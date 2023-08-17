@@ -2,7 +2,7 @@
 
 ## Setup Instructions
 
-1. Clone the repository:
+1. Clone the repository: https://github.com/devcbatarija/cms-cba.git
 
 2. Navigate to the backend directory and install dependencies:
 
