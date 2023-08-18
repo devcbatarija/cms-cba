@@ -1,5 +1,5 @@
 module.exports={
-    test:async()=>{
+    test:async(valor)=>{
         try {
             return "<h1>Hola mundo</h1>"
         } catch (error) {
