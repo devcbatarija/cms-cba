@@ -3,6 +3,7 @@ const { test,testRegister,testDelete } = require("../controllers/testController"
 module.exports={
     test:async(req,res)=>{
         try {
+            //req.body {}   req.params {}   req.query.id 
             const response=await test();
             res.status(200).send(response)
         } catch (error) {

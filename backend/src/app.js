@@ -10,7 +10,7 @@ const router = require("./routes/index.js"); //importamos rutas
 const server=express(); //importamos server
 server.disable("x-powered-by"); //eliminar el express service
 
-server.name="olivio-git"; //nombre api
+server.name="CBA"; //nombre api
 
 server.use(morgan("dev"));
 server.use(bodyParser.urlencoded({extended:true,limit:"50mb"}));
@@ -28,7 +28,7 @@ server.use((req,res,next)=>{
 })
 
 server.use("/api",router); //rutas
-
+//http://localhost:3001/api/
 server.use(cors()); //cors
 
 server.use((err,req,res,next)=>{
