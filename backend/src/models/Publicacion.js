@@ -3,9 +3,9 @@ const { DataTypes, UUIDV4} = require("sequelize");
 module.exports=(sequelize)=>{
     sequelize.define('Publicacion',{
         id_Publicacion:{
-            type:DataTypes.UUID,
+            type:DataTypes.UUID,  
             primaryKey:true,
-            defaultValue:UUIDV4,
+            defaultValue:UUIDV4,  
             allowNull:false
         },
         titulo:{
@@ -17,7 +17,7 @@ module.exports=(sequelize)=>{
             allowNull:false
         },
         multimedia:{
-            type:DataTypes.ARRAY(DataTypes.TEXT),
+            type:DataTypes.ARRAY(DataTypes.TEXT), 
             allowNull:false
         },
         estado:{
