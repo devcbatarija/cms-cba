@@ -1,5 +1,5 @@
 const express=require("express");
-const {getAllUsuarios,postUser, deleteById, updateById,validateUser}=require("../handelrs/usuarioHandler");
+const {getAllUsuarios,postUser, deleteById, updateById,validateUser}=require("../handlers/usuarioHandler");
 const router=express();
 
 router.get('/',getAllUsuarios); //http://localhost:3001/api/users/   GET
