@@ -1,4 +1,4 @@
-const { DataTypes, UUIDV4} = require("sequelize");
+const { DataTypes, UUIDV4, DATE} = require("sequelize");
 
 module.exports=(sequelize)=>{
     sequelize.define('Publicacion',{
@@ -29,6 +29,11 @@ module.exports=(sequelize)=>{
             type:DataTypes.STRING,
             allowNull:false
         },
+        // fecha:{
+        //     type: DataTypes.DATE,
+        //     allowNull: false,
+        //     defaultValue: Date.now()
+        // }
     });
 
 }
