@@ -3,8 +3,9 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import Home from './components/home/home';
 import NavBar from './components/navBar/navBar';
 import About from './components/about/about';
+import { useState } from 'react';
 function App() {
-  
+  const [a,setA]=useState(true)
   return (
     <>
     <NavBar/>
