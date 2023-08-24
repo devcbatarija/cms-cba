@@ -3,3 +3,13 @@
   margin: 0;
   box-sizing: border-box;
 }
+.calendar{
+  margin: 20px;
+}
+/* .fc-scrollgrid-sync-inner{
+  padding: 10px;
+}
+.fc-daygrid-day-frame{
+  background-color: red;
+  border: 1px solid yellow;
+} */

@@ -10,6 +10,12 @@ const NavBar = () => {
             <div>
                 <Link to={"/about"}>About</Link>
             </div>
+            <div>
+                <Link to={"/calendar"}>Calendario</Link>
+            </div>
+            <div>
+                <Link to={"/calendario"}>Calendario oficial</Link>
+            </div>
         </div>
     );
 }
