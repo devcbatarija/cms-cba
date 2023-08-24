@@ -1,0 +1,30 @@
+.navBar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #282c34;
+    color: white;
+}
+
+.routesNavbar,
+.loginNabvar {
+   display: flex;
+   gap:0px;
+}
+
+@media screen and (max-width: 992px) {
+    .navBar{
+        flex-direction: column;
+    }
+    .routesNavbar, .loginNabvar {
+        justify-content: center;
+        gap: 5px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .routesNavbar, .loginNabvar{
+        flex-direction: column;
+        align-items: center;
+    }
+}
