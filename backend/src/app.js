@@ -17,7 +17,7 @@ server.use(bodyParser.urlencoded({extended:true,limit:"50mb"}));
 server.use(bodyParser.json({limit:"50mb"}));
 server.use(cookieParser());
 server.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","*");
+    res.header("Access-Control-Allow-Origin","http://localhost:5173");
     res.header("Access-Control-Allow-Credentials","true");
     res.header("Access-Control-Allow-Headers","Origin,X-Request-With, Content-Type,Accept");
     res.header("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
@@ -29,7 +29,10 @@ server.use((req,res,next)=>{
 
 server.use("/api",router); //rutas
 //http://localhost:3001/api/
-server.use(cors()); //cors
+server.use(cors({
+    origin: 'http://localhost:5173/', // reemplaza esto con el origen de tu frontend
+    credentials: true
+})); 
 
 server.use((err,req,res,next)=>{
     const status=err.stats || 500;

@@ -1,5 +1,5 @@
 const { Usuario } = require("../db");
-const { generateToken } = require("../services/jwtservice");
+const { signIn } = require("../services/jwtservice");
 function formatDate(dateString) {
     const parts = dateString.split('/');
     const year = parts[2];
@@ -15,7 +15,9 @@ module.exports = {
         return "Users not found!";
       }
       return response;
-    } catch (error) {}
+    } catch (error) {
+      return error;
+    }
   },
   postUsuario: async (user) => {
     try {
@@ -33,7 +35,9 @@ module.exports = {
         return "Internal Error!";
       }
       return newUser;
-    } catch (error) {}
+    } catch (error) {
+      return error;
+    }
   },
   
   deleteById: async (id) => {
@@ -44,7 +48,9 @@ module.exports = {
       }
       deleteUSer.estado=false;
       return `User with the id ${deleteUSer.id_Usuario}`;
-    } catch (error) {}
+    } catch (error) {
+      return error;
+    }
   },
   updateById: async (id, user) => {
     try {
@@ -76,24 +82,28 @@ module.exports = {
           return {message:"User update success"};
       }
       return "Error user update!"
-    } catch (error) {}
-  },
-  validateUser:async(user)=>{
-    try {
-      if(!user.correo && !user.password){
-        return {message:"Unknow data"}
-      }
-      const userExist=await Usuario.findOne({where:{correo:user.correo}});
-      if(!userExist){
-        return {message:"User not found"}
-      }
-      if(userExist.password!=user.password){
-        return {message:"User apassword not valid"};
-      }
-      const tokengen=await generateToken(userExist)
-      return tokengen;
     } catch (error) {
-      
+      return error;
+    }
+  },
+  authLogin: async (user) => {
+    try {
+      const userExist = await Usuario.findOne({ where: { correo: user.correo } });
+      if (!userExist) {
+        throw new Error("User not found");
+      }
+      if (userExist.password !== user.password) {
+        throw new Error("User password not valid");
+      }
+      const tokengen = await signIn(userExist);
+      const usLogin = {
+        _userId: userExist.id_Usuario,
+        correo: userExist.correo,
+        rol: userExist.rol,
+      };
+      return { usLogin: usLogin, token: tokengen };
+    } catch (error) {
+      throw error;
     }
   }
 };
