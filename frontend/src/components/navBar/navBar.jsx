@@ -18,13 +18,14 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
+import PositionedMenu from "./positionedMenu";
 
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [auth, setAuth] = useState(false);
-  const authlogin=useSelector((state)=>state.login);
+  const authlogin = useSelector((state) => state.login);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -33,7 +34,7 @@ const NavBar = () => {
   const drawer = (
     <div>
       <List>
-        {["/", "/about", "/login"].map((text, index) => (
+        {["/", "/about","/dashboard"].map((text, index) => (
           <ListItem
             key={text}
             onClick={handleDrawerToggle}
@@ -73,6 +74,36 @@ const NavBar = () => {
             >
               {drawer}
             </Drawer>
+            
+            {authlogin.auth ? (
+              <Tooltip>
+                <IconButton
+                  onClick={() => {
+                    setAuth(!auth);
+                  }}
+                  sx={{ p: 0 }}
+                >
+                  <PositionedMenu
+                    altImg={authlogin.user.correo}
+                    srcImg={authlogin.user._profileImage}
+                  ></PositionedMenu>
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Link
+                to="/login"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button
+                  onClick={() => {
+                    setAuth(!auth);
+                  }}
+                  color="inherit"
+                >
+                  Login
+                </Button>
+              </Link>
+            )}
           </>
         ) : (
           <>
@@ -81,6 +112,12 @@ const NavBar = () => {
               <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
                 <Button color="inherit">Home</Button>
               </Link>
+              {/* <Link
+                to="/dashboard"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button color="inherit">DASHBOARD</Button>
+              </Link> */}
               <Link
                 to="/calendar"
                 style={{ color: "inherit", textDecoration: "none" }}
@@ -100,13 +137,18 @@ const NavBar = () => {
                 <Button color="inherit">About</Button>
               </Link>
             </Typography>
-            {
-            authlogin.auth ? (
-              <Tooltip title="Open settings">
-                <IconButton onClick={()=>{
-                    setAuth(!auth)
-                }} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            {authlogin.auth ? (
+              <Tooltip>
+                <IconButton
+                  onClick={() => {
+                    setAuth(!auth);
+                  }}
+                  sx={{ p: 0 }}
+                >
+                  <PositionedMenu
+                    altImg={authlogin.user.correo}
+                    srcImg={authlogin.user._profileImage}
+                  ></PositionedMenu>
                 </IconButton>
               </Tooltip>
             ) : (
@@ -114,9 +156,14 @@ const NavBar = () => {
                 to="/login"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
-                <Button onClick={()=>{
-                    setAuth(!auth)
-                }} color="inherit">Login</Button>
+                <Button
+                  onClick={() => {
+                    setAuth(!auth);
+                  }}
+                  color="inherit"
+                >
+                  Login
+                </Button>
               </Link>
             )}
           </>
