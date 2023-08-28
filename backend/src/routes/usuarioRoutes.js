@@ -1,11 +1,14 @@
 const express=require("express");
-const {getAllUsuarios,postUser, deleteById, updateById,authLogin}=require("../handlers/usuarioHandler");
+const {getAllUsuarios,postUser, deleteById, updateById,authLogin, emailVerify, emailVerifyToken}=require("../handlers/usuarioHandler");
+const { validToken } = require("../services/jwtservice");
 const router=express();
 
 router.get('/',getAllUsuarios); //http://localhost:3001/api/users/   GET
 router.post('/',postUser); //http://localhost:3001/api/users/  POST
-router.delete('/delete/:id',deleteById);
-router.put('/update/:id',updateById);
-router.post('/login',authLogin)
-
+router.post('/valid/email',emailVerify) //Verificar email existente
+router.delete('/delete/:id',deleteById); //Borrar usuario por id
+router.put('/update/:id',updateById); //Actualizar usuairio por id
+router.post('/login',authLogin) //Iniciar sesion
+router.post('/valid/token',validToken) //Validar valides de token e iniciar sesion
+router.get('/valid/token/email',emailVerifyToken)
 module.exports=router;
