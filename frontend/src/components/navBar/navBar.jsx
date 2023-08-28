@@ -82,6 +82,18 @@ const NavBar = () => {
                 <Button color="inherit">Home</Button>
               </Link>
               <Link
+                to="/calendar"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button color="inherit">Calendar</Button>
+              </Link>
+              <Link
+                to="/calendario"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button color="inherit">Calendario</Button>
+              </Link>
+              <Link
                 to="/about"
                 style={{ color: "inherit", textDecoration: "none" }}
               >
