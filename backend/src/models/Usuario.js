@@ -11,6 +11,10 @@ module.exports=(sequelize)=>{
             type:DataTypes.STRING,
             allowNull:false
         },
+        image:{
+            type:DataTypes.TEXT,
+            allowNull:true,
+        },
         celular:{
             type:DataTypes.INTEGER,
             allowNull:true
@@ -44,6 +48,11 @@ module.exports=(sequelize)=>{
             type:DataTypes.BOOLEAN,
             allowNull:false,
             defaultValue: true
+        },
+        verificacion:{
+            type: DataTypes.STRING,
+            allowNull:false,
+            defaultValue:UUIDV4
         }
     }
     );
