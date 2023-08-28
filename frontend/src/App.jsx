@@ -1,13 +1,17 @@
 import './App.css'
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes, useNavigate, useParams } from 'react-router-dom';
 import Home from './components/home/home';
 import NavBar from './components/navBar/navBar';
 import About from './components/about/about';
 import DemoApp from './components/Calendar/Calendar';
 import { useState } from 'react';
 import Calendario from './components/calendar/calendario';
+import Login from './components/auth/auth.login';
+import { useEffect } from 'react';
+import Register from './components/auth/auth.register';
+import { useSelector } from 'react-redux';
 function App() {
-  const [a,setA]=useState(true)
+  const auth=useSelector((state)=>state.login.auth);
   return (
     <>
     <NavBar/>
@@ -16,6 +20,8 @@ function App() {
       <Route path='/about' element={<About></About>}></Route>
       <Route path='/calendar' element={<DemoApp></DemoApp>}></Route>
       <Route path='/calendario' element={<Calendario></Calendario>}></Route>
+      <Route path='/login' element={<Login></Login>}></Route>
+      <Route path='/register' element={<Register></Register>}></Route>
       </Routes>
     </>
   )
