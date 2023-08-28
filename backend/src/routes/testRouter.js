@@ -1,5 +1,5 @@
 const express=require("express");
-const {test,testRegister,testDelete}=require("../handelrs/testHandler")
+const {test,testRegister,testDelete}=require("../handlers/testHandler")
 const router=express();
 
 router.get('/',test) //middlewares     //"http:localhost:3001/api/test/"
