@@ -5,6 +5,7 @@
 }
 .calendar{
   margin: 20px;
+  text-transform: capitalize;
 }
 /* .fc-scrollgrid-sync-inner{
   padding: 10px;
