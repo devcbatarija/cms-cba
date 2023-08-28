@@ -1,10 +1,9 @@
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import "./styles.css";
 import { useState } from "react";
-import { Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import axios from "axios";
 import { signin } from "../../redux-toolkit/actions/auth.Actions";
 import { useEffect } from "react";
@@ -37,7 +36,6 @@ const Login = () => {
         setError(response.data.messageError);
         return;
       }
-      console.log(response.headers)
       dispatch(signin(response.data));
     } catch (error) {
       setError(error.response.data.messageError);
@@ -58,14 +56,7 @@ const Login = () => {
       <div className="formDiv">
         <form onSubmit={handeSubmit} className="formLogin">
           {error ? (
-            <Typography
-              component="label"
-              sx={{
-                color: "red",
-              }}
-            >
-              {error}
-            </Typography>
+          <Alert severity="error">{error}</Alert>
           ) : null}
           <TextField
             onChange={handleChange}
