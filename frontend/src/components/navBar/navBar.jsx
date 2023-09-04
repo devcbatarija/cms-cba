@@ -136,6 +136,13 @@ const NavBar = () => {
               >
                 <Button color="inherit">About</Button>
               </Link>
+
+              <Link
+                to="/tableuser"
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Button color="inherit">TableUser</Button>
+              </Link>
             </Typography>
             {authlogin.auth ? (
               <Tooltip>
