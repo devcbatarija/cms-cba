@@ -14,23 +14,24 @@ import Cookie from 'js-cookie';
 import axios from 'axios';
 import { authValid } from './redux-toolkit/actions/auth.Actions';
 import Dashboard from './components/dashboard/dashboard'
+import { getEvents } from './redux-toolkit/actions/eventActions';
 
 function App() {
-  const auth=useSelector((state)=>state.login.auth);
-  const dispatch=useDispatch();
-  const validToken=async()=>{
-    const token=Cookie.get('token');
-    const config={
-      headers:{
-        Authorization:`Bearer ${token}`,
+  const auth = useSelector((state) => state.login.auth);
+  const dispatch = useDispatch();
+  const validToken = async () => {
+    const token = Cookie.get('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
       }
     }
-    const data={
-      validation:"Validation"
+    const data = {
+      validation: "Validation"
     }
     try {
-      const response=await axios.post('/users/valid/token',data,config)
-      if(response.data.user){
+      const response = await axios.post('/users/valid/token', data, config)
+      if (response.data.user) {
         dispatch(
           authValid(response.data.user)
         )
@@ -39,22 +40,27 @@ function App() {
       console.log(error.response.data.messageError)
     }
   }
+  const getStates = async () => {
+    await dispatch(getEvents());
+  }
+
   useEffect(() => {
-      if(Cookie.get('token')){
-        validToken()
-      }
-  },[])
+    getStates();
+    if (Cookie.get('token')) {
+      validToken()
+    }
+  }, [dispatch])
   return (
     <>
-    <NavBar/>
+      <NavBar />
       <Routes>
-      <Route exact path='/' element={<Home></Home>}></Route>
-      <Route path='/about' element={<About></About>}></Route>
-      <Route path='/calendar' element={<DemoApp></DemoApp>}></Route>
-      <Route path='/calendario' element={<Calendario></Calendario>}></Route>
-      <Route path='/login' element={<Login></Login>}></Route>
-      <Route path='/register' element={<Register></Register>}></Route>
-      <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
+        <Route exact path='/' element={<Home></Home>}></Route>
+        <Route path='/about' element={<About></About>}></Route>
+        <Route path='/calendar' element={<DemoApp></DemoApp>}></Route>
+        <Route path='/calendario' element={<Calendario></Calendario>}></Route>
+        <Route path='/login' element={<Login></Login>}></Route>
+        <Route path='/register' element={<Register></Register>}></Route>
+        <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
       </Routes>
     </>
   )
