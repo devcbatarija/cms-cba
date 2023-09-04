@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import { authValid } from './redux-toolkit/actions/auth.Actions';
+import { getEvents } from './redux-toolkit/actions/eventActions';
 import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
@@ -39,15 +40,19 @@ function App() {
       console.log(error.response.data.messageError);
     }
   }
+  const getStates = async () => {
+    await dispatch(getEvents());
+  }
 
   useEffect(() => {
+    getStates();
     if (Cookie.get('token')) {
-      validToken();
+      validToken()
     }
-  }, [])
-
+  }, [dispatch])
   return (
     <>
+      <NavBar />
       {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
       {location.pathname !== '/dashboard' && <NavBar />}
       <Routes>

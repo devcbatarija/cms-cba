@@ -32,10 +32,23 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Para relacionarlos hacemos un destructuring
 const { 
   Usuario,
-  Publicacion
+  Publicacion,
+  Evento,
+  Dato_Evento,
+  Evento_Predefinido
 } = sequelize.models;
 Usuario.hasMany(Publicacion);
 Publicacion.belongsTo(Usuario);
+
+Usuario.hasMany(Evento);
+Evento.belongsTo(Usuario);
+
+Evento.hasMany(Dato_Evento);
+Dato_Evento.belongsTo(Evento);
+
+Usuario.hasMany(Evento_Predefinido);
+Evento_Predefinido.belongsTo(Usuario);
+
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,
   conn: sequelize,     // para importar la conexión { conn } = require('./db.js');

@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 *{
   padding: 0;
   margin: 0;
@@ -7,6 +10,10 @@
   margin: 20px;
   text-transform: capitalize;
 }
+:root {
+  --fc-today-bg-color: rgb(137, 195, 229); /* Establece el color de fondo del día actual */
+  /* --fc-border-color: none; */
+}
 /* .fc-scrollgrid-sync-inner{
   padding: 10px;
 }
@@ -14,3 +21,6 @@
   background-color: red;
   border: 1px solid yellow;
 } */
+.fc-day{
+  /* border-radius: 10%; */
+}
