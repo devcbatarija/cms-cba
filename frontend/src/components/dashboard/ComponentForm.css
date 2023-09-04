@@ -1,0 +1,15 @@
+/* ComponentForm.css */
+#component-details {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+  }
+  
+  /* Agrega más estilos específicos aquí si es necesario */
+  
