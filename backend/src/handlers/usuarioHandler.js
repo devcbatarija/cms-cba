@@ -1,4 +1,5 @@
-const { getAllUsuarios,postUsuario,deleteById,updateById, authLogin, emailVerify, emailVerifyToken } = require("../controllers/usuarioController")
+const { getAllUsuarios,
+    postUsuario,deleteById,updateById, authLogin, emailVerify, emailVerifyToken, updateState, getById } = require("../controllers/usuarioController")
 
 module.exports = {
     getAllUsuarios:async(req,res)=>{
@@ -63,6 +64,14 @@ module.exports = {
             res.status(500).json({messageError:error.message});
         }
     },
+    getById:async(req,res)=>{
+        try {
+            const response=await getById(req.params.id);
+            res.status(200).json(response)
+        } catch (error) {
+            res.status(error.statusCode).json(error);
+        }
+    },
     emailVerify : async(req,res)=>{ //verificar si ya existe un email
         try {
             const result=await emailVerify(req.body);
@@ -100,6 +109,15 @@ module.exports = {
                 <p>Tu correo electrónico ha sido verificado correctamente.</p>
             </div>
             `)
+        } catch (error) {
+            res.status(500).json({messageError:error.message});
+        }
+    },
+    updateState:async(req,res)=>{
+        console.log(req.body.estado)
+        try {
+            const response=await updateState(req.params.id,req.body.estado);
+            res.status(200).json(response)
         } catch (error) {
             res.status(500).json({messageError:error.message});
         }
