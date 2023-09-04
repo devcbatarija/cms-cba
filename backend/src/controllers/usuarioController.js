@@ -53,7 +53,7 @@ module.exports = {
       if (!deleteUSer) {
         return "User not found";
       }
-      deleteUSer.estado=false;
+      deleteUSer.destroy();
       return `User with the id ${deleteUSer.id_Usuario}`;
     } catch (error) {
       return error;
@@ -78,7 +78,7 @@ module.exports = {
             ci: user.ci ? user.ci : updateById.ci,
             password: user.password ? user.password : updateById.password,
             rol: "client",
-            estado: false,
+            estado: true  ,
         },
         {
           where: {
@@ -103,9 +103,9 @@ module.exports = {
       if (userExist.password !== user.password) {
         throw new Error("User password not valid");
       }
-      if (!userExist.estado) {
-        throw new Error("User is not valid");
-      }
+      // if (!userExist.estado) {
+      //   throw new Error("User is not valid");
+      // }
       const tokengen = await signIn(userExist);
       const usLogin = {
         _userId: userExist.id_Usuario,

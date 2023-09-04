@@ -1,50 +1,27 @@
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import StoreMallDirectoryOutlinedIcon from "@mui/icons-material/StoreMallDirectoryOutlined";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
-import { Link } from "react-router-dom";
-import "./sidebar.css";
-import { Toolbar } from "@mui/material";
+import React from "react";
+import Sidebar from "./Sidebar";
+import ComponentForm from "./ComponentForm";
+import ComponentPreview from "./ComponentPreview";
 
+import "./Sidebar";
+import { useLocation } from "react-router-dom";
 
-export default function Dashboard() {
-    return (
-        <Toolbar className="sidebar">
-          <ul>
-            <li>
-              <DashboardIcon aria-label="open drawer" className="icon" />
-              <span>
-                  Dashboard
-              </span>
-            </li>
-            <li>
-              <PersonOutlineOutlinedIcon className="icon" />
-              <span>
-                  Users
-              </span>
-            </li>
-            <li>
-              <StoreMallDirectoryOutlinedIcon className="icon" />
-              <span>
-                  Products
-              </span>
-            </li>
-            <li>
-              <CreditCardIcon className="icon" />
-              <span>
-                  Orders
-              </span>
-            </li>
-            {/* <p className="title">USEFUL</p> */}
-            <li>
-              <AssessmentOutlinedIcon className="icon" />
-              <span>
-                  Categories
-              </span>
-            </li>
-          </ul>
-        </Toolbar>
-      )
+function DashboardPage() {
+  const location = useLocation();
+  location.pathname
+  return (
+    
+    <div class="container">
+      <div className="side-container">
+        <Sidebar />
+      </div>
+      <div className="body-container">
+      
+        <ComponentForm />
+        <ComponentPreview />
+      </div>
+    </div>
+  );
 }
 
+export default DashboardPage;
