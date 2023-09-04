@@ -1,0 +1,23 @@
+/* ComponentPreview.css */
+#component-preview { 
+    padding: 20px;
+    border-left: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .preview-content {
+    text-align: center;
+  }
+  
+  .preview-content h4 {
+    margin-bottom: 10px;
+  }
+  
+  .preview-content img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+  }
+  
+  /* Agrega más estilos específicos aquí si es necesario */
+  
