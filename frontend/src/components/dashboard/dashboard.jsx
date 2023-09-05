@@ -11,7 +11,7 @@ function DashboardPage() {
   location.pathname
   return (
     
-    <div class="container">
+    <div className="container">
       <div className="side-container">
         <Sidebar />
       </div>

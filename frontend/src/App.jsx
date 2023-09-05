@@ -52,7 +52,6 @@ function App() {
   }, [dispatch])
   return (
     <>
-      <NavBar />
       {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
       {location.pathname !== '/dashboard' && <NavBar />}
       <Routes>
