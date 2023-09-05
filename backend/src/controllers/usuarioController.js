@@ -118,6 +118,18 @@ module.exports = {
       throw error;
     }
   },
+  getById:async(id)=>{
+    try {
+      const us=await Usuario.findByPk(id);
+      if(!us){
+        throw new Error("User not found");
+      }
+      return us;
+    } catch (error) {
+      error.statusCode=404;
+      throw error;
+    }
+  },
   emailVerify : async(body)=>{
     console.log(body)
     try {
@@ -144,4 +156,19 @@ module.exports = {
       throw error;
     }
   },
+  updateState:async(id,estado)=>{
+
+    try {
+      const update=await Usuario.findByPk(id);
+      if(!update){
+        throw new Error("User token not found");
+      }
+    console.log(estado)
+
+      update.dataValues.estado=estado;
+      return update;
+    } catch (error) {
+      console.log(error)
+    }
+  }
 };
