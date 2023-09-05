@@ -14,11 +14,13 @@
   transition: width 0.3s, background-color 0.3s;
   overflow: hidden;
   width: 70px; /* Ancho inicial para ocultar el dashboard */
+  z-index: 4;
 }
 
 .side-container:hover {
   width: 250px; /* Ancho al pasar el cursor */
-  background-color: #005791; /* Color de fondo al pasar el cursor */
+  background-color: #010051; /* Color de fondo al pasar el cursor */
+  z-index: 5;
 }
 
 .side-container h1 {
