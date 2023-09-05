@@ -1,5 +1,5 @@
 const express=require("express");
-const {getAllUsuarios,postUser, deleteById, updateById,authLogin, emailVerify, emailVerifyToken}=require("../handlers/usuarioHandler");
+const {getAllUsuarios,postUser, deleteById, updateById,authLogin, emailVerify, emailVerifyToken, updateState, getById}=require("../handlers/usuarioHandler");
 const { validToken } = require("../services/jwtservice");
 const router=express();
 
@@ -11,4 +11,7 @@ router.put('/update/:id',updateById); //Actualizar usuairio por id
 router.post('/login',authLogin) //Iniciar sesion
 router.post('/valid/token',validToken) //Validar valides de token e iniciar sesion
 router.get('/valid/token/email',emailVerifyToken)
+
+router.put('/state/update/:id',updateState)
+router.get('/get/by/:id',getById);
 module.exports=router;
