@@ -24,10 +24,9 @@ export default function Sidebar() {
     <Toolbar className="sidebar">
       <ul>
         <SidebarItem icon={DashboardIcon} label="Dashboard" to="/dashboard" />
-        <SidebarItem icon={PersonOutlineOutlinedIcon} label="Usuarios" to="/users" />
+        <SidebarItem icon={PersonOutlineOutlinedIcon} label="Usuarios" to="/about" />
         <SidebarItem icon={StoreMallDirectoryOutlinedIcon} label="Programas" to="/programs" />
-        <SidebarItem icon={CreditCardIcon} label="Education USA" to="/education" />
-        <SidebarItem icon={AssessmentOutlinedIcon} label="Publicaciones" to="/dashboard/publication" />
+        <SidebarItem icon={AssessmentOutlinedIcon} label="PublicationAdd" to='/dashboard/publicaciones'/>
       </ul>
     </Toolbar>
   );

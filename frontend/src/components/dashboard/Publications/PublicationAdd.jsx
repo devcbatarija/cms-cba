@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function CreatePost({ onPostCreate }) {
+function PublicationAdd({ onPostCreate }) {
   const [postData, setPostData] = useState({
     title: '',
     description: '',
@@ -136,4 +136,4 @@ function CreatePost({ onPostCreate }) {
   );
 }
 
-export default CreatePost;
+export default PublicationAdd;
