@@ -65,29 +65,17 @@ module.exports = {
       if (!exist) {
         return "User not found!";
       }
-      const updateById = await Usuario.update(
-        {
-            correo: user.correo ? user.correo : updateById.correo,
-            image:user.image?user.image:updateById.image,
-            celular: user.celular ? user.celular : updateById.celular,
-            nombres: user.nombres ? user.nombres : updateById.nombres,
-            apellidos: user.apellidos ? user.apellidos : updateById.apellidos,
-            fecha_Nacimiento: user.fecha_Nacimiento
-              ? formatDate(user.fecha_Nacimiento)
-              : updateById.fecha_Nacimiento,
-            ci: user.ci ? user.ci : updateById.ci,
-            password: user.password ? user.password : updateById.password,
-            rol: "client",
-            estado: true  ,
-        },
+      const updateUserById = await Usuario.update(
+        user,
         {
           where: {
             id_Usuario: id 
           },
         }
       );
-      if(updateById[0]==1){
-          return {message:"User update success"};
+      if (updateUserById[0] === 1) {
+        const dataUpdate=await Usuario.findAll();
+        return { message: "User update success",results:dataUpdate};
       }
       return "Error user update!"
     } catch (error) {
