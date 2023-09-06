@@ -79,7 +79,9 @@ export default function TableUser() {
     dispatch(getallusers());
   }, []);
   return (
-    <TableContainer component={Paper}>
+    <TableContainer 
+    sx={{width:"100%",borderRadius:'0'}}
+    component={Paper}>
       {
         open?<ModalUnstyled 
         id={selectedUserModal} 
