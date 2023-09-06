@@ -16,6 +16,7 @@ import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
 import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
+import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
 import TableUser from './components/dashboard/tableUser';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
   const dispatch = useDispatch();
   const location = useLocation();
 
+  // Función para validar el token
   const validToken = async () => {
     const token = Cookie.get('token');
     const config = {
@@ -43,16 +45,21 @@ function App() {
     }
   }
 
+  // Validar el token al cargar la página
   useEffect(() => {
     if (Cookie.get('token')) {
       validToken();
     }
   }, []);
 
+  // Verificar si estamos en la ruta /dashboard
+  const isDashboardRoute = location.pathname.startsWith('/dashboard');
+
   return (
     <>
       {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
-      {<NavBar />}
+      {!isDashboardRoute && <NavBar />}
+      {isDashboardRoute && <DashNavbar />} {/* Mostrar DashNavbar solo en la ruta /dashboard */}
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
@@ -77,3 +84,4 @@ function App() {
 }
 
 export default App;
+
