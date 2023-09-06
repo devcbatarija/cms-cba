@@ -18,6 +18,7 @@ import NotFound from './components/Error/NotFound';
 import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
 import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
 import TableUser from './components/dashboard/tableUser';
+import { getEvents } from './redux-toolkit/actions/eventActions';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -47,6 +48,7 @@ function App() {
 
   // Validar el token al cargar la página
   useEffect(() => {
+    dispatch(getEvents())
     if (Cookie.get('token')) {
       validToken();
     }

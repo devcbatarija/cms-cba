@@ -1,14 +1,34 @@
 import daygrid from "@fullcalendar/daygrid";
-import interaction from "@fullcalendar/interaction";
+import interaction, { Draggable } from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timegrid from "@fullcalendar/timegrid";
 import { useState } from "react";
 import UseModal from "./modal";
 import { Button } from '@mui/base/Button';
 import { styled } from "@mui/system";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
+import { getEvents } from "../../redux-toolkit/actions/eventActions";
 
 const Calendario = () => {
+    const dispatch=useDispatch();
+    document.addEventListener("DOMContentLoaded", function(){
+    // let draggableEl = document.getElementById("mydraggable");
+    // new Draggable(draggableEl);
+    })
+    useEffect(()=>{
+        const containerEl=document.getElementById("myeventlist");
+        console.log("yesysy",containerEl)
+        new Draggable(containerEl,{
+            itemSelector: '.fc-event',
+            eventData:function(eventEl) {
+        return {
+          title: eventEl.innerText.trim()
+        }}
+        })
+    },[])
+
     const events=useSelector((state)=>state.events.events);
     
     const userLogin=useSelector((state)=>state.login.user)
@@ -16,6 +36,7 @@ const Calendario = () => {
     const handleOpen=()=>setOpen(true);
     const handleClose=()=>setOpen(false);
     const [data,setData]=useState({
+        id:"",
         title:"",
         start:"",
         end:"",
@@ -39,15 +60,37 @@ const Calendario = () => {
     }
 
     const handleEventClick=(e)=>{
+        const containerEl=document.getElementById("myeventlist");
+    console.log("yesysy",containerEl)
         console.log(e.event)
     }
+    const handleEventDrop=async (e)=>{
+        const eventDrop=e.event;
+        console.log(eventDrop)
+        await setData({
+            ...data,
+            id:eventDrop.id,
+            title:eventDrop.title,
+            start:eventDrop.startStr,
+            end:eventDrop.endStr,
+            color: eventDrop.backgroundColor,
+            tipo:eventDrop.extendedProps.tipo
+        })
+    }
+    useEffect(()=>{
+        data.id?axios.put(`event/update/${data.id}`,data).then(res=>{
+            dispatch(getEvents())
+        }).catch(error=>{
+            console.log(error)
+        }):null;
+    },[data])
+    
     return (
         <>
             <TriggerButton onClick={handleOpen}>Open modal</TriggerButton>
         {
             <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
         }
-        <span>{data.title}</span>
         <div>
             <div className="calendar">
                 <FullCalendar
@@ -67,10 +110,18 @@ const Calendario = () => {
                     selectMirror={true}
                     dayMaxEvents={true}
                     weekends={true}
+                    droppable={true}
                     select={handleDateSelect}
                     eventClick={handleEventClick}
+                    eventDrop={handleEventDrop}
+                    // drop={handleEventDrop}
                     // dateClick={handleDateSelect}
                 />
+            </div>
+            <div id={"mydraggable"}>
+                <div id="myeventlist">    
+                    <div className='fc-event' data-event='{ "title": "my event", "duration": "02:00" }'>drag me</div>
+                </div>
             </div>
         </div>
         </>
