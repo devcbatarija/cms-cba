@@ -1,9 +1,9 @@
-import './App.css'
+import './App.css';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/home/home';
 import NavBar from './components/navBar/navBar';
 import About from './components/about/about';
-import DemoApp from './components/calendar/calendar';
+import DemoApp from './components/Calendar/Calendar';
 import Calendario from './components/calendar/calendario';
 import Login from './components/auth/auth.login';
 import { useEffect } from 'react';
@@ -12,10 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import Cookie from 'js-cookie';
 import axios from 'axios';
 import { authValid } from './redux-toolkit/actions/auth.Actions';
-import Dashboard from './components/dashboard/dashboard'
-import TableUser from './components/dashboard/tableUser';
-import { getEvents } from './redux-toolkit/actions/eventActions';
+import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
+
+import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -41,36 +41,37 @@ function App() {
       console.log(error.response.data.messageError);
     }
   }
-  const getStates = async () => {
-    await dispatch(getEvents());
-  }
 
   useEffect(() => {
-    getStates();
     if (Cookie.get('token')) {
-      validToken()
+      validToken();
     }
-  }, [dispatch])
+  }, []);
+
   return (
     <>
       {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
-      {location.pathname !== '/dashboard' && <NavBar />}
+      {<NavBar />}
       <Routes>
-      <Route exact path='/' element={<Home></Home>}></Route>
-      <Route path='/about' element={<About></About>}></Route>
-      <Route path='/calendar' element={<DemoApp></DemoApp>}></Route>
-      <Route path='/calendario' element={<Calendario></Calendario>}></Route>
-      <Route path='/login' element={<Login></Login>}></Route>
-      <Route path='/register' element={<Register></Register>}></Route>
-      <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
-
-      <Route path='/tableuser' element={<TableUser></TableUser>}></Route>
+        <Route exact path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/calendar' element={<DemoApp />} />
+        <Route path='/calendario' element={<Calendario />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
         {/* Ruta del dashboard, sin verificación de autenticación */}
+        <Route path='/dashboard' element={<Dashboard></Dashboard>}>
+          <Route path='/dashboard/publicaciones' element={<PublicationAdd />} />
+          
+        </Route>
         {/* Ruta para manejar páginas no encontradas */}
         <Route path='*' element={<NotFound />} />
       </Routes>
+      {/* <Routes>
+        <Route path='/dashboard' element={<PublicationAdd />} />
+        </Routes> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
