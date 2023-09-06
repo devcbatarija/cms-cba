@@ -40,10 +40,9 @@ function PublicationAdd({ onPostCreate }) {
   const styles = {
     container: {
       margin: '0 auto',
-      width: '80%',
       padding: '20px',
       backgroundColor: '#f8f9fa',
-      borderRadius: '5px',
+      borderRadius: '0px',
       boxShadow: '0 0 10px rgba(0,0,0,0.1)'
     },
     title: {
