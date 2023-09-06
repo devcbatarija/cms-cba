@@ -1,4 +1,4 @@
-const { addEvento, getAllEvento } = require("../controllers/eventoController")
+const { addEvento, getAllEvento, updateEvento } = require("../controllers/eventoController")
 
 
 module.exports={
@@ -18,6 +18,17 @@ module.exports={
             res.status(200).json({
                 results:response
             });
+        } catch (error) {
+            res.status(400).json({error:error.message});
+        }
+    },
+    updateEvento:async(req, res)=>{
+        try {
+            const id=req.params.id;
+            const changes=req.body;
+            const response= await updateEvento(id, changes);
+            res.status(200).json(response)
+            
         } catch (error) {
             res.status(400).json({error:error.message});
         }
