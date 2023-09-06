@@ -39,11 +39,10 @@ module.exports = {
         try {
             if(!req.params.id)res.status(401).json({messageError:'No user id'});
             if(!req.body)res.status(401).json({messageError:'No user data'});
-
             const result=await updateById(req.params.id,req.body);
             res.status(200).json(result);
         } catch (error) {
-            res.status(500).json({messageError:error.message});
+            res.status(500).json({ messageError: error.message });
         }
     },
     authLogin:async(req,res)=>{

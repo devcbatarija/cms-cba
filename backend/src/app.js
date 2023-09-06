@@ -12,6 +12,7 @@ server.disable("x-powered-by"); //eliminar el express service
 
 server.name="CBA"; //nombre api
 
+
 server.use(morgan("dev"));
 server.use(bodyParser.urlencoded({extended:true,limit:"50mb"}));
 server.use(bodyParser.json({limit:"50mb"}));
@@ -27,13 +28,13 @@ server.use((req,res,next)=>{
     next();
 })
 
+
 server.use("/api",router); //rutas
 //http://localhost:3001/api/
 server.use(cors({
     origin: 'http://localhost:5173/', // reemplaza esto con el origen de tu frontend
     credentials: true
 })); 
-
 server.use((err,req,res,next)=>{
     const status=err.stats || 500;
     const message=err.message || err;
