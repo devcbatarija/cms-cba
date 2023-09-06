@@ -11,4 +11,3 @@
 4. Create a `.env` file in the backend directory and add the necessary environment variables. The required variables and their values have been shared via WhatsApp.
 
 Please replace `<repository_url>` with the actual URL of your repository.
-hola
