@@ -4,7 +4,7 @@ import ComponentForm from "./ComponentForm";
 import ComponentPreview from "./ComponentPreview";
 
 import "./Sidebar";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 function DashboardPage() {
   const location = useLocation();
@@ -15,10 +15,8 @@ function DashboardPage() {
       <div className="side-container">
         <Sidebar />
       </div>
-      <div className="body-container">
-      
-        <ComponentForm />
-        <ComponentPreview />
+      <div className="">
+        <Outlet></Outlet>
       </div>
     </div>
   );
