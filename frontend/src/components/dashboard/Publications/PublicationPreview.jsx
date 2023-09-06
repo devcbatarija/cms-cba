@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PreviewPost({ post }) {
+function PublicationPreview({ post }) {
   const styles = {
     container: {
       margin: '0 auto',
@@ -43,4 +43,4 @@ function PreviewPost({ post }) {
   );
 }
 
-export default PreviewPost;
+export default PublicationPreview;
