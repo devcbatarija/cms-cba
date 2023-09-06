@@ -1,10 +1,12 @@
 /* Sidebar.css */
 
 /* Establece el contenedor principal como una cuadrícula */
-.container {
+.containerr {
   display: grid;
   grid-template-columns: 15% 85%;
   min-height: 100vh;
+  width: 100%;
+  background-color: green;
 }
 
 /* Establece los estilos para la barra lateral */
@@ -13,16 +15,10 @@
   color: white; /* Texto blanco */
   transition: width 0.3s, background-color 0.3s;
   overflow: hidden;
-  width: 70px; /* Ancho inicial para ocultar el dashboard */
   z-index: 4;
 }
 
-.side-container:hover {
-  width: 250px; /* Ancho al pasar el cursor */
-  background-color: #010051; /* Color de fondo al pasar el cursor */
-  z-index: 5;
-}
-
+ 
 .side-container h1 {
   padding: 20px;
   font-size: 24px;
@@ -41,10 +37,7 @@
   display: flex;
   align-items: center;
 }
-
-.side-container li:hover {
-  transform: translateX(5px); /* Desplazamiento al pasar el cursor */
-}
+ 
 
 .side-container a {
   text-decoration: none;
@@ -58,103 +51,4 @@
   margin-right: 10px;
 }
 
-/* Establece los estilos para el contenido principal */
-.body-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  transition: all 0.3s;
-}
-
-/* Establece los estilos para cada columna */
-.dashboard {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  display: none; /* Oculta por defecto */
-}
-
-.component {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.preview {
-  background-color: #f7f7f7;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-.side-container:hover .dashboard {
-  display: block; /* Muestra el dashboard al pasar el cursor */
-}
-
-@media screen and (max-width: 900px) {
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .side-container {
-    width: 0px;
-    transform: translateX(-50px);
-  }
-  .body-container {
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  .container {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  .side-container {
-    width: 0px;
-    transform: translateX(-50px);
-  }
-  .body-container {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-    min-height: 50vh;
-  }
-}
-.side-container {
-  /* ... (otros estilos) ... */
-
-  /* Agrega estilos específicos para dispositivos móviles */
-  @media screen and (max-width: 900px) {
-    width: 100%; /* Ancho completo en dispositivos móviles */
-    transform: none; /* Elimina la transformación */
-  }
-}
-
-/* Agrega estilos específicos para dispositivos móviles */
-@media screen and (max-width: 900px) {
-  .side-container ul {
-    display: none; /* Oculta la lista en dispositivos móviles */
-  }
-
-  .side-container.open ul {
-    display: block; /* Muestra la lista cuando se abre el menú */
-  }
-
-  .side-container h1 {
-    margin: 0;
-    padding: 20px 0;
-  }
-
-  .side-container li {
-    margin: 0;
-    padding: 10px 0;
-  }
-
-  .menu-icon {
-    display: block; /* Muestra el ícono del menú en dispositivos móviles */
-    margin: 20px;
-    cursor: pointer;
-  }
-}
+ 
