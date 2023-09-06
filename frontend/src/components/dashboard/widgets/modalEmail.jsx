@@ -3,41 +3,45 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { styled, Box } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import {
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  OutlinedInput,
+  Button,
   TextField,
+  FormControl,
+  Grid,
+  Typography,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import QuillEdit from "./quillEdit";
+import SendIcon from "@mui/icons-material/Send";
+import SelectEmail from "./selectEmail";
 
-export default function ModalUnstyled({
-  id,
-  open,
-  handleOpen,
-  handleClose,
-}) {
-  const [user, setUser] = useState({});
+
+const emails = ['username@gmail.com', 'user02@gmail.com'];
+
+export default function ModalUnstyledEmail({ open, handleOpen, handleClose }) {
   const [form, setForm] = useState({
-    correo: "",
-    nombres: "",
-    apellidos: "",
-    celular: "",
-    password: "",
-    rol: "",
+    title: "",
+    description: "",
+    multimedia: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () =>
-    setShowPassword((show) => !show);
+  //select email component states
+  const [openSelectEmail, setOpenSelectEmail] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(emails[1]);
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const handleClickOpenSelectEmail = () => {
+    setOpen(true);
+  };
+
+  const handleCloseSelectEmail = (value) => {
+    setOpen(false);
+    setSelectedValue(value);
+  };
+
+
+  const handleChangeEmail = (e) => {
+    setValue(e.key);
+    console.log(value);
   };
 
   const handleChange = (e) => {
@@ -48,17 +52,21 @@ export default function ModalUnstyled({
       [property]: value,
     });
   };
-
-  const getById = async () => {
-    const response = await axios.get(`users/get/by/${id}`);
-    setForm(response.data);
-  };
-  useEffect(() => {
-    getById();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div>
+      {
+        openSelectEmail?
+        <SelectEmail
+         open={openSelectEmail}
+         setOpen={setOpenSelectEmail} 
+         selectedValue={selectedValue} 
+         setSelectedValue={setSelectedValue} 
+         handleClickOpenSelectEmail={handleClickOpenSelectEmail}
+         handleCloseSelectEmail={handleCloseSelectEmail}
+         ></SelectEmail>:null
+      }
       <StyledModal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"
@@ -67,75 +75,53 @@ export default function ModalUnstyled({
         slots={{ backdrop: StyledBackdrop }}
       >
         <Box sx={style}>
+        
+          <Typography sx={{m: 1}}  variant="h3" component="h3">
+             Email
+          </Typography>
           <form className="">
-            <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
+            <FormControl sx={{ m: 1, width: "50%" }} variant="outlined">
               <TextField
                 onChange={handleChange}
-                value={form.correo}
-                id="outlined-basic-correo"
-                label="Correo"
-                name="correo"
+                value={form.title}
+                id="outlined-basic-title"
+                label="Title"
+                name="title"
                 type="text"
                 variant="outlined"
+                sx={{ borderRadius: "0px" }}
               />
             </FormControl>
             <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-              <TextField
-                onChange={handleChange}
-                value={form.nombres}
-                id="outlined-basic-nombres"
-                label="Nombres"
-                name="nombres"
-                type="text"
-                variant="outlined"
-              />
+              <QuillEdit></QuillEdit>
             </FormControl>
-            <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-              <TextField
-                onChange={handleChange}
-                value={form.apellidos}
-                id="outlined-basic-apellidos"
-                label="Apellidos"
-                name="apellidos"
-                type="text"
-                variant="outlined"
-              />
+            <FormControl sx={{ m: 1 }} variant="outlined">
+              <Button
+                variant="contained"
+                sx={{ borderRadius: "0px" }}
+                onClick={handleClose}
+                endIcon={<SendIcon />}
+              >
+                Enviar
+              </Button>
             </FormControl>
-            <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-              <TextField
-                onChange={handleChange}
-                value={form.celular}
-                id="outlined-basic-celular"
-                label="Celular"
-                name="celular"
-                type="text"
+            <FormControl sx={{ m: 1 }} variant="outlined">
+              <Button
                 variant="outlined"
-              />
+                sx={{ borderRadius: "0px" }}
+                onClick={handleClose}
+              >
+                CANCELAR
+              </Button>
             </FormControl>
-            <FormControl sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                onChange={handleChange}
-                value={form.password}
-                name="password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
+            <FormControl sx={{ m: 1 }} variant="outlined">
+              <Button
+                variant="outlined"
+                sx={{ borderRadius: "0px" }}
+                onClick={handleClickOpenSelectEmail}
+              >
+                SELECCIONAR
+              </Button>
             </FormControl>
           </form>
         </Box>
@@ -197,8 +183,8 @@ const StyledBackdrop = styled(Backdrop)`
 `;
 
 const style = (theme) => ({
-  width: 400,
-  borderRadius: "12px",
+  width: 1000,
+  // borderRadius: "12px",
   padding: "16px 32px 24px 32px",
   backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",
   boxShadow: `0px 2px 24px ${

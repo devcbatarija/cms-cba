@@ -21,11 +21,12 @@ import {
   Grid
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ModalUnstyled from "./widgets/switch/modalUsers";
+import ModalUnstyled from "./widgets/modalUsers";
+import EditIcon from '@mui/icons-material/Edit';
+import EmailIcon from '@mui/icons-material/Email';
+import ModalUnstyledEmail from "./widgets/modalEmail";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+
 function calculateAge(dateString) {
   const userDate = new Date(dateString);
   const currentDate = new Date();
@@ -46,6 +47,11 @@ export default function TableUser() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  //modal email
+  const [openEmail, setOpenEmail] = useState(false);
+
+  const handleOpenEmail = () => setOpenEmail(true);
+  const handleCloseEmail = () => setOpenEmail(false);
 
   const handleSelectAll = () => {
     if (!selectAll) {
@@ -75,21 +81,43 @@ export default function TableUser() {
   return (
     <TableContainer component={Paper}>
       {
-        open?<ModalUnstyled id={selectedUserModal} open={open} handleOpen={handleOpen} handleClose={handleClose} ></ModalUnstyled>:null
+        open?<ModalUnstyled 
+        id={selectedUserModal} 
+        open={open} 
+        handleOpen={handleOpen} 
+        handleClose={handleClose} ></ModalUnstyled>:null
       }
-      {selectedUsers.length > 0 ? (
+      {
+        openEmail?<ModalUnstyledEmail 
+        open={openEmail} 
+        handleOpen={handleOpenEmail} 
+        handleClose={handleCloseEmail} ></ModalUnstyledEmail>:null
+      }
         <Grid
           container
           direction="row"
           justifyContent="flex-end"
           alignItems="center"
-          style={{ padding: "10px" }}
+          style={{ padding: "10px",gap:"10px" }}
         >
-          <Button variant="contained" color="error" startIcon={<DeleteIcon />}>
-            Borrar ({selectedUsers.length})
+          <Button 
+            variant="contained"
+            sx={{borderRadius:"0px"}}
+            startIcon={<EmailIcon sx={{color:'white'}} />}
+            onClick={handleOpenEmail}
+          >
+            Escribir 
+          </Button>
+          <Button 
+            disabled={selectedUsers.length>0?false:true}
+            variant="contained" 
+            color="error" 
+            sx={{borderRadius:"0px"}}
+            startIcon={<DeleteIcon />}>
+            Borrar {selectedUsers.length}
           </Button>
         </Grid>
-      ) : null}
+        
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -144,6 +172,8 @@ export default function TableUser() {
                 variant="contained" 
                 color="success"
                 onClick={()=>handleModal(row.id_Usuario)}
+                sx={{borderRadius:"0px"}}
+                endIcon={<EditIcon></EditIcon>}
                 >
                   Editar
                 </Button>
