@@ -5,14 +5,13 @@
   display: grid;
   grid-template-columns: 15% 85%;
   min-height: 100vh;
-  width: 100%;
-  background-color: green;
+  width: 100%; 
 }
 
 /* Establece los estilos para la barra lateral */
 .side-container {
-  background-color: #003c64; /* Azul suave */
-  color: white; /* Texto blanco */
+  background-color: #fdfdfd; /*BLANCO*/
+  color: rgb(0, 0, 0); /* Texto blanco */
   transition: width 0.3s, background-color 0.3s;
   overflow: hidden;
   z-index: 4;
@@ -41,7 +40,7 @@
 
 .side-container a {
   text-decoration: none;
-  color: white;
+  color: rgb(0, 0, 0);
   display: inline-block;
   width: 100%;
   padding: 10px 20px;
@@ -51,4 +50,7 @@
   margin-right: 10px;
 }
 
- 
+.sidebar-link:hover {
+  background-color: lightblue;
+  transition: background-color 0.25s;
+}
