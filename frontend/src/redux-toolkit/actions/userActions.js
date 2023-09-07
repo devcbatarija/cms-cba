@@ -9,6 +9,14 @@ export const getallusers = createAsyncThunk("/getallusers", async (payload) => {
     return error.message;
   }
 });
+
+export const deleteStateAllUsers = createAsyncThunk("/deleteStateAllUsers", async (payload) => {
+  try {
+    return [];
+  } catch (error) {
+    return error.message;
+  }
+});
 export const selectAllUsers = createAsyncThunk("/selectAllUsers", async (userIds) => {
   return userIds;
 });

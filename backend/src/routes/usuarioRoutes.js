@@ -1,5 +1,17 @@
 const express=require("express");
-const {getAllUsuarios,postUser, deleteById, updateById,authLogin, emailVerify, emailVerifyToken, updateState, getById}=require("../handlers/usuarioHandler");
+const {
+    getAllUsuarios,
+    postUser,
+    deleteById,
+    updateById,
+    authLogin,
+    emailVerify,
+    emailVerifyToken,
+    updateState,
+    getById,
+    deleteSelect
+}=require("../handlers/usuarioHandler");
+
 const { validToken } = require("../services/jwtservice");
 const router=express();
 
@@ -14,4 +26,7 @@ router.get('/valid/token/email',emailVerifyToken)
 
 router.put('/state/update/:id',updateState)
 router.get('/get/by/:id',getById);
+
+router.post('/delete/select',deleteSelect);
+
 module.exports=router;
