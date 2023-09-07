@@ -12,9 +12,9 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import QuillEdit from "./quillEdit";
+import QuillEdit from "../widgets/quillEdit";
 import SendIcon from "@mui/icons-material/Send";
-import SelectEmail from "./selectEmail";
+import SelectEmail from "../widgets/selectEmail";
 
 
 const emails = ['username@gmail.com', 'user02@gmail.com'];

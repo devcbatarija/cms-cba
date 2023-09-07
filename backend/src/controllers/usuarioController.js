@@ -22,13 +22,15 @@ module.exports = {
     }
   },
   postUsuario: async (user) => {
+    console.log(user.fecha_Nacimiento)
     try {
+      
       const newUser = await Usuario.create({
         correo: user.correo,
         celular:user.celular,
         nombres: user.nombres,
         apellidos: user.apellidos,
-        fecha_Nacimiento: user.fecha_Nacimiento,
+        fecha_Nacimiento:  user.fecha_Nacimiento,
         ci: user.ci,
         password: user.password,
         rol: user.rol,
@@ -119,8 +121,7 @@ module.exports = {
     }
   },
   emailVerify : async(body)=>{
-    console.log(body)
-    try {
+      try {
       const user=await Usuario.findOne({ where: { correo: body.correo }})
       if(!user){
         return "User valid"
@@ -131,8 +132,7 @@ module.exports = {
     }
   },
   emailVerifyToken : async(token)=>{
-    console.log(token)
-    try {
+       try {
       const user=await Usuario.findOne({ where: { verificacion: token }})
       if(!user){
         throw new Error("User token not found");
@@ -151,12 +151,22 @@ module.exports = {
       if(!update){
         throw new Error("User token not found");
       }
-    console.log(estado)
-
+    
       update.dataValues.estado=estado;
       return update;
     } catch (error) {
-      console.log(error)
+         }
+  },
+  deleteSelect: async (userIds) => {
+    try {
+      for (let id of userIds) {
+        const user = await Usuario.findByPk(id);
+        await user.destroy();
+      }
+      const remainingUsers = await Usuario.findAll();
+      return remainingUsers;
+    } catch (error) {
+      return error;
     }
-  }
+  }  
 };

@@ -1,5 +1,14 @@
-const { getAllUsuarios,
-    postUsuario,deleteById,updateById, authLogin, emailVerify, emailVerifyToken, updateState, getById } = require("../controllers/usuarioController")
+const { 
+    getAllUsuarios,
+    postUsuario,
+    deleteById,
+    updateById, 
+    authLogin, 
+    emailVerify, 
+    emailVerifyToken, 
+    updateState, 
+    getById, 
+    deleteSelect } = require("../controllers/usuarioController")
 
 module.exports = {
     getAllUsuarios:async(req,res)=>{
@@ -116,6 +125,14 @@ module.exports = {
         console.log(req.body.estado)
         try {
             const response=await updateState(req.params.id,req.body.estado);
+            res.status(200).json(response)
+        } catch (error) {
+            res.status(500).json({messageError:error.message});
+        }
+    },
+    deleteSelect:async(req,res)=>{
+        try {
+            const response=await deleteSelect(req.body.ids);
             res.status(200).json(response)
         } catch (error) {
             res.status(500).json({messageError:error.message});

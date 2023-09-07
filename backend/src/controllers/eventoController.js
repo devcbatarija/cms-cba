@@ -36,5 +36,30 @@ module.exports={
         } catch (error) {
             return error
         }
+    },
+    updateEvento:async(id,changes)=>{
+        try {
+            const event=await Evento.findByPk(id)
+            if (!event) {
+              return "User not found!";
+            }
+            const updateById = await Evento.update(
+              {
+                  start:changes.start?changes.start:updateById.start,
+                  end: changes.end ? changes.end : updateById.end
+              },
+              {
+                where: {
+                  id: id 
+                },
+              }
+            );
+            if(updateById[0]==1){
+                return {message:"User update success"};
+            }
+            return "Error user update!"
+        } catch (error) {
+            return error
+        }
     }
 }
