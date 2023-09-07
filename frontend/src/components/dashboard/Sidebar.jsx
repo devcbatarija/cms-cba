@@ -26,7 +26,8 @@ export default function Sidebar() {
         <SidebarItem icon={DashboardIcon} label="Dashboard" to="/dashboard" />
         <SidebarItem icon={PersonOutlineOutlinedIcon} label="Usuarios" to="/dashboard/tableuser" />
         <SidebarItem icon={StoreMallDirectoryOutlinedIcon} label="Programas" to="/programs" />
-        <SidebarItem icon={AssessmentOutlinedIcon} label="PublicationAdd" to='/dashboard/publicaciones'/>
+        <SidebarItem icon={StoreMallDirectoryOutlinedIcon} label="Cartelera" to="/dashboard/cartelera" />
+        <SidebarItem icon={AssessmentOutlinedIcon} label="PublicationAdd" to='/dashboard/publinav'/>
       </ul>
     </Toolbar>
   );
