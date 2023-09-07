@@ -12,120 +12,121 @@ import axios from "axios";
 import { getEvents } from "../../redux-toolkit/actions/eventActions";
 
 const Calendario = () => {
-    const dispatch=useDispatch();
-    document.addEventListener("DOMContentLoaded", function(){
-    // let draggableEl = document.getElementById("mydraggable");
-    // new Draggable(draggableEl);
-    })
-    useEffect(()=>{
-        const containerEl=document.getElementById("myeventlist");
-        console.log("yesysy",containerEl)
-        new Draggable(containerEl,{
-            itemSelector: '.fc-event',
-            eventData:function(eventEl) {
-        return {
-          title: eventEl.innerText.trim()
-        }}
-        })
-    },[])
+    const dispatch = useDispatch();
 
-    const events=useSelector((state)=>state.events.events);
-    
-    const userLogin=useSelector((state)=>state.login.user)
-    const [open, setOpen]= useState(false);
-    const handleOpen=()=>setOpen(true);
-    const handleClose=()=>setOpen(false);
-    const [data,setData]=useState({
-        id:"",
-        title:"",
-        start:"",
-        end:"",
-        color:"",
-        tipo:"",
-        UsuarioIdUsuario:userLogin._userId
+    const [myDraggable,setMyDraggable]=useState(null);
+    const events = useSelector((state) => state.events.events);
+    const [containerEl, setContainerEl] = useState(null);
+    const userLogin = useSelector((state) => state.login.user)
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [data, setData] = useState({
+        id: "",
+        title: "",
+        start: "",
+        end: "",
+        color: "",
+        tipo: "",
+        UsuarioIdUsuario: userLogin._userId
     })
+    useEffect(() => {
+        console.log(containerEl)
+        setContainerEl(document.getElementById("myeventlist"));
+        if (containerEl != null&&myDraggable == null) {
+            setMyDraggable(
+                new Draggable(containerEl, {
+                    itemSelector: '.fc-event',
+                    eventData: function (eventEl) {
+                        return {
+                            title: eventEl.innerText.trim()
+                        }
+                    }
+                })
+            )
+        }
 
-    const handleDateSelect=(e)=>{
-        const start=e.startStr;
+    }, [containerEl])
+    const handleDateSelect = (e) => {
+        const start = e.startStr;
         const end = e.endStr;
         setData({
             ...data,
-            title:"",
-            start:start,
-            end:end,
-            color:"",
-            tipo:""
+            id:"",
+            title: "",
+            start: start,
+            end: end,
+            color: "",
+            tipo: ""
         })
         handleOpen()
     }
 
-    const handleEventClick=(e)=>{
-        const containerEl=document.getElementById("myeventlist");
-    console.log("yesysy",containerEl)
+    const handleEventClick = (e) => {
+        const containerEl = document.getElementById("myeventlist");
+        console.log("yesysy", containerEl)
         console.log(e.event)
     }
-    const handleEventDrop=async (e)=>{
-        const eventDrop=e.event;
+    const handleEventDrop = async (e) => {
+        const eventDrop = e.event;
         console.log(eventDrop)
         await setData({
             ...data,
-            id:eventDrop.id,
-            title:eventDrop.title,
-            start:eventDrop.startStr,
-            end:eventDrop.endStr,
+            id: eventDrop.id,
+            title: eventDrop.title,
+            start: eventDrop.startStr,
+            end: eventDrop.endStr,
             color: eventDrop.backgroundColor,
-            tipo:eventDrop.extendedProps.tipo
+            tipo: eventDrop.extendedProps.tipo
         })
     }
-    useEffect(()=>{
-        data.id?axios.put(`event/update/${data.id}`,data).then(res=>{
+    useEffect(() => {
+        data.id ? axios.put(`event/update/${data.id}`, data).then(res => {
             dispatch(getEvents())
-        }).catch(error=>{
+        }).catch(error => {
             console.log(error)
-        }):null;
-    },[data])
-    
+        }) : null;
+    }, [data])
+
     return (
         <>
             <TriggerButton onClick={handleOpen}>Open modal</TriggerButton>
-        {
-            <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
-        }
-        <div>
-            <div className="calendar">
-                <FullCalendar
-                    headerToolbar={{
-                        left:'dayGridMonth,timeGridWeek,timeGridDay',
-                        center:'title',
-                        right:'prev,today,next'
-                    }}
-                    plugins={[daygrid,interaction,timegrid]}
-                    fixedWeekCount={false}
-                    locales='es'
-                    initialView="dayGridMonth"
-                    // initialEvents={events}
-                    events={events}
-                    editable={true}
-                    selectable={true}
-                    selectMirror={true}
-                    dayMaxEvents={true}
-                    weekends={true}
-                    droppable={true}
-                    select={handleDateSelect}
-                    eventClick={handleEventClick}
-                    eventDrop={handleEventDrop}
+            {
+                <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
+            }
+            <div className={"flex flex-row"}>
+                <div className="calendar w-9/12">
+                    <FullCalendar
+                        headerToolbar={{
+                            left: 'dayGridMonth,timeGridWeek,timeGridDay',
+                            center: 'title',
+                            right: 'prev,today,next'
+                        }}
+                        plugins={[daygrid, interaction, timegrid]}
+                        fixedWeekCount={false}
+                        locales='es'
+                        initialView="dayGridMonth"
+                        // initialEvents={events}
+                        events={events}
+                        editable={true}
+                        selectable={true}
+                        selectMirror={true}
+                        dayMaxEvents={true}
+                        weekends={true}
+                        droppable={true}
+                        select={handleDateSelect}
+                        eventClick={handleEventClick}
+                        eventDrop={handleEventDrop}
                     // drop={handleEventDrop}
                     // dateClick={handleDateSelect}
-                />
-            </div>
-            <div id={"mydraggable"}>
-                <div id="myeventlist">    
-                    <div className='fc-event' data-event='{ "title": "my event", "duration": "02:00" }'>drag me</div>
+                    />
                 </div>
+                <div id="myeventlist" className="w-3/12">
+                        <div className='fc-event' data-event='{ "title": "my event", "duration": "02:00" }'>drag me</div>
+                    </div>
             </div>
-        </div>
         </>
-     );
+    );
 }
 
 
@@ -134,9 +135,9 @@ const blue = {
     200: '#99CCF3',
     400: '#3399FF',
     500: '#007FFF',
-  };
-  
-  const grey = {
+};
+
+const grey = {
     50: '#f6f8fa',
     100: '#eaeef2',
     200: '#d0d7de',
@@ -147,7 +148,7 @@ const blue = {
     700: '#424a53',
     800: '#32383f',
     900: '#24292f',
-  };
+};
 const TriggerButton = styled(Button)(
     ({ theme }) => `
     font-family: IBM Plex Sans, sans-serif;
@@ -172,6 +173,6 @@ const TriggerButton = styled(Button)(
       outline: 3px solid ${theme.palette.mode === 'dark' ? blue[500] : blue[200]};
     }
     `
-    );
- 
+);
+
 export default Calendario;
