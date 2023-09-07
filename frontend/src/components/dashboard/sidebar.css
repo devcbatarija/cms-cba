@@ -5,8 +5,7 @@
   display: grid;
   grid-template-columns: 15% 85%;
   min-height: 100vh;
-  width: 100%;
-  background-color: green;
+  width: 100%; 
 }
 
 /* Establece los estilos para la barra lateral */
@@ -51,4 +50,7 @@
   margin-right: 10px;
 }
 
- 
+.sidebar-link:hover {
+  background-color: lightblue;
+  transition: background-color 0.25s;
+}
