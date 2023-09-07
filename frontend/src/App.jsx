@@ -16,6 +16,7 @@ import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
 import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
+import PublicationNav from './components/dashboard/Publications/Nav';
 import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
 import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents } from './redux-toolkit/actions/eventActions';
@@ -72,7 +73,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         {/* Ruta del dashboard, sin verificación de autenticación */}
         <Route path='/dashboard' element={<Dashboard></Dashboard>}>
-          <Route path='/dashboard/publicaciones' element={<PublicationAdd />} />
+          <Route path='/dashboard/publinav' element={<PublicationNav />} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>
         </Route>
         {/* Ruta para manejar páginas no encontradas */}

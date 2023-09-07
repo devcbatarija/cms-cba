@@ -52,7 +52,7 @@ export default function Sidebar() {
         <SidebarItem 
           icon={AssessmentOutlinedIcon} 
           label="Publicaciones" 
-          to="/dashboard/publicaciones" 
+          to="/dashboard/publinav" 
         />
         <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
