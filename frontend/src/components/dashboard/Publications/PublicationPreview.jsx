@@ -1,45 +1,88 @@
 import React from 'react';
+import styled from 'styled-components';
 
-function PublicationPreview({ post }) {
-  const styles = {
-    container: {
-      margin: '0 auto',
-      padding: '20px',
-      backgroundColor: '#f8f9fa',
-      borderRadius: '5px',
-      boxShadow: '0 0 10px rgba(0,0,0,0.1)'
-    },
-    title: {
-      color: '#343a40',
-      textAlign: 'center'
-    },
-    strong: {
-      color: '#007bff'
-    },
-    multimedia: {
-      marginTop: '20px'
-    }
-  };
+const PreviewContainer = styled.div`
+  margin: 0 auto;
+  padding-left: 200px ;
+  background-color: #f8f9fa;
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+`;
 
+const Title = styled.h2`
+  color: #343a40;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+const PropertyLabel = styled.strong`
+  color: #00000;
+  display: block;
+  font-size: 18px;
+  margin-top: 10px;
+`;
+
+const PropertyValue = styled.p`
+  font-size: 16px;
+`;
+
+const MultimediaContainer = styled.div`
+  margin-top: 20px;
+`;
+
+const MultimediaList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+function PublicationPreview() {
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Vista Previa de la Publicación</h2>
-      <p><strong style={styles.strong}>Título:</strong> {post.title}</p>
-      <p><strong style={styles.strong}>Descripción:</strong> {post.description}</p>
-      <p><strong style={styles.strong}>Estado:</strong> {post.status}</p>
-      <p><strong style={styles.strong}>Tipo:</strong> {post.type}</p>
-      {post.multimedia.length > 0 && (
-        <div style={styles.multimedia}>
-          <strong style={styles.strong}>Multimedia:</strong>
-          <ul>
-            {post.multimedia.map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    <PreviewContainer>
+      <Title>Vista Previa</Title>
+      <PropertyLabel>Título:</PropertyLabel>
+      <PropertyValue>El senor de los anillos</PropertyValue>
+      <MultimediaContainer>
+        <PropertyLabel>Multimedia:</PropertyLabel>
+        <MultimediaList>
+          <img src="https://www.camarapiracicaba.sp.gov.br/Artigos/Imagens/t620/76616.jpg" alt="" srcset="" />
+        </MultimediaList>
+      </MultimediaContainer>  
+      
+      <PropertyLabel>Descripción:</PropertyLabel>
+      <PropertyValue>El arte del camuflaje</PropertyValue>
+      <PropertyLabel>Estado:</PropertyLabel>
+      <PropertyValue>Agotado</PropertyValue>
+      <PropertyLabel>Tipo:</PropertyLabel>
+      <PropertyValue>Cartelera</PropertyValue>
+      
+    </PreviewContainer>
   );
 }
+// function PublicationPreview({ post }) {
+//   return (
+//     <PreviewContainer>
+//       <Title>Vista Previa de la Publicación</Title>
+//       <PropertyLabel>Título:</PropertyLabel>
+//       <PropertyValue>{post.title}</PropertyValue>
+//       <PropertyLabel>Descripción:</PropertyLabel>
+//       <PropertyValue>{post.description}</PropertyValue>
+//       <PropertyLabel>Estado:</PropertyLabel>
+//       <PropertyValue>{post.status}</PropertyValue>
+//       <PropertyLabel>Tipo:</PropertyLabel>
+//       <PropertyValue>{post.type}</PropertyValue>
+//       {post.multimedia.length > 0 && (
+//         <MultimediaContainer>
+//           <PropertyLabel>Multimedia:</PropertyLabel>
+//           <MultimediaList>
+//             {post.multimedia.map((file, index) => (
+//               <MultimediaItem key={index}>{file.name}</MultimediaItem>
+//             ))}
+//           </MultimediaList>
+//         </MultimediaContainer>
+//       )}
+//     </PreviewContainer>
+//   );
+// }
 
 export default PublicationPreview;

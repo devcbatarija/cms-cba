@@ -16,9 +16,11 @@ import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
 import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
+import PublicationNav from './components/dashboard/Publications/Nav';
 import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
-import TableUser from './components/dashboard/tableUser';
+import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents } from './redux-toolkit/actions/eventActions';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -71,7 +73,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         {/* Ruta del dashboard, sin verificación de autenticación */}
         <Route path='/dashboard' element={<Dashboard></Dashboard>}>
-          <Route path='/dashboard/publicaciones' element={<PublicationAdd />} />
+          <Route path='/dashboard/publinav' element={<PublicationNav />} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>
         </Route>
         {/* Ruta para manejar páginas no encontradas */}
@@ -81,6 +83,28 @@ function App() {
       {/* <Routes>
         <Route path='/dashboard' element={<PublicationAdd />} />
         </Routes> */}
+        <Toaster
+        position="top-right"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          className: "",
+          duration: 5000,
+          style: {
+            background: "white",
+            color: "black",
+          },
+          success: {
+            duration: 3000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+        }}
+      />
     </>
   );
 }

@@ -26,6 +26,7 @@ import { useDispatch } from "react-redux";
 import { getallusers } from "../../../redux-toolkit/actions/userActions";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
   const [spinner, setSpinner] = useState(false);
@@ -66,9 +67,13 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
     try {
       setSpinner(true);
       const response = await axios.put(`users/update/${id}`, form);
-      dispatch(getallusers());
-      setSpinner(false);
-      handleClose();
+      setTimeout(() => {
+        toast.success("Actualización exitosa!");
+        dispatch(getallusers());
+        setSpinner(false);
+        handleClose();
+      }, 1500);
+      
     } catch (error) {
       console.log(error);
     }
@@ -81,6 +86,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
 
   return (
     <div>
+      
       <StyledModal
         aria-labelledby="unstyled-modal-title"
         aria-describedby="unstyled-modal-description"
@@ -201,6 +207,9 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                 </Select>
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-estado">
+                  Estado
+                </InputLabel>
                 <Select
                   sx={{ width: "100%" }}
                   labelId="demo-select-small-label"
