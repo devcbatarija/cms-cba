@@ -4,7 +4,8 @@ import {
   selectAllUsers,
   deselectAllUsers,
   selectUser,
-  deselectUser 
+  deselectUser, 
+  deleteStateAllUsers
 } from "../actions/userActions";
 
 const initialState = {
@@ -26,6 +27,17 @@ const userSlices = createSlice({
         state.status = "success";
     });
     builder.addCase(getallusers.rejected, (state, action) => {
+        state.status = "rejected";
+    });
+
+    builder.addCase(deleteStateAllUsers.pending, (state, action) => {
+      state.status = "pending";
+    });
+    builder.addCase(deleteStateAllUsers.fulfilled, (state, action) => { //action.payload
+        state.users=action.payload
+        state.status = "success";
+    });
+    builder.addCase(deleteStateAllUsers.rejected, (state, action) => {
         state.status = "rejected";
     });
 
