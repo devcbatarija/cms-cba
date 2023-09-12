@@ -21,6 +21,10 @@ module.exports=(sequelize)=>{
             type: DataTypes.BOOLEAN,
             allowNull:false,
             defaultValue: true
+        },
+        tipo:{
+            type:DataTypes.STRING,
+            allowNull:false
         }
     })
 }
