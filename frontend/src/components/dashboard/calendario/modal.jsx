@@ -10,8 +10,9 @@ import { TextField, Typography, Button, TextareaAutosize, Alert } from "@mui/mat
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { getEvents } from "../../redux-toolkit/actions/eventActions";
-
+import { getEvents } from "../../../redux-toolkit/actions/eventActions";
+import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 const UseModal = ({setData,data,handleOpen,handleClose,open}) => {
    const dispatch=useDispatch();
 
@@ -29,10 +30,20 @@ const UseModal = ({setData,data,handleOpen,handleClose,open}) => {
         // })
     }
     const saveEvent=()=>{
-      const res = axios.post("/event/create",data).then(res=>{
+      const token = Cookies.get('token');
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+      const res = axios.post("/event/create",data, config).then(res=>{
+        toast.success(res.data.successMessage)
         dispatch(getEvents())
       }).catch(error=>{
         console.log(error)
+        if(error.response.status==401){
+          toast.error(error.response.data.messageError)
+        }
       })
       handleClose()
     }

@@ -9,3 +9,11 @@ export const getEvents = createAsyncThunk("/getEvents", async ()=>{
         return error;
     }
 })
+export const getEventsPredefinidos=createAsyncThunk("/getEventsPredefinidos", async()=>{
+    try {
+        const eventsPredefinidos= await axios.get("eventpredefinido");
+        return eventsPredefinidos.data.results;
+    } catch (error) {
+        
+    }
+})

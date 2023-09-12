@@ -10,7 +10,7 @@ router.use('/test',testRouter); //"http:localhost:3001/api/test"
 router.use('/users',userRouter);
 router.use('/publication',publicacionRoutes);
 router.use("/event",eventoRoutes);
-router.use("/eventPredefinido",EPredefinido);
+router.use("/eventpredefinido",EPredefinido);
 
 
 module.exports=router;
