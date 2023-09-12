@@ -35,7 +35,8 @@ const {
   Publicacion,
   Evento,
   Dato_Evento,
-  Evento_Predefinido
+  Evento_Predefinido,
+  Programa
 } = sequelize.models;
 Usuario.hasMany(Publicacion);
 Publicacion.belongsTo(Usuario);
@@ -48,6 +49,9 @@ Dato_Evento.belongsTo(Evento);
 
 Usuario.hasMany(Evento_Predefinido);
 Evento_Predefinido.belongsTo(Usuario);
+
+Usuario.hasMany(Programa);
+Programa.belongsTo(Usuario);
 
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,

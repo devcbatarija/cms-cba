@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PublicationAdd from './PublicationAdd';
 import PublicationPreview from './PublicationPreview';
+import TablePublication from './PublicationTable';
+import PublicationTable from './PublicationTable';
 
 function Publicacion() {
   const [currentView, setCurrentView] = useState('crear');
@@ -30,7 +32,7 @@ function Publicacion() {
       </nav>
       
       {currentView === 'crear' ? (
-        <PublicationAdd />
+        <TablePublication />
       ) : (
         <PublicationPreview post={{/* Aquí proporciona los datos de la publicación */}} />
       )}

@@ -24,7 +24,7 @@ function DashNavbar() {
   const navbarStyle = {
     background: 'white',
     color: 'black',
-    borderBottom: '1px solid #000000', // Cambia el color y el grosor de la línea inferior
+    borderBottom: '1px solid #ACACAC', // Cambia el color y el grosor de la línea inferior
     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Añade una sombra
   };
 
@@ -38,7 +38,6 @@ function DashNavbar() {
             alt=""
             srcSet=""
           />
-
         </Typography>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <IconButton
