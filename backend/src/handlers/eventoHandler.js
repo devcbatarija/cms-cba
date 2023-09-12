@@ -16,7 +16,8 @@ module.exports={
         try {
             const response = await addEvento(req.body);
             res.status(200).json({
-                results:response
+                results:response,
+                successMessage:"Se registro el evento correctamente"
             });
         } catch (error) {
             res.status(400).json({error:error.message});

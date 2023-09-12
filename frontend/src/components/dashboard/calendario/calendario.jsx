@@ -4,18 +4,24 @@ import FullCalendar from "@fullcalendar/react";
 import timegrid from "@fullcalendar/timegrid";
 import { useState } from "react";
 import UseModal from "./modal";
-import { Button } from '@mui/base/Button';
+// import { Button } from '@mui/base/Button';
 import { styled } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
-import { getEvents } from "../../redux-toolkit/actions/eventActions";
+import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
+import BasicStack from "./widgets/stack";
+import multimonth from "@fullcalendar/multimonth";
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from "@mui/material";
+import "./calendarStyles.css"
 
 const Calendario = () => {
     const dispatch = useDispatch();
 
     const [myDraggable,setMyDraggable]=useState(null);
     const events = useSelector((state) => state.events.events);
+    const eventsPredefinidos=useSelector((state)=>state.events.eventsPredefinidos);
     const [containerEl, setContainerEl] = useState(null);
     const userLogin = useSelector((state) => state.login.user)
     const [open, setOpen] = useState(false);
@@ -31,23 +37,18 @@ const Calendario = () => {
         UsuarioIdUsuario: userLogin._userId
     })
     useEffect(() => {
-        console.log(containerEl)
         setContainerEl(document.getElementById("myeventlist"));
         if (containerEl != null&&myDraggable == null) {
             setMyDraggable(
                 new Draggable(containerEl, {
-                    itemSelector: '.fc-event',
-                    eventData: function (eventEl) {
-                        return {
-                            title: eventEl.innerText.trim()
-                        }
-                    }
+                    itemSelector: '.fc-event'
                 })
             )
         }
 
     }, [containerEl])
     const handleDateSelect = (e) => {
+        console.log(e)
         const start = e.startStr;
         const end = e.endStr;
         setData({
@@ -88,21 +89,42 @@ const Calendario = () => {
         }) : null;
     }, [data])
 
+    const handleExternalEventDrop=async (e)=>{
+        const eventDrop = JSON.parse(e.draggedEl.dataset.event);
+        const X=e.date;
+        X.setDate(X.getDate() + 1);
+        const y=X.toISOString().slice(0,10);
+        const newE={
+            title:eventDrop.title,
+            start:e.dateStr,
+            end:y,
+            color:eventDrop.color,
+            tipo:"Predefinido",
+            UsuarioIdUsuario: data.UsuarioIdUsuario
+        }
+        axios.post("/event/create", newE).then(res=>{
+        dispatch(getEvents())
+        }).catch(error=>{
+            console.log(error)
+        });
+    }
+
     return (
         <>
-            <TriggerButton onClick={handleOpen}>Open modal</TriggerButton>
+            {/* <TriggerButton onClick={handleOpen}>Open modal</TriggerButton> */}
             {
                 <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
             }
             <div className={"flex flex-row"}>
-                <div className="calendar w-9/12">
+                <div className="calendar w-10/12">
+                    {/* seo declarar para consultas slang */}
                     <FullCalendar
                         headerToolbar={{
-                            left: 'dayGridMonth,timeGridWeek,timeGridDay',
-                            center: 'title',
-                            right: 'prev,today,next'
+                            left:'title,prev,next',
+                            // center: 'dayGridMonth,timeGridWeek,timeGridDay',
+                            right:'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
                         }}
-                        plugins={[daygrid, interaction, timegrid]}
+                        plugins={[daygrid, interaction, timegrid,multimonth]}
                         fixedWeekCount={false}
                         locales='es'
                         initialView="dayGridMonth"
@@ -114,22 +136,39 @@ const Calendario = () => {
                         dayMaxEvents={true}
                         weekends={true}
                         droppable={true}
+                        eventDurationEditable={false}
                         select={handleDateSelect}
                         eventClick={handleEventClick}
                         eventDrop={handleEventDrop}
-                    // drop={handleEventDrop}
+                        drop={handleExternalEventDrop}
                     // dateClick={handleDateSelect}
                     />
                 </div>
-                <div id="myeventlist" className="w-3/12">
-                        <div className='fc-event' data-event='{ "title": "my event", "duration": "02:00" }'>drag me</div>
+                <div className="w-2/12 mt-5">
+                    <div id="myeventlist"   className="eventPred mb-3">
+                            <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
                     </div>
+                    <Button 
+            sx={{ borderRadius: "3px" }}
+            type="submit"
+            variant="contained"
+            fullWidth={true}
+            startIcon={<AddIcon sx={{color:'white'}} />}
+          >
+            Añadir 
+          </Button>
+                </div>
             </div>
         </>
     );
 }
 
-
+const styles={
+    backgroundColor:"rgb(166, 167, 170)",
+    borderRadius:"10px",
+    padding:"15px",
+    height:"80vh"
+}
 
 const blue = {
     200: '#99CCF3',
