@@ -78,7 +78,10 @@ export default function TableUser() {
       setSelectAll(false);  // Actualiza el estado local.
     }
   };
-
+  const handleModal = (id) =>{ //Para poder seleccionar un usuario que se va a editar
+    setSelectedUserModal(id)
+    handleOpen(true)
+  }
   // Función para eliminar usuarios seleccionados.
   const handleDelete = async() => {
     const response = await axios.post('/users/delete/select', { ids: selectedUsers });  // Envía una solicitud para eliminar usuarios seleccionados.
