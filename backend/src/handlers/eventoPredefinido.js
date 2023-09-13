@@ -1,4 +1,4 @@
-const { getAllEPredefinido, addEPredefinido } = require("../controllers/EventoPredefinido")
+const { getAllEPredefinido, addEPredefinido } = require("../controllers/eventoPredefinido")
 
 
 module.exports={
