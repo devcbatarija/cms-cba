@@ -1,0 +1,12 @@
+.button-404{
+    background-color: black;
+    border-radius: 5px;
+    width: 150px;
+    height: 35px;
+    color: whitesmoke;
+    transition: all .3s;
+    border: 1px solid transparent;
+}
+.button-404:hover{
+    background-color: rgba(0, 0, 0, 0.80);
+}

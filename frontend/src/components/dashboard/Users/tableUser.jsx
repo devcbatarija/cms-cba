@@ -205,7 +205,7 @@ export default function TableUser() {
               <TableCell align="center">
                 <Avatar alt="Remy Sharp" src={row.image ? row.image : null} />
               </TableCell>
-              <TableCell align="center">{row.estado?"true":"false"}</TableCell>
+              <TableCell align="center">{row.estado?"Habilitado":"Desabilitado"}</TableCell>
               <TableCell align="center">
                 <Button 
                 variant="contained" 

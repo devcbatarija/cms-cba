@@ -6,10 +6,16 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useSelector } from 'react-redux';
+import { Tooltip } from '@mui/material';
+import PositionedMenu from '../../navBar/positionedMenu';
 
 function DashNavbar() {
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+
+  const [auth, setAuth] = useState(false);
+  const authlogin = useSelector((state) => state.login);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,24 +44,24 @@ function DashNavbar() {
             alt=""
             srcSet=""
           />
-
         </Typography>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            color="inherit"
-            onClick={handleProfileMenuOpen}
-            style={{ marginRight: '20px' }}
-          >
-            <AccountCircle fontSize="large" />
-            <Typography variant="body2" noWrap>
-            Limber Tolaba
-          </Typography>
-          </IconButton>
-          
+            {authlogin.auth ? (
+              <Tooltip>
+                <IconButton
+                  onClick={() => {
+                    setAuth(!auth);
+                  }}
+                  sx={{ p: 0 }}
+                >
+                  <PositionedMenu
+                    altImg={authlogin.user.correo}
+                    srcImg={authlogin.user._profileImage}
+                  ></PositionedMenu>
+                </IconButton>
+              </Tooltip>
+            ):null
+            }
         </div>
       </Toolbar>
       <Menu

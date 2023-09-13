@@ -5,6 +5,8 @@ import DashNavbar from "./DashboardNavbar/DashNavbar";
 
 function DashboardPage() {
   return (
+    <>
+    <DashNavbar />
     <div className="containerr">
       <div className="side-container">
         <Sidebar />
@@ -14,6 +16,7 @@ function DashboardPage() {
         <Outlet />
       </div>
     </div>
+    </>
   );
 }
 
