@@ -62,7 +62,7 @@ export default function Sidebar() {
         <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
           label="Programas" 
-          to="/programs" 
+          to="/dashboard/tableprogram" 
         />
       </ul>
     </Toolbar>

@@ -2,12 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Define una acción asíncrona llamada `getAllProgram`.
-export const getAllProgram = createAsyncThunk("/getAllProgram", async () => {
+export const getAllProgram = createAsyncThunk("/getAllPrograms", async () => {
     try {
         // Realiza una solicitud GET a "program" utilizando axios.
         const response = await axios.get("program");
         // Imprime los resultados de la solicitud en la consola.
-        console.log(response.data.results);
         // Retorna los resultados de la solicitud (normalmente, un array de programas).
         return response.data.results;
     } catch (error) {
