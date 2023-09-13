@@ -15,13 +15,16 @@ import multimonth from "@fullcalendar/multimonth";
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
 import "./calendarStyles.css"
+import ModalAddEvent from "./modalAddEvent";
+import Cookies from "js-cookie";
+import { toast } from "react-hot-toast";
 
 const Calendario = () => {
     const dispatch = useDispatch();
 
-    const [myDraggable,setMyDraggable]=useState(null);
+    const [myDraggable, setMyDraggable] = useState(null);
     const events = useSelector((state) => state.events.events);
-    const eventsPredefinidos=useSelector((state)=>state.events.eventsPredefinidos);
+    const eventsPredefinidos = useSelector((state) => state.events.eventsPredefinidos);
     const [containerEl, setContainerEl] = useState(null);
     const userLogin = useSelector((state) => state.login.user)
     const [open, setOpen] = useState(false);
@@ -38,7 +41,7 @@ const Calendario = () => {
     })
     useEffect(() => {
         setContainerEl(document.getElementById("myeventlist"));
-        if (containerEl != null&&myDraggable == null) {
+        if (containerEl != null && myDraggable == null) {
             setMyDraggable(
                 new Draggable(containerEl, {
                     itemSelector: '.fc-event'
@@ -48,17 +51,17 @@ const Calendario = () => {
 
     }, [containerEl])
     const handleDateSelect = (e) => {
-        console.log(e)
         const start = e.startStr;
         const end = e.endStr;
         setData({
             ...data,
-            id:"",
+            id: "",
             title: "",
             start: start,
             end: end,
             color: "",
-            tipo: ""
+            tipo: "",
+            UsuarioIdUsuario: userLogin._userId
         })
         handleOpen()
     }
@@ -89,42 +92,66 @@ const Calendario = () => {
         }) : null;
     }, [data])
 
-    const handleExternalEventDrop=async (e)=>{
+    useEffect(() => {
+        setData({
+            ...data,
+            UsuarioIdUsuario: userLogin._userId
+        })
+    }, [])
+    const handleExternalEventDrop = async (e) => {
+        const token = Cookies.get('token');
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
         const eventDrop = JSON.parse(e.draggedEl.dataset.event);
-        const X=e.date;
+        const X = e.date;
         X.setDate(X.getDate() + 1);
-        const y=X.toISOString().slice(0,10);
-        const newE={
-            title:eventDrop.title,
-            start:e.dateStr,
-            end:y,
-            color:eventDrop.color,
-            tipo:"Predefinido",
-            UsuarioIdUsuario: data.UsuarioIdUsuario
+        const y = X.toISOString().slice(0, 10);
+        const newE = {
+            title: eventDrop.title,
+            start: e.dateStr,
+            end: y,
+            color: eventDrop.color,
+            tipo: eventDrop.tipo,
+            UsuarioIdUsuario: userLogin._userId
         }
-        axios.post("/event/create", newE).then(res=>{
-        dispatch(getEvents())
-        }).catch(error=>{
-            console.log(error)
-        });
+        axios.post("event/create", newE, config).then(res => {
+            setTimeout(() => {
+                toast.success(res.data.successMessage)
+                dispatch(getEvents())
+                handleClose();
+            }, 1500);
+        }).catch(error => {
+            if (error.response.status == 401) {
+                toast.error(error.response.data.messageError)
+            }
+        })
     }
 
     return (
         <>
             {/* <TriggerButton onClick={handleOpen}>Open modal</TriggerButton> */}
             {
-                <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
+                // <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
+                <ModalAddEvent
+                    setData={setData}
+                    data={data}
+                    open={open}
+                    handleClose={handleClose}
+                />
             }
             <div className={"flex flex-row"}>
                 <div className="calendar w-10/12">
                     {/* seo declarar para consultas slang */}
                     <FullCalendar
                         headerToolbar={{
-                            left:'title,prev,next',
+                            left: 'title,prev,next',
                             // center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                            right:'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
+                            right: 'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
                         }}
-                        plugins={[daygrid, interaction, timegrid,multimonth]}
+                        plugins={[daygrid, interaction, timegrid, multimonth]}
                         fixedWeekCount={false}
                         locales='es'
                         initialView="dayGridMonth"
@@ -145,29 +172,29 @@ const Calendario = () => {
                     />
                 </div>
                 <div className="w-2/12 mt-5">
-                    <div id="myeventlist"   className="eventPred mb-3">
-                            <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
+                    <div id="myeventlist" className="eventPred mb-3">
+                        <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
                     </div>
-                    <Button 
-            sx={{ borderRadius: "3px" }}
-            type="submit"
-            variant="contained"
-            fullWidth={true}
-            startIcon={<AddIcon sx={{color:'white'}} />}
-          >
-            Añadir 
-          </Button>
+                    <Button
+                        sx={{ borderRadius: "3px" }}
+                        type="submit"
+                        variant="contained"
+                        fullWidth={true}
+                        startIcon={<AddIcon sx={{ color: 'white' }} />}
+                    >
+                        Añadir
+                    </Button>
                 </div>
             </div>
         </>
     );
 }
 
-const styles={
-    backgroundColor:"rgb(166, 167, 170)",
-    borderRadius:"10px",
-    padding:"15px",
-    height:"80vh"
+const styles = {
+    backgroundColor: "rgb(166, 167, 170)",
+    borderRadius: "10px",
+    padding: "15px",
+    height: "80vh"
 }
 
 const blue = {

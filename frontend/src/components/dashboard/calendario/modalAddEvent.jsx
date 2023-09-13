@@ -7,24 +7,19 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import {
-    Avatar,
     Button,
     Grid,
-    IconButton,
-    InputAdornment,
     InputLabel,
     MenuItem,
-    OutlinedInput,
     Select,
     TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
-import { getallusers } from "../../../redux-toolkit/actions/userActions";
+import { getEvents } from "../../../redux-toolkit/actions/eventActions";
+import Cookies from "js-cookie";
 
 export default function ModalAddEvent({
     setData,
@@ -33,45 +28,40 @@ export default function ModalAddEvent({
     handleClose,
 }) {
     const [spinner, setSpinner] = useState(false);
-    const [form, setForm] = useState({
-        correo: "",
-        nombres: "",
-        apellidos: "",
-        celular: "",
-        password: "",
-        rol: "Client",
-        estado: true,
-        ci: "",
-        fecha_Nacimiento: "",
-    });
     const dispatch = useDispatch();
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
 
     const handleChange = (e) => {
         const property = e.target.name;
         const value = e.target.value;
-        setForm({
-            ...form,
+        setData({
+            ...data,
             [property]: value,
         });
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            const token = Cookies.get('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            };
             setSpinner(true);
-            const response = await axios.post(`users`, form);
-            setTimeout(() => {
-                toast.success("Registro exitoso!");
-                dispatch(getallusers());
-                handleClose();
-            }, 1500);
+
+            const res = axios.post("event/create", data, config).then(res => {
+                setTimeout(() => {
+                    toast.success(res.data.successMessage)
+                    dispatch(getEvents())
+                    handleClose();
+                }, 1500);
+            }).catch(error => {
+                if (error.response.status == 401) {
+                    toast.error(error.response.data.messageError)
+                }
+            })
         } catch (error) {
-            console.log(error);
+            console.log(error)
         }
     };
     useEffect(() => {
@@ -91,137 +81,88 @@ export default function ModalAddEvent({
                     <form
                         onSubmit={handleSubmit}
                         style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(2,1fr)",
-                            gap: "10px",
+                            // display: "grid",
+                            // gridTemplateColumns: "repeat(2,1fr)",
+                            // gap: "10px",
                         }}
                     >
                         <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <Avatar alt="Remy Sharp" src={form.image} />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-celular">
-                                Correo
+                            <InputLabel htmlFor="outlined-adornment-title">
+                                Titulo
                             </InputLabel>
                             <TextField
                                 sx={{ width: "100%" }}
                                 onChange={handleChange}
-                                value={form.correo}
-                                id="outlined-basic-correo"
-                                name="correo"
+                                value={data.title}
+                                id="outlined-basic-title"
+                                name="title"
                                 type="text"
                                 variant="outlined"
                             />
                         </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-celular">
-                                Nombres
-                            </InputLabel>
-                            <TextField
-                                sx={{ width: "100%" }}
-                                onChange={handleChange}
-                                value={form.nombres}
-                                id="outlined-basic-nombres"
-                                name="nombres"
-                                type="text"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-celular">
-                                Apellidos
-                            </InputLabel>
-                            <TextField
-                                sx={{ width: "100%" }}
-                                onChange={handleChange}
-                                value={form.apellidos}
-                                id="outlined-basic-apellidos"
-                                name="apellidos"
-                                type="text"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-celular">
-                                Apellidos
-                            </InputLabel>
-                            <TextField
-                                onChange={handleChange}
-                                value={form.fecha_Nacimiento}
-                                id="outlined-basic-fecha_Nacimiento"
-                                name="fecha_Nacimiento"
-                                type="date"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-celular">
-                                Celular
-                            </InputLabel>
-                            <TextField
-                                sx={{ width: "100%" }}
-                                onChange={handleChange}
-                                value={form.celular}
-                                id="outlined-basic-celular"
-                                name="celular"
-                                type="text"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-ci">Ci</InputLabel>
-                            <TextField
-                                sx={{ width: "100%" }}
-                                onChange={handleChange}
-                                value={form.ci}
-                                id="outlined-basic-ci"
-                                name="ci"
-                                type="text"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">
-                                Password
-                            </InputLabel>
-                            <OutlinedInput
-                                sx={{ width: "100%" }}
-                                id="outlined-adornment-password"
-                                type={showPassword ? "text" : "password"}
-                                onChange={handleChange}
-                                value={form.password}
-                                name="password"
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            edge="end"
-                                        >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                            />
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-password">Rol</InputLabel>
-                            <Select
-                                sx={{ width: "100%" }}
-                                labelId="demo-select-small-label"
-                                id="demo-select-small"
-                                value={form.rol}
-                                label="rol"
-                                onChange={handleChange}
-                                name="rol"
-                            >
-                                <MenuItem value="Admin">Admin</MenuItem>
-                                <MenuItem value="Client">Client</MenuItem>
-                            </Select>
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                        <div style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(2,1fr)",
+                            gap: "10px",
+                        }}>
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-start">
+                                    Fecha de Inicio
+                                </InputLabel>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    onChange={handleChange}
+                                    value={data.start}
+                                    id="outlined-basic-start"
+                                    name="start"
+                                    type="date"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-end">
+                                    Fecha de finalizacion
+                                </InputLabel>
+                                <TextField
+                                    sx={{ width: "100%" }}
+                                    onChange={handleChange}
+                                    value={data.end}
+                                    id="outlined-basic-end"
+                                    name="end"
+                                    type="date"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-color">
+                                    Color
+                                </InputLabel>
+                                <TextField
+                                    onChange={handleChange}
+                                    value={data.color}
+                                    id="outlined-basic-color"
+                                    name="color"
+                                    type="color"
+                                    variant="outlined"
+                                />
+                            </Grid>
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-tipo">Tipo</InputLabel>
+                                <Select
+                                    sx={{ width: "100%" }}
+                                    labelId="demo-select-small-label"
+                                    id="demo-select-small"
+                                    value={data.tipo}
+                                    label="Tipo"
+                                    onChange={handleChange}
+                                    name="tipo"
+                                >
+                                    <MenuItem value="Administrativo">Administrativo</MenuItem>
+                                    <MenuItem value="Academico">Academico</MenuItem>
+                                </Select>
+                            </Grid>
+                        </div>
+                        {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-estado">
                                 Estado
                             </InputLabel>
@@ -237,38 +178,40 @@ export default function ModalAddEvent({
                                 <MenuItem value={true}>Activo</MenuItem>
                                 <MenuItem value={false}>Baja</MenuItem>
                             </Select>
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            {!spinner ? (
+                        </Grid> */}
+                        <div className="grid grid-cols-2 gap-2">
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                                {!spinner ? (
+                                    <Button
+                                        sx={{ width: "100%", borderRadius: "0px" }}
+                                        type="submit"
+                                        variant="contained"
+                                    >
+                                        REGISTRAR
+                                    </Button>
+                                ) : (
+                                    <LoadingButton
+                                        size="small"
+                                        endIcon={<SendIcon />}
+                                        loading={true}
+                                        loadingPosition="end"
+                                        variant="contained"
+                                        sx={{ width: "100%", height: "35px" }}
+                                    >
+                                        <span>Actualizando</span>
+                                    </LoadingButton>
+                                )}
+                            </Grid>
+                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                                 <Button
+                                    variant="outlined"
                                     sx={{ width: "100%", borderRadius: "0px" }}
-                                    type="submit"
-                                    variant="contained"
+                                    onClick={handleClose}
                                 >
-                                    REGISTRAR
+                                    CANCELAR
                                 </Button>
-                            ) : (
-                                <LoadingButton
-                                    size="small"
-                                    endIcon={<SendIcon />}
-                                    loading={true}
-                                    loadingPosition="end"
-                                    variant="contained"
-                                    sx={{ width: "100%", height: "35px" }}
-                                >
-                                    <span>Actualizando</span>
-                                </LoadingButton>
-                            )}
-                        </Grid>
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <Button
-                                variant="outlined"
-                                sx={{ width: "100%", borderRadius: "0px" }}
-                                onClick={handleClose}
-                            >
-                                CANCELAR
-                            </Button>
-                        </Grid>
+                            </Grid>
+                        </div>
                     </form>
                 </Box>
             </StyledModal>

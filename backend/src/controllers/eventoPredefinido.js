@@ -14,6 +14,7 @@ module.exports={
             const EPredefinido={
                 title:e.title,
                 color:e.color,
+                tipo:e.tipo,
                 UsuarioIdUsuario:e.UsuarioIdUsuario
             }
             const newEPredefinido=await Evento_Predefinido.create(EPredefinido);
