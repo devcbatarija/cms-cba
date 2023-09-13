@@ -13,7 +13,7 @@ const store = configureStore({
     users:userSlices,
     events:eventSlices,
     publications: publicationSlices,
-    program: programSlices
+    programs: programSlices
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });

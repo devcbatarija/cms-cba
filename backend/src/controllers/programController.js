@@ -1,8 +1,9 @@
-const { Programa } = require("../db")
+const { Programa, Usuario } = require("../db")
 module.exports = {
     getAllPrograms: async () => {
         try {
-            const data = await Programa.findAll();
+            const data = await Programa.findAll({include:
+            [{model:Usuario}]});
             return data;
         } catch (error) {
             return error
