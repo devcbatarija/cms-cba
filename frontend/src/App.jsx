@@ -14,6 +14,7 @@ import { authValid } from './redux-toolkit/actions/auth.Actions';
 import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
+import ProgramTable from './components/dashboard/Programas/ProgramTables';
 import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
 import PublicationNav from './components/dashboard/Publications/Nav';
 import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
@@ -64,7 +65,6 @@ function App() {
     <>
       {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
       {!isDashboardRoute && <NavBar />}
-      {isDashboardRoute && <DashNavbar />} {/* Mostrar DashNavbar solo en la ruta /dashboard */}
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
@@ -72,11 +72,15 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         {/* Ruta del dashboard, sin verificación de autenticación */}
+        {
+        auth &&
         <Route path='/dashboard' element={<Dashboard></Dashboard>}>
         <Route path='/dashboard/calendario' element={<Calendario />} />
           <Route path='/dashboard/publinav' element={<PublicationNav />} />
-          <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>
+          <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
+          <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
         </Route>
+        }
         {/* Ruta para manejar páginas no encontradas */}
         <Route path='*' element={<NotFound />} />
       </Routes>
@@ -92,13 +96,20 @@ function App() {
         containerStyle={{}}
         toastOptions={{
           className: "",
-          duration: 5000,
+          duration: 1500,
           style: {
             background: "white",
             color: "black",
           },
+          error: {
+            duration: 1500,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
           success: {
-            duration: 3000,
+            duration: 2500,
             theme: {
               primary: "green",
               secondary: "black",

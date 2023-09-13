@@ -45,8 +45,7 @@ export default function Sidebar() {
           icon={PersonOutlineOutlinedIcon} 
           label="Usuarios" 
           subItems={[
-            { label: "Table", to:"/dashboard/tableuser"},
-            { label: "Create", to: "/item2" },
+            { label: "Tabla", to:"/dashboard/tableuser"}
           ]}
         />
         <SidebarItem 
@@ -62,7 +61,12 @@ export default function Sidebar() {
         <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
           label="Programas" 
-          to="/programs" 
+          to="/dashboard/tableprogram" 
+        />
+        <SidebarItem  
+          icon={StoreMallDirectoryOutlinedIcon} 
+          label="SpotifyPlayer" 
+          to="/dashboard/spotify/podcast" 
         />
       </ul>
     </Toolbar>

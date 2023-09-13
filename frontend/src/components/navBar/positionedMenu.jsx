@@ -6,6 +6,9 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutSession } from "../../redux-toolkit/actions/auth.Actions";
 import Cookie from "js-cookie";
+import toast from "react-hot-toast";
+
+
 const PositionedMenu = ({ altImg, srcImg }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -24,6 +27,7 @@ const PositionedMenu = ({ altImg, srcImg }) => {
     dispatch(
       logoutSession(false)
     )
+    toast.success("Cierre de sesion exitoso")
   }
   return (
     <div>

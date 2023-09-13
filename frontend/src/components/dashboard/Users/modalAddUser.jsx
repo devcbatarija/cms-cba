@@ -256,7 +256,7 @@ export default function ModalUnstyledAdd({
                   variant="contained"
                   sx={{ width: "100%", height: "35px" }}
                 >
-                  <span>Actualizando</span>
+                  <span>GUARDANDO</span>
                 </LoadingButton>
               )}
             </Grid>
