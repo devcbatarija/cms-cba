@@ -53,10 +53,15 @@ export default function Sidebar() {
           label="Publicaciones" 
           to="/dashboard/publinav" 
         />
-        <SidebarItem  
+        <SidebarItem 
+          icon={AssessmentOutlinedIcon} 
+          label="Calendario" 
+          to="/dashboard/Calendario" 
+        />
+        <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
           label="Programas" 
-          to="/programs" 
+          to="/dashboard/tableprogram" 
         />
         <SidebarItem  
           icon={StoreMallDirectoryOutlinedIcon} 

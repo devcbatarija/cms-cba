@@ -1,5 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReactPlayer from 'react-player'
+import { useState } from 'react';
+import { useRef } from 'react';
 
 const PreviewContainer = styled.div`
   margin: 0 auto;
@@ -9,6 +12,7 @@ const PreviewContainer = styled.div`
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
   max-width: 100%;
 `;
+
 
 const Title = styled.h2`
   color: #343a40;
@@ -37,6 +41,19 @@ const MultimediaList = styled.ul`
   padding: 0;
 `;
 function PublicationPreview() {
+  const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.8);
+
+  const playerRef = useRef(null);
+
+  const handlePlayPause = () => {
+    setPlaying(!playing);
+  }
+
+  const handleVolumeChange = (e) => {
+    setVolume(parseFloat(e.target.value));
+  }
+
   return (
     <PreviewContainer>
       <Title>Vista Previa</Title>
@@ -46,16 +63,39 @@ function PublicationPreview() {
         <PropertyLabel>Multimedia:</PropertyLabel>
         <MultimediaList>
           <img src="https://www.camarapiracicaba.sp.gov.br/Artigos/Imagens/t620/76616.jpg" alt="" srcset="" />
+          <div>
+      <button onClick={handlePlayPause}>
+        {playing ? 'Pause' : 'Play'}
+      </button>
+      <input 
+        type="range" 
+        min={0} 
+        max={1} 
+        step={0.01} 
+        value={volume} 
+        onChange={handleVolumeChange} 
+      />
+      <div>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/watch?v=TJJk66LZLsE"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
         </MultimediaList>
-      </MultimediaContainer>  
-      
+      </MultimediaContainer>
+
       <PropertyLabel>Descripción:</PropertyLabel>
       <PropertyValue>El arte del camuflaje</PropertyValue>
       <PropertyLabel>Estado:</PropertyLabel>
       <PropertyValue>Agotado</PropertyValue>
       <PropertyLabel>Tipo:</PropertyLabel>
       <PropertyValue>Cartelera</PropertyValue>
-      
+
     </PreviewContainer>
   );
 }

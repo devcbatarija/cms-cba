@@ -1,12 +1,12 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import Table from "@mui/material/Table";  // Importa el componente de tabla de Material-UI.
+import TableBody from "@mui/material/TableBody";  // Importa el componente de cuerpo de tabla.
+import TableCell from "@mui/material/TableCell";  // Importa el componente de celda de tabla.
+import TableContainer from "@mui/material/TableContainer";  // Importa el componente de contenedor de tabla.
+import TableHead from "@mui/material/TableHead";  // Importa el componente de encabezado de tabla.
+import TableRow from "@mui/material/TableRow";  // Importa el componente de fila de tabla.
+import Paper from "@mui/material/Paper";  // Importa el componente de papel para envolver la tabla.
+import { useEffect, useState } from "react";  // Importa hooks de React.
+import { useDispatch, useSelector } from "react-redux";  // Importa funciones para interactuar con el estado global de Redux.
 import {
   deleteStateAllUsers,
   deselectAllUsers,
@@ -14,23 +14,24 @@ import {
   getallusers,
   selectAllUsers,
   selectUser,
-} from "../../../redux-toolkit/actions/userActions";
+} from "../../../redux-toolkit/actions/userActions";  // Importa acciones de Redux relacionadas con usuarios.
 import {
   Avatar,
   Button,
   Checkbox,
   Grid
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModalUnstyled from "./modalUsers";
-import EditIcon from '@mui/icons-material/Edit';
-import EmailIcon from '@mui/icons-material/Email';
-import ModalUnstyledEmail from "./modalEmail";
-import AddIcon from '@mui/icons-material/Add';
-import axios from "axios";
-import toast from "react-hot-toast";
-import ModalUnstyledAdd from "./modalAddUser";
+} from "@mui/material";  // Importa componentes de Material-UI como botones y avatares.
+import DeleteIcon from "@mui/icons-material/Delete";  // Importa un ícono de Material-UI.
+import ModalUnstyled from "./modalUsers";  // Importa un componente modal personalizado.
+import EditIcon from '@mui/icons-material/Edit';  // Importa un ícono de edición.
+import EmailIcon from '@mui/icons-material/Email';  // Importa un ícono de correo electrónico.
+import ModalUnstyledEmail from "./modalEmail";  // Importa un componente modal personalizado para correos electrónicos.
+import AddIcon from '@mui/icons-material/Add';  // Importa un ícono de agregar.
+import axios from "axios";  // Importa axios para hacer peticiones HTTP.
+import toast from "react-hot-toast";  // Importa una librería para mostrar notificaciones emergentes.
+import ModalUnstyledAdd from "./modalAddUser";  // Importa un componente modal personalizado para agregar usuarios.
 
+// Función para calcular la edad a partir de una fecha.
 function calculateAge(dateString) {
   const userDate = new Date(dateString);
   const currentDate = new Date();
@@ -40,86 +41,97 @@ function calculateAge(dateString) {
 
   return Math.floor(ageInYears);
 }
+
+// Componente principal TableUser.
 export default function TableUser() {
-  const dispatch = useDispatch();
-  const data = useSelector((state) => state.users.users);
-  const selectedUsers = useSelector((state) => state.users.selectedUsers);
-  const [selectAll, setSelectAll] = useState(false);
-  //modal
-  const [open, setOpen] = useState(false);
-  const [selectedUserModal,setSelectedUserModal]=useState("")
+  const dispatch = useDispatch();  // Obtiene la función `dispatch` de Redux para enviar acciones.
+  const data = useSelector((state) => state.users.users);  // Obtiene la lista de usuarios del estado global de Redux.
+  const selectedUsers = useSelector((state) => state.users.selectedUsers);  // Obtiene la lista de usuarios seleccionados del estado global de Redux.
+  const [selectAll, setSelectAll] = useState(false);  // Estado local para el control de selección de todos los usuarios.
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  //modal email
-  const [openEmail, setOpenEmail] = useState(false);
+  // Variables y funciones para controlar un modal de detalles de usuario.
+  const [open, setOpen] = useState(false);  // Estado para abrir/cerrar el modal.
+  const [selectedUserModal, setSelectedUserModal] = useState("");  // Estado para almacenar el ID del usuario seleccionado en el modal.
 
-  const handleOpenEmail = () => setOpenEmail(true);
-  const handleCloseEmail = () => setOpenEmail(false);
-  //modal add user
-  const [openAddUser, setOpenAddUser] = useState(false);
+  const handleOpen = () => setOpen(true);  // Función para abrir el modal.
+  const handleClose = () => setOpen(false);  // Función para cerrar el modal.
 
-  const handleOpenAddUser = () => setOpenAddUser(true);
-  const handleCloseAddUser = () => setOpenAddUser(false);
+  // Variables y funciones para controlar un modal de correo electrónico.
+  const [openEmail, setOpenEmail] = useState(false);  // Estado para abrir/cerrar el modal de correo electrónico.
 
+  const handleOpenEmail = () => setOpenEmail(true);  // Función para abrir el modal de correo electrónico.
+  const handleCloseEmail = () => setOpenEmail(false);  // Función para cerrar el modal de correo electrónico.
 
+  // Variables y funciones para controlar un modal de agregar usuario.
+  const [openAddUser, setOpenAddUser] = useState(false);  // Estado para abrir/cerrar el modal de agregar usuario.
 
+  const handleOpenAddUser = () => setOpenAddUser(true);  // Función para abrir el modal de agregar usuario.
+  const handleCloseAddUser = () => setOpenAddUser(false);  // Función para cerrar el modal de agregar usuario.
+
+  // Función para seleccionar/deseleccionar todos los usuarios.
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllUsers(data.map((user) => user.id_Usuario)));
-      setSelectAll(true);
+      dispatch(selectAllUsers(data.map((user) => user.id_Usuario)));  // Activa la selección de todos los usuarios.
+      setSelectAll(true);  // Actualiza el estado local.
     } else {
-      dispatch(deselectAllUsers());
-      setSelectAll(false);
+      dispatch(deselectAllUsers());  // Deselecciona a todos los usuarios.
+      setSelectAll(false);  // Actualiza el estado local.
     }
   };
+
+  // Función para eliminar usuarios seleccionados.
   const handleDelete = async() => {
-    const response=await axios.post('/users/delete/select',{ids:selectedUsers});
+    const response = await axios.post('/users/delete/select', { ids: selectedUsers });  // Envía una solicitud para eliminar usuarios seleccionados.
     setTimeout(() => {
-      dispatch(getallusers());
-      dispatch(deselectAllUsers());
-      dispatch(deleteStateAllUsers());
-      toast.success("Borrado exitoso!");
+      dispatch(getallusers());  // Actualiza la lista de usuarios después de la eliminación.
+      dispatch(deselectAllUsers());  // Deselecciona a todos los usuarios.
+      dispatch(deleteStateAllUsers());  // Elimina el estado de los usuarios seleccionados.
+      toast.success("Borrado exitoso!");  // Muestra una notificación de éxito.
     }, 1500);
   }
+
+  // Función para seleccionar/deseleccionar un usuario individual.
   const handleSelectUser = (userId) => {
     if (selectedUsers.includes(userId)) {
-      dispatch(deselectUser(userId));
-      setSelectAll(false);
+      dispatch(deselectUser(userId));  // Deselecciona al usuario.
+      setSelectAll(false);  // Actualiza el estado local.
     } else {
-      dispatch(selectUser(userId));
+      dispatch(selectUser(userId));  // Selecciona al usuario.
     }
   };
-  const handleModal=(id)=>{
-    handleOpen()
-    setSelectedUserModal(id)
-  }
+
+  // Efecto para cargar la lista de usuarios al cargar el componente.
   useEffect(() => {
-    dispatch(getallusers());
+    dispatch(getallusers());  // Obtiene la lista de usuarios al montar el componente.
   }, []);
+
+  // Renderizado del componente.
   return (
     <TableContainer 
     sx={{width:"100%",borderRadius:'0', height:"100vh%" }}
     component={Paper}>
+      {/* Renderiza un modal de detalles de usuario si está abierto */}
       {
-        open?<ModalUnstyled 
+        open ? <ModalUnstyled 
         id={selectedUserModal} 
         open={open} 
         handleOpen={handleOpen} 
-        handleClose={handleClose} ></ModalUnstyled>:null
+        handleClose={handleClose} ></ModalUnstyled> : null
       }
+      {/* Renderiza un modal de correo electrónico si está abierto */}
       {
-        openEmail?<ModalUnstyledEmail 
+        openEmail ? <ModalUnstyledEmail 
         open={openEmail} 
         handleOpen={handleOpenEmail} 
-        handleClose={handleCloseEmail} ></ModalUnstyledEmail>:null
+        handleClose={handleCloseEmail} ></ModalUnstyledEmail> : null
       }
+      {/* Renderiza un modal de agregar usuario si está abierto */}
       {
-        openAddUser?<ModalUnstyledAdd
+        openAddUser ? <ModalUnstyledAdd
         open={openAddUser} 
         handleOpen={handleOpenAddUser} 
         handleClose={handleCloseAddUser}
-        ></ModalUnstyledAdd>:null
+        ></ModalUnstyledAdd> : null
       }
         <Grid
           container
@@ -128,8 +140,9 @@ export default function TableUser() {
           alignItems="center"
           style={{ padding: "10px",gap:"10px" }}
         >
+          {/* Botón para eliminar usuarios seleccionados */}
           <Button 
-            disabled={selectedUsers.length>0?false:true}
+            disabled={selectedUsers.length > 0 ? false : true}
             variant="contained" 
             color="error" 
             sx={{borderRadius:"0px"}}
@@ -137,6 +150,7 @@ export default function TableUser() {
             startIcon={<DeleteIcon />}>
             Borrar {selectedUsers.length}
           </Button>
+          {/* Botón para agregar un nuevo usuario */}
           <Button 
             variant="contained"
             sx={{borderRadius:"0px"}}
@@ -145,6 +159,7 @@ export default function TableUser() {
           >
             Añadir 
           </Button>
+          {/* Botón para enviar correo electrónico */}
           <Button 
             variant="contained"
             sx={{borderRadius:"0px"}}
@@ -155,9 +170,11 @@ export default function TableUser() {
           </Button>
         </Grid>
         
+      {/* Tabla de usuarios */}
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
+            {/* Celda de selección de todos los usuarios */}
             <TableCell align="center">
               <Checkbox
                 color="primary"
@@ -168,6 +185,7 @@ export default function TableUser() {
                 onChange={handleSelectAll}
               />
             </TableCell>
+            {/* Encabezados de columnas */}
             <TableCell align="center">Nombres y Apellidos</TableCell>
             <TableCell align="center">CI</TableCell>
             <TableCell align="center">Correo</TableCell>
@@ -185,6 +203,7 @@ export default function TableUser() {
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
+              {/* Celda de selección de usuario individual */}
               <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
@@ -192,6 +211,7 @@ export default function TableUser() {
                   onChange={() => handleSelectUser(row.id_Usuario)}
                 />
               </TableCell>
+              {/* Datos de usuario */}
               <TableCell component="th" scope="row">
                 {row.nombres + " " + row.apellidos}
               </TableCell>
