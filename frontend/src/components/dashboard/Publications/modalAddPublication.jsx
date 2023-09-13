@@ -3,54 +3,36 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { styled, Box } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Avatar,
   Button,
   Grid,
-  IconButton,
-  InputAdornment,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Select,
   TextField,
 } from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import SendIcon from "@mui/icons-material/Send";
+import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
-import toast, { Toaster } from "react-hot-toast";
-import { getallusers } from "../../../redux-toolkit/actions/userActions";
 
-export default function ModalUnstyledAdd({
-  id,
+export default function ModalAddPublication({
   open,
   handleOpen,
   handleClose,
 }) {
   const [spinner, setSpinner] = useState(false);
   const [form, setForm] = useState({
-    correo: "",
-    nombres: "",
-    apellidos: "",
-    celular: "",
-    password: "",
-    rol: "Client",
+    titulo: "",
+    descripcion: "",
     estado: true,
-    ci: "",
-    fecha_Nacimiento: "",
+    tipo: "",
+    url: "",
   });
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   const handleChange = (e) => {
     const property = e.target.name;
@@ -60,22 +42,24 @@ export default function ModalUnstyledAdd({
       [property]: value,
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.post(`users`, form);
+      const response = await axios.post(`/publications`, form); // Cambia la URL para hacer la solicitud de publicación
       setTimeout(() => {
-        toast.success("Registro exitoso!");
-        dispatch(getallusers());
+        toast.success("Publicación exitosa!");
+        // Agrega lógica adicional si es necesario después de crear la publicación
         handleClose();
       }, 1500);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
-    setTimeout(() => { }, 600);
+    // Lógica adicional que puedas necesitar al abrir el modal
   }, []);
 
   return (
@@ -96,148 +80,61 @@ export default function ModalUnstyledAdd({
               gap: "10px",
             }}
           >
+            {/* Avatar o imagen si es necesario */}
             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <Avatar alt="Remy Sharp" src={form.image} />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Correo
-              </InputLabel>
+              <InputLabel htmlFor="outlined-adornment-titulo">Título</InputLabel>
               <TextField
                 sx={{ width: "100%" }}
                 onChange={handleChange}
-                value={form.correo}
-                id="outlined-basic-correo"
-                name="correo"
+                value={form.titulo}
+                id="outlined-basic-titulo"
+                name="titulo"
                 type="text"
                 variant="outlined"
               />
             </Grid>
             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Nombres
+              <InputLabel htmlFor="outlined-adornment-descripcion">
+                Descripción
               </InputLabel>
               <TextField
                 sx={{ width: "100%" }}
                 onChange={handleChange}
-                value={form.nombres}
-                id="outlined-basic-nombres"
-                name="nombres"
+                value={form.descripcion}
+                id="outlined-basic-descripcion"
+                name="descripcion"
                 type="text"
                 variant="outlined"
               />
             </Grid>
             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Apellidos
-              </InputLabel>
+              <InputLabel htmlFor="outlined-adornment-estado">Estado</InputLabel>
               <TextField
                 sx={{ width: "100%" }}
                 onChange={handleChange}
-                value={form.apellidos}
-                id="outlined-basic-apellidos"
-                name="apellidos"
-                type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Apellidos
-              </InputLabel>
-              <TextField
-                onChange={handleChange}
-                value={form.fecha_Nacimiento}
-                id="outlined-basic-fecha_Nacimiento"
-                name="fecha_Nacimiento"
-                type="date"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Celular
-              </InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.celular}
-                id="outlined-basic-celular"
-                name="celular"
-                type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-ci">Ci</InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.ci}
-                id="outlined-basic-ci"
-                name="ci"
-                type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                sx={{ width: "100%" }}
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
-                onChange={handleChange}
-                value={form.password}
-                name="password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">Rol</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={form.rol}
-                label="rol"
-                onChange={handleChange}
-                name="rol"
-              >
-                <MenuItem value="Admin">Admin</MenuItem>
-                <MenuItem value="Client">Client</MenuItem>
-              </Select>
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-estado">
-                Estado
-              </InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
                 value={form.estado}
-                label="estado"
-                onChange={handleChange}
+                id="outlined-basic-estado"
                 name="estado"
+                type="text"
+                variant="outlined"
+              />
+            </Grid>
+            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-tipo">Tipo</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={form.tipo}
+                label="tipo"
+                onChange={handleChange}
+                name="tipo"
               >
-                <MenuItem value={true}>Activo</MenuItem>
-                <MenuItem value={false}>Baja</MenuItem>
+                <MenuItem value="Cartelera">Cartelera</MenuItem>
+                <MenuItem value="Evento">Evento</MenuItem>
               </Select>
             </Grid>
+
             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
               {!spinner ? (
                 <Button
@@ -256,7 +153,7 @@ export default function ModalUnstyledAdd({
                   variant="contained"
                   sx={{ width: "100%", height: "35px" }}
                 >
-                  <span>GUARDANDO</span>
+                  <span>Actualizando</span>
                 </LoadingButton>
               )}
             </Grid>
@@ -276,6 +173,7 @@ export default function ModalUnstyledAdd({
   );
 }
 
+// Resto del código para Backdrop, StyledModal, y estilos
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;
   return (
@@ -364,3 +262,4 @@ const TriggerButton = styled("button")(
   }
   `
 );
+
