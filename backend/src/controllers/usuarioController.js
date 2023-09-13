@@ -22,7 +22,6 @@ module.exports = {
     }
   },
   postUsuario: async (user) => {
-    console.log(user.fecha_Nacimiento)
     try {
       
       const newUser = await Usuario.create({
@@ -53,7 +52,7 @@ module.exports = {
     try {
       const deleteUSer = await Usuario.findOne({ where: { id_Usuario: id } });
       if (!deleteUSer) {
-        return "User not found";
+        return "Usuario no encontrado.";
       }
       deleteUSer.destroy();
       return `User with the id ${deleteUSer.id_Usuario}`;
@@ -65,7 +64,7 @@ module.exports = {
     try {
       const exist = await Usuario.findByPk(id);
       if (!exist) {
-        return "User not found!";
+        return "Usuario no encontrado.";
       }
       const updateUserById = await Usuario.update(
         user,
@@ -88,14 +87,14 @@ module.exports = {
     try {
       const userExist = await Usuario.findOne({ where: { correo: user.correo } });
       if (!userExist) {
-        throw new Error("User not found");
+        throw new Error("Usuario no encontrado.");
       }
       if (userExist.password !== user.password) {
-        throw new Error("User password not valid");
+        throw new Error("La contraseña es incorrcta.");
       }
-      // if (!userExist.estado) {
-      //   throw new Error("User is not valid");
-      // }
+      if (!userExist.estado) {
+        throw new Error("El usuario no tiene acceso.");
+      }
       const tokengen = await signIn(userExist);
       const usLogin = {
         _userId: userExist.id_Usuario,
@@ -112,7 +111,7 @@ module.exports = {
     try {
       const us=await Usuario.findByPk(id);
       if(!us){
-        throw new Error("User not found");
+        throw new Error("Usuario no encontrado.");
       }
       return us;
     } catch (error) {
@@ -124,9 +123,9 @@ module.exports = {
       try {
       const user=await Usuario.findOne({ where: { correo: body.correo }})
       if(!user){
-        return "User valid"
+        return "Email valido"
       }
-      throw new Error("User email exist");
+      throw new Error("El email ya existe.");
     } catch (error) {
       throw error;
     }
@@ -135,7 +134,7 @@ module.exports = {
        try {
       const user=await Usuario.findOne({ where: { verificacion: token }})
       if(!user){
-        throw new Error("User token not found");
+        throw new Error("El token de usuario no encontrado.");
       }
       user.estado=true;
       await user.save();
@@ -149,7 +148,7 @@ module.exports = {
     try {
       const update=await Usuario.findByPk(id);
       if(!update){
-        throw new Error("User token not found");
+        throw new Error("El token no se encontró.");
       }
     
       update.dataValues.estado=estado;
