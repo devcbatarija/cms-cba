@@ -12,7 +12,7 @@ router.use('/users',userRouter);
 router.use('/publication',publicacionRoutes);
 router.use("/event",eventoRoutes);
 router.use("/eventpredefinido",EPredefinido);
-router.use('/programa', programaRoutes); // http
+router.use('/program', programaRoutes); // http
 
 
 module.exports=router;
