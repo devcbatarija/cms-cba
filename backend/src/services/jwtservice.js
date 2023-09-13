@@ -32,11 +32,17 @@ module.exports = {
   },
   validToken: async (req, res) => {
     try {
+      
       const token = req.headers.authorization.split("Bearer ")[1];
-
+      // if(!token){
+      //   return res.status(200).json({ user: usResult });
+      // }
       jwt.verify(token, keymaster, async (error, decoded) => {
         const currentTime = Math.floor(Date.now() / 1000);
         const usLogin = await Usuario.findByPk(decoded._userId);
+        if(!usLogin){
+          return res.status(404).json({ messageError: "El usuario no existe." });
+        }
         const usResult = {
           _userId: usLogin.id_Usuario,
           _profileImage: usLogin.image,
@@ -46,7 +52,6 @@ module.exports = {
         return res.status(200).json({ user: usResult });
       });
     } catch (error) {
-      console.log(error);
       return res.status(400).json({ messageError: error.message });
     }
   },

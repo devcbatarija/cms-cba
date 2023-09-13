@@ -25,10 +25,8 @@ module.exports = {
                 res.status(401).json({messageError:'No user data'});
             }
             const result=await postUsuario(req.body);
-            console.log(result)
             res.status(200).json(result);
         } catch (error) {
-            console.log(error)
             res.status(401).json({messageError:error.message})
         }
     },
@@ -69,7 +67,7 @@ module.exports = {
                 res.status(200).json(result.usLogin);
             }
         } catch (error) {
-            res.status(500).json({messageError:error.message});
+            res.status(error.statusCode).json({messageError:error.message});
         }
     },
     getById:async(req,res)=>{
@@ -89,7 +87,6 @@ module.exports = {
         }
     },
     emailVerifyToken : async(req,res)=>{ //verificar el registro mediante token con email
-        console.log(req.query.token)
         try {
             const result=await emailVerifyToken(req.query.token);
             res.status(200).send(`
@@ -100,7 +97,6 @@ module.exports = {
             align-items:center; 
             justify-content:center; 
             margin:0 auto; 
-            width:50%; 
             padding:20px; 
             text-align:center; 
             border:1px solid green; 
@@ -108,13 +104,25 @@ module.exports = {
             background:#272C35;
             font-family:sans-serif;
             width:100%;
-            heigth:100vh;
+            height:100vh;
             ">  
                 <h1>¡Verificación exitosa!</h1>
                 <h2 style="
                     color:white;
                 ">${result.user.correo}</h2>
                 <p>Tu correo electrónico ha sido verificado correctamente.</p>
+                <p>
+                <a style="
+                    font-family:sans-serif;
+                    border:none;
+                    border-radius:2px;
+                    color:aqua;
+                    cursor:pointes;
+                    width:100px;
+                    height:30px;
+                " href="http://localhost:5173/login"
+                >Iniciar secion</a>
+                </p>
             </div>
             `)
         } catch (error) {
@@ -122,7 +130,6 @@ module.exports = {
         }
     },
     updateState:async(req,res)=>{
-        console.log(req.body.estado)
         try {
             const response=await updateState(req.params.id,req.body.estado);
             res.status(200).json(response)

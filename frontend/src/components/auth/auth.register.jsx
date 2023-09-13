@@ -2,6 +2,10 @@ import { TextField, Typography, Button, TextareaAutosize, Alert } from "@mui/mat
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -14,7 +18,9 @@ const Register = () => {
     password: "",
     rol: "Client",
   });
-  const [emailValid,setEmailValid]=useState(false)
+  const navigate = useNavigate();
+  const [spinner,setSpinner] = useState(false);
+  const [emailValid,setEmailValid] = useState(false);
   const [error, setError] = useState({
     z_errorForm:"",
     z_errorEmail:""
@@ -32,7 +38,13 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setSpinner(true);
       const response = await axios.post("http://localhost:3001/api/users", form); ///valid/email
+      if(response.status === 200){
+        setSpinner(false);
+        toast.success("Registro exitoso")
+        navigate("/login");
+      }
       if (response.data.messageError) {
         setError({
           ...error,
@@ -40,7 +52,6 @@ const Register = () => {
         });
         return;
       }
-      console.log(response.headers);
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +62,8 @@ const Register = () => {
       const response = await axios.post("http://localhost:3001/api/users/valid/email", {
         correo:form.correo
       });
-      if (response.data) {
+      if (response.status===200 && response.data) {
+        toast.success("Correo validado exitosamente")
         setEmailValid(true);
         return;
       }
@@ -116,9 +128,13 @@ const Register = () => {
             type="number"
             variant="outlined"
           />
-          <Button type="submit">
+          {
+            spinner?<Box sx={{ display: 'flex',justifyContent:'center' }}>
+            <CircularProgress />
+          </Box>:<Button type="submit">
             Registrar
           </Button>
+          }
             </form>
           ):
           <form onSubmit={handeSubmitVerify} className="formLogin">
