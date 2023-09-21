@@ -1,8 +1,9 @@
 .eventPred {
-  background-color: rgb(243, 243, 245);
+  /* background-color: rgb(243, 243, 245); */
   border-radius: 10px;
   padding: 8%;
-  min-height: 80vh;
+  height: 80vh;
+  overflow: auto; 
 }
 
 .fc-event {
@@ -10,7 +11,7 @@
 }
 
 .calendar {
-  background-color: rgb(243, 243, 245);
+  /* background-color: rgb(243, 243, 245); */
   border-radius: 10px;
   padding: 0px 20px 20px 20px;
   margin: 20px;

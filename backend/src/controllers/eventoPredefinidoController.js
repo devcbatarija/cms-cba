@@ -11,11 +11,17 @@ module.exports={
     },
     addEPredefinido: async (e)=>{
         try {
+            delete e.start;
+            delete e.end;
             const EPredefinido={
-                title:e.title,
-                color:e.color,
-                tipo:e.tipo,
-                UsuarioIdUsuario:e.UsuarioIdUsuario
+                title: e.title,
+                color: e.color,
+                state: e.state,
+                tipo: e.tipo,
+                start_Time: e.start_Time,
+                end_Time: e.end_Time,
+                allDay: e.allDay,
+                UsuarioIdUsuario: e.UsuarioIdUsuario
             }
             const newEPredefinido=await Evento_Predefinido.create(EPredefinido);
             return newEPredefinido;
