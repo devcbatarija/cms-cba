@@ -3,6 +3,7 @@ import PublicationAdd from './PublicationAdd';
 import PublicationPreview from './PublicationPreview';
 import TablePublication from './PublicationTable';
 import PublicationTable from './PublicationTable';
+import ContarinerNewPublication from './containerNewPublication';
 
 function Publicacion() {
   const [currentView, setCurrentView] = useState('crear');
@@ -27,14 +28,14 @@ function Publicacion() {
   return (
     <div style={{ backgroundColor: 'white', color: 'black' }}>
       <nav>
-        <button style={buttonStyle} onClick={() => handleNavButtonClick('crear')}>Crear Publicación</button>
-        <button style={buttonStyle} onClick={() => handleNavButtonClick('vista-previa')}>Vista Previa</button>
+        <button style={buttonStyle} onClick={() => handleNavButtonClick('crear')}>Tabla de publicaciones</button>
+        <button style={buttonStyle} onClick={() => handleNavButtonClick('vista-previa')}>Nueva publicacion</button>
       </nav>
       
       {currentView === 'crear' ? (
         <TablePublication />
       ) : (
-        <PublicationPreview post={{/* Aquí proporciona los datos de la publicación */}} />
+        <ContarinerNewPublication/>
       )}
     </div>
   );
