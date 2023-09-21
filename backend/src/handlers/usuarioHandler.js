@@ -67,7 +67,7 @@ module.exports = {
                 res.status(200).json(result.usLogin);
             }
         } catch (error) {
-            res.status(error.statusCode).json({messageError:error.message});
+            res.status(401).json({messageError:error.message});
         }
     },
     getById:async(req,res)=>{
