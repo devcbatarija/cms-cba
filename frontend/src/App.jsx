@@ -22,6 +22,8 @@ import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
+import { getPodcasts } from './redux-toolkit/actions/podcastActions';
+import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -79,6 +81,7 @@ function App() {
           <Route path='/dashboard/publinav' element={<PublicationNav />} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
+          <Route path='/dashboard/spotify/podcast' element={<SpotifyPlayer></SpotifyPlayer>}></Route>
         </Route>
         }
         {/* Ruta para manejar páginas no encontradas */}
