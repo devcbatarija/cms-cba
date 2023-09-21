@@ -21,7 +21,7 @@ module.exports={
         }
     },
     addEvento:async(e)=>{
-        try {
+        try { 
             const evento={
                 title:e.title,
                 start: e.start,
