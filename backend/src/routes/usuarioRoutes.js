@@ -27,6 +27,6 @@ router.get('/valid/token/email',emailVerifyToken)
 router.put('/state/update/:id',updateState)
 router.get('/get/by/:id',getById);
 
-router.post('/delete/select',deleteSelect);
+router.post('/delete/select',deleteSelect); //agregar a programas
 
 module.exports=router;
