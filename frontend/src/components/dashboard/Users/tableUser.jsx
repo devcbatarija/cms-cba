@@ -46,6 +46,7 @@ function calculateAge(dateString) {
 export default function TableUser() {
   const dispatch = useDispatch();  // Obtiene la función `dispatch` de Redux para enviar acciones.
   const data = useSelector((state) => state.users.users);  // Obtiene la lista de usuarios del estado global de Redux.
+  
   const selectedUsers = useSelector((state) => state.users.selectedUsers);  // Obtiene la lista de usuarios seleccionados del estado global de Redux.
   const [selectAll, setSelectAll] = useState(false);  // Estado local para el control de selección de todos los usuarios.
 
@@ -201,7 +202,7 @@ export default function TableUser() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
+          {data && data.map((row, index) => (
             <TableRow
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

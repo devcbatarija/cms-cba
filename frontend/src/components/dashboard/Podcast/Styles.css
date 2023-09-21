@@ -1,0 +1,17 @@
+.scroll {
+  height: 472px;
+  overflow: auto;
+}
+.scroll-table-credentials{
+    max-height: 20px;
+    overflow: auto;
+    background-color: red;
+}
+.tr-width{
+    width: 100%;
+
+}
+.myTableRow:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
