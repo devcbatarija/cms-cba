@@ -8,6 +8,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import {
     Button,
+    Collapse,
+    Fade,
     Grid,
     InputLabel,
     MenuItem,
@@ -18,18 +20,20 @@ import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
-import { getEvents } from "../../../redux-toolkit/actions/eventActions";
+import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
 import Cookies from "js-cookie";
+import Checkboxes from "./widgets/checkbox";
+import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 
 export default function ModalAddEvent({
     setData,
     data,
     open,
     handleClose,
+    tipoModal
 }) {
     const [spinner, setSpinner] = useState(false);
     const dispatch = useDispatch();
-
     const handleChange = (e) => {
         const property = e.target.name;
         const value = e.target.value;
@@ -48,17 +52,40 @@ export default function ModalAddEvent({
                 },
             };
             setSpinner(true);
-
-            const res = axios.post("event/create", data, config).then(res => {
+            // Determinar la ruta en base al valor de tipoModal
+            const path = tipoModal == "Evento" ? "event/create" : "eventpredefinido/create"
+            const res = axios.post(path, data, config).then(res => {
                 setTimeout(() => {
                     toast.success(res.data.successMessage)
-                    dispatch(getEvents())
+                    setData({
+                        ...data,
+                        id: "",
+                        title: "",
+                        start: "",
+                        end: "",
+                        color: "",
+                        tipo: "",
+                        start_Time: "",
+                        end_Time: "",
+                        allDay: true
+                    })
+                    // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().
+                    tipoModal == "Evento" ? dispatch(getEvents()) : dispatch(getEventsPredefinidos())
                     handleClose();
+                    setSpinner(false);
                 }, 1500);
             }).catch(error => {
-                if (error.response.status == 401) {
-                    toast.error(error.response.data.messageError)
-                }
+                console.log(error);
+                setTimeout(() => {
+                    if (error.response.status == 401) {
+                        toast.error(error.response.data.messageError)
+                    }
+                    else{
+                        toast.error(error.message)
+                    }
+                    setSpinner(false);
+                },1500);
+                    
             })
         } catch (error) {
             console.log(error)
@@ -100,38 +127,126 @@ export default function ModalAddEvent({
                                 variant="outlined"
                             />
                         </Grid>
+                        <div className="flex flex-row">
+                            {tipoModal === "Evento" ?
+                                <Grid sx={{ m: 1 }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-start">
+                                        Fecha de Inicio
+                                    </InputLabel>
+                                    <TextField
+                                        sx={!data.allDay?{ width: "58%",marginRight:"2%" }:{ width: "100%"}}
+                                        onChange={handleChange}
+                                        value={data.start}
+                                        id="outlined-basic-start"
+                                        name="start"
+                                        type="date"
+                                        size="small"
+                                        variant="outlined" />
+                                    {data.allDay === false ?
+                                        <Fade in={!data.allDay}>
+                                        <TextField
+                                            sx={{ width: "40%" }}
+                                            onChange={handleChange}
+                                            value={data.start_Time}
+                                            id="outlined-basic-start_Time"
+                                            name="start_Time"
+                                            type="time"
+                                            size="small"
+                                            variant="outlined" />
+                                            </Fade>
+                                        : null}
+                                </Grid>
+                                : null}
+                            {tipoModal === "EventoPredifinido" && data.allDay === false ?
+                                <Grid sx={{ m: 1 }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-start_Time">
+                                        Hora de Inicio
+                                    </InputLabel>
+                                    <TextField
+                                        sx={{ width: "100%" }}
+                                        onChange={handleChange}
+                                        value={data.start_Time}
+                                        id="outlined-basic-start_Time"
+                                        name="start_Time"
+                                        type="time"
+                                        size="small"
+                                        variant="outlined" />
+                                </Grid>
+                                : null}
+                            {tipoModal === "Evento" || data.allDay === false ?
+                                <div className="grid content-center">
+                                    <ArrowRightAltRoundedIcon />
+                                </div>
+                                : null}
+                            {tipoModal === "EventoPredifinido" && data.allDay === false ?
+                                <Grid sx={{ m: 1 }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-end_Time">
+                                        Hora de finalizacion
+                                    </InputLabel>
+                                    <TextField
+                                        sx={{ width: "100%" }}
+                                        onChange={handleChange}
+                                        value={data.end_Time}
+                                        id="outlined-basic-end_Time"
+                                        name="end_Time"
+                                        type="time"
+                                        size="small"
+                                        variant="outlined" />
+                                </Grid>
+                                : null}
+                            {tipoModal === "Evento" ?
+                                <Grid sx={{ m: 1 }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-end">
+                                        Fecha de finalizacion
+                                    </InputLabel>
+                                    {data.allDay === false ?
+                                        <TextField
+                                            sx={{ width: "40%", marginRight:"2%" }}
+                                            onChange={handleChange}
+                                            value={data.end_Time}
+                                            id="outlined-basic-end_Time"
+                                            name="end_Time"
+                                            type="time"
+                                            size="small"
+                                            variant="outlined" />
+                                        : null}
+                                    <TextField
+                                        sx={!data.allDay?{ width: "58%" }:{ width: "100%"}}
+                                        onChange={handleChange}
+                                        value={data.end}
+                                        id="outlined-basic-end"
+                                        name="end"
+                                        type="date"
+                                        size="small"
+                                        variant="outlined" />
+                                </Grid>
+                                : null}
+                            <div className="grid content-center">
+                                <Checkboxes
+                                    data={data}
+                                    setData={setData}
+                                />
+                            </div>
+                        </div>
                         <div style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(2,1fr)",
                             gap: "10px",
                         }}>
                             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-start">
-                                    Fecha de Inicio
-                                </InputLabel>
-                                <TextField
+                                <InputLabel htmlFor="outlined-adornment-tipo">Tipo de evento</InputLabel>
+                                <Select
                                     sx={{ width: "100%" }}
+                                    labelId="demo-select-small-label"
+                                    id="demo-select-small"
+                                    value={data.tipo}
+                                    label="Tipo"
                                     onChange={handleChange}
-                                    value={data.start}
-                                    id="outlined-basic-start"
-                                    name="start"
-                                    type="date"
-                                    variant="outlined"
-                                />
-                            </Grid>
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-end">
-                                    Fecha de finalizacion
-                                </InputLabel>
-                                <TextField
-                                    sx={{ width: "100%" }}
-                                    onChange={handleChange}
-                                    value={data.end}
-                                    id="outlined-basic-end"
-                                    name="end"
-                                    type="date"
-                                    variant="outlined"
-                                />
+                                    name="tipo"
+                                >
+                                    <MenuItem value="Administrativo">Administrativo</MenuItem>
+                                    <MenuItem value="Academico">Academico</MenuItem>
+                                </Select>
                             </Grid>
                             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-color">
@@ -145,21 +260,6 @@ export default function ModalAddEvent({
                                     type="color"
                                     variant="outlined"
                                 />
-                            </Grid>
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-tipo">Tipo</InputLabel>
-                                <Select
-                                    sx={{ width: "100%" }}
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={data.tipo}
-                                    label="Tipo"
-                                    onChange={handleChange}
-                                    name="tipo"
-                                >
-                                    <MenuItem value="Administrativo">Administrativo</MenuItem>
-                                    <MenuItem value="Academico">Academico</MenuItem>
-                                </Select>
                             </Grid>
                         </div>
                         {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
@@ -206,7 +306,21 @@ export default function ModalAddEvent({
                                 <Button
                                     variant="outlined"
                                     sx={{ width: "100%", borderRadius: "0px" }}
-                                    onClick={handleClose}
+                                    onClick={() => {
+                                        handleClose()
+                                        setData({
+                                            ...data,
+                                            id: "",
+                                            title: "",
+                                            start: "",
+                                            end: "",
+                                            color: "",
+                                            tipo: "",
+                                            start_Time: "",
+                                            end_Time: "",
+                                            allDay: true
+                                        })
+                                    }}
                                 >
                                     CANCELAR
                                 </Button>
@@ -274,7 +388,7 @@ const StyledBackdrop = styled(Backdrop)`
 const style = (theme) => ({
     display: "flex",
     flexDirection: "column",
-    width: 700,
+    width: 780,
     // borderRadius: "12px",
     padding: "16px 32px 24px 32px",
     backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",

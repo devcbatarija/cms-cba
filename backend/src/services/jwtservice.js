@@ -58,25 +58,21 @@ module.exports = {
   isAdmin: async(req, res, next)=>{
     try {
       if(!req.headers.authorization){
-        res.status(401).json({messageError:"Inautorizado"});
-        return
+        return res.status(401).json({messageError:"Usuario no autorizado"});
       }
       const token = req.headers.authorization.split("Bearer ")[1];
       jwt.verify(token, keymaster, async (error, decoded) => {
         const usLogin = await Usuario.findByPk(decoded._userId);
         if(usLogin){
           if(usLogin.rol=="Admin"){
-            next();
-            return
+            return next();
           }
-          res.status(401).json({messageError:"Usuario no autorizado"})
-          return
+          return res.status(401).json({messageError:"Usuario no autorizado"})
         }
-        res.status(404).json({messageError:"Usuario no encontrado"})
-        return
+        return res.status(404).json({messageError:"Usuario no encontrado"})
       });
     } catch (error) {
-      res.status(401).json({messageError:error.message})
+      return res.status(401).json({messageError:error.message})
     }
   }
 };
