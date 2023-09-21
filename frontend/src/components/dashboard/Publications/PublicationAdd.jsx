@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Uploader from './TestComponent';
+import axios from 'axios';
 
 const StyledButton = styled.button`
   display: inline-block;
@@ -37,14 +39,13 @@ const StyledButton = styled.button`
 `;
 const Container = styled.div`
 margin: 0 auto;
-padding: 40px;
+padding: 5px;
 background-color: #f8f9fa;
 border-radius: 0;
 box-shadow: 0 0 10px rgba(0,0,0,0.1);
 height: 100vh;  //Agrega esta línea
 width: 100%;    //Agrega esta línea
 `;
-
 const Title = styled.h2`
   color: #343a40;
   text-align: center;
@@ -82,41 +83,31 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-function PublicationAdd({ onPostCreate }) {
-  const [postData, setPostData] = useState({
-    title: '',
-    description: '',
-    status: '',
-    type: '',
-    multimedia: [],
-  });
+function PublicationAdd({publicacion, setPublicacion }) {
+  const [urls,setUrls]=useState([])
+  const handleChange=(e)=>{
+    const property=e.target.name;
+    const value=e.target.value;
+    console.log(value);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPostData({
-      ...postData,
-      [name]: value,
-    });
-  };
-
-  const handleMultimediaChange = (e) => {
-    const files = e.target.files;
-    setPostData({
-      ...postData,
-      multimedia: [...postData.multimedia, ...files],
-    });
-  };
-
-  const handleSubmit = (e) => {
+    if (property!="multimedia") {
+      setPublicacion({
+        ...publicacion,
+        [property]:value
+      });
+    }
+  }
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    onPostCreate(postData);
-    setPostData({
-      title: '',
-      description: '',
-      status: '',
-      type: '',
-      multimedia: [],
-    });
+    try {
+      const response= await axios.post('/files/upload',{
+        filePath:urls,
+        type:"image"
+      })
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -128,8 +119,8 @@ function PublicationAdd({ onPostCreate }) {
             <Label>Título:</Label>
             <Input
               type="text"
-              name="title"
-              value={postData.title}
+              name="titulo"
+              value={publicacion.titulo}
               onChange={handleChange}
               required
             />
@@ -137,8 +128,8 @@ function PublicationAdd({ onPostCreate }) {
           <FormGroup>
             <Label>Descripción:</Label>
             <TextArea
-              name="description"
-              value={postData.description}
+              name="descripcion"
+              value={publicacion.descripcion}
               onChange={handleChange}
               required
             ></TextArea>
@@ -147,8 +138,8 @@ function PublicationAdd({ onPostCreate }) {
             <Label>Estado:</Label>
             <Input
               type="text"
-              name="status"
-              value={postData.status}
+              name="estado"
+              value={publicacion.estado}
               onChange={handleChange}
               required
             />
@@ -157,20 +148,15 @@ function PublicationAdd({ onPostCreate }) {
             <Label>Tipo:</Label>
             <Input
               type="text"
-              name="type"
-              value={postData.type}
+              name="tipo"
+              value={publicacion.tipo}
               onChange={handleChange}
               required
             />
           </FormGroup>
           <FormGroup>
-            <Label>Subir Multimedia:</Label>
-            <Input
-              type="file"
-              accept="image/*, video/*"
-              multiple
-              onChange={handleMultimediaChange}
-            />
+            <Label>Imagen:</Label>
+            <Uploader urls={urls} setUrls={setUrls} ></Uploader>
           </FormGroup>
           <Button type="submit">Crear</Button> <Button type="submit">Cancelar</Button>
         </form>

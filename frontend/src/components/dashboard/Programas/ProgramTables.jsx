@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStateAllPrograms, deselectAllPrograms, deselectProgram, getAllProgram, selectAllPrograms, selectProgram } from "../../../redux-toolkit/actions/programActions";
+
+import { deleteStateAllPrograms, deselectAllPrograms, 
+  deselectProgram, getAllProgram, selectAllPrograms, 
+  selectProgram } from "../../../redux-toolkit/actions/programActions";
 import toast from "react-hot-toast";
-import { Avatar, Button, Checkbox, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Avatar, Button, Checkbox, Grid, Paper, Table, 
+  TableBody, TableCell, TableContainer, TableHead, 
+  TableRow } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
-
-/* eslint-disable react/no-unknown-property */
+import ModalUpdateProgram from './modalUpdateProgram';
+import ModalAddProgram from "./modalAddProgram";
 
 export default function ProgramTable() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.programs.programs);
-  
   const selectedPrograms = useSelector((state) => state.programs.selectedPrograms);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -32,7 +36,7 @@ export default function ProgramTable() {
   //funcion para seleccionar/deseleccionar los programas
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllPrograms(data.map((pub) => pub.id_Program)));
+      dispatch(selectAllPrograms(data.map((pub) => pub.id_Programa)));
       setSelectAll(true);
     }
     else {
@@ -40,9 +44,14 @@ export default function ProgramTable() {
       setSelectAll(false);
     }
   };
+
+  const handModal=(id)=>{
+    setSelectedProgramModal(id);
+    handleOpen(true);
+  };
   //funcion para eliminar los programas
   const handleDelete = async () => {
-    const response=await axios.post('/programs/delete/select', {ids: selectedPrograms});
+    const response=await axios.post('program/delete/select', {ids: selectedPrograms});
     setTimeout(() => {
       dispatch(getAllProgram());
       dispatch(deselectAllPrograms());
@@ -51,12 +60,12 @@ export default function ProgramTable() {
     }, 1500);
   };
   //Funcion para seleccionar/deseleccionar una publicacion individual
-  const handleSelectProgram = (id_Program) => {
-    if (selectedPrograms.includes(id_Program)) {
-      dispatch(deselectProgram(id_Program));
+  const handleSelectProgram = (id_Programa) => {
+    if (selectedPrograms.includes(id_Programa)) {
+      dispatch(deselectProgram(id_Programa));
       setSelectAll(false);
     } else {
-      dispatch(selectProgram(id_Program));
+      dispatch(selectProgram(id_Programa));
     }
   };
   useEffect(() => {
@@ -69,20 +78,20 @@ export default function ProgramTable() {
       sx={{ width: "100%", borderRadius: "0", height: "100vh%" }}
       component={Paper}>
       {
-        open ? <modalAddProgram
+        open ? <ModalUpdateProgram
           id={selectedProgramModal}
           open={open}
           handleOpen={handleOpen}
           handleClose={handleClose}
-        ></modalAddProgram> : null
+        ></ModalUpdateProgram> : null
       }
       {/*Renderizar el modal de agregar programa*/}
       {
-        openAddProgram?<modalAddProgram
+        openAddProgram?<ModalAddProgram
         open={openAddProgram}
         handleOpen={handleOpenAddProgram}
         handleClose={handleCloseAddProgram}
-        ></modalAddProgram> : null
+        ></ModalAddProgram> : null
       }
       <Grid
         container
@@ -92,7 +101,7 @@ export default function ProgramTable() {
         style={{ padding: "10px", gap: "10px" }}
       >
         {/*Boton para eliminar publicaciones*/}
-          {/* <Button
+          <Button
             disabled={selectedPrograms.length > 0 ? false : true}
             variant="contained"
             color="error"
@@ -100,7 +109,7 @@ export default function ProgramTable() {
             onClick={handleDelete}
             startIcon={<DeleteIcon />}>
             Borrar {selectedPrograms.length}
-          </Button> */}
+          </Button>
         {/*Boton para agregar nueva publicacion*/}
         <Button
           variant="contained"
@@ -115,7 +124,7 @@ export default function ProgramTable() {
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            {/* <TableCell align="center">
+            <TableCell align="center">
               <Checkbox
                 color="primary"
                 inputProps={{
@@ -124,7 +133,7 @@ export default function ProgramTable() {
                 checked={selectAll}
                 onChange={handleSelectAll}
               />
-            </TableCell> */}
+            </TableCell>
             {/*Encabezado de las columnas*/}
             <TableCell align="center">Nombre Programa</TableCell>
             <TableCell align="center">Descripcion</TableCell>
@@ -132,7 +141,6 @@ export default function ProgramTable() {
             <TableCell align="center">Turno</TableCell>
             <TableCell align="center">Modalidad</TableCell>
             <TableCell align="center">Estado</TableCell>
-            <TableCell align="center">Usuario</TableCell>
             <TableCell align="right">Acciones</TableCell>
           </TableRow>
         </TableHead>
@@ -143,31 +151,28 @@ export default function ProgramTable() {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               {/*Celda de seleccion de publicacion individual*/}
-              {/* <TableCell component="th" scope="row" padding="checkbox">
+              <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
                   checked={selectedPrograms.includes(row.id_Programa)}
                   onChange={() => handleSelectProgram(row.id_Programa)}
                 />
-              </TableCell> */}
+              </TableCell>
               {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.nombre}</TableCell>
-              <TableCell align="center">{row.descripcion}</TableCell>
-              
+              <TableCell align="center">{row.descripcion}</TableCell>            
               <TableCell align="center">
                 <Avatar alt="Remy Sharp" src={row.imagen ? row.imagen : null} />
               </TableCell>
               <TableCell align="center">{row.turno}</TableCell>
-              
               <TableCell align="center">{row.modalidad}</TableCell>
               <TableCell align="center">{row.estado ? "Visible" : "Oculto"}</TableCell>
-              
-              <TableCell align="center">{row.Usuario.nombres}</TableCell>
               {/*Boton para editar publicacion*/}
               <TableCell align="center">
                 <Button
                   variant="contained"
                   color="success"
+                  onClick={()=>handModal(row.id_Programa)}
                   sx={{ borderRadius: "0px" }}
                   endIcon={<EditIcon></EditIcon>}
                 >

@@ -5,6 +5,7 @@ const publicacionRoutes=require('./publicacionRoutes');
 const eventoRoutes=require("./eventoRoutes");
 const EPredefinido=require("./eventoPredefinidoRoutes")
 const programaRoutes=require('./programaRoutes');
+const uploadRoutes=require('./uploadRoutes');
 const podcastRoutes=require('./podcastRoutes');
 
 const router=Router();
@@ -15,6 +16,7 @@ router.use('/publication',publicacionRoutes);
 router.use('/event',eventoRoutes);
 router.use('/eventpredefinido',EPredefinido);
 router.use('/program', programaRoutes); // http
+router.use("/files",uploadRoutes)
 router.use('/podcast',podcastRoutes)
 
 module.exports=router;
