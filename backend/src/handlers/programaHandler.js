@@ -1,4 +1,4 @@
-const { getAllPrograms, getProgram, hiddenPrograma, deleteProgram, addPrograma, updatePrograma } = require("../controllers/programController")
+const { getAllPrograms, getProgram, hiddenPrograma, deleteProgram, addPrograma, updatePrograma, deleteSelect } = require("../controllers/programController")
 
 module.exports={
     getAllPrograms:async(req, res)=>{
@@ -29,9 +29,9 @@ module.exports={
     },
     updatePrograma:async(req,res)=>{
         try {
-            const id=req.params.id;
-            const changes=req.body;
-            const program=await updatePrograma(id,changes);
+            if(!req.params.id)res.status(401).json({messageError:'No program id'});
+            if(!req.body)res.status(401).json({messageError:'No user program'});
+            const program=await updatePrograma(req.params.id, req.body);
             res.status(200).json(program);
         } catch (error) {
             res.status(404).json({error:error.message});
@@ -56,5 +56,14 @@ module.exports={
         } catch (error) {
             res.status(404).json({error:error.message});
         }
+    },
+    deleteSelect:async(req,res)=>{
+        try {
+            const response=await deleteSelect(req.body.ids);
+            res.status(200).json(response)
+        } catch (error) {
+            res.status(500).json({messageError:error.message});
+        }
     }
+
 }

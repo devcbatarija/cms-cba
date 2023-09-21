@@ -22,6 +22,7 @@ import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
+import Uploader from './components/dashboard/Publications/TestComponent';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -79,6 +80,7 @@ function App() {
           <Route path='/dashboard/publinav' element={<PublicationNav />} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
+          <Route path='/dashboard/uploader' element={<Uploader></Uploader>} ></Route>
         </Route>
         }
         {/* Ruta para manejar páginas no encontradas */}

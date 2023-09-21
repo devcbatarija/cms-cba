@@ -5,6 +5,8 @@ const publicacionRoutes=require('./publicacionRoutes');
 const eventoRoutes=require("./eventoRoutes");
 const EPredefinido=require("./eventoPredefinidoRoutes")
 const programaRoutes=require('./programaRoutes');
+const uploadRoutes=require('./uploadRoutes');
+
 const router=Router();
 
 router.use('/test',testRouter); //"http:localhost:3001/api/test"
@@ -13,7 +15,6 @@ router.use('/publication',publicacionRoutes);
 router.use("/event",eventoRoutes);
 router.use("/eventpredefinido",EPredefinido);
 router.use('/program', programaRoutes); // http
-
-
+router.use("/files",uploadRoutes)
 module.exports=router;
 

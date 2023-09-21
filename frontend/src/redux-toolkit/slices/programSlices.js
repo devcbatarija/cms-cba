@@ -5,7 +5,7 @@ import { deleteStateAllPrograms, deselectAllPrograms, deselectProgram, getAllPro
 // Define el estado inicial para este slice de Redux.
 const initialState = {
     programs: [],              // Un array para almacenar programas.
-    selectedPublications: []   // Un array para almacenar las publicaciones seleccionadas.
+    selectedPrograms: []   // Un array para almacenar las publicaciones seleccionadas.
 };
 
 // Crea un slice de Redux llamado "programSlices" con su estado inicial.
@@ -36,7 +36,7 @@ const programSlices = createSlice({
         state.status = "pending";
       });
       builder.addCase(deleteStateAllPrograms.fulfilled, (state, action) => { //action.payload
-          state.publications=action.payload
+          state.programs=action.payload
           state.status = "success";
       });
       builder.addCase(deleteStateAllPrograms.rejected, (state) => {
@@ -47,7 +47,7 @@ const programSlices = createSlice({
         state.status = "pending";
       });
       builder.addCase(selectAllPrograms.fulfilled, (state, action) => { //action.payload
-          state.selectedPublications = action.payload;
+          state.selectedPrograms = action.payload;
           state.status = "success";
       });
       builder.addCase(selectAllPrograms.rejected, (state) => {
@@ -58,7 +58,7 @@ const programSlices = createSlice({
         state.status = "pending";
       });
       builder.addCase(deselectAllPrograms.fulfilled, (state) => { //action.payload
-          state.selectedPublications = [];
+          state.selectedPrograms = [];
           state.status = "success";
       });
       builder.addCase(deselectAllPrograms.rejected, (state) => {
@@ -69,7 +69,7 @@ const programSlices = createSlice({
         state.status = "pending";
       });
       builder.addCase(selectProgram.fulfilled, (state, action) => { //action.payload
-         state.selectedPublications.push(action.payload);
+         state.selectedPrograms.push(action.payload);
           state.status = "success";
       });
       builder.addCase(selectProgram.rejected, (state) => {
@@ -80,8 +80,8 @@ const programSlices = createSlice({
         state.status = "pending";
       });
       builder.addCase(deselectProgram.fulfilled, (state, action) => { //action.payload
-        state.selectedPublications = state.selectedPublications.filter(
-          (publicationId) => publicationId !== action.payload
+        state.selectedPrograms = state.selectedPrograms.filter(
+          (programId) => programId !== action.payload
         );
           state.status = "success";
       });
