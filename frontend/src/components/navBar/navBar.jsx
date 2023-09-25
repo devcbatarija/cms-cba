@@ -56,7 +56,6 @@ const NavBar = () => {
       </List>
     </div>
   );
-
   return (
     <AppBar position="static"
       sx={{

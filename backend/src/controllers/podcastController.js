@@ -96,21 +96,35 @@ module.exports = {
       if (!response) {
         throw new Error("Couldn't find");
       }
-    //   for (let [index,p] of data.results.entries()) {
-    //     if (p.preview_url) {
-    //       const obj = {
-    //         name: p.name,
-    //         preview_url: p.preview_url,
-    //         images: p.album.images,
-    //         id_song: p.id,
-    //         state: true,
-    //       };
-    //       Podcast.create(obj);
-    //     }
-    //   }
       return { results: response };
     } catch (error) {
       throw error;
     }
   },
+  addPodcastBd:async (song)=>{
+    try {
+      const response=await Podcast.findAll({where:{id_song:song.id_song}});
+      if(response.length > 0) {
+        throw new Error("The song has already been added");
+      }
+      const resultAdd=await Podcast.create(song);
+      return resultAdd;
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
+  }
 };
+
+ // for (let [index,p] of data.results.entries()) {
+      //   if (p.preview_url) {
+      //     const obj = {
+      //       name: p.name,
+      //       preview_url: p.preview_url,
+      //       images: p.album.images,
+      //       id_song: p.id,
+      //       state: true,
+      //     };
+      //     Podcast.create(obj);
+      //   }
+      // }

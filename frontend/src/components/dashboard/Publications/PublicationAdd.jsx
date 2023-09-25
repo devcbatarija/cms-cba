@@ -3,40 +3,7 @@ import styled from 'styled-components';
 import Uploader from './TestComponent';
 import axios from 'axios';
 
-const StyledButton = styled.button`
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  vertical-align: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  border: 1px solid transparent;
-  padding: .375rem .75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: .25rem;
-  color: #FFF;
-  background-clip: padding-box;
-  border: 0;
-  cursor: pointer;
-  transition: all .2s;
-  width: 100px;
-  background: linear-gradient(to right, #007bff 0%, #66a6ff 100%);
 
-  &:hover {
-    transform: scale(1.1);
-  }
-  
-  &:focus {
-    outline:0;
-  }
-
-  &:not(:last-child) {
-    margin-right: .75rem;
-  }
-`;
 const Container = styled.div`
 margin: 0 auto;
 padding: 5px;
@@ -48,7 +15,6 @@ width: 100%;    //Agrega esta línea
 `;
 const Title = styled.h2`
   color: #343a40;
-  text-align: center;
 `;
 
 const FormGroup = styled.div`
@@ -83,30 +49,34 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-function PublicationAdd({publicacion, setPublicacion }) {
+function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) {
   const [urls,setUrls]=useState([])
+
   const handleChange=(e)=>{
     const property=e.target.name;
     const value=e.target.value;
-    console.log(value);
 
     if (property!="multimedia") {
       setPublicacion({
         ...publicacion,
         [property]:value
       });
+      return;
     }
   }
   const handleSubmit =async (e) => {
     e.preventDefault();
     try {
-      const response= await axios.post('/files/upload',{
-        filePath:urls,
-        type:"image"
-      })
-      console.log(response)
+      const response = await axios.post("/files/upload", {
+        filePath: publicacion.multimedia,
+        type: "image",
+      });
+      if(response.data.results){
+        console.log(response.data.message)
+        handleSubmitPublication()
+      }
     } catch (error) {
-      console.log(error)
+      return error;
     }
   };
 
@@ -154,12 +124,18 @@ function PublicationAdd({publicacion, setPublicacion }) {
               required
             />
           </FormGroup>
-          <FormGroup>
-            <Label>Imagen:</Label>
-            <Uploader urls={urls} setUrls={setUrls} ></Uploader>
-          </FormGroup>
-          <Button type="submit">Crear</Button> <Button type="submit">Cancelar</Button>
         </form>
+        <FormGroup>
+            <Label>Multimedia:</Label>
+            <Uploader 
+            urls={urls} 
+            setUrls={setUrls} 
+
+            publicacion={publicacion}
+            setPublicacion={setPublicacion}
+            ></Uploader>
+        </FormGroup>
+        <Button onClick={handleSubmit} >Crear publicacion</Button>
       </Container>
 
     </>
