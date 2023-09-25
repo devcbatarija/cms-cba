@@ -173,7 +173,6 @@ export default function PublicationTable() {
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {/*Celda de seleccion de publicacion individual*/}
               <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
@@ -181,7 +180,6 @@ export default function PublicationTable() {
                   onChange={() => handleSelectPublication(row.id_Publicacion)}
                 />
               </TableCell>
-              {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.titulo}</TableCell>
               <TableCell
                 align="center"
@@ -198,7 +196,6 @@ export default function PublicationTable() {
                 {row.estado ? "Visible" : "Oculto"}
               </TableCell>
               <TableCell align="center">{row.tipo}</TableCell>
-              {/*Boton para editar publicacion*/}
               <TableCell align="center">
                 <Button
                   variant="contained"
