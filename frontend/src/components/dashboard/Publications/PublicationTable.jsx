@@ -6,7 +6,9 @@ import {
   deleteStateAllPublications,
   deselectAllPublications,
   deselectPublication,
-  getAllPublication, selectAllPublications, selectPublication
+  getAllPublication,
+  selectAllPublications,
+  selectPublication,
 } from "../../../redux-toolkit/actions/publicationActions";
 import {
   Button,
@@ -22,21 +24,23 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import ModalAddPublication from "./modalAddPublication";
 import ModalUpdatePublication from "./modalUpdatePublication";
 import axios from "axios";
 
 //Componente principal PublicationTable
 export default function PublicationTable() {
-  const dispatch = useDispatch();//Obtiene la funcion dispatch de Redux para enviar acciones
+  const dispatch = useDispatch(); //Obtiene la funcion dispatch de Redux para enviar acciones
   const data = useSelector((state) => state.publications.publications); //selectedPublications. Obtiene la lista de los usuarios del estado global de Redux
-  const selectedPublications = useSelector((state) => state.publications.selectedPublications); //Obtiene la lista de los usuarios seleccionados del estado global de Redux
+  const selectedPublications = useSelector(
+    (state) => state.publications.selectedPublications
+  ); //Obtiene la lista de los usuarios seleccionados del estado global de Redux
   const [selectAll, setSelectAll] = useState(false); //Estado local para el control de seleccion de todos los usuarios
 
   // //Modal para editar publicacion seleccionada
   const [open, setOpen] = useState(false);
-  const [selectedPublicationModal, setSelectedPublicationModal] = useState("")
+  const [selectedPublicationModal, setSelectedPublicationModal] = useState("");
 
   //funciones para abrir y cerrar el modal
   const handleOpen = () => setOpen(true);
@@ -48,35 +52,34 @@ export default function PublicationTable() {
   const handleOpenAddPublication = () => setOpenAddPublication(true);
   const handleCloseAddPublication = () => setOpenAddPublication(false);
 
-
-
   //Funcion para seleccionar/deseleccionar las publicaciones
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllPublications(data.map((pub) => pub.id_Publicacion)));//Activa la seleccion de todos las publicaciones
+      dispatch(selectAllPublications(data.map((pub) => pub.id_Publicacion))); //Activa la seleccion de todos las publicaciones
       setSelectAll(true); //Actualiza el estado local
     } else {
       dispatch(deselectAllPublications()); //Deselecciona todas las publicaciones
-      setSelectAll(false);// Actualiza el estado local
+      setSelectAll(false); // Actualiza el estado local
     }
   };
   //Funcion para seleccionar la publicacion que se va a editar
   const handleModal = (id) => {
-    setSelectedPublicationModal(id)
-    handleOpen(true)
-  }
+    setSelectedPublicationModal(id);
+    handleOpen(true);
+  };
 
   //funcion para eliminar publicaciones http://localhost:3001/api/publication/create
   const handleDelete = async () => {
-    //Envia una solicitud para eliminar usuarios seleccionados
-    const response = await axios.post('publication/delete/select', { ids: selectedPublications });
+    const response = await axios.post("publication/delete/select", {
+      ids: selectedPublications,
+    });
     setTimeout(() => {
-      dispatch(getAllPublication());//Actualiza la lista de publicaciones despues de la eliminacion
-      dispatch(deselectAllPublications());//Deselecciona a todos los usuarios.
-      dispatch(deleteStateAllPublications());//Elimina el estado de los usuarios seleccionados
+      dispatch(getAllPublication()); //Actualiza la lista de publicaciones despues de la eliminacion
+      dispatch(deselectAllPublications()); //Deselecciona a todos los usuarios.
+      dispatch(deleteStateAllPublications()); //Elimina el estado de los usuarios seleccionados
       toast.success("Borrado exitoso!"); //Muestra una notificacion de exito
     }, 1500);
-  }
+  };
 
   //funcion para seleccionar/deseleccionar una publicacion infividual
   const handleSelectPublication = (pubId) => {
@@ -96,24 +99,24 @@ export default function PublicationTable() {
   return (
     <TableContainer
       sx={{ width: "100%", borderRadius: "0", height: "100vh%" }}
-      component={Paper}>
+      component={Paper}
+    >
       {/*rederiza el modal de modificacion*/}
-      {
-        open ? <ModalUpdatePublication
+      {open ? (
+        <ModalUpdatePublication
           id={selectedPublicationModal}
           open={open}
           handleOpen={handleOpen}
           handleClose={handleClose}
-        ></ModalUpdatePublication> : null
-      }
-      {
-        openAddPublication ? <ModalAddPublication
+        ></ModalUpdatePublication>
+      ) : null}
+      {openAddPublication ? (
+        <ModalAddPublication
           open={openAddPublication}
           handleOpen={handleOpenAddPublication}
           handleClose={handleCloseAddPublication}
-        >
-        </ModalAddPublication> : null
-      }
+        ></ModalAddPublication>
+      ) : null}
       <Grid
         container
         direction="row"
@@ -128,7 +131,8 @@ export default function PublicationTable() {
           color="error"
           sx={{ borderRadius: "3px" }}
           onClick={handleDelete}
-          startIcon={<DeleteIcon />}>
+          startIcon={<DeleteIcon />}
+        >
           Borrar {selectedPublications.length}
         </Button>
         {/*Boton para agregar nueva publicacion*/}
@@ -179,8 +183,20 @@ export default function PublicationTable() {
               </TableCell>
               {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.titulo}</TableCell>
-              <TableCell align="center">{row.descripcion}</TableCell>
-              <TableCell align="center">{row.estado ? "Visible" : "Oculto"}</TableCell>
+              <TableCell
+                align="center"
+                style={{
+                  maxWidth: "200px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {row.descripcion}
+              </TableCell>
+              <TableCell align="center">
+                {row.estado ? "Visible" : "Oculto"}
+              </TableCell>
               <TableCell align="center">{row.tipo}</TableCell>
               {/*Boton para editar publicacion*/}
               <TableCell align="center">
