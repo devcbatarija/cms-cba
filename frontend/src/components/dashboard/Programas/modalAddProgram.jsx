@@ -1,16 +1,30 @@
-import { Button, MenuItem, Select } from "@mui/base";
+import * as React from "react";
 import PropTypes from "prop-types";
+import clsx from "clsx";
+import { styled, Box } from "@mui/system";
+import { Modal } from "@mui/base/Modal";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { Avatar, Box, Grid, InputLabel, Modal, TextField, styled } from "@mui/material";
+import {Avatar,
+  Button,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,} from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SendIcon from "@mui/icons-material/Send";
+import { getAllProgram } from "../../../redux-toolkit/actions/programActions";
 
 export default function ModalAddProgram({
-    open, handleClose, handleOpen, })
+    open,
+    handleClose, 
+    handleOpen
+  })
      {
+    const userLogin = useSelector((state) => state.login.user)
         const [spinner, setSpinner]=useState(false);
         const [form, setForm]=useState({
             nombre: "",
@@ -27,6 +41,7 @@ export default function ModalAddProgram({
             const value=e.target.value;
             setForm({
                 ...form,
+                UsuarioIdUsuario:userLogin._userId,
                 [property]: value,
             });
         };
@@ -34,9 +49,10 @@ export default function ModalAddProgram({
             e.preventDefault();
             try {
                 setSpinner(true);
-                const response=await axios.post(`/programs`, form);
+                const response=await axios.post(`program/create`, form);
                 setTimeout(() => {
-                    toast.success("Exito");
+                    toast.success("Registro exito");
+                    dispatch(getAllProgram());
                     handleClose();
                 }, 1500);
             } catch (error) {
@@ -45,9 +61,9 @@ export default function ModalAddProgram({
         };
         useEffect(() => {
           setTimeout(() => {
-            
           }, 600);
         }, []);
+
         return (
             <div>
               <StyledModal
@@ -76,9 +92,9 @@ export default function ModalAddProgram({
                       <TextField
                         sx={{ width: "100%" }}
                         onChange={handleChange}
-                        value={form.correo}
-                        id="outlined-basic-correo"
-                        name="correo"
+                        value={form.nombre}
+                        id="outlined-basic-nombre"
+                        name="nombre"
                         type="text"
                         variant="outlined"
                       />
@@ -90,9 +106,9 @@ export default function ModalAddProgram({
                       <TextField
                         sx={{ width: "100%" }}
                         onChange={handleChange}
-                        value={form.nombres}
-                        id="outlined-basic-nombres"
-                        name="nombres"
+                        value={form.descripcion}
+                        id="outlined-basic-descripcion"
+                        name="descripcion"
                         type="text"
                         variant="outlined"
                       />
@@ -104,37 +120,38 @@ export default function ModalAddProgram({
                       <TextField
                         sx={{ width: "100%" }}
                         onChange={handleChange}
-                        value={form.apellidos}
-                        id="outlined-basic-apellidos"
-                        name="apellidos"
+                        value={form.imagen}
+                        id="outlined-basic-imagen"
+                        name="imagen"
                         type="text"
                         variant="outlined"
                       />
                     </Grid>
                     <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-celular">
-                        Modalidad
-                      </InputLabel>
-                      <TextField
+                      <InputLabel htmlFor="outlined-adornment-celular"> Modalidad </InputLabel>
+                      <Select
                         sx={{ width: "100%" }}
-                        onChange={handleChange}
-                        value={form.celular}
+                        labelId="demo-select-small-label"
                         id="outlined-basic-celular"
-                        name="celular"
-                        type="text"
-                        variant="outlined"
-                      />
+                        value={form.modalidad}
+                        label="modalidad"
+                        onChange={handleChange}
+                        name="modalidad"
+                      >
+                        <MenuItem value="presencial">Presencial</MenuItem>
+                        <MenuItem value="virtua">Virtual</MenuItem>
+                      </Select>
                     </Grid>
                     <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-password">Turno</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-celular">Turno</InputLabel>
                       <Select
                         sx={{ width: "100%" }}
                         labelId="demo-select-small-label"
                         id="demo-select-small"
-                        value={form.rol}
-                        label="rol"
+                        value={form.turno}
+                        label="turno"
                         onChange={handleChange}
-                        name="rol"
+                        name="turno"
                       >
                         <MenuItem value="Manana 7:00 am">Manana 7:00 am</MenuItem>
                         <MenuItem value="Tarde 2:15 pm">Tarde 2:15 pm</MenuItem>
@@ -159,6 +176,7 @@ export default function ModalAddProgram({
                         <MenuItem value={false}>No vigente</MenuItem>
                       </Select>
                     </Grid>
+
                     <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                       {!spinner ? (
                         <Button
@@ -177,7 +195,7 @@ export default function ModalAddProgram({
                           variant="contained"
                           sx={{ width: "100%", height: "35px" }}
                         >
-                          <span>Actualizando</span>
+                          <span>GUARDANDO</span>
                         </LoadingButton>
                       )}
                     </Grid>
