@@ -16,7 +16,7 @@ function SidebarItem({ icon: Icon, label, to, subItems }) { // Añadir prop de s
 
   return (
     <div>
-      <li className="sidebar-link" onClick={handleOpen}>
+      <li className="sidebar-link sidebar md:block hidden" onClick={handleOpen}>
         <Icon className="icon" />
         <span>
           <Link  to={to}>{label}</Link>
@@ -48,10 +48,15 @@ export default function Sidebar() {
             { label: "Tabla", to:"/dashboard/tableuser"}
           ]}
         />
+        {/* <Link to='/dashboard/publinav/table'>Tabl</Link>
+        <Link to='/dashboard/publinav/add'>table</Link> */}
         <SidebarItem 
           icon={AssessmentOutlinedIcon} 
-          label="Publicaciones" 
-          to="/dashboard/publinav" 
+          label="Publicaciones"
+          subItems={[
+            {label:"Tabla",to:"/dashboard/publinav/table"},
+            {label:"Crear nueva",to:"/dashboard/publinav/add"}
+          ]}
         />
         <SidebarItem 
           icon={AssessmentOutlinedIcon} 

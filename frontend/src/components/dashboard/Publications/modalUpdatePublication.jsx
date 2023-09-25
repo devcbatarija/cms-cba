@@ -47,7 +47,8 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
 
   const getPublicationById = async () => {
     try {
-      const response = await axios.get(`/publications/${id}`);
+      const response = await axios.get(`/publication/getone/${id}`);
+      console.log(response)
       setForm(response.data);
       setSkeleton(false);
     } catch (error) {
@@ -59,7 +60,7 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.put(`/publications/${id}`, form);
+      const response = await axios.put(`/publication/getone/${id}`, form);
       setTimeout(() => {
         toast.success("Actualización exitosa!");
         //dispatch(updatePublication(response.data)); // Actualizar el estado global
@@ -82,7 +83,6 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
         aria-describedby="modal-update-publication-description"
         open={open}
         onClose={handleClose}
-        slots={{ backdrop: StyledBackdrop }}
       >
         <Box sx={style}>
           {!skeleton ? (

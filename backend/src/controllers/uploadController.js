@@ -8,33 +8,39 @@ const {
 const FormData = require('form-data');
 
 
-// const API_KEY_IMGBB = 'https://api.imgbb.com/1';
-
-const uploadImage = async (filePath,type) => { //RECIBIMOS BASE64
-    console.log(filePath)
+const uploadImage = async ({filePath,type}) => { //RECIBIMOS BASE64
     try {
-        const formData = new FormData();
-        let data;
+        let data=[];
+        let urlsComplet=[];
         if(type=="image"){
-            data = await formatImage(filePath[0]);  //enviamos el base64 a formatear
+            for(let img of filePath){
+                const bs=await formatImage(img)
+                data.push(bs); 
+            }
         }else{
             
         }
-        type=="image"?formData.append('image', data):formData.append('video', data); //cargamos al formData
-        const response = await axios.post(
-            `${BASE_URL}/upload?expiration=600&key=${API_KEY_IMGBB}`,
-            formData,
-            { 
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+        for(let base of data){
+            const formData = new FormData();
+            formData.append('image', base)
+            const response = await axios.post(
+                `${BASE_URL}/upload?key=${API_KEY_IMGBB}`,
+                formData,
+                { 
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            );
+            if(response.data.success){
+                urlsComplet.push(response.data.data.display_url);
+                console.log(response.data.data)
+                console.log(response.data.data.display_url)
+            } else {
+                throw new Error('La carga falló');
             }
-        );
-        if(response.data.success){
-            return response.data.data.display_url;
-        } else {
-            throw new Error('Upload failed');
         }
+        return {message:"Las imagenes se subieron exitosamente",results:urlsComplet}
     } catch (error) {
         return error;
     }
@@ -45,6 +51,7 @@ const getImage = async (id) => {
     return response.data;
 };
 const formatImage = (base) => {
+    console.log("format")
     return new Promise((resolve, reject) => {
         try {
             const s = base.replace(/data:image\/(png|jpg|jpeg);base64,/, '');
