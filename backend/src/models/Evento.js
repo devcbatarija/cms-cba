@@ -33,6 +33,17 @@ module.exports=(sequelize)=>{
         tipo:{
             type:DataTypes.STRING,
             allowNull:false
+        },
+        start_Time:{
+            type:DataTypes.STRING
+        },
+        end_Time:{
+            type:DataTypes.STRING
+        },
+        allDay:{
+            type:DataTypes.BOOLEAN,
+            allowNull:false,
+            defaultValue:false
         }
     })
 }

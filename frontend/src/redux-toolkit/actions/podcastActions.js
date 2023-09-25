@@ -9,6 +9,13 @@ export const getPodcasts = createAsyncThunk("/getPodcasts", async ()=>{
         return error;
     }
 })
+export const hadleDeleteState = createAsyncThunk("/hadleDeleteState", async ()=>{
+    try {
+        return [];
+    } catch (error) {
+        return error;
+    }
+})
 export const getPodcastSongs = createAsyncThunk("/getPodcastSongs", async ()=>{
     try {
         const podcasts= await axios.get("podcast/songs/mgr");
