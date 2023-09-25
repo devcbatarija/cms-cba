@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getPodcastSongs, getPodcastSongsSpotify, getPodcasts } from "../actions/podcastActions";
+import { getPodcastSongs, getPodcastSongsSpotify, getPodcasts, hadleDeleteState } from "../actions/podcastActions";
 
 const initialState = {
     podcasts:[],
@@ -45,6 +45,16 @@ const podcastSlices = createSlice({
         state.status = "rejected";
     });
 
+    builder.addCase(hadleDeleteState.pending, (state, action) => {
+      state.status = "pending";
+    });
+    builder.addCase(hadleDeleteState.fulfilled, (state, action) => { //action.payload
+        state.songs=[];
+        state.status = "success";
+    });
+    builder.addCase(hadleDeleteState.rejected, (state, action) => {
+        state.status = "rejected";
+    })
   },
 });
 

@@ -47,6 +47,7 @@ module.exports={
         }
     },
     deletePublication:async(id)=>{
+        console.log(id)
         try {
             const publication=await Publicacion.findByPk(id);
             Publicacion.delete(publication);
@@ -62,5 +63,18 @@ module.exports={
         } catch (error) {
             return error;
         }
+    },
+    deletePublicationSelect:async(pubIds)=>{
+        console.log(pubIds)
+        try {
+            for (let id of pubIds) {
+              const publi = await Publicacion.findByPk(id);
+              await publi.destroy();
+            }
+            const remainingPublis = await Publicacion.findAll();
+            return remainingPublis;
+          } catch (error) {
+            return error;
+          }
     }
 }
