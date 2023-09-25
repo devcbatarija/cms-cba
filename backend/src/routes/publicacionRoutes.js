@@ -1,6 +1,7 @@
 const express=require('express');
 const { getAllPublicacion,addPublicacion,hiddenPublication,updatePublication, deletePublication,
-getPublication} = require('../handlers/publicacionHandler');
+getPublication,
+deletePublicationSelect} = require('../handlers/publicacionHandler');
 const router=express();
 
 router.get('/',getAllPublicacion);
@@ -8,6 +9,8 @@ router.post('/create',addPublicacion);
 router.put('/hidden/:id', hiddenPublication);
 router.put('/update/:id', updatePublication);
 router.delete('/delete/:id', deletePublication);
-router.get('/getOne/:id', getPublication);
+router.get('/getone/:id', getPublication);
+
+router.post('/delete/select', deletePublicationSelect);
 
 module.exports=router;

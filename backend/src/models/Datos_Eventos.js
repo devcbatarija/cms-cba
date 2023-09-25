@@ -17,12 +17,6 @@ module.exports=(sequelize)=>{
             type:DataTypes.ARRAY(DataTypes.TEXT),
             allowNull: false
         },
-        startTime:{
-            type:DataTypes.STRING
-        },
-        endTime:{
-            type:DataTypes.STRING
-        },
         state:{
             type:DataTypes.BOOLEAN,
             allowNull:false,
