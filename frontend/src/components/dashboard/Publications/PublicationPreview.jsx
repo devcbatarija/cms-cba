@@ -1,24 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import ReactPlayer from 'react-player'
-import { useState } from 'react';
-import { useRef } from 'react';
 
 const PreviewContainer = styled.div`
   margin: 0 auto;
-  padding-left: 200px ;
   background-color: #f8f9fa;
   border-radius: 1px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  overflow: auto;
+  font-family: ${props => props.fontFamily};
 `;
-
 
 const Title = styled.h2`
   color: #343a40;
-  text-align: center;
+  text-align: ${props => props.textAlign};
   font-size: 24px;
   margin-bottom: 20px;
+  font-weight: ${props => props.fontWeight};
 `;
 
 const PropertyLabel = styled.strong`
@@ -34,95 +34,34 @@ const PropertyValue = styled.p`
 
 const MultimediaContainer = styled.div`
   margin-top: 20px;
+  text-align: ${props => props.imageAlign};
 `;
 
 const MultimediaList = styled.ul`
   list-style-type: none;
   padding: 0;
 `;
-function PublicationPreview() {
-  const [playing, setPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.8);
 
-  const playerRef = useRef(null);
-
-  const handlePlayPause = () => {
-    setPlaying(!playing);
-  }
-
-  const handleVolumeChange = (e) => {
-    setVolume(parseFloat(e.target.value));
-  }
+function PublicationPreview({
+  titulo, descripcion, multimedia, estado, tipo
+}) {
+  const [fontFamily, setFontFamily] = useState('Arial');
+  const [fontWeight, setFontWeight] = useState('normal');
+  const [textAlign, setTextAlign] = useState('center');
+  const [imageAlign, setImageAlign] = useState('center');
 
   return (
-    <PreviewContainer>
-      <Title>Vista Previa</Title>
-      <PropertyLabel>Título:</PropertyLabel>
-      <PropertyValue>El senor de los anillos</PropertyValue>
-      <MultimediaContainer>
-        <PropertyLabel>Multimedia:</PropertyLabel>
-        <MultimediaList>
-          <img src="https://www.camarapiracicaba.sp.gov.br/Artigos/Imagens/t620/76616.jpg" alt="" srcset="" />
-          <div>
-      <button onClick={handlePlayPause}>
-        {playing ? 'Pause' : 'Play'}
-      </button>
-      <input 
-        type="range" 
-        min={0} 
-        max={1} 
-        step={0.01} 
-        value={volume} 
-        onChange={handleVolumeChange} 
-      />
-      <div>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/watch?v=TJJk66LZLsE"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
-      </div>
-    </div>
-
-        </MultimediaList>
+    <PreviewContainer fontFamily={fontFamily}>
+      <Title fontWeight={fontWeight} textAlign={textAlign}>Vista Previa</Title>
+      <PropertyLabel>{titulo}</PropertyLabel>
+      <MultimediaContainer imageAlign={imageAlign}>
+        <img src={"https://elpais.bo/img/images_1200/contents/2020/06/16/c2485658-d073-4fa4-be13-0877953f3647.jpg"} alt={"No hay multimedia"} />
       </MultimediaContainer>
-
-      <PropertyLabel>Descripción:</PropertyLabel>
-      <PropertyValue>El arte del camuflaje</PropertyValue>
-      <PropertyLabel>Estado:</PropertyLabel>
-      <PropertyValue>Agotado</PropertyValue>
-      <PropertyLabel>Tipo:</PropertyLabel>
-      <PropertyValue>Cartelera</PropertyValue>
-
+      <PropertyValue>{descripcion}</PropertyValue>
+      <PropertyLabel>{estado}</PropertyLabel>
+      <PropertyValue>{tipo}</PropertyValue>
     </PreviewContainer>
   );
 }
-// function PublicationPreview({ post }) {
-//   return (
-//     <PreviewContainer>
-//       <Title>Vista Previa de la Publicación</Title>
-//       <PropertyLabel>Título:</PropertyLabel>
-//       <PropertyValue>{post.title}</PropertyValue>
-//       <PropertyLabel>Descripción:</PropertyLabel>
-//       <PropertyValue>{post.description}</PropertyValue>
-//       <PropertyLabel>Estado:</PropertyLabel>
-//       <PropertyValue>{post.status}</PropertyValue>
-//       <PropertyLabel>Tipo:</PropertyLabel>
-//       <PropertyValue>{post.type}</PropertyValue>
-//       {post.multimedia.length > 0 && (
-//         <MultimediaContainer>
-//           <PropertyLabel>Multimedia:</PropertyLabel>
-//           <MultimediaList>
-//             {post.multimedia.map((file, index) => (
-//               <MultimediaItem key={index}>{file.name}</MultimediaItem>
-//             ))}
-//           </MultimediaList>
-//         </MultimediaContainer>
-//       )}
-//     </PreviewContainer>
-//   );
-// }
 
 export default PublicationPreview;

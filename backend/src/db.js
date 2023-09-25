@@ -9,7 +9,13 @@ const {
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-});
+  // dialectOptions: {
+  //   ssl: {
+  //     require: true,
+  //     rejectUnauthorized: false 
+  //   }
+  // },
+});//para poder conectarse a una base de datos con ssl
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -36,7 +42,9 @@ const {
   Evento,
   Dato_Evento,
   Evento_Predefinido,
-  Programa
+  Programa,
+  Credencial,
+  Podcast
 } = sequelize.models;
 Usuario.hasMany(Publicacion);
 Publicacion.belongsTo(Usuario);
@@ -52,6 +60,12 @@ Evento_Predefinido.belongsTo(Usuario);
 
 Usuario.hasMany(Programa);
 Programa.belongsTo(Usuario);
+
+Usuario.hasMany(Credencial);
+Credencial.belongsTo(Usuario);
+
+Credencial.hasMany(Podcast);
+Podcast.belongsTo(Credencial);
 
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,
