@@ -23,8 +23,13 @@ import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
 import Uploader from './components/dashboard/Publications/TestComponent';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
-import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';
 import CalendarioClient from './components/Calendar/Calendar';
+import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
+import MediaControlCard from './components/programs/programs';
+import ProgramChildren from './components/programs/children';
+import ProgramList from './components/programs/programs';
+import TablePublication from './components/dashboard/Publications/PublicationTable'
+import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -72,14 +77,19 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/calendar' element={<CalendarioClient />} />
+        <Route path='/programs' element={<ProgramList />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+
         {/* Ruta del dashboard, sin verificación de autenticación */}
         {
         auth &&
         <Route path='/dashboard' element={<Dashboard></Dashboard>}>
         <Route path='/dashboard/calendario' element={<Calendario />} />
-          <Route path='/dashboard/publinav' element={<PublicationNav />} />
+          <Route path='/dashboard/publinav' element={<PublicationNav />} >
+            <Route path='/dashboard/publinav/table' element={<TablePublication/>} />
+            <Route path='/dashboard/publinav/add' element={<ContarinerNewPublication/>} />
+          </Route>
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
           <Route path='/dashboard/uploader' element={<Uploader></Uploader>} ></Route>

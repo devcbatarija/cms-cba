@@ -5,7 +5,8 @@ const {
     editCredentials, 
     deleteCredentials, 
     getPodcasts,
-    getPodcastsBd
+    getPodcastsBd,
+    addPodcastBd
 } = require("../handlers/podcastHandler");
 const { isAdmin } = require("../services/jwtservice");
 const router= express();
@@ -16,5 +17,7 @@ router.put('/:id',editCredentials)
 router.delete('/:id',deleteCredentials)
 router.post('/songs',getPodcasts)
 router.get('/songs/mgr',getPodcastsBd)
+router.post('/song',addPodcastBd)
+
 
 module.exports=router;

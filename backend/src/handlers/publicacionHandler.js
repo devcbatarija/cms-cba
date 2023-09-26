@@ -1,6 +1,7 @@
 const express = require('express');
 const{getAllPublicacion, addPublicacion, hiddenPublication,updatePublication, deletePublication,
-getPublication}=require('../controllers/publicacionController');
+getPublication,
+deletePublicationSelect}=require('../controllers/publicacionController');
 module.exports={
     getAllPublicacion:async(req,res)=>{
         try {
@@ -40,7 +41,7 @@ module.exports={
     },
     deletePublication:async(req, res)=>{
         try {
-            const publication= await deletePublication(req.params.id);
+            const publication= await deletePublication(req.body.ids);
             res.status(200).json(publication);
         } catch (error) {
             res.status(404).json({error:error.message});
@@ -52,6 +53,15 @@ module.exports={
             res.status(200).json({
                 results:publication
             })
+        } catch (error) {
+            res.status(404).json({error:error.message});
+        }
+    },
+    deletePublicationSelect:async(req,res)=>{
+        // console.log(req.body)
+        try {
+            const result=await deletePublicationSelect(req.body.ids);
+            res.status(200).json({results:result})
         } catch (error) {
             res.status(404).json({error:error.message});
         }

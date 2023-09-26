@@ -1,4 +1,4 @@
-const { getCredentials, createCredentials, editCredentials, deleteCredentials, getPodcasts, getPodcastsBd } = require("../controllers/podcastController")
+const { getCredentials, createCredentials, editCredentials, deleteCredentials, getPodcasts, getPodcastsBd, addPodcastBd } = require("../controllers/podcastController")
 
 module.exports={
     getCredentials:async(req,res)=>{
@@ -49,4 +49,12 @@ module.exports={
             res.status(401).json(error);
         }
     },
+    addPodcastBd:async(req,res)=>{
+        try {
+            const result = await addPodcastBd(req.body.song);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(409).json({error:error.message});
+        }
+    }
 }
