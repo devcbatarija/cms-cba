@@ -4,6 +4,7 @@ import PublicationPreview from "./PublicationPreview";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const ContarinerNewPublication = () => {
   const [publicacion, setPublicacion] = useState({
@@ -14,17 +15,17 @@ const ContarinerNewPublication = () => {
     tipo: "",
     UsuarioIdUsuario: "",
   });
-  const idUser = useSelector((state) => state.login.user._userId);
-
-  const handleSubmitPublication = async () => {
+  const idUser = useSelector((state) => state.login.user);
+  const navigate=useNavigate();
+  const handleSubmitPublication = async (urls) => {
     try {
       const response = await axios.post("publication/create", {
         titulo: publicacion.titulo,
         descripcion: publicacion.descripcion,
-        multimedia: publicacion.multimedia,
+        multimedia: urls,
         estado: publicacion.estado,
         tipo: publicacion.estado,
-        UsuarioIdUsuario: idUser,
+        UsuarioIdUsuario: idUser._userId,
       });
       if (response.data) {
         toast.success("Registro exitoso.");
@@ -37,17 +38,21 @@ const ContarinerNewPublication = () => {
           tipo: "",
           UsuarioIdUsuario: "",
         });
+        navigate('/dashboard/publinav/table')
       }
     } catch (error) {}
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 shadow border  gap-2 bg-zinc-100 p-2">
+      <div>
       <PublicationAdd
         publicacion={publicacion}
         setPublicacion={setPublicacion}
         handleSubmitPublication={handleSubmitPublication}
       />
+      </div>
+      <div>
       <PublicationPreview
         titulo={publicacion.titulo}
         descripcion={publicacion.descripcion}
@@ -56,6 +61,7 @@ const ContarinerNewPublication = () => {
         tipo={publicacion.tipo}
         UsuarioIdUsuario={publicacion.UsuarioIdUsuario}
       ></PublicationPreview>
+      </div>
     </div>
   );
 };

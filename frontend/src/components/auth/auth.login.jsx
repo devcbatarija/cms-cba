@@ -1,9 +1,11 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel"; // Importa el componente InputLabel
+import { FormControl, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import "./styles.css";
 import { useState } from "react";
-import { Alert, Typography } from "@mui/material";
+import { Alert } from "@mui/material";
 import axios from "axios";
 import { signin } from "../../redux-toolkit/actions/auth.Actions";
 import { useEffect } from "react";
@@ -34,15 +36,17 @@ const Login = () => {
     try {
       setForm({
         ...form,
-        correo:"",
-        password:""
-      })
-      const response = await axios.post("users/login", form,{ withCredentials: true });
+        correo: "",
+        password: "",
+      });
+      const response = await axios.post("users/login", form, {
+        withCredentials: true,
+      });
       if (response.data.messageError) {
         setError(response.data.messageError);
         return;
       }
-      toast.success("Inicio de sesion exitoso");
+      toast.success("Inicio de sesión exitoso");
       dispatch(signin(response.data));
     } catch (error) {
       setError(error.response.data.messageError);
@@ -56,59 +60,70 @@ const Login = () => {
   }, [auth.auth, navigate]);
 
   return (
-    <div className="flex">
-      <div className="w-1/2 p-3">
-        <div className="formDiv" style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-
-        }} >
-        <Typography variant="h5" component="h2">
-          INICIO DE SESION
-        </Typography>
-          <form onSubmit={handeSubmit} className="formLogin" style={{
-            padding:"0px",
-            display:"flex",
-            flexDirection:"column",
-            width:"100%",
-            justifyContent:"center",
-            alignItems:"center",
-            }}>
-            {error ? (
-            <Alert severity="error">{error}</Alert>
-            ) : null}
+    <div className="flex flex-col md:flex-row min-h-full p-4 px-20 bg-gray-502" style={{ height: "90vh" }}>
+      <div className="flex flex-col items-center justify-center w-full h-full md:h-auto md:w-6/12 shadow border">
+        <div style={{ width: "80%", padding: "15px" }}>
+          <Typography variant="h5" component="h2">
+            Iniciar sesión
+          </Typography>
+        </div>
+        <form
+          onSubmit={handeSubmit}
+          className="formLogin flex flex-col items-center"
+          style={{ width: "100%", justifyContent: "center" }}
+        >
+          {error ? <Alert severity="error">{error}</Alert> : null}
+          {/* Campo de Correo */}
+          <FormControl sx={{ width: "80%" }}>
+            <InputLabel htmlFor="outlined-basic-correo">Correo</InputLabel>
             <TextField
-              sx={{width:"80%"}}
               onChange={handleChange}
               value={form.correo}
               id="outlined-basic-correo"
-              label="Correo"
               name="correo"
               type="txt"
               variant="outlined"
             />
+          </FormControl>
+          {/* Campo de Contraseña */}
+          <FormControl sx={{ width: "80%", mt: 2 }}>
+            <InputLabel htmlFor="outlined-basic-password">Contraseña</InputLabel>
             <TextField
-              sx={{width:"80%"}}
               onChange={handleChange}
               value={form.password}
               id="outlined-basic-password"
-              label="Password"
               name="password"
               type="password"
               variant="outlined"
             />
-            <Button type="submit">Iniciar sesion</Button>
-            <Button onClick={() => navigate("/register")} sx={{ marginTop: 2 }}>
-              Registrar
-            </Button>
-          </form>
-        </div>
+          </FormControl>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ width: "80%", background: "#002E5F" ,borderRadius:"0px" }}
+          >
+            Iniciar sesión
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/register")}
+            className="mt-2"
+            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"0px" }}
+          >
+            Registrar
+          </Button>
+        </form>
       </div>
-      <div className="w-1/2 p-3">
-        {/* Aquí puedes poner tu imagen */}
-      </div>
+      <div
+        style={{
+          backgroundImage:
+            'url("https://images.unsplash.com/photo-1588912914017-923900a34710?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1519&q=80")',
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+        className="w-full h-full md:h-auto md:w-6/12 shadow border"
+      ></div>
     </div>
   );
 };

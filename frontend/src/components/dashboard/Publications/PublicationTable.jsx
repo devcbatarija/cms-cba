@@ -11,6 +11,7 @@ import {
   selectPublication,
 } from "../../../redux-toolkit/actions/publicationActions";
 import {
+  Avatar,
   Button,
   Checkbox,
   Grid,
@@ -110,13 +111,6 @@ export default function PublicationTable() {
           handleClose={handleClose}
         ></ModalUpdatePublication>
       ) : null}
-      {openAddPublication ? (
-        <ModalAddPublication
-          open={openAddPublication}
-          handleOpen={handleOpenAddPublication}
-          handleClose={handleCloseAddPublication}
-        ></ModalAddPublication>
-      ) : null}
       <Grid
         container
         direction="row"
@@ -163,7 +157,7 @@ export default function PublicationTable() {
             <TableCell align="center">Titulo</TableCell>
             <TableCell align="center">Descripcion</TableCell>
             <TableCell align="center">Estado</TableCell>
-            <TableCell align="center">Tipo</TableCell>
+            <TableCell align="center">Imagenes</TableCell>
             <TableCell align="center">Opciones</TableCell>
           </TableRow>
         </TableHead>
@@ -195,7 +189,19 @@ export default function PublicationTable() {
               <TableCell align="center">
                 {row.estado ? "Visible" : "Oculto"}
               </TableCell>
-              <TableCell align="center">{row.tipo}</TableCell>
+              <TableCell align="center" sx={{
+                display:"flex",
+                alignItems:"center",
+                justifyContent:"center"
+                }} >
+              {
+                row.multimedia.map((im)=>{
+                  return(
+                    <Avatar key={im} alt="Remy Sharp" src={im ? im : null} />
+                  )
+                })
+              }
+              </TableCell>
               <TableCell align="center">
                 <Button
                   variant="contained"
