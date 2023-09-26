@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/home/home';
 import NavBar from './components/navBar/navBar';
 import About from './components/about/about';
-import DemoApp from './components/calendar/calendar';
 import Login from './components/auth/auth.login';
 import { useEffect } from 'react';
 import Register from './components/auth/auth.register';
@@ -25,6 +24,7 @@ import Calendario from './components/dashboard/calendario/calendario';
 import Uploader from './components/dashboard/Publications/TestComponent';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';
+import CalendarioClient from './components/Calendar/Calendar';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -71,7 +71,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
-        <Route path='/calendar' element={<DemoApp />} />
+        <Route path='/calendar' element={<CalendarioClient />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         {/* Ruta del dashboard, sin verificación de autenticación */}
