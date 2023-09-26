@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Uploader from './TestComponent';
+import Uploader from './Uploader';
 import axios from 'axios';
+import { Grid, MenuItem, Select,Button } from '@mui/material';
 
 
 const Container = styled.div`
 margin: 0 auto;
 padding: 5px;
-background-color: #f8f9fa;
-border-radius: 0;
+background-color: white;
 box-shadow: 0 0 10px rgba(0,0,0,0.1);
 height: 100vh;  //Agrega esta línea
 width: 100%;    //Agrega esta línea
@@ -40,14 +40,6 @@ const TextArea = styled.textarea`
   border: 1px solid #ced4da;
 `;
 
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 90px;
-  cursor: pointer;
-`;
 
 function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) {
   const [urls,setUrls]=useState([])
@@ -72,8 +64,7 @@ function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) 
         type: "image",
       });
       if(response.data.results){
-        console.log(response.data.message)
-        handleSubmitPublication()
+        handleSubmitPublication(response.data.results)
       }
     } catch (error) {
       return error;
@@ -82,9 +73,15 @@ function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) 
 
   return (
     <>
-      <Container>
+      <Container 
+      className='rounded-lg border rounded-lg' 
+      >
         <Title>Crear</Title>
-        <form onSubmit={handleSubmit}>
+        <form 
+        onSubmit={handleSubmit}
+      className='rounded-lg'
+        
+        >
           <FormGroup>
             <Label>Título:</Label>
             <Input
@@ -105,24 +102,33 @@ function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) 
             ></TextArea>
           </FormGroup>
           <FormGroup>
-            <Label>Estado:</Label>
-            <Input
-              type="text"
-              name="estado"
-              value={publicacion.estado}
-              onChange={handleChange}
-              required
-            />
+          <Label>Estado</Label>
+            <Select
+                labelId="demo-select-small-label"
+                id="estado"
+                value={publicacion.estado}
+                label="rol"
+                onChange={handleChange}
+                name="estado"
+              >
+                <MenuItem value="true">Activo</MenuItem>
+                <MenuItem value="false">Oculto</MenuItem>
+              </Select>
           </FormGroup>
           <FormGroup>
-            <Label>Tipo:</Label>
-            <Input
-              type="text"
-              name="tipo"
-              value={publicacion.tipo}
-              onChange={handleChange}
-              required
-            />
+          <Label>Tipo</Label>
+            <Select
+                labelId="demo-select-small-label"
+                id="estado"
+                value={publicacion.tipo}
+                label="rol"
+                onChange={handleChange}
+                name="tipo"
+              >
+                <MenuItem selected value="General">Seleccionar</MenuItem>
+                <MenuItem value="General">General</MenuItem>
+                <MenuItem value="Academico">Academico</MenuItem>
+              </Select>
           </FormGroup>
         </form>
         <FormGroup>
@@ -135,7 +141,15 @@ function PublicationAdd({publicacion, setPublicacion,handleSubmitPublication }) 
             setPublicacion={setPublicacion}
             ></Uploader>
         </FormGroup>
-        <Button onClick={handleSubmit} >Crear publicacion</Button>
+        <Grid sx={{ m: 1, width: "100%" }}>
+              <Button
+                variant="contained"
+                sx={{ width: "20%", borderRadius: "0px" }}
+                onClick={handleSubmit}
+              >
+                CREAR
+              </Button>
+            </Grid>
       </Container>
 
     </>

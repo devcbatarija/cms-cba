@@ -23,16 +23,19 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { getAllPublication } from "../../../redux-toolkit/actions/publicationActions";
 
 export default function ModalUpdatePublication({ id, open, handleClose }) {
   const [spinner, setSpinner] = useState(false);
   const [skeleton, setSkeleton] = useState(true);
   const [form, setForm] = useState({
+    id_Publicacion: "",
     titulo: "",
     descripcion: "",
-    estado: true,
+    multimedia: [],
+    estado: false,
     tipo: "",
-    url: "",
+    UsuarioIdUsuario: null,
   });
   const dispatch = useDispatch();
 
@@ -48,8 +51,8 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
   const getPublicationById = async () => {
     try {
       const response = await axios.get(`/publication/getone/${id}`);
-      console.log(response)
-      setForm(response.data);
+      console.log(response);
+      setForm(response.data.results);
       setSkeleton(false);
     } catch (error) {
       console.log(error);
@@ -60,10 +63,11 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.put(`/publication/getone/${id}`, form);
+      const response = await axios.put(`/publication/update/${id}`, form);
+      console.log(response);
       setTimeout(() => {
         toast.success("Actualización exitosa!");
-        //dispatch(updatePublication(response.data)); // Actualizar el estado global
+        dispatch(getAllPublication()); // Actualizar el estado global
         setSpinner(false);
         handleClose();
       }, 1500);
@@ -94,11 +98,29 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
                 gap: "10px",
               }}
             >
-              <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                <Avatar alt="Publication Image" src={form.url} />
+              <Grid
+                align="center"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                {form.multimedia &&
+                  form.multimedia.map((im) => {
+                    return (
+                      <Avatar
+                        sx={{ width: "80px", height: "80px", gap: "10px" }}
+                        key={im}
+                        alt="Remy Sharp"
+                        src={im ? im : null}
+                      />
+                    );
+                  })}
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                <InputLabel htmlFor="outlined-basic-title">Titulo</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-celular">Titulo</InputLabel>
                 <TextField
                   sx={{ width: "100%" }}
                   onChange={handleChange}
@@ -110,27 +132,23 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
                 />
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                <InputLabel htmlFor="outlined-basic-description">
-                  Descripcion
-                </InputLabel>
+                <InputLabel htmlFor="outlined-adornment-celular">Descripcion</InputLabel>
                 <TextField
                   sx={{ width: "100%" }}
                   onChange={handleChange}
                   value={form.descripcion}
-                  id="outlined-basic-description"
+                  id="descripcion"
                   name="descripcion"
                   type="text"
                   variant="outlined"
                 />
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-estado">Estado</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-celular">Estado</InputLabel>
                 <Select
                   sx={{ width: "100%" }}
-                  labelId="select-estado-label"
-                  id="select-estado"
+                  labelId="demo-select-small-label"
                   value={form.estado}
-                  label="estado"
                   onChange={handleChange}
                   name="estado"
                 >
@@ -139,18 +157,15 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
                 </Select>
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                <InputLabel htmlFor="outlined-basic-tipo">Tipo</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-celular">Tipo</InputLabel>
                 <Select
-                  sx={{ width: "100%" }}
-                  labelId="select-tipo-label"
-                  id="select-tipo"
+                  labelId="demo-select-small-label"
                   value={form.tipo}
-                  label="tipo"
                   onChange={handleChange}
                   name="tipo"
                 >
-                  <MenuItem value="Cartelera">Cartelera</MenuItem>
-                  <MenuItem value="Evento">Evento</MenuItem>
+                  <MenuItem value="General">General</MenuItem>
+                  <MenuItem value="Academico">Academico</MenuItem>
                 </Select>
               </Grid>
               <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
@@ -236,10 +251,6 @@ ModalUpdatePublication.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
-
-const Backdrop = styled("div")((props) => ({
-  ...props.theme.backdrop,
-}));
 
 const StyledModal = styled(Modal)`
   position: fixed;

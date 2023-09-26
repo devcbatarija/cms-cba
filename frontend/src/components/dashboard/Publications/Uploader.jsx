@@ -10,62 +10,33 @@ import {
   Button as Btn,
   Card,
   CardActionArea,
-  CardActions,
-  CardContent,
   CardMedia,
-  Typography,
 } from "@mui/material";
 const UploadContainer = styled.div`
   margin: 0 auto;
   background-color: #f8f9fa;
   border-radius: 1px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   padding: 10px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
 
 const InputContainer = styled.div`
   margin-bottom: 10px;
-`;
-
-const Input = styled.input`
   width: 100%;
-  height: 30px;
-  border: 1px solid #ccc;
-  padding: 10px;
 `;
-
-const Button = styled.button`
-  background-color: #000;
-  color: #fff;
-  font-weight: bold;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
-const PreviewContainer = styled.div`
-  margin-top: 20px;
-  text-align: center;
-`;
-
-const Preview = styled.img`
-  width: 100px;
-  height: 100px;
-`;
-
 const Uploader = ({ 
-  urls, 
   setUrls,
-  handleUploadBack,
   publicacion,
   setPublicacion
 }) => {
   //COMPONENT
   const [image, setImage] = useState([]);
-  const [url, setUrl] = useState("");
   const [isDragging, setIsDragging] = useState(false);
 
   const convertBase = async (e) => {
@@ -79,10 +50,8 @@ const Uploader = ({
     setImage(format);
     const promises = await handleUpload(files);
 
-    // Usar Promise.all para esperar a que todas las promesas se resuelvan
     const base64DataArray = await Promise.all(promises);
     
-    // Pushear los datos base64 a los arrays de estado
     setUrls(base64DataArray);
     setIsDragging(false);
     setPublicacion({
@@ -124,7 +93,7 @@ const Uploader = ({
           onDragLeave={handleDragLeave}
           onDrop={convertBase}
         >
-          <label className="flex flex-col items-center justify-center w-full h-64">
+          <label className="flex flex-col items-center justify-center w-full h-22">
             <div className="flex items-center justify-center pt-5 pb-6 gap-2 ">
               {image.length>0 ? (
                 image.map((img, index) => {
