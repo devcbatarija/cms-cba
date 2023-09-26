@@ -3,7 +3,7 @@ const { DataTypes, UUIDV4 } = require("sequelize")
 
 module.exports=(sequelize)=>{
     sequelize.define("Podcast",{
-        id_Credencial:{
+        id_Podcast:{
             type: DataTypes.UUID,
             primaryKey:true,
             defaultValue:UUIDV4,

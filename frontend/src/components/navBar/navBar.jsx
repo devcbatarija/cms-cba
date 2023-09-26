@@ -36,7 +36,7 @@ const NavBar = () => {
 
   const drawer = (
     <div style={{ width: '100%' }}>
-      <List>
+      <List> 
         {["/","/calendar", "/about"].map((text, index) => (
           <div key={text} style={{ borderBottom: '1px solid #cdd1dc', margin: '0 20px 0 20px' }}>
             <ListItem
@@ -57,7 +57,6 @@ const NavBar = () => {
       </List>
     </div>
   );
-
   return (
     <AppBar position="static"
       sx={{
@@ -139,7 +138,7 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <Typography variant="h6" style={{ display: 'flex ', gap: '3%', flexGrow: 1 }}>
+            <Typography variant="h6" style={{ display: 'flex ', gap: '5%', flexGrow: 1 }}>
               CBA
               <Link to="/" style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}>
                 Home
@@ -155,6 +154,12 @@ const NavBar = () => {
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
                 Calendar
+              </Link>
+              <Link
+                to="/programs"
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
+              >
+                Programas
               </Link>
               <Link
                 to="/about"

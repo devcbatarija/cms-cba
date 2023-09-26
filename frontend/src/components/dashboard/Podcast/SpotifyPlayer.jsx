@@ -1,39 +1,36 @@
-import * as React from 'react';
+import * as React from "react";
 import axios from "axios";
 import { getArtistId } from "./spotifyServices";
 import { useEffect, useState } from "react";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import Reproductor from "./Reproductor";
 import { useDispatch, useSelector } from "react-redux";
-import { getPodcastSongs, getPodcastSongsSpotify, getPodcasts } from "../../../redux-toolkit/actions/podcastActions";
+import {
+  getPodcastSongs,
+  getPodcastSongsSpotify,
+  getPodcasts,
+  hadleDeleteState,
+} from "../../../redux-toolkit/actions/podcastActions";
 import toast from "react-hot-toast";
-import './Styles.css';
-
+import "./Styles.css";
+import { Button } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 //aqui empieza
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 //aqui finaliza
 const SpotifyPlayer = () => {
   const dataCredentials = useSelector((state) => state.podcasts.credentials);
   const userId = useSelector((state) => state.login.user._userId);
   const songs = useSelector((state) => state.podcasts.songs);
   const [selected, setSelected] = useState("");
+
 
   const [form, setForm] = useState({
     identificador: "",
@@ -54,7 +51,6 @@ const SpotifyPlayer = () => {
     e.preventDefault();
     try {
       const response = await axios.post("/podcast", form);
-      console.log(response);
       if (response.data.token) {
         dispatch(getPodcasts());
         toast.success("Registro exitoso.");
@@ -68,19 +64,22 @@ const SpotifyPlayer = () => {
       const response = await axios.delete(`/podcast/${idCredencial}`);
       if (response.status == 200) {
         dispatch(getPodcasts());
-        setSelected("")
+        dispatch(hadleDeleteState())
+        setSelected("");
       }
-    } catch (error) { }
+    } catch (error) {}
   };
-  const handleUpdsteSongs = () => {
-    const selec = selected.identificador;
-    const accesToken = dataCredentials[0].token_Access
+  const handleUpdsteSongs = (identif) => {
+    const selec = identif.identificador;
+    setSelected(identif)
+    const accesToken = dataCredentials[0].token_Access;
     const usId = userId;
     dispatch(getPodcastSongsSpotify({ selec, accesToken, usId }));
-  }
+  };
   const handleCopy = () => {
     navigator.clipboard.writeText("Texto copiado!");
   };
+
   useEffect(() => {
     dispatch(getPodcasts());
   }, []);
@@ -178,27 +177,34 @@ const SpotifyPlayer = () => {
 
         {/* Separacion */}
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 100 }} aria-label="simple table">
+          <Table sx={{ minWidth: 100}} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Nro</TableCell>
                 <TableCell align="right">Identificador</TableCell>
-                <TableCell align="right">Reset&nbsp;(g)</TableCell>
+                <TableCell align="right">Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {dataCredentials.map((row, index) => (
                 <TableRow
-                className="myTableRow"
-                  onClick={()=>setSelected(row)}
+                  className="myTableRow"
+                  onClick={() => handleUpdsteSongs(row)}
                   key={row.identificador}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
                     {index + 1}
                   </TableCell>
                   <TableCell align="right">{row.identificador}</TableCell>
-                  <TableCell align="right">Delete</TableCell>
+                  <TableCell align="right">
+                    <IconButton onClick={()=>alert("Renovando Token de acceso")} aria-label="delete">
+                      <AutorenewIcon titleAccess="Renovar token" sx={{color:"green"}} />
+                    </IconButton>
+                    <IconButton onClick={()=>handleDelete(row.id_Credencial) } aria-label="delete">
+                      <DeleteIcon titleAccess="Eliminar credencial" sx={{color:"crimson"}}/>
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -206,9 +212,11 @@ const SpotifyPlayer = () => {
         </TableContainer>
       </div>
 
-      <div className="w-full h-full 
+      <div
+        className="w-full h-full 
       md:h-auto md:w-6/12 
-      gap-2 bg-zinc-50 rounded-lg shadow border bg-red-100" >
+      gap-2 bg-zinc-50 rounded-lg shadow border bg-red-100"
+      >
         <div className="flex justify-center w-full px-8 pt-6 mb-4">
           <h1
             className="
@@ -225,35 +233,53 @@ const SpotifyPlayer = () => {
         </div>
 
         <div className="flex flex-col md:flex-row p-2 gap-2">
-          {selected ? (
+          {/* {selected ? (
             <button
-              className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-800 hover:bg-blue-700 md:w-6/12 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               onClick={handleUpdsteSongs}
             >
-              Agregar
+              Listar disponibles
             </button>
-          ) : null}
+          ) : null} */}
           <div className="flex flex-col w-full h-full md:h-auto md:w-12/12 gap-2 gap-2">
-            {selected ? selected.identificador : null}
+            {selected ? 
+          <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl"><span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">Artista: </span>{selected.identificador }</h1>
+            :
+          <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-2xl lg:text-2xl">Ninguno artista seleccionado</h1>
+            }
           </div>
         </div>
         <div className="flex flex-col md:flex-row p-2 gap-2">
-         
           <div className="flex flex-col w-full h-full md:h-auto md:w-12/12 gap-2 gap-2 scroll border-b-2">
             {
               //mapeo
-              songs && songs.map((s) => {
-                return (
-                  <div key={s.name} className="flex items-center justify-between p-6 border bg-zinc-50 shadow rounded-lg">
-                    {/* <br />
+              songs &&
+                songs.map((s) => {
+                  return (
+                    <div
+                      key={s.name}
+                      // className="flex items-center justify-between p-6 border bg-zinc-50 shadow rounded-lg"
+                    >
+                      {/* <br />
                     <audio controls>
                       <source src={s.preview_url} type="audio/mpeg" />
                     </audio>
                     {s.name} */}
-                    <Reproductor song={s.preview_url} name={s.name} album={s.album}></Reproductor>
-                  </div>
-                )
-              })
+                    {
+                      s.preview_url?
+                      <Reproductor
+                        // key={s.name}
+                        song={s.preview_url}
+                        name={s.name}
+                        album={s.album}
+                        songMedatada={s}
+                        id_Credencial={selected.id_Credencial}
+                      ></Reproductor>:
+                      null
+                    }
+                    </div>
+                  );
+                })
             }
           </div>
         </div>
