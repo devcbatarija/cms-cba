@@ -21,6 +21,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
 import PositionedMenu from "./positionedMenu";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import cbaImage from '../../assets/cba.png';
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -61,8 +62,8 @@ const NavBar = () => {
   
   const drawer = (
     <div style={{ width: '100%' }}>
-      <List>
-        {["/", "/about", "/dashboard"].map((text, index) => (
+      <List> 
+        {["/","/calendar", "/about"].map((text, index) => (
           <div key={text} style={{ borderBottom: '1px solid #cdd1dc', margin: '0 20px 0 20px' }}>
             <ListItem
               sx={{}}
@@ -85,15 +86,19 @@ const NavBar = () => {
   return (
     <AppBar position="static"
       sx={{
-        backgroundColor: 'white',
-        color: "black",
+        backgroundColor: 'rgb(0, 46, 95);',
+        color: "white",
         borderBottom: "1px solid #cdd1dc",
         boxShadow: 'none',
+        position: 'sticky',
+        top: 0,
+        zIndex:1000
       }}>
       <Toolbar sx={{
         shadow: 'none',
         display: 'flex',
         justifyContent: 'space-between',
+        height: '100%',
       }} >
         {isMobile ? (
           <>
@@ -154,21 +159,21 @@ const NavBar = () => {
                 >
                   Login
                 </Button>
-              </Link>
+              </Link> 
             )}
           </>
         ) : (
           <>
             <Typography variant="h6" style={{ display: 'flex ', gap: '5%', flexGrow: 1 }}>
               CBA
-              <Link to="/" style={{ color: "inherit", textDecoration: "none" }}>
-                <Button color="inherit">Home</Button>
+              <Link to="/" style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}>
+                Home
               </Link>
               <Link
                 to="/calendar"
-                style={{ color: "inherit", textDecoration: "none" }}
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
-                <Button color="inherit">Calendar</Button>
+                Calendar
               </Link>
               {/* inicio */}
             
@@ -202,17 +207,16 @@ const NavBar = () => {
               </Menu>
               {/* final */}
               <Link
-                to="/about"
-                style={{ color: "inherit", textDecoration: "none" }}
+                to="/programs"
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
-                <Button color="inherit">About</Button>
+                Programas
               </Link>
-
               <Link
-                to="/tableuser"
-                style={{ color: "inherit", textDecoration: "none" }}
+                to="/about"
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
-                <Button color="inherit">TableUser</Button>
+                About
               </Link>
             </Typography>
             {authlogin.auth ? (
