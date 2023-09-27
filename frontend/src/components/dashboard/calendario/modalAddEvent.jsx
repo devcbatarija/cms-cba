@@ -249,13 +249,15 @@ export default function ModalAddEvent({
                                     <MenuItem value="Academico">Academico</MenuItem>
                                 </Select>
                             </Grid>
-                            <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-color">
+                            <Grid sx={{ m: 1, width: "40%", backgroundColor:'green'}} variant="outlined">
+                                <InputLabel htmlFor="outlined-adornment-color" >
                                     Color
                                 </InputLabel>
+                                <div style={{display:'flex'}} className='h-full'>
                                 <SelectColorList
                                     
                                 />
+                                </div>
                                 {/* <TextField
                                     onChange={handleChange}
                                     value={data.color}
