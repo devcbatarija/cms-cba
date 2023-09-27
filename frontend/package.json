@@ -18,6 +18,8 @@
     "@fullcalendar/multimonth": "^6.1.8",
     "@fullcalendar/react": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "@mui/icons-material": "^5.14.6",
     "@mui/lab": "^5.0.0-alpha.143",
     "@mui/material": "^5.14.5",

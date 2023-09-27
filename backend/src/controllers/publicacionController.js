@@ -16,7 +16,8 @@ module.exports={
                 descripcion : p.descripcion,
                 multimedia : p.multimedia,
                 estado: p.estado,
-                tipo: p.tipo
+                tipo: p.tipo,
+                UsuarioIdUsuario:p.UsuarioIdUsuario
             };
             const newPublication=await Publicacion.create(
                 publication

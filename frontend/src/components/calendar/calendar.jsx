@@ -1,138 +1,147 @@
-import React from 'react'
-import { formatDate } from '@fullcalendar/core'
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import { INITIAL_EVENTS, createEventId } from './event-utils'
+import Typography from '@mui/material/Typography';
+import daygrid from "@fullcalendar/daygrid";
+import interaction, { Draggable } from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
+import timegrid from "@fullcalendar/timegrid";
+import { useRef, useState } from "react";
+import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
+import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+// import { Button } from '@mui/base/Button';
+import { styled } from "@mui/system";
+import {  useSelector } from "react-redux";
+import multimonth from "@fullcalendar/multimonth";
+import { Button } from "@mui/material";
 
-export default class DemoApp extends React.Component {
+const CalendarioClient = () => {
+    const calendarRef = useRef(null);
+    const next = () => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.next();
+    };
 
-  state = {
-    weekendsVisible: true,
-    currentEvents: []
-  }
+    const prev = () => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.prev();
+    };
+    const goToToday = () => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.today();
+    };
+    const changeView = (view) => {
+        let calendarApi = calendarRef.current.getApi();
+        calendarApi.changeView(view);
+    };
+    const [title, setTitle] = useState('');
 
-  render() {
-    return (
-      <div className='demo-app'>
-        {this.renderSidebar()}
-        <div className='demo-app-main'>
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }}
-            fixedWeekCount={false}
-            locale='es'
-            initialView='dayGridMonth'
-            editable={true}
-            selectable={true}
-            selectMirror={true}
-            dayMaxEvents={true}
-            weekends={this.state.weekendsVisible}
-            initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-            select={this.handleDateSelect}
-            // eventContent={renderEventContent} // custom render function
-            eventClick={this.handleEventClick}
-            eventsSet={this.handleEvents}
-            // eventBackgroundColor={'red'} // called after events are initialized/added/changed/removed
-            /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
-          />
-        </div>
-      </div>
-    )
-  }
-
-  renderSidebar() {
-    return (
-      <div className='demo-app-sidebar'>
-        <div className='demo-app-sidebar-section'>
-          <h2>Instructions</h2>
-          <ul>
-            <li>Select dates and you will be prompted to create a new event</li>
-            <li>Drag, drop, and resize events</li>
-            <li>Click an event to delete it</li>
-          </ul>
-        </div>
-        <div className='demo-app-sidebar-section'>
-          <label>
-            <input
-              type='checkbox'
-              checked={this.state.weekendsVisible}
-              onChange={this.handleWeekendsToggle}
-            ></input>
-            toggle weekends
-          </label>
-        </div>
-        <div className='demo-app-sidebar-section'>
-          <h2>All Events ({this.state.currentEvents.length})</h2>
-          <ul>
-            {this.state.currentEvents.map(renderSidebarEvent)}
-          </ul>
-        </div>
-      </div>
-    )
-  }
-
-  handleWeekendsToggle = () => {
-    this.setState({
-      weekendsVisible: !this.state.weekendsVisible
-    })
-  }
-
-  handleDateSelect = (selectInfo) => {
-    console.log(selectInfo)
-    let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
-
-    calendarApi.unselect() // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
+    const updateTitle = (e) => {
+        //   let calendarApi = calendarRef.current.getApi();
+        setTitle(e.view.title);
     }
-  }
 
-  handleEventClick = (clickInfo) => {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+    const handleEventClick= (e) => {
+        let calendarApi = calendarRef.current.getApi();
+        console.log(calendarApi)
+        console.log(e);
+    };
+
+
+    const events = useSelector((state) => state.events.events);
+    
+    return (
+        <>
+            <div className={"flex flex-row"}>
+                <div className="calendar w-8/12 bg-zinc-100">
+                    {/* seo declarar para consultas slang */}
+                    <div className='flex flex-row mt-4 mb-3 relative'>
+                        <Button onClick={prev}><NavigateBeforeRoundedIcon /></Button>
+                        <Typography sx={{ fontSize: '25px' }}>{title}</Typography>
+                        <Button onClick={next}><NavigateNextRoundedIcon /></Button>
+                        <div className='absolute right-0'>
+                            <Button onClick={goToToday}>Today</Button>
+                            <select onChange={(e) => changeView(e.target.value)}>
+                                <option value="dayGridMonth">Month</option>
+                                <option value="timeGridWeek">Week</option>
+                                <option value="multiMonthYear">Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <FullCalendar
+                        ref={calendarRef}
+                        headerToolbar={false}
+                        // headerToolbar={{
+                        //     left: 'title,prev,next',
+                        //     // center: 'dayGridMonth,timeGridWeek,timeGridDay',
+                        //     right: 'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
+                        // }}
+                        plugins={[daygrid, interaction, timegrid, multimonth]}
+                        fixedWeekCount={false}
+                        locales='es'
+                        initialView="dayGridMonth"
+                        // initialEvents={events}
+                        events={events}
+                        dayMaxEvents={true}
+                        weekends={true}
+                        datesSet={updateTitle}
+                        eventClick={handleEventClick}
+                    />
+                </div>
+                <div className="w-4/12 mt-5 bg-zinc-100 calendar">
+                    <button onClick={handleEventClick}>select</button>
+                </div>
+            </div>
+        </>
+    );
+}
+
+const styles = {
+    backgroundColor: "rgb(166, 167, 170)",
+    borderRadius: "10px",
+    padding: "15px",
+    height: "80vh"
+}
+
+const blue = {
+    200: '#99CCF3',
+    400: '#3399FF',
+    500: '#007FFF',
+};
+
+const grey = {
+    50: '#f6f8fa',
+    100: '#eaeef2',
+    200: '#d0d7de',
+    300: '#afb8c1',
+    400: '#8c959f',
+    500: '#6e7781',
+    600: '#57606a',
+    700: '#424a53',
+    800: '#32383f',
+    900: '#24292f',
+};
+const TriggerButton = styled(Button)(
+    ({ theme }) => `
+    font-family: IBM Plex Sans, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-sizing: border-box;
+    min-height: calc(1.5em + 22px);
+    border-radius: 12px;
+    padding: 6px 12px;
+    line-height: 1.5;
+    background: transparent;
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
+    color: ${theme.palette.mode === 'dark' ? grey[100] : grey[900]};
+  
+    &:hover {
+      background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
+      border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
     }
-  }
+  
+    &:focus-visible {
+      border-color: ${blue[400]};
+      outline: 3px solid ${theme.palette.mode === 'dark' ? blue[500] : blue[200]};
+    }
+    `
+);
 
-  handleEvents = (events) => {
-    this.setState({
-      currentEvents: events
-    })
-  }
-
-}
-
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  )
-}
-
-function renderSidebarEvent(event) {
-  return (
-    <li key={event.id}>
-      <b>{formatDate(event.start, {year: 'numeric', month: 'short', day: 'numeric'})}</b>
-      <i>{event.title}</i>
-    </li>
-  )
-}
+export default CalendarioClient;

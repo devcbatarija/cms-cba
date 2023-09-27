@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import Home from './components/home/home';
 import NavBar from './components/navBar/navBar';
 import About from './components/about/about';
-import DemoApp from './components/calendar/calendar';
 import Login from './components/auth/auth.login';
 import { useEffect } from 'react';
 import Register from './components/auth/auth.register';
@@ -23,6 +22,7 @@ import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventA
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
+import CalendarioClient from './components/calendar/calendar';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
 import MediaControlCard from './components/programs/programs';
 import ProgramChildren from './components/programs/children';
@@ -75,7 +75,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
-        <Route path='/calendar' element={<DemoApp />} />
+        <Route path='/calendar' element={<CalendarioClient />} />
         <Route path='/programs' element={<ProgramList />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
