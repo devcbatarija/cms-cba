@@ -73,11 +73,6 @@ export default function Sidebar() {
           label="SpotifyPlayer" 
           to="/dashboard/spotify/podcast" 
         />
-        <SidebarItem  
-          icon={StoreMallDirectoryOutlinedIcon} 
-          label="Uploader" 
-          to="/dashboard/uploader" 
-        />
       </ul>
     </Toolbar>
   );
