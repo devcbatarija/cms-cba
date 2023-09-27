@@ -2,7 +2,7 @@ import { Avatar } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutSession } from "../../redux-toolkit/actions/auth.Actions";
 import Cookie from "js-cookie";
@@ -14,6 +14,7 @@ const PositionedMenu = ({ altImg, srcImg }) => {
   const open = Boolean(anchorEl);
   const dispatch=useDispatch(false)
   const navigate=useNavigate();
+  const rolUSer=useSelector((state)=>state.login.user)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -60,7 +61,14 @@ const PositionedMenu = ({ altImg, srcImg }) => {
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem component={Link} to="/dashboard" onClick={handleClose}>Dashboard</MenuItem>
+        {
+          rolUSer.rol && rolUSer.rol=="Admin"?
+          <MenuItem component={Link} to="/" onClick={handleClose}>Vista Cliente</MenuItem>:null
+        }
+        {
+          rolUSer.rol && rolUSer.rol=="Admin"?
+          <MenuItem component={Link} to="/dashboard" onClick={handleClose}>Vista Administrador</MenuItem>:null
+        }
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
