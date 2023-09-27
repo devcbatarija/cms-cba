@@ -1,0 +1,36 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+html, body{
+  font-size: 18px;
+  background-color: #f5f6f7;
+
+}
+.contenedor-programa{
+  min-height: 1170px;
+  height: 368px;
+  margin: 10px 10px 50px;
+  display: flex;
+  background-color: #fff;
+  box-shadow: 0 3px 13px 1px rgb(0 0 0 /9%);
+  justify-content: center;
+}
+/* .CursoContainer {
+    display: flex;
+    padding: 2px;
+    margin: 20px 10px 20px 20px;
+    background-color: rgb(252, 252, 252)    ;
+  }
+  
+  .CursoImagen {
+    flex: 1;
+  }
+  
+  .CursoDescripcion {
+    flex: 1;
+    font-size: 25px;
+    margin: 5%;
+    font-family:'Courier New', Courier, monospace;
+
+  } */

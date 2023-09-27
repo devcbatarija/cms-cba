@@ -21,7 +21,6 @@ import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
-import Uploader from './components/dashboard/Publications/TestComponent';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import CalendarioClient from './components/calendar/calendar';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
@@ -82,6 +81,8 @@ function App() {
         <Route path='/programs' element={<ProgramList />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/programs/children' element={<ProgramChildren />} />
+        
 
         {/* Ruta del dashboard, sin verificación de autenticación */}
         {
@@ -94,7 +95,6 @@ function App() {
           </Route>
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
-          <Route path='/dashboard/uploader' element={<Uploader></Uploader>} ></Route>
           <Route path='/dashboard/spotify/podcast' element={<SpotifyPlayer></SpotifyPlayer>}></Route>
         </Route>
         }
