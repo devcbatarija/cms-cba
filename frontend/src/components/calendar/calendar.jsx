@@ -53,7 +53,10 @@ const CalendarioClient = () => {
                 <div className="calendar col-span-2">
                     {/* seo declarar para consultas slang */}
                     <div className='flex flex-row relative text-lg sm:text-xl md:text-2xl lg:text-2xl  '>
-                        <Button onClick={prev}><NavigateBeforeRoundedIcon /></Button>
+                        <Button 
+                        sx={{width: '5px',margin:0, height: 'fit-content', backgroundColor: 'red', padding: 0}}
+                        onClick={prev}
+                        ><NavigateBeforeRoundedIcon /></Button>
                         <h1 >{title}</h1>
                         <Button onClick={next}><NavigateNextRoundedIcon /></Button>
                         <div className='absolute right-0'>
@@ -92,56 +95,5 @@ const CalendarioClient = () => {
         </>
     );
 }
-
-const styles = {
-    backgroundColor: "rgb(166, 167, 170)",
-    borderRadius: "10px",
-    padding: "15px",
-    height: "80vh"
-}
-
-const blue = {
-    200: '#99CCF3',
-    400: '#3399FF',
-    500: '#007FFF',
-};
-
-const grey = {
-    50: '#f6f8fa',
-    100: '#eaeef2',
-    200: '#d0d7de',
-    300: '#afb8c1',
-    400: '#8c959f',
-    500: '#6e7781',
-    600: '#57606a',
-    700: '#424a53',
-    800: '#32383f',
-    900: '#24292f',
-};
-const TriggerButton = styled(Button)(
-    ({ theme }) => `
-    font-family: IBM Plex Sans, sans-serif;
-    font-size: 0.875rem;
-    font-weight: 600;
-    box-sizing: border-box;
-    min-height: calc(1.5em + 22px);
-    border-radius: 12px;
-    padding: 6px 12px;
-    line-height: 1.5;
-    background: transparent;
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[800] : grey[200]};
-    color: ${theme.palette.mode === 'dark' ? grey[100] : grey[900]};
-  
-    &:hover {
-      background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
-      border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
-    }
-  
-    &:focus-visible {
-      border-color: ${blue[400]};
-      outline: 3px solid ${theme.palette.mode === 'dark' ? blue[500] : blue[200]};
-    }
-    `
-);
 
 export default CalendarioClient;
