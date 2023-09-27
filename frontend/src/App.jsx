@@ -80,6 +80,8 @@ function App() {
         <Route path='/programs' element={<ProgramList />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/programs/children' element={<ProgramChildren />} />
+        
 
         {/* Ruta del dashboard, sin verificación de autenticación */}
         {
