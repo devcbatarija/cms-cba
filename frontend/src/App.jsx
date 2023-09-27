@@ -29,6 +29,7 @@ import ProgramChildren from './components/programs/children';
 import ProgramList from './components/programs/programs';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
+import Footer from './components/footer/footer';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -70,9 +71,10 @@ function App() {
 
   return (
     <>
-      {/* Mostrar NavBar en todas las rutas, excepto en el dashboard */}
-      {!isDashboardRoute && <NavBar />}
-      <Routes>
+    <div className="flex flex-col min-h-screen">
+        {!isDashboardRoute && <NavBar />}
+      <div className="flex-grow">
+        <Routes>
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/calendar' element={<CalendarioClient />} />
@@ -97,7 +99,10 @@ function App() {
         {/* Ruta para manejar páginas no encontradas */}
         <Route path='*' element={<NotFound />} />
       </Routes>
-
+      </div>
+        {!isDashboardRoute &&<Footer/>}
+    </div>
+      
       {/* <Routes>
         <Route path='/dashboard' element={<PublicationAdd />} />
         </Routes> */}

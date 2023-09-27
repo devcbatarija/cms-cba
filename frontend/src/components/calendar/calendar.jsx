@@ -49,12 +49,12 @@ const CalendarioClient = () => {
     
     return (
         <>
-            <div className={"flex flex-row"}>
-                <div className="calendar w-8/12 bg-zinc-100">
+            <div className={"grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 min-h-full gap-4"}>
+                <div className="calendar col-span-2">
                     {/* seo declarar para consultas slang */}
-                    <div className='flex flex-row mt-4 mb-3 relative'>
+                    <div className='flex flex-row relative text-lg sm:text-xl md:text-2xl lg:text-2xl  '>
                         <Button onClick={prev}><NavigateBeforeRoundedIcon /></Button>
-                        <Typography sx={{ fontSize: '25px' }}>{title}</Typography>
+                        <h1 >{title}</h1>
                         <Button onClick={next}><NavigateNextRoundedIcon /></Button>
                         <div className='absolute right-0'>
                             <Button onClick={goToToday}>Today</Button>
@@ -85,7 +85,7 @@ const CalendarioClient = () => {
                         eventClick={handleEventClick}
                     />
                 </div>
-                <div className="w-4/12 mt-5 bg-zinc-100 calendar">
+                <div className=" mt-5 ">
                     <button onClick={handleEventClick}>select</button>
                 </div>
             </div>
