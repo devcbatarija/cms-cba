@@ -41,14 +41,14 @@ const PublicationPreview = ({
         ></p>
       </div>
       <div className="flex flex-row gap-5 p-4">
-        {/* <a
+        <a
           className="text-blue-500 underline"
           href="link"
           target="_blank"
           rel="noopener noreferrer"
         >
           http://localhost:5173/dashboard/publinav/add
-        </a> */}
+        </a>
       </div>
     </div>
   );
