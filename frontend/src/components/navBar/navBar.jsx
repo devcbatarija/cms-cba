@@ -23,17 +23,43 @@ import PositionedMenu from "./positionedMenu";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import cbaImage from '../../assets/cba.png';
 
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+// ...
+
+
+
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("900"));
   const [auth, setAuth] = useState(false);
   const authlogin = useSelector((state) => state.login);
-
+  
+  const [anchorEl, setAnchorEl] = useState({
+    programas:null,
+    publicaciones:null
+  });
+  
+  const handleClick = (event) => {
+    setAnchorEl({
+      ...anchorEl,
+      [event.target.name]: event.currentTarget
+    });
+  };
+  
+  const handleClose = (event) => {
+    setAnchorEl({
+      ...anchorEl,
+      programas:null,
+      publicaciones:null
+    })
+  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  
   const drawer = (
     <div style={{ width: '100%' }}>
       <List> 
@@ -143,18 +169,43 @@ const NavBar = () => {
               <Link to="/" style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}>
                 Home
               </Link>
-              {/* <Link
-                to="/dashboard"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <Button color="inherit">DASHBOARD</Button>
-              </Link> */}
               <Link
                 to="/calendar"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
                 Calendar
               </Link>
+              {/* inicio */}
+            
+              <Button color="inherit" name="programas" onClick={handleClick}  >Programas</Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl.programas}
+                keepMounted
+                open={Boolean(anchorEl.programas)}
+                onClose={handleClose}
+                name="programas"
+              >
+                <MenuItem component={Link} to="/programs/children">Niños</MenuItem>
+                <MenuItem component={Link}>Adolescentes</MenuItem>
+                <MenuItem  component={Link}>Jóvenes</MenuItem>
+              </Menu>
+              {/* final */}
+              {/* inicio */}
+              <Button color="inherit" name="programas" onClick={handleClick}  >Publicaciones</Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl.Publicaciones}
+                keepMounted
+                open={Boolean(anchorEl.Publicaciones)}
+                onClose={handleClose}
+                name="Publicaciones"
+              >
+                <MenuItem component={Link}>Niños</MenuItem>
+                <MenuItem component={Link}>Adolescentes</MenuItem>
+                <MenuItem  component={Link}>Jóvenes</MenuItem>
+              </Menu>
+              {/* final */}
               <Link
                 to="/programs"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
