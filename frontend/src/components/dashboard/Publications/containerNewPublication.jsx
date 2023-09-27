@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const ContarinerNewPublication = () => {
   const [publicacion, setPublicacion] = useState({
@@ -12,12 +13,13 @@ const ContarinerNewPublication = () => {
     descripcion: "",
     multimedia: [],
     estado: false,
-    tipo: "",
+    tipo: "General",
     UsuarioIdUsuario: "",
   });
-  const idUser = useSelector((state) => state.login.user);
+  const idUser = useSelector((state) => state.login.user._userId);
   const navigate=useNavigate();
   const handleSubmitPublication = async (urls) => {
+    console.log("prueba de envio")
     try {
       const response = await axios.post("publication/create", {
         titulo: publicacion.titulo,
@@ -25,7 +27,7 @@ const ContarinerNewPublication = () => {
         multimedia: urls,
         estado: publicacion.estado,
         tipo: publicacion.estado,
-        UsuarioIdUsuario: idUser._userId,
+        UsuarioIdUsuario: publicacion.UsuarioIdUsuario,
       });
       if (response.data) {
         toast.success("Registro exitoso.");
@@ -40,9 +42,16 @@ const ContarinerNewPublication = () => {
         });
         navigate('/dashboard/publinav/table')
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
-
+  useEffect(()=>{
+    idUser?setPublicacion({
+      ...publicacion,
+      UsuarioIdUsuario:idUser
+    }):null
+  },[])
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 shadow border  gap-2 bg-zinc-100 p-2">
       <div>

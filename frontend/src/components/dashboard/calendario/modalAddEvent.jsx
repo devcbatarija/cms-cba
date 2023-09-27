@@ -24,6 +24,7 @@ import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions
 import Cookies from "js-cookie";
 import Checkboxes from "./widgets/checkbox";
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
+import SelectColorList from "./widgets/selectColor";
 
 export default function ModalAddEvent({
     setData,
@@ -248,19 +249,25 @@ export default function ModalAddEvent({
                                     <MenuItem value="Academico">Academico</MenuItem>
                                 </Select>
                             </Grid>
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+                            <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-color">
                                     Color
                                 </InputLabel>
-                                <TextField
+                                <SelectColorList
+                                    
+                                />
+                                {/* <TextField
                                     onChange={handleChange}
                                     value={data.color}
                                     id="outlined-basic-color"
                                     name="color"
                                     type="color"
                                     variant="outlined"
-                                />
+                                /> */}
                             </Grid>
+                            {/* <Grid>
+                                <SelectColorList/>
+                            </Grid> */}
                         </div>
                         {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-estado">

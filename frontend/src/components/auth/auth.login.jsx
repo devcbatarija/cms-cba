@@ -60,7 +60,7 @@ const Login = () => {
   }, [auth.auth, navigate]);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-full p-4 px-20 bg-gray-502" style={{ height: "90vh" }}>
+    <div className="flex flex-col md:flex-row min-h-full p-4 md:px-20  bg-gray-502" style={{ height: "90vh" }}>
       <div className="flex flex-col items-center justify-center w-full h-full md:h-auto md:w-6/12 shadow border">
         <div style={{ width: "80%", padding: "15px" }}>
           <Typography variant="h5" component="h2">
@@ -75,25 +75,26 @@ const Login = () => {
           {error ? <Alert severity="error">{error}</Alert> : null}
           {/* Campo de Correo */}
           <FormControl sx={{ width: "80%" }}>
-            <InputLabel htmlFor="outlined-basic-correo">Correo</InputLabel>
             <TextField
               onChange={handleChange}
               value={form.correo}
               id="outlined-basic-correo"
               name="correo"
               type="txt"
+              label="Correo"
               variant="outlined"
             />
           </FormControl>
           {/* Campo de Contraseña */}
           <FormControl sx={{ width: "80%", mt: 2 }}>
-            <InputLabel htmlFor="outlined-basic-password">Contraseña</InputLabel>
             <TextField
               onChange={handleChange}
               value={form.password}
               id="outlined-basic-password"
               name="password"
               type="password"
+              label="Contraseña"
+
               variant="outlined"
             />
           </FormControl>
@@ -106,9 +107,9 @@ const Login = () => {
           </Button>
           <Button
             variant="outlined"
+            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"0px" }}
             onClick={() => navigate("/register")}
             className="mt-2"
-            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"0px" }}
           >
             Registrar
           </Button>
