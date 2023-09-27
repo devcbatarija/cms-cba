@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useLocation } from 'react-router-dom';
-const Carousel = ({ multimedia }) => {
+const CarouselHome = ({ multimedia }) => {
   const [current, setCurrent] = useState(0);
   const location = useLocation();
 
@@ -21,13 +21,21 @@ const Carousel = ({ multimedia }) => {
   
   return (
         multimedia.length>0?
-        <div className="relative flex items-center justify-center h-64 overflow-hidden bg-gray-800">
+        <div 
+        style={{height:"60vh"}}
+        className="relative flex items-center justify-center overflow-hidden bg-gray-800">
         {multimedia.map((image, index) => (
         <div
+          style={{
+          backgroundImage:`url("${image}")`,
+          height:"60vh",
+          backgroundPosition:"center",
+          backgroundRepeat:"no-repear",
+          backgroundSize:"cover"
+        }}
           className={`absolute w-full transition-opacity duration-500 ease-in-out ${index === current ? 'opacity-100' : 'opacity-0'}`}
           key={index}
         >
-          <img src={image} alt="" className="object-cover w-full h-full" />
         </div>
       ))}
       {
@@ -54,4 +62,4 @@ const Carousel = ({ multimedia }) => {
   );
 };
 
-export default Carousel;
+export default CarouselHome;
