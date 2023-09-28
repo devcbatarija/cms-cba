@@ -1,9 +1,14 @@
-const {Publicacion} = require("../db")
+const {Publicacion,Usuario} = require("../db")
 
 module.exports={
     getAllPublicacion:async()=>{
         try {
-            const data=await Publicacion.findAll();
+            const data=await Publicacion.findAll({
+                include:[{
+                    model:Usuario,
+                    
+                }]
+            });
             return data; 
         } catch (error) {
             return error;
