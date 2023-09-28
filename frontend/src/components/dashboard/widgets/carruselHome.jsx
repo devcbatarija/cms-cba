@@ -22,7 +22,7 @@ const CarouselHome = ({ multimedia }) => {
   return (
         multimedia.length>0?
         <div 
-        style={{height:"60vh"}}
+        style={{minHeight:"60vh"}}
         className="relative flex items-center justify-center overflow-hidden bg-gray-800">
         {multimedia.map((image, index) => (
         <div
