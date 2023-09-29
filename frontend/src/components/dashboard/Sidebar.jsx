@@ -61,7 +61,10 @@ export default function Sidebar() {
         <SidebarItem 
           icon={AssessmentOutlinedIcon} 
           label="Calendario" 
-          to="/dashboard/Calendario" 
+          subItems={[
+            {label:"Calendario",to:"/dashboard/Calendario/calendario"},
+            {label:"Crear Evento",to:"/dashboard/Calendario/addEvent"}
+          ]}
         />
         <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
