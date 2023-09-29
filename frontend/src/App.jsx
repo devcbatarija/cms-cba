@@ -14,22 +14,21 @@ import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
 import ProgramTable from './components/dashboard/Programas/ProgramTables';
-import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
 import PublicationNav from './components/dashboard/Publications/Nav';
-import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
 import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
+import CalendarioClient from './components/calendar/calendar';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
-import CalendarioClient from './components/Calendar/Calendar';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
-import MediaControlCard from './components/programs/programs';
 import ProgramChildren from './components/programs/children';
 import ProgramList from './components/programs/programs';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
 import Footer from './components/footer/footer';
+import { Publications } from './components/publications/publications';
+import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
 import ProgramAdults from './components/programs/adults';
 import ProgramTeens from './components/programs/teens';
 import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
@@ -86,11 +85,11 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/programs/children' element={<ProgramChildren />} />
+        <Route path='/publications' element={<Publications />} />
         <Route path='/programs/adults' element={<ProgramAdults />} />
         <Route path='/programs/teens' element={<ProgramTeens />} />
 
         
-
         {/* Ruta del dashboard, sin verificación de autenticación */}
         {
         auth &&
@@ -103,6 +102,7 @@ function App() {
             <Route path='/dashboard/publinav/table' element={<TablePublication/>} />
             <Route path='/dashboard/publinav/add' element={<ContarinerNewPublication/>} />
           </Route>
+          <Route path='/dashboard/testimononios' element={<TestimoniosContainer/>} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
           <Route path='/dashboard/spotify/podcast' element={<SpotifyPlayer></SpotifyPlayer>}></Route>
@@ -139,7 +139,7 @@ function App() {
             },
           },
           success: {
-            duration: 2500,
+            duration: 1500,
             theme: {
               primary: "green",
               secondary: "black",

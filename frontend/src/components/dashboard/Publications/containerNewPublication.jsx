@@ -17,6 +17,8 @@ const ContarinerNewPublication = () => {
     UsuarioIdUsuario: "",
   });
   const idUser = useSelector((state) => state.login.user._userId);
+  const user = useSelector((state) => state.login.user);
+
   const navigate=useNavigate();
   const handleSubmitPublication = async (urls) => {
     console.log("prueba de envio")
@@ -69,6 +71,8 @@ const ContarinerNewPublication = () => {
         estado={publicacion.estado}
         tipo={publicacion.tipo}
         UsuarioIdUsuario={publicacion.UsuarioIdUsuario}
+        fecha="Hace un momento"
+        user={user}
       ></PublicationPreview>
       </div>
     </div>

@@ -9,3 +9,8 @@
   box-sizing: border-box;
   /* font-family: 'Inter', sans-serif !important; */
 }
+.style-img-publi{
+  background-position: center; 
+  background-repeat: no-repeat;  
+  background-size: cover; 
+}
