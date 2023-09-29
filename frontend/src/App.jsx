@@ -30,6 +30,8 @@ import ProgramList from './components/programs/programs';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
 import Footer from './components/footer/footer';
+import ProgramAdults from './components/programs/adults';
+import ProgramTeens from './components/programs/teens';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -82,6 +84,9 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/programs/children' element={<ProgramChildren />} />
+        <Route path='/programs/adults' element={<ProgramAdults />} />
+        <Route path='/programs/teens' element={<ProgramTeens />} />
+
         
 
         {/* Ruta del dashboard, sin verificación de autenticación */}
