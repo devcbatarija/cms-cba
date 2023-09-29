@@ -25,6 +25,10 @@ module.exports=(sequelize)=>{
             type:DataTypes.TEXT,
             allowNull:false
         },
+        imagen:{
+            type:DataTypes.TEXT,
+            allowNull:false
+        },
         state:{
             type:DataTypes.BOOLEAN,
             allowNull:false,
