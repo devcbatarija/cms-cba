@@ -1,19 +1,19 @@
-const {Evento_Predefinido}=require("../db")
+const { Evento_Predefinido } = require("../db")
 
-module.exports={
-    getAllEPredefinido: async ()=>{
+module.exports = {
+    getAllEPredefinido: async () => {
         try {
-            const res= await Evento_Predefinido.findAll();
+            const res = await Evento_Predefinido.findAll();
             return res;
         } catch (error) {
             return error
         }
     },
-    addEPredefinido: async (e)=>{
+    addEPredefinido: async (e) => {
         try {
             delete e.start;
             delete e.end;
-            const EPredefinido={
+            const EPredefinido = {
                 title: e.title,
                 color: e.color,
                 state: e.state,
@@ -23,7 +23,7 @@ module.exports={
                 allDay: e.allDay,
                 UsuarioIdUsuario: e.UsuarioIdUsuario
             }
-            const newEPredefinido=await Evento_Predefinido.create(EPredefinido);
+            const newEPredefinido = await Evento_Predefinido.create(EPredefinido);
             return newEPredefinido;
         } catch (error) {
             return error;
