@@ -186,8 +186,8 @@ const NavBar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} component={Link} to="/programs/children">Niños</MenuItem>
-                <MenuItem component={Link}>Adolecentes</MenuItem>
-                <MenuItem  component={Link}>Adultos</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} to="/programs/teens">Adolecentes</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} to="/programs/adults">Adultos</MenuItem>
               </Menu>
               {/* final */}
               {/* inicio */}
