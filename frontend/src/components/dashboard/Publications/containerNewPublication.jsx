@@ -71,6 +71,7 @@ const ContarinerNewPublication = () => {
         estado={publicacion.estado}
         tipo={publicacion.tipo}
         UsuarioIdUsuario={publicacion.UsuarioIdUsuario}
+        fecha="Hace un momento"
         user={user}
       ></PublicationPreview>
       </div>
