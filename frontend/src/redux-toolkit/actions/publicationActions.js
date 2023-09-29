@@ -3,7 +3,6 @@ import axios from "axios";
 export const getAllPublication = createAsyncThunk("/getAllPublication", async () => {
   try {
     const   response=await axios.get("publication");
-    console.log(response.data.results)
     return response.data.results
   } catch (error) {
     return error.message;

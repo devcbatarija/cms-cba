@@ -101,13 +101,13 @@ const Login = () => {
           <Button
             type="submit"
             variant="contained"
-            sx={{ width: "80%", background: "#002E5F" ,borderRadius:"0px" }}
+            sx={{ width: "80%", background: "#002E5F" ,borderRadius:"5px",minHeight:"40px" }}
           >
             Iniciar sesión
           </Button>
           <Button
             variant="outlined"
-            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"0px" }}
+            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"5px",minHeight:"40px" }}
             onClick={() => navigate("/register")}
             className="mt-2"
           >
