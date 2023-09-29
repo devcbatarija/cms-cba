@@ -75,6 +75,11 @@ export default function Sidebar() {
           label="SpotifyPlayer" 
           to="/dashboard/spotify/podcast" 
         />
+        <SidebarItem 
+          icon={AssessmentOutlinedIcon} 
+          label="Testimonios"
+          to="/dashboard/testimononios"
+        />
       </ul>
     </Toolbar>
   );

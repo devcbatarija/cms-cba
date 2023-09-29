@@ -14,24 +14,20 @@ import Dashboard from './components/dashboard/dashboard';
 import NotFound from './components/Error/NotFound';
 
 import ProgramTable from './components/dashboard/Programas/ProgramTables';
-import PublicationAdd from './components/dashboard/Publications/PublicationAdd.jsx';
 import PublicationNav from './components/dashboard/Publications/Nav';
-import DashNavbar from './components/dashboard/DashboardNavbar/DashNavbar'; // Importa DashNavbar
 import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
-import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import CalendarioClient from './components/calendar/calendar';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
-import MediaControlCard from './components/programs/programs';
 import ProgramChildren from './components/programs/children';
 import ProgramList from './components/programs/programs';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
 import Footer from './components/footer/footer';
 import { Publications } from './components/publications/publications';
-import { Testimonios } from './components/testimonios/testimonios';
+import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -95,7 +91,7 @@ function App() {
             <Route path='/dashboard/publinav/table' element={<TablePublication/>} />
             <Route path='/dashboard/publinav/add' element={<ContarinerNewPublication/>} />
           </Route>
-          <Route path='/dashboard/testimononios' element={<Testimonios/>} />
+          <Route path='/dashboard/testimononios' element={<TestimoniosContainer/>} />
           <Route path='/dashboard/tableuser' element={<TableUser></TableUser>}/>         
           <Route path='/dashboard/tableprogram' element={<ProgramTable></ProgramTable>}/>
           <Route path='/dashboard/spotify/podcast' element={<SpotifyPlayer></SpotifyPlayer>}></Route>
@@ -132,7 +128,7 @@ function App() {
             },
           },
           success: {
-            duration: 2500,
+            duration: 1500,
             theme: {
               primary: "green",
               secondary: "black",
