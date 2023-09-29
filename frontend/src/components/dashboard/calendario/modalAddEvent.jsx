@@ -247,13 +247,16 @@ export default function ModalAddEvent({
                                 >
                                     <MenuItem value="Administrativo">Administrativo</MenuItem>
                                     <MenuItem value="Academico">Academico</MenuItem>
+                                    {tipoModal === "Evento" ?
+                                        <MenuItem value="General">General</MenuItem>:null
+                                    }
                                 </Select>
                             </Grid>
-                            <Grid sx={{ m: 1, width: "40%", backgroundColor:'green'}} variant="outlined">
+                            <Grid sx={{ m: 1, width: "40%"}} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-color" >
                                     Color
                                 </InputLabel>
-                                <div style={{display:'flex'}} className='h-full'>
+                                <div style={{display:'flex'}} className=''>
                                 <SelectColorList
                                     
                                 />
