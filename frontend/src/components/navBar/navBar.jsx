@@ -167,13 +167,13 @@ const NavBar = () => {
             <Typography variant="h6" style={{ display: 'flex ', gap: '5%', flexGrow: 1 }}>
               CBA
               <Link to="/" style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}>
-                Home
+               Inicio
               </Link>
               <Link
                 to="/calendar"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
-                Calendar
+                Calendario
               </Link>
               {/* inicio */}
             
@@ -183,40 +183,33 @@ const NavBar = () => {
                 anchorEl={anchorEl.programas}
                 keepMounted
                 open={Boolean(anchorEl.programas)}
-                onClose={handleClose}
                 name="programas"
+                onClose={handleClose}
               >
-                <MenuItem component={Link} to="/programs/children">Niños</MenuItem>
-                <MenuItem component={Link}>Adolescentes</MenuItem>
-                <MenuItem  component={Link}>Jóvenes</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} to="/programs/children">Niños</MenuItem>
+                <MenuItem component={Link}>Adolecentes</MenuItem>
+                <MenuItem  component={Link}>Adultos</MenuItem>
               </Menu>
               {/* final */}
               {/* inicio */}
-              <Button color="inherit" name="programas" onClick={handleClick}  >Publicaciones</Button>
+              <Button color="inherit" name="publicaciones" onClick={handleClick}  >Publicaciones</Button>
               <Menu
                 id="simple-menu"
-                anchorEl={anchorEl.Publicaciones}
+                anchorEl={anchorEl.publicaciones}
                 keepMounted
-                open={Boolean(anchorEl.Publicaciones)}
+                open={Boolean(anchorEl.publicaciones)}
                 onClose={handleClose}
                 name="Publicaciones"
               >
-                <MenuItem component={Link}>Niños</MenuItem>
-                <MenuItem component={Link}>Adolescentes</MenuItem>
-                <MenuItem  component={Link}>Jóvenes</MenuItem>
+                <MenuItem component={Link}>Eventos</MenuItem>
+                <MenuItem component={Link}>Cartelera</MenuItem>
               </Menu>
               {/* final */}
-              <Link
-                to="/programs"
-                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
-              >
-                Programas
-              </Link>
               <Link
                 to="/about"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
-                About
+                Acerca de nosotros
               </Link>
             </Typography>
             {authlogin.auth ? (
@@ -244,7 +237,7 @@ const NavBar = () => {
                   }}
                   color="inherit"
                 >
-                  Login
+                  INICIAR SESION
                 </Button>
               </Link>
             )}
