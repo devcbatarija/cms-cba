@@ -29,6 +29,8 @@ import ContarinerNewPublication from './components/dashboard/Publications/contai
 import Footer from './components/footer/footer';
 import { Publications } from './components/publications/publications';
 import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
+import ProgramAdults from './components/programs/adults';
+import ProgramTeens from './components/programs/teens';
 import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
 import EventNav from './components/dashboard/calendario/eventNav';
 
@@ -84,6 +86,9 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/programs/children' element={<ProgramChildren />} />
         <Route path='/publications' element={<Publications />} />
+        <Route path='/programs/adults' element={<ProgramAdults />} />
+        <Route path='/programs/teens' element={<ProgramTeens />} />
+
         
         {/* Ruta del dashboard, sin verificación de autenticación */}
         {
