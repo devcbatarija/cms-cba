@@ -35,7 +35,9 @@ function SidebarItem({ icon: Icon, label, to, subItems }) { // Añadir prop de s
 export default function Sidebar() {
   return (
     <Toolbar className="sidebar">
-      <ul>
+      <ul style={{
+        fontSize:"10px"
+      }}>
         <SidebarItem 
           icon={DashboardIcon} 
           label="Dashboard" 
@@ -75,6 +77,11 @@ export default function Sidebar() {
           icon={StoreMallDirectoryOutlinedIcon} 
           label="SpotifyPlayer" 
           to="/dashboard/spotify/podcast" 
+        />
+        <SidebarItem 
+          icon={AssessmentOutlinedIcon} 
+          label="Testimonios"
+          to="/dashboard/testimononios"
         />
       </ul>
     </Toolbar>

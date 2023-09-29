@@ -89,10 +89,9 @@ const NavBar = () => {
         backgroundColor: 'rgb(0, 46, 95);',
         color: "white",
         borderBottom: "1px solid #cdd1dc",
-        boxShadow: 'none',
-        position: 'sticky',
+        boxShadow: 'none', 
         top: 0,
-        zIndex:1000
+        zIndex:2
       }}>
       <Toolbar sx={{
         shadow: 'none',
@@ -187,8 +186,8 @@ const NavBar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose} component={Link} to="/programs/children">Niños</MenuItem>
-                <MenuItem component={Link}>Adolecentes</MenuItem>
-                <MenuItem  component={Link}>Adultos</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} to="/programs/teens">Adolecentes</MenuItem>
+                <MenuItem onClick={handleClose} component={Link} to="/programs/adults">Adultos</MenuItem>
               </Menu>
               {/* final */}
               {/* inicio */}

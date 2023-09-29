@@ -1,7 +1,7 @@
 import Carousel from '../carusel/carusel';
 import CuadroInscripcion from '../inscripcion/incripcion';
 
-const ProgramAdults = () => {
+const ProgramTeens = () => {
 
   return (
     <>
@@ -11,16 +11,18 @@ const ProgramAdults = () => {
             {/* <div className="ImagenPrincipal w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 p-8"> */}
             <div className="ImagenPrincipal w-full md:w-1/2  p-0">
               <div style={{
-                backgroundImage: `url("https://costaaraucania.educacionpublica.cl/wp-content/uploads/2020/03/EDUMAT-2020-3.jpeg")`,
+                backgroundImage: `url("https://creativeadvertising.ro/wp-content/uploads/2023/04/business.jpg")`,
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 height: "50vh",
                 width: "100%"
               }}>
+
               </div>
             </div>
-            <div className="mt-4 md:mt-0 md:ml-4 md:w-1/2 md:mt-4 text-justify pb-4 pl-4 pr-6 pt-4">
+
+            <div className="mt-4 md:mt-0 md:ml-4 md:w-1/2 md:mt-4 text-justify pb-10 pl-10 pr-10 pt-10">
               <div className='imagen flex items-center h-full'>
                 <img className='imagenPequena w-30 h-20' src="https://th.bing.com/th/id/R.f4d824992072c70247fce6773a393b6f?rik=sflnahOaaHzPwQ&pid=ImgRaw&r=0" alt="estudianteIcon" />
               </div>
@@ -44,7 +46,7 @@ const ProgramAdults = () => {
           </div>
 
           <div id='2' className="mt-4 p-4 rounded-lg text-gray-700 blur-10 flex flex-col md:flex-row border-b border-gray-300 ">
-            <div className="w-full md:w-1/2 mt-4 p-2 rounded-lg text-center">
+            <div className="w-full md:w-1/2 mt-4 p-5 rounded-lg text-center">
               <div className='imagen flex items-center '>
                 <img className='imagenPequena w-15 h-20' src="https://cdn.goconqr.com/uploads/media/image/18714397/desktop_a7d21e94-1811-4ac5-a226-4e8e8494f284.jpg" alt="estudianteIcon" />
               </div>
@@ -118,4 +120,4 @@ const ProgramAdults = () => {
     </>
   );
 }
-export default ProgramAdults;
+export default ProgramTeens;
