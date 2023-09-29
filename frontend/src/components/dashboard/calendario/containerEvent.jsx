@@ -76,12 +76,12 @@ const ContarinerNewEvent = ({
       </div>
       <div>
         <EventPreview
-          titulo={data.title}
+          titulo={data?data.title:Evento.title}
           descripcion={datosEvento.descripcion}
           multimedia={datosEvento.multimedia}
           state={datosEvento.state}
           tipo={datosEvento.tipo}
-          UsuarioIdUsuario={data.UsuarioIdUsuario}
+          UsuarioIdUsuario={data?data.UsuarioIdUsuario:Evento.UsuarioIdUsuario}
         ></EventPreview>
       </div>
     </div>

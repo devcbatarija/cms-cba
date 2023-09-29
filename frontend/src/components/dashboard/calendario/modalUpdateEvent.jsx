@@ -19,11 +19,12 @@ import {
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
 import Cookies from "js-cookie";
 import Checkboxes from "./widgets/checkbox";
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
+import SelectColorList from "./widgets/selectColor";
 
 export default function ModalUpdateEvent({
     id,
@@ -40,7 +41,7 @@ export default function ModalUpdateEvent({
         tipo: "",
         start_Time: "",
         end_Time: "",
-        allDay:true,
+        allDay: true,
         state: ""
     })
     const [spinner, setSpinner] = useState(false);
@@ -66,8 +67,8 @@ export default function ModalUpdateEvent({
                     end: event.end,
                     color: event.color,
                     tipo: event.tipo,
-                    start_Time: event.start_Time?event.start_Time:'',
-                    end_Time: event.end_Time?event.end_Time:'',
+                    start_Time: event.start_Time ? event.start_Time : '',
+                    end_Time: event.end_Time ? event.end_Time : '',
                     allDay: event.allDay,
                     state: event.state
                 });
@@ -91,7 +92,7 @@ export default function ModalUpdateEvent({
             setSpinner(true);
             // Determinar la ruta en base al valor de tipoModal
             const path = tipoModal == "Evento" ? "event/update/" : "eventpredefinido/update"
-            const res = axios.put(path+id, data, config).then(res => {
+            const res = axios.put(path + id, data, config).then(res => {
                 setTimeout(() => {
                     toast.success(res.data.successMessage)
                     setData({
@@ -288,18 +289,17 @@ export default function ModalUpdateEvent({
                                         <MenuItem value="Academico">Academico</MenuItem>
                                     </Select>
                                 </Grid>
-                                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-color">
+                                <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
+                                    <InputLabel htmlFor="outlined-adornment-color" >
                                         Color
                                     </InputLabel>
-                                    <TextField
-                                        onChange={handleChange}
-                                        value={data.color}
-                                        id="outlined-basic-color"
-                                        name="color"
-                                        type="color"
-                                        variant="outlined"
-                                    />
+                                    <div style={{ display: 'flex' }} className=''>
+                                        {data.id!=''?
+                                        <SelectColorList
+                                        data={data}
+                                        setData={setData}
+                                    />:null}
+                                    </div>
                                 </Grid>
                             </div>
                             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
@@ -327,7 +327,7 @@ export default function ModalUpdateEvent({
                                             type="submit"
                                             variant="contained"
                                         >
-                                            REGISTRAR
+                                            ACTUALIZAR
                                         </Button>
                                     ) : (
                                         <LoadingButton
@@ -370,15 +370,15 @@ export default function ModalUpdateEvent({
                     ) : (
                         <form>
                             <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
+                                <Skeleton variant="text" width="100%" height={90} />
+                            </Grid>
                             <div className="flex flex-row">
                                 {tipoModal === "Evento" ?
                                     <Grid sx={{ m: 1 }} variant="outlined">
-                                        <Skeleton variant="text" sx={!data.allDay ? { width:!data.allDay ? "58%":"100%", marginRight: "2%" } : { width: "100%" }} height={90} />
+                                        <Skeleton variant="text" sx={!data.allDay ? { width: !data.allDay ? "58%" : "100%", marginRight: "2%" } : { width: "100%" }} height={90} />
                                         {data.allDay === false ?
-                                        <Skeleton variant="text" sx={{ width: "40%" }} height={90} />
-                                        : null}
+                                            <Skeleton variant="text" sx={{ width: "40%" }} height={90} />
+                                            : null}
                                     </Grid>
                                     : null}
                                 {tipoModal === "EventoPredifinido" && data.allDay === false ?
@@ -399,13 +399,13 @@ export default function ModalUpdateEvent({
                                 {tipoModal === "Evento" ?
                                     <Grid sx={{ m: 1 }} variant="outlined">
                                         {data.allDay === false ?
-                                        <Skeleton variant="text" sx={{ width: "40%", marginRight: "2%" }} height={90} />
-                                        : null}
+                                            <Skeleton variant="text" sx={{ width: "40%", marginRight: "2%" }} height={90} />
+                                            : null}
                                         <Skeleton variant="text" sx={!data.allDay ? { width: "58%" } : { width: "100%" }} height={90} />
                                     </Grid>
                                     : null}
                                 <div className="grid content-center">
-                                <Skeleton variant="text" width="100px" height={90} />
+                                    <Skeleton variant="text" width="100px" height={90} />
                                 </div>
                             </div>
                             <div style={{
@@ -414,21 +414,21 @@ export default function ModalUpdateEvent({
                                 gap: "10px",
                             }}>
                                 <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <Skeleton variant="text" width="100%" height={90} />
+                                    <Skeleton variant="text" width="100%" height={90} />
                                 </Grid>
                                 <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <Skeleton variant="text" width="40%" height={90} />
+                                    <Skeleton variant="text" width="40%" height={90} />
                                 </Grid>
                             </div>
                             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <Skeleton variant="text" width="50%" height={90} />
+                                <Skeleton variant="text" width="50%" height={90} />
                             </Grid>
                             <div className="grid grid-cols-2 gap-2">
                                 <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <Skeleton variant="text" width="100%" height={70} />
+                                    <Skeleton variant="text" width="100%" height={70} />
                                 </Grid>
                                 <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <Skeleton variant="text" width="100%" height={70} />
+                                    <Skeleton variant="text" width="100%" height={70} />
                                 </Grid>
                             </div>
                         </form>

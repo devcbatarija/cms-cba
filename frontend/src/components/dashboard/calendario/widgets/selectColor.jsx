@@ -1,31 +1,47 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const colors = [
-  { nombre: 'Color 1', color: '#FF0000' },
-  { nombre: 'Color 2', color: '#00FF00' },
-  { nombre: 'Color 3', color: '#0000FF' },
-  { nombre: 'Color 4', color: '#FFFF00' },
-  { nombre: 'Color 5', color: '#FF00FF' },
+  { nombre: 'Azul', color: '#0000FF' },
+  { nombre: 'Verde', color: '#00FF00' },
+  { nombre: 'Rojo', color: '#FF0000' },
+  { nombre: 'Amarillo', color: '#FFFF00' },
+  { nombre: 'Rosa', color: '#FF00FF' },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function SelectColorList() {
-  const [selected, setSelected] = useState(colors[3])
-
+export default function SelectColorList({
+  data,
+  setData
+}) {
+  const [selected, setSelected] = useState(colors[0])
+  useEffect(() => {
+    setData({
+      ...data,
+      color: selected.color
+    })
+  }, [selected])
+  useEffect(() => {
+    if (data.color != '') {
+      const color = colors.find(color => color.color === data.color);
+      if (color) {
+        setSelected(color);
+      }
+    }
+  }, [])
   return (
     <Listbox value={selected} onChange={setSelected} >
       {({ open }) => (
         <>
           {/* <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Listbox.Label> */}
-          <div className="relative" style={{ flex:1}}>
+          <div className="relative" style={{ flex: 1 }}>
             <Listbox.Button className="h-full relative w-full cursor-pointer rounded-md bg-white py-3 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
               <span className="flex items-center">
-                <span className="h-8 w-8 flex-shrink-0 rounded-full" style={{backgroundColor:selected.color}} />
+                <span className="h-8 w-8 flex-shrink-0 rounded-full" style={{ backgroundColor: selected.color }} />
                 <span className="ml-3 block truncate">{selected.nombre}</span>
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -55,7 +71,7 @@ export default function SelectColorList() {
                     {({ selected, active }) => (
                       <>
                         <div className="flex items-center">
-                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor:color.color}} />
+                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor: color.color }} />
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >

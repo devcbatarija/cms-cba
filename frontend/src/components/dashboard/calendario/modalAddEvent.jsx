@@ -258,21 +258,11 @@ export default function ModalAddEvent({
                                 </InputLabel>
                                 <div style={{display:'flex'}} className=''>
                                 <SelectColorList
-                                    
+                                    data={data}
+                                    setData={setData}
                                 />
                                 </div>
-                                {/* <TextField
-                                    onChange={handleChange}
-                                    value={data.color}
-                                    id="outlined-basic-color"
-                                    name="color"
-                                    type="color"
-                                    variant="outlined"
-                                /> */}
                             </Grid>
-                            {/* <Grid>
-                                <SelectColorList/>
-                            </Grid> */}
                         </div>
                         {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-estado">
@@ -310,7 +300,7 @@ export default function ModalAddEvent({
                                         variant="contained"
                                         sx={{ width: "100%", height: "35px" }}
                                     >
-                                        <span>Actualizando</span>
+                                        <span>Registrando</span>
                                     </LoadingButton>
                                 )}
                             </Grid>
