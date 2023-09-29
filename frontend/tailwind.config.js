@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      height: {
+        '118': '28rem',
+        '120':'32rem'
+      }
     },
   },
   plugins: [],

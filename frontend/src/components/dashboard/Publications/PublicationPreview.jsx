@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Carrousel from "../widgets/carrousel";
 import { useSelector } from "react-redux";
 import Avatar from "@mui/material/Avatar";
+import { calcularTimestate } from "../../../services/functions";
 
 const PublicationPreview = ({
   titulo,
@@ -9,9 +10,10 @@ const PublicationPreview = ({
   multimedia,
   estado,
   tipo,
+  fecha,
+  user
 }) => {
-  const data = useSelector((state) => state.login.user);
-  useEffect(() => {}, [multimedia]);
+   
 
   const renderDescription = () => {
     return {
@@ -22,10 +24,10 @@ const PublicationPreview = ({
   return (
     <div className="bg-white shadow-lg rounded-lg border">
       <header className="flex flex-row gap-5 p-4">
-        <Avatar src={data._profileImage} />
+        <Avatar src={user.image || user._profileImage} />
         <div className="flex flex-col gap-2">
-          <p className="text-1xl font-bold">{data.correo}</p>
-          <p className="text-gray-700">Hace un momento</p>
+          <p className="text-1xl font-bold">{user.correo}</p>
+          <p className="text-gray-700">{fecha}</p>
         </div>
       </header>
       <div className="flex flex-row gap-5 p-4">
@@ -41,14 +43,14 @@ const PublicationPreview = ({
         ></p>
       </div>
       <div className="flex flex-row gap-5 p-4">
-        <a
+        {/* <a
           className="text-blue-500 underline"
           href="link"
           target="_blank"
           rel="noopener noreferrer"
         >
           http://localhost:5173/dashboard/publinav/add
-        </a>
+        </a> */}
       </div>
     </div>
   );
