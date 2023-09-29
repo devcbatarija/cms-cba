@@ -36,7 +36,8 @@ export default function BasicPopover({
         await setData({
             ...data,
             start:date,
-            end: date
+            end: date,
+            tipo:'Academico'
         })
         setTipoModal(e);
         handleClose();
