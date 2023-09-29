@@ -20,6 +20,7 @@ import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventA
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
 import CalendarioClient from './components/calendar/calendar';
+import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
 import ProgramChildren from './components/programs/children';
 import ProgramList from './components/programs/programs';
@@ -28,6 +29,8 @@ import ContarinerNewPublication from './components/dashboard/Publications/contai
 import Footer from './components/footer/footer';
 import { Publications } from './components/publications/publications';
 import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
+import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
+import EventNav from './components/dashboard/calendario/eventNav';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -86,7 +89,10 @@ function App() {
         {
         auth &&
         <Route path='/dashboard' element={<Dashboard></Dashboard>}>
-        <Route path='/dashboard/calendario' element={<Calendario />} />
+        <Route path='/dashboard/Calendario' element={<EventNav/>}>
+          <Route path='/dashboard/Calendario/calendario' element={<Calendario />}/>
+          <Route path='/dashboard/Calendario/addEvent' element={<ContarinerNewEvent />}/>
+        </Route>
           <Route path='/dashboard/publinav' element={<PublicationNav />} >
             <Route path='/dashboard/publinav/table' element={<TablePublication/>} />
             <Route path='/dashboard/publinav/add' element={<ContarinerNewPublication/>} />
