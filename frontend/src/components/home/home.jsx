@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { test } from "../../redux-toolkit/actions/testActions";
 import NavBar from "../navBar/navBar";
@@ -9,17 +9,29 @@ import { getAllPublication } from "../../redux-toolkit/actions/publicationAction
 import CuadroInscripcion from "../inscripcion/incripcion";
 import { calcularTimestate } from "../../services/functions";
 import Carousel from "../dashboard/widgets/carrousel";
+import { StatisticsBanner } from "../statisticsBanner/statisticsBanner";
+import { Link } from "react-router-dom";
+import { Comments } from "../publications/comments";
+import primera from "../../assets/1.jpeg";
+import segunda from "../../assets/2.jpeg";
+import tercera from "../../assets/3.jpeg";
+import cuarta from "../../assets/4.jpeg";
 
 const dataImage = [
-  "https://images.unsplash.com/photo-1543304216-b46be324b571?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1581&q=80",
-  "https://images.unsplash.com/photo-1509367851641-69176fc69f79?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1576&q=80",
+  primera,
+  segunda,
+  tercera,
+  cuarta
 ];
+
 const Home = () => {
   const [dataCalc, setDataCalc] = useState([]);
+  const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
   const multimediadata = useSelector(
     (state) => state.publications.publications
   );
+  const bannerRef = useRef();
 
   const calc = () => {
     let calcData = [];
@@ -33,6 +45,7 @@ const Home = () => {
   const data = () => {
     dispatch(test());
   };
+
   useEffect(() => {
     dispatch(getAllPublication());
   }, []);
@@ -43,6 +56,29 @@ const Home = () => {
     }
   }, [multimediadata]); // Agrega multimediadata como dependencia
 
+  useEffect(() => {
+    // const observer = new IntersectionObserver(
+    //   ([entry]) => {
+    //     setIsVisible(entry.isIntersecting);
+    //   },
+    //   {
+    //     root: null,
+    //     rootMargin: '0px',
+    //     threshold: 0.1
+    //   }
+    // );
+
+    // if (bannerRef.current) {
+    //   observer.observe(bannerRef.current);
+    // }
+
+    // return () => {
+    //   if (bannerRef.current) {
+    //     observer.unobserve(bannerRef.current);
+    //   }
+    // };
+  }, []);
+
   const sortedPublications = [...multimediadata].sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
@@ -52,31 +88,35 @@ const Home = () => {
       __html: descripcion.replace(/\n/g, "<br>"),
     };
   };
+  const handleClick = (id) => {
+    alert(id)
+  }
+
   return (
-    <div className="flex flex-col h-auto gap-8">
+    <div className="flex flex-col h-auto gap-6 bg-zinc-50">
+      <div className="w-full h-auto">
       <CarouselHome multimedia={dataImage}></CarouselHome>
+      </div>
       <ComponentComunication></ComponentComunication>
-      <div className="flex flex-col md:flex-row min-h-full p-6 bg-white-100 gap-2 gap-2">
-        <div 
-        style={{
-          boxShadow:"1px 1px 5px 1px"
-        }}
-        className="flex flex-col shadow-2xl md:w-8/12 w-full gap-4 box-shadow border p-4 ">
+      <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
+        <div className="flex flex-col md:w-8/12 w-full gap-4 p-4 bg-white shadow-md">
           <h2 className="text-1xl ">Comunicados</h2>
-          {latestPublications.map((m, index) => {
+          {latestPublications&& latestPublications.map((m, index) => {
             return (
               <div
                 key={m.descripcion}
                 className="
                 grid grid-cols-1
                 sm:grid-cols-1 md:grid-cols-2
-                items-center justify-center "
+                items-center justify-center bg-white"
               >
                 <div className="">
                   <Carousel multimedia={m.multimedia} type="home" ></Carousel>
                 </div>
-                <div className="flex flex-col gap-5 p-6">
-                  <h2 className="text-2xl text-blue-900">{m.titulo}</h2>
+                <div className="flex flex-col p-6">
+                  <h2
+                  onClick={()=>handleClick(m.id_Publicacion)}
+                  className="text-2xl text-blue-900 hover:cursor-pointer">{m.titulo}</h2>
                   <p
                     className="text-gray-700"
                     dangerouslySetInnerHTML={renderDescription(m.descripcion)}
@@ -87,39 +127,29 @@ const Home = () => {
           })}
           {
             latestPublications.length>0?
-            <div className="flex flex-col text-blue-900">
-              <a>Ver mas....</a>
+            <div className="flex flex-col text-blue-900">  
+                <Link 
+                to={"/publications"}
+                >
+                Ver mas....
+                </Link>
             </div>:
             <div className="flex flex-col text-blue-900">
               <a>No hay comunicados</a>
             </div>
           }
         </div>
-        <div 
-        style={{
-          boxShadow:"1px 1px 5px 1px"
-        }}
-        className="flex flex-col shadow-2xl md:w-4/12 w-full gap-4 box-shadow border p-4 rounded-lg">
+        <div
+        className="flex flex-col md:w-4/12 w-full gap-4 p-4 rounded-lg bg-white shadow-md">
           Próximos eventos
         </div>
       </div>
+       
+      <StatisticsBanner></StatisticsBanner> 
+      <Comments></Comments>
       <CuadroInscripcion></CuadroInscripcion>
-      <ComponentComunication></ComponentComunication>
     </div>
   );
 };
 
 export default Home;
-
-{
-  /* <PublicationPreview
-                  key={m.titulo+"index"}
-                  titulo={m.titulo}
-                  descripcion={m.descripcion}
-                  multimedia={m.multimedia}
-                  estado={m.estado}
-                  tipo={m.tipo}
-                  fecha={dataCalc[index]}
-                  user={m.Usuario}
-                ></PublicationPreview> */
-}
