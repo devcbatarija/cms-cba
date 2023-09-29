@@ -31,7 +31,7 @@ const PublicationPreview = ({
         </div>
       </header>
       <div className="flex flex-row gap-5 p-4">
-        <h2 className="text-2xl ">{titulo}</h2>
+        <h2 className="text-2xl text-black">{titulo}</h2>
       </div>
       <div className="w-full">
         <Carrousel multimedia={multimedia}></Carrousel>
