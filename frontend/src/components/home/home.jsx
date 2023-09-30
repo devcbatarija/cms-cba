@@ -16,14 +16,12 @@ import primera from "../../assets/1.jpeg";
 import segunda from "../../assets/2.jpeg";
 import tercera from "../../assets/3.jpeg";
 import cuarta from "../../assets/4.jpeg";
+import { TestimonioPreview } from "../testimonios/testimonioPreview";
 
-const dataImage = [
-  primera,
-  segunda,
-  tercera,
-  cuarta
-];
-
+const dataImage = [primera, segunda, tercera, cuarta];
+const comentario =
+  "I love your system. I am comletely blown away.\nCribrocket " +
+  "is exactly what our business has been lacking.";
 const Home = () => {
   const [dataCalc, setDataCalc] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -67,11 +65,9 @@ const Home = () => {
     //     threshold: 0.1
     //   }
     // );
-
     // if (bannerRef.current) {
     //   observer.observe(bannerRef.current);
     // }
-
     // return () => {
     //   if (bannerRef.current) {
     //     observer.unobserve(bannerRef.current);
@@ -89,64 +85,64 @@ const Home = () => {
     };
   };
   const handleClick = (id) => {
-    alert(id)
-  }
+    alert(id);
+  };
 
   return (
     <div className="flex flex-col h-auto gap-6 bg-zinc-50">
       <div className="w-full h-auto">
-      <CarouselHome multimedia={dataImage}></CarouselHome>
+        <CarouselHome multimedia={dataImage}></CarouselHome>
       </div>
       <ComponentComunication></ComponentComunication>
       <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
         <div className="flex flex-col md:w-8/12 w-full gap-4 p-4 bg-white shadow-md">
           <h2 className="text-1xl ">Comunicados</h2>
-          {latestPublications&& latestPublications.map((m, index) => {
-            return (
-              <div
-                key={m.descripcion}
-                className="
+          {latestPublications &&
+            latestPublications.map((m, index) => {
+              return (
+                <div
+                  key={m.descripcion}
+                  className="
                 grid grid-cols-1
                 sm:grid-cols-1 md:grid-cols-2
                 items-center justify-center bg-white"
-              >
-                <div className="">
-                  <Carousel multimedia={m.multimedia} type="home" ></Carousel>
-                </div>
-                <div className="flex flex-col p-6">
-                  <h2
-                  onClick={()=>handleClick(m.id_Publicacion)}
-                  className="text-2xl text-blue-900 hover:cursor-pointer">{m.titulo}</h2>
-                  <p
-                    className="text-gray-700"
-                    dangerouslySetInnerHTML={renderDescription(m.descripcion)}
-                  ></p>
-                </div>
-              </div>
-            );
-          })}
-          {
-            latestPublications.length>0?
-            <div className="flex flex-col text-blue-900">  
-                <Link 
-                to={"/publications"}
                 >
-                Ver mas....
-                </Link>
-            </div>:
+                  <div className="">
+                    <Carousel multimedia={m.multimedia} type="home"></Carousel>
+                  </div>
+                  <div className="flex flex-col p-6">
+                    <h2
+                      onClick={() => handleClick(m.id_Publicacion)}
+                      className="text-2xl text-blue-900 hover:cursor-pointer"
+                    >
+                      {m.titulo}
+                    </h2>
+                    <p
+                      className="text-gray-700"
+                      dangerouslySetInnerHTML={renderDescription(m.descripcion)}
+                    ></p>
+                  </div>
+                </div>
+              );
+            })}
+          {latestPublications.length > 0 ? (
+            <div className="flex flex-col text-blue-900">
+              <Link to={"/publications"}>Ver mas....</Link>
+            </div>
+          ) : (
             <div className="flex flex-col text-blue-900">
               <a>No hay comunicados</a>
             </div>
-          }
+          )}
         </div>
-        <div
-        className="flex flex-col md:w-4/12 w-full gap-4 p-4 rounded-lg bg-white shadow-md">
+        <div className="flex flex-col md:w-4/12 w-full gap-4 p-4 rounded-lg bg-white shadow-md">
           Próximos eventos
         </div>
       </div>
-       
-      <StatisticsBanner></StatisticsBanner> 
-      <Comments></Comments>
+      <StatisticsBanner></StatisticsBanner>
+      <div className="flex flex-col w-full items-center">
+        <TestimonioPreview nombre={"Olivio"} apellidos={"Subelza"} cargo={"Teacher CBA."} comentario={comentario}></TestimonioPreview>
+      </div>
       <CuadroInscripcion></CuadroInscripcion>
     </div>
   );

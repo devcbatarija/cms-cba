@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Uploader from "../dashboard/Publications/Uploader";
 
@@ -8,7 +8,7 @@ const Title = styled.h2`
 `;
 export const TestimonioAdd = ({ testimonios, setTestimonios }) => {
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const fileInputRef = useRef(null);
   const handleChange = (e) => {
     const property = e.target.name;
     const value = e.target.value;
@@ -18,6 +18,25 @@ export const TestimonioAdd = ({ testimonios, setTestimonios }) => {
     });
   };
 
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    // Agrega una clase CSS para resaltar la zona de soltar.
+    fileInputRef.current.classList.add("drag-over");
+  };
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+  const handleDragLeave = (e) => {
+    // Quita la clase CSS al salir de la zona de soltar.
+    fileInputRef.current.classList.remove("drag-over");
+  };
+  const handleDrop = (e) => {
+    e.preventDefault();
+    fileInputRef.current.classList.remove("drag-over");
+    const droppedFiles = e.dataTransfer.files;
+    console.log(setSelectedFile(droppedFiles[0]));
+  };
+  
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
   };
@@ -70,10 +89,10 @@ export const TestimonioAdd = ({ testimonios, setTestimonios }) => {
               Cargo
             </label>
             <select
-              id="comentario"
+              id="cargo"
               onChange={handleChange}
-              name="comentario"
-              value={testimonios.comentario}
+              name="cargo"
+              value={testimonios.cargo}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="Estudiante">Estudiante</option>
@@ -118,7 +137,13 @@ export const TestimonioAdd = ({ testimonios, setTestimonios }) => {
 
           <div className="max-w-xl">
             <div className="max-w-xl">
-              <label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
+              <label
+              className={`flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none ${fileInputRef.current?.classList.contains("drag-over") ? "bg-blue-100" : ""}`}
+              onDragEnter={handleDragEnter}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              >
                 <span className="flex items-center space-x-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -135,11 +160,17 @@ export const TestimonioAdd = ({ testimonios, setTestimonios }) => {
                     />
                   </svg>
                   <span className="font-medium text-gray-600">
-                    Drop files to Attach, or
-                    <span className="text-blue-600 underline">browse</span>
+                    Image 
+                    <span className="text-blue-600 underline">Files</span>
                   </span>
                 </span>
-                <input type="file" name="file_upload" className="hidden" />
+                <input
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+                type="file" 
+                name="file_upload"
+                />
               </label>
             </div>
           </div>
