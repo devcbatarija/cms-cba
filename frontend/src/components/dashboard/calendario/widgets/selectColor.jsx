@@ -62,7 +62,7 @@ export default function SelectColorList({
                     key={color.color}
                     className={({ active }) =>
                       classNames(
-                        active ? 'bg-indigo-600 text-white' : 'text-gray-900',
+                        active ? 'bg-zinc-200 text-white' : 'text-gray-900',
                         'relative cursor-pointer select-none py-2 pl-3 pr-9'
                       )
                     }
@@ -75,14 +75,14 @@ export default function SelectColorList({
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
-                            {color.nombre}
+                            {/* {color.nombre} */}
                           </span>
                         </div>
 
                         {selected ? (
                           <span
                             className={classNames(
-                              active ? 'text-white' : 'text-indigo-600',
+                              active ? 'text-white' : 'text-white',
                               'absolute inset-y-0 right-0 flex items-center pr-4'
                             )}
                           >

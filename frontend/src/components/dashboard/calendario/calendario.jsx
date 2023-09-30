@@ -81,6 +81,7 @@ const Calendario = () => {
         tipo: "",
         start_Time: "",
         end_Time: "",
+        state:true,
         allDay: true,
         UsuarioIdUsuario: userLogin._userId
     })
@@ -226,6 +227,7 @@ const Calendario = () => {
             tipo: "",
             start_Time: "",
             end_Time: "",
+            state: true,
             allDay: true
         })
     }

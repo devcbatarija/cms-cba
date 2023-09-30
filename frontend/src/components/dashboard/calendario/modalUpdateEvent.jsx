@@ -56,15 +56,16 @@ export default function ModalUpdateEvent({
         });
     };
     const getById = async () => {
-        const event = axios.get(`event/getById/${id}`)
+        const path=tipoModal=='Evento'?'event':'eventpredefinido'
+        const event = axios.get(`${path}/getById/${id}`)
             .then(response => {
                 const event = response.data.results;
                 setData({
                     ...data,
                     id: event.id,
                     title: event.title,
-                    start: event.start,
-                    end: event.end,
+                    start: event.start?event.start:'',
+                    end: event.end?event.end:'',
                     color: event.color,
                     tipo: event.tipo,
                     start_Time: event.start_Time ? event.start_Time : '',
@@ -91,7 +92,7 @@ export default function ModalUpdateEvent({
             };
             setSpinner(true);
             // Determinar la ruta en base al valor de tipoModal
-            const path = tipoModal == "Evento" ? "event/update/" : "eventpredefinido/update"
+            const path = tipoModal == "Evento" ? "event/update/" : "eventpredefinido/update/"
             const res = axios.put(path + id, data, config).then(res => {
                 setTimeout(() => {
                     toast.success(res.data.successMessage)
@@ -105,6 +106,7 @@ export default function ModalUpdateEvent({
                         tipo: "",
                         start_Time: "",
                         end_Time: "",
+                        state: true,
                         allDay: true
                     })
                     // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().
