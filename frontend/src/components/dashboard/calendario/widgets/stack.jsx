@@ -17,12 +17,17 @@ const Item = styled(Paper)(({ theme }) => ({
 
 export default function BasicStack({ eventsPredefinidos }) {
     const [open, setOpen] = React.useState(false);
+    const [idEvent, setIdEvent] = React.useState(null);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const handleClick=(id)=>{
+        setIdEvent(id);
+        handleOpen();
+    }
     return (
         <>
             {open ? <ModalUpdateEvent
-                id={id}
+                id={idEvent}
                 open={open}
                 handleClose={handleClose}
                 tipoModal={'EventoPredefinido'}
@@ -33,8 +38,8 @@ export default function BasicStack({ eventsPredefinidos }) {
                         eventsPredefinidos.length > 0 ?
                             eventsPredefinidos.map((evento) => (
                                 evento.allDay ?
-                                    <Item style={{ backgroundColor: evento.color, color: "white" }} key={evento.id} className='fc-event' data-event={JSON.stringify(evento)}>{evento.title}</Item> :
-                                    <Item key={evento.id} className='fc-event' data-event={JSON.stringify(evento)}><span style={{ color: evento.color }}>
+                                    <Item onClick={()=>handleClick(evento.id)} style={{ backgroundColor: evento.color, color: "white" }} key={evento.id} className='fc-event' data-event={JSON.stringify(evento)}>{evento.title}</Item> :
+                                    <Item onClick={()=>handleClick(evento.id)} key={evento.id} className='fc-event' data-event={JSON.stringify(evento)}><span style={{ color: evento.color }}>
                                         <FiberManualRecordRoundedIcon style={{ width: '12px' }} /></span>{evento.start_Time} {evento.title}</Item>
                             )) : (
                                 <div>No hay datos</div>
