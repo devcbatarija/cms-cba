@@ -8,6 +8,7 @@ const programaRoutes=require('./programaRoutes');
 const uploadRoutes=require('./uploadRoutes');
 const podcastRoutes=require('./podcastRoutes');
 const testimonioRoutes=require('./testimoniosRoutes');
+const datos_EventoRoutes = require('./datos_EventoRoutes');
 
 const router=Router();
 
@@ -20,7 +21,7 @@ router.use('/program', programaRoutes); // http
 router.use("/files",uploadRoutes)
 router.use('/podcast',podcastRoutes)
 router.use('/testimonios',testimonioRoutes)
-
+router.use('/datosevento',datos_EventoRoutes)
 
 
 module.exports=router;
