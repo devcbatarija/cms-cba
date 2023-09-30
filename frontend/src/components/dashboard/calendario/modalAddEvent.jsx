@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import {
     Button,
-    Collapse,
     Fade,
     Grid,
     InputLabel,
@@ -68,6 +67,7 @@ export default function ModalAddEvent({
                         tipo: "",
                         start_Time: "",
                         end_Time: "",
+                        state:true,
                         allDay: true
                     })
                     // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().

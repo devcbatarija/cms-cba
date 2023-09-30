@@ -17,3 +17,4 @@ conn.sync({ force: false }).then(() => {
         console.log(`Server is running in port: http://localhost:${PORT}`);
     })
 });
+ 
