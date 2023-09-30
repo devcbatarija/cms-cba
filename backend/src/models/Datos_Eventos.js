@@ -3,7 +3,7 @@ const { DataTypes, UUIDV4 } = require("sequelize")
 
 module.exports=(sequelize)=>{
     sequelize.define("Dato_Evento",{
-        id_E:{
+        id_Evento:{
             type: DataTypes.UUID,
             primaryKey:true,
             defaultValue:UUIDV4,
@@ -17,10 +17,9 @@ module.exports=(sequelize)=>{
             type:DataTypes.ARRAY(DataTypes.TEXT),
             allowNull: false
         },
-        state:{
-            type:DataTypes.BOOLEAN,
-            allowNull:false,
-            defaultValue:true
+        categoria:{
+            type:DataTypes.STRING,
+            allowNull:false
         }
     })
 }

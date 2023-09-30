@@ -7,8 +7,6 @@ const EventPreview = ({
   titulo,
   descripcion,
   multimedia,
-  state,
-  tipo,
 }) => {
   const data = useSelector((state) => state.login.user);
   useEffect(() => {}, [multimedia]);

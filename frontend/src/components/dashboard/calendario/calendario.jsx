@@ -11,7 +11,7 @@ import { styled } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
-import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
+import { getEvents} from "../../../redux-toolkit/actions/eventActions";
 import BasicStack from "./widgets/stack";
 import multimonth from "@fullcalendar/multimonth";
 import { Button } from "@mui/material";
@@ -81,6 +81,7 @@ const Calendario = () => {
         tipo: "",
         start_Time: "",
         end_Time: "",
+        state:true,
         allDay: true,
         UsuarioIdUsuario: userLogin._userId
     })
@@ -107,9 +108,6 @@ const Calendario = () => {
             start = e.startStr;
             end = dayjs(e.endStr).subtract(1, 'day').format('YYYY-MM-DD');
         }
-        console.log(e)
-        // const start = e.startStr;
-        // const end = e.endStr;
         setData({
             ...data,
             id: "",
@@ -160,15 +158,6 @@ const Calendario = () => {
             dispatch(getEvents())
         })
     }
-    useEffect(() => {
-        console.log(data)
-        // data.id ? axios.put(`event/update/${data.id}`, data).then(res => {
-        //     limpiarDatos();
-        //     dispatch(getEvents())
-        // }).catch(error => {
-        //     console.log(error)
-        // }) : null;
-    }, [data])
 
     useEffect(() => {
         setData({
@@ -238,6 +227,7 @@ const Calendario = () => {
             tipo: "",
             start_Time: "",
             end_Time: "",
+            state: true,
             allDay: true
         })
     }

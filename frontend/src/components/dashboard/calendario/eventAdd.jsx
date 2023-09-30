@@ -2,8 +2,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Uploader from "../Publications/Uploader";
 import axios from "axios";
-import { Grid, MenuItem, Select, Button } from "@mui/material";
+import { 
+  Button,
+  Fade,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,} from "@mui/material";
 import { useEffect } from "react";
+import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
+import Checkboxes from "./widgets/checkbox";
+import SelectColorList from "./widgets/selectColor";
 
 const Container = styled.div`
   margin: 0 auto;
@@ -67,12 +77,12 @@ function EventAdd({
       return;
     }
   };
-  const handleChangeData=(e)=>{
+  const handleChangeData = (e) => {
     const property = e.target.name;
     const value = e.target.value;
     setData({
-        ...data,
-        [property]: value,
+      ...data,
+      [property]: value,
     })
   }
   const handleSubmit = async (e) => {
@@ -83,7 +93,7 @@ function EventAdd({
         type: "image",
       });
       if (response.data.results) {
-        handleSubmitPublication(response.data.results);
+        handleSubmitEvent(response.data.results);
       }
     } catch (error) {
       return error;
@@ -98,7 +108,7 @@ function EventAdd({
     <>
       <Container className="rounded-lg border rounded-lg">
         <div className="flex flex-col items-center justify-center">
-          <Title>Crear datosEvento</Title>
+          <Title>Crear Evento</Title>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col rounded-lg ">
           <FormGroup style={{ width: "100%" }}>
@@ -121,30 +131,82 @@ function EventAdd({
               required
             ></TextArea>
           </FormGroup>
-          <FormGroup
-            style={{ display: "flex", flexDirection: "row", gap: "20px" }}
-          >
-            <div>
-              <Label>Estado</Label>
-              <Select
-                labelId="demo-select-small-label"
-                id="state"
-                value={datosEvento.state}
-                label="Estado"
-                onChange={handleChange}
-                name="estado"
-              >
-                <MenuItem value="true">Visible</MenuItem>
-                <MenuItem value="false">Oculto</MenuItem>
-              </Select>
+
+          <div className="flex flex-row">
+              <Grid sx={{ m: 1 }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-start">
+                  Fecha de Inicio
+                </InputLabel>
+                <TextField
+                  sx={!data.allDay ? { width: "58%", marginRight: "2%" } : { width: "100%" }}
+                  onChange={handleChangeData}
+                  value={data.start}
+                  id="outlined-basic-start"
+                  name="start"
+                  type="date"
+                  size="small"
+                  variant="outlined" />
+                {data.allDay === false ?
+                  <Fade in={!data.allDay}>
+                    <TextField
+                      sx={{ width: "40%" }}
+                      onChange={handleChangeData}
+                      value={data.start_Time}
+                      id="outlined-basic-start_Time"
+                      name="start_Time"
+                      type="time"
+                      size="small"
+                      variant="outlined" />
+                  </Fade>
+                  : null}
+              </Grid>
+              <div className="grid content-center">
+                <ArrowRightAltRoundedIcon />
+              </div>
+              <Grid sx={{ m: 1 }} variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-end">
+                  Fecha de finalizacion
+                </InputLabel>
+                {data.allDay === false ?
+                  <TextField
+                    sx={{ width: "40%", marginRight: "2%" }}
+                    onChange={handleChangeData}
+                    value={data.end_Time}
+                    id="outlined-basic-end_Time"
+                    name="end_Time"
+                    type="time"
+                    size="small"
+                    variant="outlined" />
+                  : null}
+                <TextField
+                  sx={!data.allDay ? { width: "58%" } : { width: "100%" }}
+                  onChange={handleChangeData}
+                  value={data.end}
+                  id="outlined-basic-end"
+                  name="end"
+                  type="date"
+                  size="small"
+                  variant="outlined" />
+              </Grid>
+            <div className="grid content-center">
+              <Checkboxes
+                data={data}
+                setData={setData}
+              />
             </div>
-            <div>
-              <Label>Tipo</Label>
+          </div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2,1fr)",
+            gap: "10px",
+          }}>
+            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-tipo">Tipo de evento</InputLabel>
               <Select
+                sx={{ width: "100%" }}
                 labelId="demo-select-small-label"
-                id="tipo"
+                id="demo-select-small"
                 value={data.tipo}
-                label="tipo"
                 onChange={handleChangeData}
                 name="tipo"
               >
@@ -152,8 +214,51 @@ function EventAdd({
                 <MenuItem value="Academico">Academico</MenuItem>
                 <MenuItem value="General">General</MenuItem>
               </Select>
-            </div>
-          </FormGroup>
+            </Grid>
+            <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-color" >
+                Color
+              </InputLabel>
+              <div style={{ display: 'flex' }} className=''>
+                <SelectColorList
+                  data={data}
+                  setData={setData}
+                />
+              </div>
+            </Grid>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+          <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-tipo">Estado</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={data.state}
+                onChange={handleChangeData}
+                name="state"
+              >
+                <MenuItem value="true">Visible</MenuItem>
+                <MenuItem value="false">Oculto</MenuItem>
+              </Select>
+            </Grid>
+            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-tipo">Categoria</InputLabel>
+              <Select
+                sx={{ width: "100%" }}
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={datosEvento.categoria}
+                onChange={handleChange}
+                name="categoria"
+              >
+                <MenuItem value="Cine">Cine</MenuItem>
+                <MenuItem value="Comunicado">Comunicado</MenuItem>
+              </Select>
+            </Grid>
+          </div>
+          
         </form>
         <FormGroup>
           <Label>Arrastre y suelte las imagenes:</Label>
