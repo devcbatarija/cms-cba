@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import axios from "axios";
 import {
     Button,
-    Collapse,
     Fade,
     Grid,
     InputLabel,
@@ -68,6 +67,7 @@ export default function ModalAddEvent({
                         tipo: "",
                         start_Time: "",
                         end_Time: "",
+                        state:true,
                         allDay: true
                     })
                     // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().
@@ -258,21 +258,11 @@ export default function ModalAddEvent({
                                 </InputLabel>
                                 <div style={{display:'flex'}} className=''>
                                 <SelectColorList
-                                    
+                                    data={data}
+                                    setData={setData}
                                 />
                                 </div>
-                                {/* <TextField
-                                    onChange={handleChange}
-                                    value={data.color}
-                                    id="outlined-basic-color"
-                                    name="color"
-                                    type="color"
-                                    variant="outlined"
-                                /> */}
                             </Grid>
-                            {/* <Grid>
-                                <SelectColorList/>
-                            </Grid> */}
                         </div>
                         {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-estado">
@@ -310,7 +300,7 @@ export default function ModalAddEvent({
                                         variant="contained"
                                         sx={{ width: "100%", height: "35px" }}
                                     >
-                                        <span>Actualizando</span>
+                                        <span>Registrando</span>
                                     </LoadingButton>
                                 )}
                             </Grid>
