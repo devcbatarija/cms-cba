@@ -205,6 +205,12 @@ const NavBar = () => {
               </Menu>
               {/* final */}
               <Link
+                to="/educationUSA"
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
+              >
+                Educacion USA
+              </Link>
+              <Link
                 to="/about"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
