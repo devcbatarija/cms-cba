@@ -33,6 +33,7 @@ import ProgramAdults from './components/programs/adults';
 import ProgramTeens from './components/programs/teens';
 import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
 import EventNav from './components/dashboard/calendario/eventNav';
+import EducationUSA from './components/educationUSA/EducationUSA';
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -88,6 +89,7 @@ function App() {
         <Route path='/publications' element={<Publications />} />
         <Route path='/programs/adults' element={<ProgramAdults />} />
         <Route path='/programs/teens' element={<ProgramTeens />} />
+        <Route path='/educationUSA' element={<EducationUSA />} />
 
         
         {/* Ruta del dashboard, sin verificación de autenticación */}
