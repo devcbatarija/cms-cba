@@ -22,7 +22,7 @@ const ProgramChildren = () => {
               </div>
             </div>
 
-            <div className="mt-4 md:mt-0 md:ml-4 md:w-1/2 md:mt-4 text-justify pb-10 pl-10 pr-10 pt-10">
+            <div className="mt-4 md:mt-0 md:ml-4 md:w-1/2 md:mt-4 text-justify pb-4 pl-4 pr-6 pt-4">
               <div className='imagen flex items-center h-full'>
                 <img className='imagenPequena w-30 h-20' src="https://th.bing.com/th/id/R.f4d824992072c70247fce6773a393b6f?rik=sflnahOaaHzPwQ&pid=ImgRaw&r=0" alt="estudianteIcon" />
               </div>
@@ -46,7 +46,7 @@ const ProgramChildren = () => {
           </div>
 
           <div id='2' className="mt-4 p-4 rounded-lg text-gray-700 blur-10 flex flex-col md:flex-row border-b border-gray-300 ">
-            <div className="w-full md:w-1/2 mt-4 p-5 rounded-lg text-center">
+            <div className="w-full md:w-1/2 mt-4 p-2 rounded-lg text-center">
               <div className='imagen flex items-center '>
                 <img className='imagenPequena w-15 h-20' src="https://cdn.goconqr.com/uploads/media/image/18714397/desktop_a7d21e94-1811-4ac5-a226-4e8e8494f284.jpg" alt="estudianteIcon" />
               </div>
