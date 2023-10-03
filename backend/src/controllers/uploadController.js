@@ -40,6 +40,7 @@ const uploadImage = async ({filePath,type}) => { //RECIBIMOS BASE64
                 throw new Error('La carga falló');
             }
         }
+        console.log("subida "+urlsComplet)
         return {message:"Las imagenes se subieron exitosamente",results:urlsComplet}
     } catch (error) {
         return error;
