@@ -23,7 +23,6 @@ import CalendarioClient from './components/calendar/calendar';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
 import ProgramChildren from './components/programs/children';
-import ProgramList from './components/programs/programs';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
 import Footer from './components/footer/footer';
@@ -86,7 +85,6 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/calendar' element={<CalendarioClient />} />
-        <Route path='/programs' element={<ProgramList />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/programs/children' element={<ProgramChildren />} />
