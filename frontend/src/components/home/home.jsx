@@ -134,7 +134,7 @@ const Home = () => {
               cargo={t.cargo} 
               comentario={t.comentario}
               type={"Home"}
-              imagen={t.Usuario.image}
+              imagen={t.imagen}
               ></TestimonioPreview>
             )
           })

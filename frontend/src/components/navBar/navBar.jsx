@@ -176,7 +176,11 @@ const NavBar = () => {
               </Link>
               {/* inicio */}
             
-              <Button color="inherit" name="programas" onClick={handleClick}  >Programas</Button>
+              <Link 
+              name="programas"
+              onClick={handleClick} 
+              style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
+              >Programas</Link>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.programas}
@@ -184,6 +188,9 @@ const NavBar = () => {
                 open={Boolean(anchorEl.programas)}
                 name="programas"
                 onClose={handleClose}
+                sx={{
+                  marginTop:"20px"
+                }}
               >
                 <MenuItem onClick={handleClose} component={Link} to="/programs/children">Niños</MenuItem>
                 <MenuItem onClick={handleClose} component={Link} to="/programs/teens">Adolecentes</MenuItem>
@@ -191,7 +198,7 @@ const NavBar = () => {
               </Menu>
               {/* final */}
               {/* inicio */}
-              <Button color="inherit" name="publicaciones" onClick={handleClick}  >Publicaciones</Button>
+              <Link style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }} name="publicaciones" onClick={handleClick}  >Publicaciones</Link>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.publicaciones}
@@ -199,6 +206,9 @@ const NavBar = () => {
                 open={Boolean(anchorEl.publicaciones)}
                 onClose={handleClose}
                 name="Publicaciones"
+                sx={{
+                  marginTop:"20px"
+                }}
               >
                 <MenuItem component={Link}>Eventos</MenuItem>
                 <MenuItem component={Link}>Cartelera</MenuItem>
