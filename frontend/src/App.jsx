@@ -13,29 +13,27 @@ import { authValid } from "./redux-toolkit/actions/auth.Actions";
 import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
 
-import ProgramTable from "./components/dashboard/Programas/ProgramTables";
-import PublicationNav from "./components/dashboard/Publications/Nav";
-import TableUser from "./components/dashboard/Users/tableUser";
-import {
-  getEvents,
-  getEventsPredefinidos,
-} from "./redux-toolkit/actions/eventActions";
-import { Toaster } from "react-hot-toast";
-import Calendario from "./components/dashboard/calendario/calendario";
-import CalendarioClient from "./components/calendar/calendar";
-import { getPodcasts } from "./redux-toolkit/actions/podcastActions";
-import SpotifyPlayer from "./components/dashboard/Podcast/SpotifyPlayer";
-import ProgramChildren from "./components/programs/children";
-import ProgramList from "./components/programs/programs";
-import TablePublication from "./components/dashboard/Publications/PublicationTable";
-import ContarinerNewPublication from "./components/dashboard/Publications/containerNewPublication";
-import Footer from "./components/footer/footer";
-import { Publications } from "./components/publications/publications";
-import { TestimoniosContainer } from "./components/testimonios/testimoniosContainer";
-import ProgramAdults from "./components/programs/adults";
-import ProgramTeens from "./components/programs/teens";
-import ContarinerNewEvent from "./components/dashboard/calendario/containerEvent";
-import EventNav from "./components/dashboard/calendario/eventNav";
+import ProgramTable from './components/dashboard/Programas/ProgramTables';
+import PublicationNav from './components/dashboard/Publications/Nav';
+import TableUser from './components/dashboard/Users/tableUser';
+import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
+import { Toaster } from 'react-hot-toast';
+import Calendario from './components/dashboard/calendario/calendario';
+import CalendarioClient from './components/calendar/calendar';
+import { getPodcasts } from './redux-toolkit/actions/podcastActions';
+import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
+import ProgramChildren from './components/programs/children';
+import ProgramList from './components/programs/programs';
+import TablePublication from './components/dashboard/Publications/PublicationTable'
+import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
+import Footer from './components/footer/footer';
+import { Publications } from './components/publications/publications';
+import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
+import ProgramAdults from './components/programs/adults';
+import ProgramTeens from './components/programs/teens';
+import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
+import EventNav from './components/dashboard/calendario/eventNav';
+import EducationUSA from './components/educationUSA/EducationUSA';
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 
 function App() {
@@ -83,18 +81,19 @@ function App() {
     <>
       <div className="flex flex-col min-h-screen">
         {!isDashboardRoute && <NavBar />}
-        <div className="flex-grow">
-          <Routes>
-            <Route exact path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/calendar" element={<CalendarioClient />} />
-            <Route path="/programs" element={<ProgramList />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/programs/children" element={<ProgramChildren />} />
-            <Route path="/publications" element={<Publications />} />
-            <Route path="/programs/adults" element={<ProgramAdults />} />
-            <Route path="/programs/teens" element={<ProgramTeens />} />
+      <div className="flex-grow">
+        <Routes>
+        <Route exact path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/calendar' element={<CalendarioClient />} />
+        <Route path='/programs' element={<ProgramList />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/programs/children' element={<ProgramChildren />} />
+        <Route path='/publications' element={<Publications />} />
+        <Route path='/programs/adults' element={<ProgramAdults />} />
+        <Route path='/programs/teens' element={<ProgramTeens />} />
+        <Route path='/educationUSA' element={<EducationUSA />} />
 
             {/* Ruta del dashboard, sin verificación de autenticación */}
             {auth && (
