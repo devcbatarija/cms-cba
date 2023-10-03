@@ -7,14 +7,14 @@ const rectangleStyle1 = {
 const chevronStyle1 = {
     width: "0",
     height: "0",
-    borderTop: "16px solid transparent",
-    borderBottom: "16px solid transparent",
+    borderTop: "20px solid transparent",
+    borderBottom: "20px solid transparent",
     position: "absolute",
     left: "0"
 };
 export default function Flecha({color}) {
     return (
-        <div className="flex p-2">
+        <div className="flex p-3">
             <div style={rectangleStyle1}>
                 <div
                     style={{
@@ -27,15 +27,15 @@ export default function Flecha({color}) {
             <div className="flex gap-1">
                 <div
                     style={{
-                        width: "10px",
-                        height: "32px",
+                        width: "20px",
+                        height: "40px",
                         backgroundColor: `${color}`
                     }}
                 ></div>
                 <div
                     style={{
-                        width: "30px",
-                        height: "32px",
+                        width: "40px",
+                        height: "40px",
 
                         backgroundColor: `${color}`
                     }}
