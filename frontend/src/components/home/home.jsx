@@ -19,18 +19,15 @@ import cuarta from "../../assets/4.jpeg";
 import { TestimonioPreview } from "../testimonios/testimonioPreview";
 
 const dataImage = [primera, segunda, tercera, cuarta];
-const comentario =
-  "I love your system. I am comletely blown away.\nCribrocket " +
-  "is exactly what our business has been lacking.";
+ 
 const Home = () => {
   const [dataCalc, setDataCalc] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
   const dispatch = useDispatch();
   const multimediadata = useSelector(
     (state) => state.publications.publications
-  );
-  const bannerRef = useRef();
-
+  ); 
+  const testimonios=useSelector((state)=>state.testimonios.testimonios);
   const calc = () => {
     let calcData = [];
     for (let c of multimediadata) {
@@ -39,11 +36,7 @@ const Home = () => {
     }
     setDataCalc(calcData);
   };
-
-  const data = () => {
-    dispatch(test());
-  };
-
+ 
   useEffect(() => {
     dispatch(getAllPublication());
   }, []);
@@ -55,24 +48,6 @@ const Home = () => {
   }, [multimediadata]); // Agrega multimediadata como dependencia
 
   useEffect(() => {
-    // const observer = new IntersectionObserver(
-    //   ([entry]) => {
-    //     setIsVisible(entry.isIntersecting);
-    //   },
-    //   {
-    //     root: null,
-    //     rootMargin: '0px',
-    //     threshold: 0.1
-    //   }
-    // );
-    // if (bannerRef.current) {
-    //   observer.observe(bannerRef.current);
-    // }
-    // return () => {
-    //   if (bannerRef.current) {
-    //     observer.unobserve(bannerRef.current);
-    //   }
-    // };
   }, []);
 
   const sortedPublications = [...multimediadata].sort((a, b) => {
@@ -141,7 +116,29 @@ const Home = () => {
       </div>
       <StatisticsBanner></StatisticsBanner>
       <div className="flex flex-col w-full items-center">
-        <TestimonioPreview nombre={"Olivio"} apellidos={"Subelza"} cargo={"Teacher CBA."} comentario={comentario}></TestimonioPreview>
+        {
+          !testimonios.length>0?(
+            <div>Aqui se verán los testimonios</div>
+          ):(
+            null
+          )
+        }
+        {
+          testimonios && testimonios.map((t,index)=>{
+            if(index==testimonios.length-1 )
+            return(
+              <TestimonioPreview 
+              key={t.id_Testimonios}
+              nombre={t.nombre} 
+              apellidos={t.apellidos} 
+              cargo={t.cargo} 
+              comentario={t.comentario}
+              type={"Home"}
+              imagen={t.Usuario.image}
+              ></TestimonioPreview>
+            )
+          })
+        }
       </div>
       <CuadroInscripcion></CuadroInscripcion>
     </div>

@@ -6,7 +6,7 @@ import eventSlices from '../slices/eventSlices';
 import publicationSlices from '../slices/publicationSlices';
 import programSlices from '../slices/programSlices';
 import podcastSlices from '../slices/podcastSlices';
-
+import testimonioSlices from '../slices/testimonioSlices';
 
 const store = configureStore({
   reducer: {
@@ -16,7 +16,8 @@ const store = configureStore({
     events:eventSlices,
     publications: publicationSlices,
     programs: programSlices,
-    podcasts:podcastSlices
+    podcasts:podcastSlices,
+    testimonios:testimonioSlices
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });

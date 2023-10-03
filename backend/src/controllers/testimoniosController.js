@@ -1,9 +1,13 @@
-const {Testimonios} = require("../db")
+const {Testimonios,Usuario} = require("../db")
 
 module.exports={
     getAllTestimonios:async()=>{
         try {
-            const response=await Testimonios.findAll();
+            const response=await Testimonios.findAll({
+                include:[{
+                    model:Usuario
+                }]
+            });
             return response;
         } catch (error) {
             return error;
@@ -12,7 +16,8 @@ module.exports={
     createTestimonio:async(testimonio)=>{
         try {
             const response=await Testimonios.create(testimonio);
-            return response;
+            const allResponse=await Testimonios.findAll();
+            return allResponse;
         } catch (error) {
             return error;
         }

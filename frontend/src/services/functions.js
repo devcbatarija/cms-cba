@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const handleUpload = (files) => {
   return new Promise((resolve, reject) => {
     try {
@@ -58,3 +60,19 @@ export const calcularTimestate = (fecha) =>{
   }
   return(`Hace ${tiempoTranscurrido} aproximadamente`);
   }
+export const uploadImgbb =async (base64DataArray) => {
+  try {
+    const response = await axios.post("/files/upload", {
+      filePath: base64DataArray,
+      type: "image",
+    });
+    if(response.data.code=="ETIMEDOUT"){
+      return {status:503, results:"Servicio no disponible"};
+    }
+    if (response.data.results) {
+      return {status:200, results:response.data.results};
+    }
+  } catch (error) {
+    return {status:'error', message:error.message};
+  }
+}
