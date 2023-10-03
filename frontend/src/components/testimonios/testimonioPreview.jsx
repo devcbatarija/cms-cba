@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
 import React from "react";
 
-export const TestimonioPreview = ({ nombre, apellidos, cargo, comentario }) => {
+export const TestimonioPreview = ({ testimonios, nombre, apellidos, cargo, comentario, imagen,type }) => {
   
   const renderDescription = () => {
     return {
@@ -10,9 +10,14 @@ export const TestimonioPreview = ({ nombre, apellidos, cargo, comentario }) => {
   };
   return (
     <div 
-    className="flex sm:w-6/6  px-4">
+    className={`flex w-full ${ type=="Home"?(
+      "sm:w-8/12 md:w-7/12 lg:w-6/12 xl:w-6/12  2xl:w-5/12"
+      ):(
+        ""
+      )
+      } px-4`}>
       <div 
-      style={{
+      style={{ 
         minHeight:'30vh'
       }}
       className="flex flex-col w-full border bg-white rounded-lg p-4 gap-1 shadow-md">
@@ -41,15 +46,20 @@ export const TestimonioPreview = ({ nombre, apellidos, cargo, comentario }) => {
             </blockquote>
           </div>
         </div>
-        <div className="flex w-full gap-2 gap-8 sm:gap-1 md:gap-1">
-          <div className="flex w-1/6 sm:w-1/6 md:w-1/6 lg:w-1/6 pl-8 sm:pl-4 items-center ">
+        <div className="flex w-full gap-2 gap-8 sm:gap-1 md:gap-0">
+          <div className="flex w-1/6 sm:w-1/6 md:w-1/6 lg:w-1/6 pl-8 sm:pl-4 items-center justify-center">
               <Avatar 
               className="w-full h-full"
-              src="https://images.unsplash.com/photo-1514673645677-5162aa89f8d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"></Avatar>
+              src={imagen}>
+              </Avatar>
           </div>
           <div className="flex flex-col w-4/6 sm:w-5/6 md:w-5/6 justify-center">
             <h1 className="text-black font-bold text-xs sm:text-xs md:text-md ">{nombre+" "+apellidos}</h1>
-            <p className="text-gray-600 text-xs sm:text-xs">{cargo}</p>
+            <p className="text-gray-600 text-xs sm:text-xs">{
+              type=="Home"?cargo:(
+                testimonios.cargo=="Otro"?testimonios.cargoTwo:cargo
+              )
+            }</p>
           </div>
         </div>
       </div>
