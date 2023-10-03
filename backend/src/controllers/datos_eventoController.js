@@ -7,12 +7,15 @@ module.exports = {
 
     getAllDatosEvento: async () => {
         try {
+            
             const datosEvento = await Dato_Evento.findAll({
                 include: [{
                     model: Evento
 
                 }]
             });
+            console.log("aqui")
+
             const eventos = await Evento.findAll({
                 where: {
                     id: {

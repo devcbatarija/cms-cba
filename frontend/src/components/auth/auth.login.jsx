@@ -41,11 +41,7 @@ const Login = () => {
       });
       const response = await axios.post("users/login", form, {
         withCredentials: true,
-      });
-      if (response.data.messageError) {
-        setError(response.data.messageError);
-        return;
-      }
+      }); 
       toast.success("Inicio de sesión exitoso");
       dispatch(signin(response.data));
     } catch (error) {
