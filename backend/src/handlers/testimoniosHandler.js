@@ -11,7 +11,7 @@ module.exports={
     },
     createTestimonio:async(req,res)=>{
         try {
-            const result=await createTestimonio();
+            const result=await createTestimonio(req.body);
             res.status(200).json(result)
         } catch (error) {
             res.status(400).json({error:error.message})
