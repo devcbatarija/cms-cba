@@ -14,7 +14,7 @@ const chevronStyle1 = {
 };
 export default function Flecha({color}) {
     return (
-        <div className="flex p-3">
+        <div className="flex p-0.5">
             <div style={rectangleStyle1}>
                 <div
                     style={{

@@ -1,37 +1,33 @@
 export default function Steps({ steps, index, type, description, color }) {
     const chevronStyle = {
         width: "0",
-        height: "0",
+        // height: "0",
         borderTop: "16px solid transparent",
         borderBottom: "16px solid transparent",
         position: "absolute",
     };
 
     const circleStyle = {
-        display: "inline-block",
-        backgroundColor: color,  // Aplicar el color al círculo
-        borderRadius: "50%",
-        width: "32px",
-        height: "32px",
+        // display: "inline-block",
+        // backgroundColor: color,  // Aplicar el color al círculo
+        // borderRadius: "50%",
         margin: "0 10px",
         color: "white"
     };
 
     const rectangleStyleRight = {
-        display: "inline-block",
+        // display: "inline-block",
         backgroundColor: color,  // Aplicar el color al rectángulo derecho
-        width: "300px",
-        height: "30px",
+        // height: "27px",
         margin: "0",
         position: "relative",
         color: "white"
     };
 
     const rectangleStyleLeft = {
-        display: "inline-block",
+        // display: "inline-block",
         backgroundColor: color,  // Aplicar el color al rectángulo izquierdo
-        width: "100px",
-        height: "30px",
+        // height: "27px",
         margin: "0",
         position: "relative",
         color: "white"
@@ -39,8 +35,8 @@ export default function Steps({ steps, index, type, description, color }) {
 
     return (
         <div className="text-center">
-            <div className="Titulo">
-                <div style={{ ...rectangleStyleLeft, width: "30%" }}>
+            <div className="flex w-full">
+                <div className="flex justify-center font-bold uppercase items-center w-5/12 h-8" style={{ ...rectangleStyleLeft }}>
                     <div
                         style={{
                             ...chevronStyle,
@@ -50,10 +46,15 @@ export default function Steps({ steps, index, type, description, color }) {
                     ></div>
                     <p>{steps}</p>
                 </div>
-                <div style={circleStyle}>
-                    <p>{index}</p>
+                <div className="flex justify-center font-bold uppercase items-center w-2/12 h-8 " style={circleStyle}>
+                    <p
+                    style={{
+                        backgroundColor:color
+                    }}
+                    className="rounded-2xl w-full h-full"
+                    >{index}</p>
                 </div>
-                <div style={{ ...rectangleStyleRight, width: "55%" }}>
+                <div className="flex justify-center font-bold uppercase items-center w-5/12 h-8" style={{ ...rectangleStyleRight,}}>
                     <div
                         style={{
                             ...chevronStyle,
@@ -64,7 +65,7 @@ export default function Steps({ steps, index, type, description, color }) {
                     <p>{type}</p>
                 </div>
             </div>
-            <div className="text-justify  pb-3 pl-10 pr-10 pt-3">
+            <div className="text-justify   pb-3 pl-10 pr-10 pt-3">
                 <p>{description}</p>
             </div>
         </div>

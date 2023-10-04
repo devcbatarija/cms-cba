@@ -156,7 +156,7 @@ const NavBar = () => {
                   }}
                   color="inherit"
                 >
-                  Login
+                  Iniciar sesion
                 </Button>
               </Link> 
             )}
@@ -250,7 +250,7 @@ const NavBar = () => {
                   onClick={() => {
                     setAuth(!auth);
                   }}
-                  color="inherit"
+                  style={{ color: "inherit", textDecoration: "none",display:'grid',alignContent:'center'}}
                 >
                   INICIAR SESION
                 </Button>
