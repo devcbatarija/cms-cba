@@ -20,15 +20,13 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
 import PositionedMenu from "./positionedMenu";
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import cbaImage from '../../assets/cba.png';
-
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import cbaImage from "../../assets/cba.png";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 // ...
-
-
 
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -36,35 +34,46 @@ const NavBar = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("900"));
   const [auth, setAuth] = useState(false);
   const authlogin = useSelector((state) => state.login);
-  
+
   const [anchorEl, setAnchorEl] = useState({
-    programas:null,
-    publicaciones:null
+    programas: null,
+    publicaciones: null,
   });
-  
+
   const handleClick = (event) => {
     setAnchorEl({
       ...anchorEl,
-      [event.target.name]: event.currentTarget
+      programas: null,
+      publicaciones: null,
+    });
+    setAnchorEl({
+      ...anchorEl,
+      [event.target.name]: event.currentTarget,
     });
   };
-  
+
   const handleClose = (event) => {
     setAnchorEl({
       ...anchorEl,
-      programas:null,
-      publicaciones:null
-    })
+      programas: null,
+      publicaciones: null,
+    });
   };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  
+
   const drawer = (
-    <div style={{ width: '100%' }}>
-      <List> 
-        {["/","/calendar", "/about"].map((text, index) => (
-          <div key={text} style={{ borderBottom: '1px solid #cdd1dc', margin: '0 20px 0 20px' }}>
+    <div style={{ width: "100%" }}>
+      <List>
+        {["/", "/calendar", "/about"].map((text, index) => (
+          <div
+            key={text}
+            style={{
+              borderBottom: "1px solid #cdd1dc",
+              margin: "0 20px 0 20px",
+            }}
+          >
             <ListItem
               sx={{}}
               onClick={handleDrawerToggle}
@@ -74,7 +83,7 @@ const NavBar = () => {
               <ListItemText
                 primary={text === "/" ? "Home" : text.replace("/", "")}
                 sx={{
-                  textTransform: 'capitalize'
+                  textTransform: "capitalize",
                 }}
               />
             </ListItem>
@@ -84,21 +93,25 @@ const NavBar = () => {
     </div>
   );
   return (
-    <AppBar position="static"
+    <AppBar
+      position="static"
       sx={{
-        backgroundColor: 'rgb(0, 46, 95);',
+        backgroundColor: "rgb(0, 46, 95);",
         color: "white",
         borderBottom: "1px solid #cdd1dc",
-        boxShadow: 'none', 
+        boxShadow: "none",
         top: 0,
-        zIndex:2
-      }}>
-      <Toolbar sx={{
-        shadow: 'none',
-        display: 'flex',
-        justifyContent: 'space-between',
-        height: '100%',
-      }} >
+        zIndex: 2,
+      }}
+    >
+      <Toolbar
+        sx={{
+          shadow: "none",
+          display: "flex",
+          justifyContent: "space-between",
+          height: "100%",
+        }}
+      >
         {isMobile ? (
           <>
             <IconButton
@@ -111,7 +124,7 @@ const NavBar = () => {
               <MenuIcon />
             </IconButton>
             <Drawer
-              sx={{ width: '100%' }}
+              sx={{ width: "100%" }}
               anchor={"left"}
               open={mobileOpen}
               onClose={handleDrawerToggle}
@@ -120,12 +133,22 @@ const NavBar = () => {
               }}
             >
               <div className="flex flex-row drawner-css">
-                <Typography>
-                  hola
-                </Typography>
+                <Typography>hola</Typography>
                 <span onClick={handleDrawerToggle}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fillRule="evenodd" clipRule="evenodd" d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L7 6.29289L12.6464 0.646447C12.8417 0.451184 13.1583 0.451184 13.3536 0.646447C13.5488 0.841709 13.5488 1.15829 13.3536 1.35355L7.70711 7L13.3536 12.6464C13.5488 12.8417 13.5488 13.1583 13.3536 13.3536C13.1583 13.5488 12.8417 13.5488 12.6464 13.3536L7 7.70711L1.35355 13.3536C1.15829 13.5488 0.841709 13.5488 0.646447 13.3536C0.451184 13.1583 0.451184 12.8417 0.646447 12.6464L6.29289 7L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z" fill="currentColor"></path></svg>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L7 6.29289L12.6464 0.646447C12.8417 0.451184 13.1583 0.451184 13.3536 0.646447C13.5488 0.841709 13.5488 1.15829 13.3536 1.35355L7.70711 7L13.3536 12.6464C13.5488 12.8417 13.5488 13.1583 13.3536 13.3536C13.1583 13.5488 12.8417 13.5488 12.6464 13.3536L7 7.70711L1.35355 13.3536C1.15829 13.5488 0.841709 13.5488 0.646447 13.3536C0.451184 13.1583 0.451184 12.8417 0.646447 12.6464L6.29289 7L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
                 </span>
               </div>
               {drawer}
@@ -158,29 +181,73 @@ const NavBar = () => {
                 >
                   Login
                 </Button>
-              </Link> 
+              </Link>
             )}
           </>
         ) : (
           <>
-            <Typography variant="h6" style={{ display: 'flex ', gap: '5%', flexGrow: 1 }}>
+            <Typography
+              variant="h6"
+              className="flex gap-20 sm:gap-8 md:gap-5 lg:gap-10 xl:gap-14 2xl:gap-15"
+            >
               CBA
-              <Link to="/" style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}>
-               Inicio
-              </Link>
-              <Link
+              <Button
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
+                >
+                <Link
+                to="/"
+                >
+                Inicio
+                </Link>
+              </Button>
+              <Button
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
+                >
+                <Link
                 to="/calendar"
-                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
-              >
+                >
                 Calendario
-              </Link>
+                </Link>
+              </Button>
               {/* inicio */}
-            
-              <Link 
-              name="programas"
-              onClick={handleClick} 
-              style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
-              >Programas</Link>
+              <Button
+                name="programas"
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
+              >
+                Programas
+              </Button>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.programas}
@@ -189,16 +256,51 @@ const NavBar = () => {
                 name="programas"
                 onClose={handleClose}
                 sx={{
-                  marginTop:"20px"
+                  marginTop: "16px",
                 }}
               >
-                <MenuItem onClick={handleClose} component={Link} to="/programs/children">Niños</MenuItem>
-                <MenuItem onClick={handleClose} component={Link} to="/programs/teens">Adolecentes</MenuItem>
-                <MenuItem onClick={handleClose} component={Link} to="/programs/adults">Adultos</MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs/children"
+                >
+                  Niños
+                </MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs/teens"
+                >
+                  Adolecentes
+                </MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs/adults"
+                >
+                  Adultos
+                </MenuItem>
               </Menu>
               {/* final */}
               {/* inicio */}
-              <Link style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }} name="publicaciones" onClick={handleClick}  >Publicaciones</Link>
+              <Button 
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
+                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
+                name="publicaciones"
+                onClick={handleClick}
+              >
+                Publicaciones
+              </Button>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.publicaciones}
@@ -207,25 +309,51 @@ const NavBar = () => {
                 onClose={handleClose}
                 name="Publicaciones"
                 sx={{
-                  marginTop:"20px"
+                  marginTop: "16px",
                 }}
               >
                 <MenuItem component={Link}>Eventos</MenuItem>
                 <MenuItem component={Link}>Cartelera</MenuItem>
               </Menu>
               {/* final */}
-              <Link
-                to="/educationUSA"
-                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
+              <Button
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
               >
+                <Link
+                  to="/educationUSA"
+                >
                 Educacion USA
-              </Link>
-              <Link
+                </Link>
+              </Button>
+              <Button
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop:"4px",
+                  textTransform:"none"
+                }}
+                >
+                <Link
                 to="/about"
-                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
-              >
+                >
                 Acerca de nosotros
-              </Link>
+                </Link>
+              </Button>
             </Typography>
             {authlogin.auth ? (
               <Tooltip>
