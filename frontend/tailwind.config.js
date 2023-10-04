@@ -8,7 +8,8 @@ export default {
     extend: {
       height: {
         '118': '28rem',
-        '120':'32rem'
+        '120':'32rem',
+        '80vh': '80vh'
       }
     },
   },
