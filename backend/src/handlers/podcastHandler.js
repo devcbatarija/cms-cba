@@ -1,46 +1,8 @@
-const { getCredentials, createCredentials, editCredentials, deleteCredentials, getPodcasts, getPodcastsBd, addPodcastBd } = require("../controllers/podcastController")
+const { getPodcastsBd, addPodcastAws,addPodcastBd } = require("../controllers/podcastController") 
+const fs=require('fs');
 
+ 
 module.exports={
-    getCredentials:async(req,res)=>{
-        try {
-            const result=await getCredentials();
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json(error);
-        }
-    },
-    createCredentials:async(req,res)=>{
-        try {
-            const result=await createCredentials(req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json(error);
-        }
-    },
-    editCredentials:async(req,res)=>{
-        try {
-            const result=await editCredentials(req.params.id,req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            
-        }
-    },
-    deleteCredentials:async(req,res)=>{
-        try {
-            const result=await deleteCredentials(req.params.id);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json(error);
-        }
-    },
-    getPodcasts:async(req,res)=>{
-        try {
-            const result=await getPodcasts(req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json(error);
-        }
-    },
     getPodcastsBd:async(req,res)=>{
         try {
             const result=await getPodcastsBd();
@@ -49,12 +11,25 @@ module.exports={
             res.status(401).json(error);
         }
     },
-    addPodcastBd:async(req,res)=>{
+    addPodcastAws:async(req,res)=>{
+        const filePath=req.files.media;
         try {
-            const result = await addPodcastBd(req.body.song);
+            console.log(filePath)
+            const result = await addPodcastAws(filePath);
+            fs.unlink(filePath.tempFilePath, err => {
+                if (err) console.error(`Error deleting temp file ${filePath.tempFilePath}:`, err);
+            }); 
             res.status(200).json(result);
         } catch (error) {
             res.status(409).json({error:error.message});
         }
-    }
+    }, 
+    addPodcastBd:async(req,res)=>{ 
+        try { 
+            const result = await addPodcastBd(req.body);
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(409).json({error:error.message});
+        }
+    },
 }

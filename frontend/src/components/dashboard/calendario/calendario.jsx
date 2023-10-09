@@ -269,9 +269,9 @@ const Calendario = () => {
                                 <div className='absolute right-0'>
                                     <Button onClick={goToToday}>Today</Button>
                                     <select onChange={(e) => changeView(e.target.value)}>
-                                        <option value="dayGridMonth">Month</option>
-                                        <option value="timeGridWeek">Week</option>
-                                        <option value="multiMonthYear">Year</option>
+                                        <option value="dayGridMonth">Mes</option>
+                                        <option value="timeGridWeek">Semana</option>
+                                        <option value="multiMonthYear">Año</option>
                                     </select>
                                 </div>
                             </div>

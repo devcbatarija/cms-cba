@@ -13,7 +13,7 @@ module.exports={
                 }
             });
             const optionsMail={
-                from: '"Fred Foo 👻" <subelzaolivitocabezas@gmail.com>',
+                from: '"CBA" <subelzaolivitocabezas@gmail.com>',
                 to: correo, 
                 subject: "Verificación de correo electrónico! ✔",
                 text: "Hello world?",
@@ -29,7 +29,7 @@ module.exports={
                 if(error){
                     reject({error:error});
                 }else{
-                    resolve({success:"Correo enviado exitosamente!"})
+                    resolve({success:"¡Registro Exitoso! Verifica tu Correo Electrónico",info:info})
                 }
             })
         })

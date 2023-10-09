@@ -51,7 +51,17 @@ const Register = () => {
       ); ///valid/email
       if (response.status === 200) {
         setSpinner(false);
-        toast.success("Registro exitoso");
+        toast.success(response.data.emailState, {
+          style: {
+            border: '1px solid #713200',
+            padding: '16px',
+            color: '#713200',
+          },
+          iconTheme: {
+            primary: '#713200',
+            secondary: '#FFFAEE',
+          },
+        });
         navigate("/login");
       }
       if (response.data.messageError) {
@@ -156,6 +166,7 @@ const Register = () => {
             {spinner ? (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <CircularProgress />
+                hola
               </Box>
             ) : (
               <Button 
