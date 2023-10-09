@@ -1,0 +1,47 @@
+/* Estilos para el contenedor principal de la mampostería */
+.masonry-grid {
+    display: flex;
+    margin-left: -16px;
+    /* Ajusta el margen izquierdo según tus necesidades */
+    width: auto;
+}
+
+/* AmericanSpaces.css (o tu archivo de estilos) */
+/* Estilos para dispositivos móviles */
+@media (max-width: 767px) {
+    .masonry-grid-column {
+        width: 100% !important;
+        /* Ancho completo para las imágenes en dispositivos móviles */
+    }
+}
+
+/* Estilos para las columnas de la mampostería */
+.masonry-grid-column {
+    padding-left: 16px;
+    /* Ajusta el espacio entre las columnas según tus necesidades */
+    background-clip: padding-box;
+    /* Asegura que el fondo no se extienda fuera del contenido */
+}
+
+/* Estilos adicionales para las imágenes (si es necesario) */
+.masonry-grid-column img {
+    width: 100%;
+    /* Asegura que las imágenes se ajusten al ancho de la columna */
+    height: auto;
+    /* Permite que la altura se ajuste automáticamente para mantener la proporción */
+    /* margin-bottom: 16px; Ajusta el espacio entre las imágenes según tus necesidades */
+}
+
+/* Estilos para la descripción que aparece en la parte posterior de la imagen */
+.masonry-grid-column .description {
+    background-color: rgba(0, 0, 0, 0.8);
+    /* Fondo semitransparente */
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}

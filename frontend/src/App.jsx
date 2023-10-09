@@ -21,7 +21,7 @@ import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
 import CalendarioClient from './components/calendar/calendar';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
-import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
+import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';
 import ProgramChildren from './components/programs/children';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
@@ -34,6 +34,10 @@ import ContarinerNewEvent from './components/dashboard/calendario/containerEvent
 import EventNav from './components/dashboard/calendario/eventNav';
 import EducationUSA from './components/educationUSA/EducationUSA';
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
+import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
+import ProgramaNav from "./components/dashboard/Programas/Nav";
+import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
+import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -80,19 +84,20 @@ function App() {
     <>
       <div className="flex flex-col min-h-screen">
         {!isDashboardRoute && <NavBar />}
-      <div className="flex-grow">
-        <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/calendar' element={<CalendarioClient />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/programs/children' element={<ProgramChildren />} />
-        <Route path='/publications' element={<Publications />} />
-        <Route path='/programs/adults' element={<ProgramAdults />} />
-        <Route path='/programs/teens' element={<ProgramTeens />} />
-        <Route path='/educationUSA' element={<EducationUSA />} />
-
+        <div className="flex-grow">
+          <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/calendar' element={<CalendarioClient />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/programs/children' element={<ProgramChildren />} />
+            <Route path='/publications' element={<Publications />} />
+            <Route path='/programs/adults' element={<ProgramAdults />} />
+            <Route path='/programs/teens' element={<ProgramTeens />} />
+            <Route path='/educationUSA' element={<EducationUSA />} />
+            <Route path="/americanSpaces" element={<AmericanSpaces />} />
+            <Route path='/americanSpaces/Gallery360' element={<GalleryContainer />} />
             {/* Ruta del dashboard, sin verificación de autenticación */}
             {auth && (
               <Route path="/dashboard" element={<Dashboard></Dashboard>}>
@@ -114,6 +119,16 @@ function App() {
                   <Route
                     path="/dashboard/publinav/add"
                     element={<ContarinerNewPublication />}
+                  />
+                </Route>
+                <Route path="/dashboard/program" element={<ProgramaNav />}>
+                  <Route
+                    path="/dashboard/program/table"
+                    element={<ProgramTable />}
+                  />
+                  <Route
+                    path="/dashboard/program/add"
+                    element={<ContarinerNewPrograma />}
                   />
                 </Route>
                 <Route
