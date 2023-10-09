@@ -3,6 +3,7 @@ const cookieParser=require("cookie-parser");
 const morgan=require("morgan");
 const cors=require("cors");
 const bodyParser = require("body-parser");
+const fileUpload=require('express-fileupload');
 
 const router = require("./routes/index.js"); //importamos rutas
 
@@ -28,7 +29,10 @@ server.use((req,res,next)=>{
     next();
 })
 
-
+server.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : './assets'
+  }));
 server.use("/api",router); //rutas
 //http://localhost:3001/api/
 server.use(cors({

@@ -1,38 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const getPodcasts = createAsyncThunk("/getPodcasts", async ()=>{
-    try {
-        const podcasts= await axios.get("podcast");
-        return podcasts.data.results;
-    } catch (error) {
-        return error;
-    }
-})
-export const hadleDeleteState = createAsyncThunk("/hadleDeleteState", async ()=>{
-    try {
-        return [];
-    } catch (error) {
-        return error;
-    }
-})
 export const getPodcastSongs = createAsyncThunk("/getPodcastSongs", async ()=>{
     try {
-        const podcasts= await axios.get("podcast/songs/mgr");
+        const podcasts= await axios.get("podcast/songs/");
+        console.log(podcasts.data.results)
         return podcasts.data.results;
     } catch (error) {
         return error;
     }
 })
-export const getPodcastSongsSpotify = createAsyncThunk("/getPodcastSongsSpotify", async ({selec,accesToken,usId})=>{
-    const obj={
-        artistName:selec,
-        token:accesToken,
-        idUsuario:usId
-    }
+export const postPodcastSongsSpotify = createAsyncThunk("/postPodcastSongsSpotify", async (obj)=>{
     try {
-        const podcasts= await axios.post("podcast/songs",obj);
-        console.log(podcasts.data)
+        const podcasts= await axios.post("/song/upload",obj);
         return podcasts.data;
     } catch (error) {
         return error;
