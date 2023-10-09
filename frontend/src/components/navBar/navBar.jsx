@@ -221,6 +221,12 @@ const NavBar = () => {
                 Educacion USA
               </Link>
               <Link
+                to="/americanSpaces/Gallery360"
+                style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
+              >
+                Espacios Americanos
+              </Link>
+              <Link
                 to="/about"
                 style={{ color: "inherit", textDecoration: "none", fontSize:'.875rem',display:'grid',alignContent:'center' }}
               >
