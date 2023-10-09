@@ -40,8 +40,10 @@ module.exports = {
       }
       const emailsend=await sentTokenVerify(newUser.verificacion,newUser.correo)
       if(emailsend.error){
+        console.log(error)
         throw new Error(emailsend.error);
       }
+      console.log(emailsend)
       return {user:newUser,emailState:emailsend.success};
     } catch (error) {
       throw error;
@@ -125,7 +127,7 @@ module.exports = {
       if(!user){
         return "Email valido"
       }
-      throw new Error("El email ya existe.");
+      throw new Error("El usuario ya existe.");
     } catch (error) {
       throw error;
     }

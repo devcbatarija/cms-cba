@@ -1,0 +1,28 @@
+input[type="range"]::-webkit-slider-thumb {
+    background-color: #007acc; /* Cambia el color de fondo del pulgar */
+    width: 16px; /* Cambia el ancho del pulgar */
+    height: 16px; /* Cambia la altura del pulgar */
+    border: none; /* Elimina el borde del pulgar */
+    border-radius: 50%; /* Hace que el pulgar sea redondeado */
+    cursor: pointer; /* Cambia el cursor al pasar por encima del pulgar */
+  }
+  
+  /* Estilo para navegadores Firefox */
+  input[type="range"]::-moz-range-thumb {
+    background-color: #007acc;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* Estilo para navegadores Microsoft Edge */
+  input[type="range"]::-ms-thumb {
+    background-color: #007acc;
+    width: 16px;
+    height: 16px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+  }

@@ -26,7 +26,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import AddIcon from "@mui/icons-material/Add";
-import ModalAddPublication from "./modalAddPublication";
 import ModalUpdatePublication from "./modalUpdatePublication";
 import axios from "axios";
 
@@ -190,17 +189,17 @@ export default function PublicationTable() {
                 {row.estado ? "Visible" : "Oculto"}
               </TableCell>
               <TableCell align="center" sx={{
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"center"
-                }} >
-              {
-                row.multimedia.map((im)=>{
-                  return(
-                    <Avatar key={im} alt="Remy Sharp" src={im ? im : null} />
-                  )
-                })
-              }
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }} >
+                {
+                  row.multimedia.map((im) => {
+                    return (
+                      <Avatar key={im} alt="Remy Sharp" src={im ? im : null} />
+                    )
+                  })
+                }
               </TableCell>
               <TableCell align="center">
                 <Button

@@ -1,95 +1,9 @@
-const { Credencial, Podcast } = require("../db");
+const { Podcast } = require("../db");
+const { uploadFile } = require("../services/aws_s3"); 
 const {
-  getAccessToken,
-  getArtistId,
-  getArtistSongs,
-} = require("../services/spotifyservice");
-
+  AWS_CLOUDFRONT
+}=require('../services/s3');
 module.exports = {
-  getCredentials: async () => {
-    try {
-      const response = await Credencial.findAll();
-      return { results: response };
-    } catch (error) {
-      return error;
-    }
-  },
-  createCredentials: async (data) => {
-    try {
-      const credToken = await getAccessToken(
-        data.cliente_Id,
-        data.client_Secret
-      );
-      console.log(credToken);
-      if (!credToken) {
-        throw new Error("No es posible obtener el token de acceso.");
-      }
-      const response = await Credencial.create({
-        identificador: data.identificador,
-        cliente_Id: data.cliente_Id,
-        client_Secret: data.client_Secret,
-        token_Access: credToken,
-      });
-      return { token: credToken, results: response };
-    } catch (error) {
-      return error;
-    }
-  },
-  editCredentials: async (id, data) => {
-    console.log(id, data);
-    try {
-      const response = await Credencial.findByPk(id);
-      if (!response) {
-        throw new Error("La credencial no existe.");
-      }
-      const updateCredential = await Credencial.update(
-        {
-          cliente_Id: data.cliente_Id ? data.cliente_Id : response.cliente_Id,
-          client_Secret: data.client_Secret
-            ? data.client_Secret
-            : response.client_Secret,
-        },
-        {
-          where: {
-            id_Credencial: id,
-          },
-        }
-      );
-      console.log(updateCredential);
-      if (updateCredential[0] === 1) {
-        const dataUpdate = await Credencial.findAll();
-        return { message: "update success", results: dataUpdate };
-      }
-      return "Error!";
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  },
-  deleteCredentials: async (id) => {
-    try {
-      const response = await Credencial.findByPk(id);
-      if (!response) {
-        throw new Error("La credencial no existe.");
-      }
-      response.destroy();
-      const data = await Credencial.findAll();
-      return { results: data };
-    } catch (error) {}
-  },
-  getPodcasts: async ({ artistName, token, idUsuario }) => {
-    try {
-        console.log(artistName)
-        console.log(token)
-        console.log(idUsuario)
-      const idArtist = await getArtistId(artistName, token);
-      const response = await getArtistSongs(idArtist, token);
-      return response;
-    } catch (error) {
-      console.log(error.message);
-      throw error;
-    }
-  },
   getPodcastsBd: async () => {
     try {
       const response = await Podcast.findAll();
@@ -101,30 +15,31 @@ module.exports = {
       throw error;
     }
   },
-  addPodcastBd:async (song)=>{
+  addPodcastAws: async (filePath) => {
     try {
-      const response=await Podcast.findAll({where:{id_song:song.id_song}});
-      if(response.length > 0) {
-        throw new Error("The song has already been added");
-      }
-      const resultAdd=await Podcast.create(song);
-      return resultAdd;
-    } catch (error) {
-      console.log(error)
+      const result = await uploadFile(filePath); 
+      return result;
+    } catch (error) { 
       throw error;
     }
-  }
+  },
+  addPodcastBd: async (podcast) => {
+    console.log(podcast)
+    try {
+      const obj = {
+        epi_number: podcast.epi_number,
+        description: podcast.description,
+        authors: podcast.authors,
+        url_cloudfront: AWS_CLOUDFRONT+podcast.url_cloudfront,
+        image: podcast.image,
+        state: podcast.state,
+        UsuarioIdUsuario: podcast.UsuarioIdUsuario,
+      };
+      const result = await Podcast.create(obj); 
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  },
 };
-
- // for (let [index,p] of data.results.entries()) {
-      //   if (p.preview_url) {
-      //     const obj = {
-      //       name: p.name,
-      //       preview_url: p.preview_url,
-      //       images: p.album.images,
-      //       id_song: p.id,
-      //       state: true,
-      //     };
-      //     Podcast.create(obj);
-      //   }
-      // }
