@@ -117,6 +117,16 @@ function App() {
                     element={<ContarinerNewPublication />}
                   />
                 </Route>
+                <Route path="/dashboard/program" element={<ProgramaNav />}>
+                  <Route
+                    path="/dashboard/program/table"
+                    element={<ProgramTable />}
+                  />
+                  <Route
+                    path="/dashboard/program/add"
+                    element={<ContarinerNewPrograma />}
+                  />
+                </Route>
                 <Route
                   path="/dashboard/testimononios"
                   element={<TestimoniosContainer />}
