@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const handleUpload = (files) => {
+  console.log(files)
   return new Promise((resolve, reject) => {
     try {
       const arrayBase = [];
@@ -23,7 +24,7 @@ export const handleUpload = (files) => {
   });
 };
 
-const convertFileToBase64 = (file) => {
+const convertFileToBase64 = (file) => { 
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {

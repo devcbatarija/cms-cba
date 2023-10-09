@@ -42,8 +42,7 @@ const {
   Evento,
   Dato_Evento,
   Evento_Predefinido,
-  Programa,
-  Credencial,
+  Programa, 
   Podcast,
   Testimonios
 } = sequelize.models;
@@ -62,11 +61,11 @@ Evento_Predefinido.belongsTo(Usuario);
 Usuario.hasMany(Programa);
 Programa.belongsTo(Usuario);
 
-Usuario.hasMany(Credencial);
-Credencial.belongsTo(Usuario);
+// Usuario.hasMany(Credencial);
+// Credencial.belongsTo(Usuario);
 
-Credencial.hasMany(Podcast);
-Podcast.belongsTo(Credencial);
+Usuario.hasMany(Podcast);
+Podcast.belongsTo(Usuario);
 
 Usuario.hasMany(Testimonios);
 Testimonios.belongsTo(Usuario);

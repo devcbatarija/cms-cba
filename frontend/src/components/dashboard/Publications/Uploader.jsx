@@ -17,7 +17,7 @@ const UploadContainer = styled.div`
   background-color: #f8f9fa;
   border-radius: 1px;
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  width: 50%;
+  width: 100%;
   height: 50%;
   padding: 10px;
   display: flex;
