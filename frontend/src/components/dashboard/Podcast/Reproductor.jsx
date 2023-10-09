@@ -16,9 +16,8 @@ import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
 import toast from "react-hot-toast";
 
-const Reproductor = ({song, name,album,songMedatada,id_Credencial}) => {
+const Reproductor = ({song, name,imgSong,authors}) => {
     const [play,setPlay]=useState(false);
-    const theme = useTheme();
     const audioRef = useRef();
     const handleAddSong = async (songAdd) => {
       console.log(songAdd)
@@ -59,13 +58,12 @@ const Reproductor = ({song, name,album,songMedatada,id_Credencial}) => {
               <Typography component="div" variant="h5">
                 {name}
               </Typography>
+              <Typography className='text-gray-500' component="div" variant="p">
+                {authors}
+              </Typography>
             </CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-              {/* <IconButton aria-label="previous">
-                {song === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
-              </IconButton> */}
+            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}> 
               <IconButton
-              onClick={()=>handleAddSong(songMedatada)}
               >
               <AddIcon sx={{color:"gray",border:"1px solid gray",borderRadius:"50%"}} ></AddIcon>
               </IconButton>
@@ -77,16 +75,13 @@ const Reproductor = ({song, name,album,songMedatada,id_Credencial}) => {
               <IconButton aria-label="stop" onClick={() =>handlePlayPause(false)}>
               <StopIcon sx={{ height: 38, width: 38 }} />
             </IconButton>
-              }
-              {/* <IconButton aria-label="next">
-                {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
-              </IconButton> */}
+              } 
             </Box>
           </Box>
           <CardMedia
             component="img"
-            sx={{ width: 151 }}
-            image={album.images[1].url}
+            sx={{ width: 148,height:148 }}
+            image={imgSong}
             alt="Live from space album cover"
           />
         </Card>
