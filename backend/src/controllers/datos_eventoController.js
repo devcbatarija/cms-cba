@@ -9,9 +9,9 @@ module.exports = {
         try {
             
             const datosEvento = await Dato_Evento.findAll({
-                include:[{
-                    model:Evento
-                    
+                include: [{
+                    model: Evento
+
                 }]
             });
             console.log("aqui")
@@ -30,7 +30,58 @@ module.exports = {
                 evento.end = dayjs(evento.end).format('YYYY-MM-DD');
 
             });
-            return {Eventos:clonedEventos,datosEvento};
+            return { Eventos: clonedEventos, datosEvento };
+        } catch (error) {
+            return error;
+        }
+    },
+    getEventsByMonth: async (date) => {
+        try {
+            const startOfMonth = dayjs(date).startOf('month').toDate();
+            const endOfMonth = dayjs(date).endOf('month').toDate();
+            const datosEvento = await Dato_Evento.findAll({
+                include: [{
+                    model: Evento,
+                    where: {
+                        start: {
+                            [Sequelize.Op.between]: [startOfMonth, endOfMonth]
+                        }
+                    }
+
+                }]
+            });
+            const eventos = await Evento.findAll({
+                where: {
+                    id: {
+                        [Sequelize.Op.notIn]: datosEvento.map(dato => dato.EventoId)
+                    },
+                    start: {
+                        [Sequelize.Op.between]: [startOfMonth, endOfMonth]
+                    }
+                }
+            });
+            const clonedEventos = JSON.parse(JSON.stringify(eventos));
+            clonedEventos.forEach(evento => {
+
+                evento.start = dayjs(evento.start).format('YYYY-MM-DD');
+                evento.end = dayjs(evento.end).format('YYYY-MM-DD');
+
+            });
+            const clonedDatosEvento = JSON.parse(JSON.stringify(datosEvento));
+            clonedDatosEvento.forEach(datos => {
+
+                datos.Evento.start = dayjs(datos.Evento.start).format('YYYY-MM-DD');
+                datos.Evento.end = dayjs(datos.Evento.end).format('YYYY-MM-DD');
+
+            });
+            const combinedArray = clonedEventos.concat(clonedDatosEvento);
+            const sortedArray = [...combinedArray].sort((a, b) => {
+                const dateA = new Date(a.Evento ? a.Evento.start : a.start);
+                const dateB = new Date(b.Evento ? b.Evento.start : b.start);
+                return dateA - dateB;
+            });
+            
+            return { Eventos: sortedArray };
         } catch (error) {
             return error;
         }

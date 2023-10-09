@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./navbar.css";
 import {
@@ -16,6 +16,7 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  Collapse,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
@@ -31,20 +32,27 @@ import MenuItem from "@mui/material/MenuItem";
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("900"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("780"));
   const [auth, setAuth] = useState(false);
   const authlogin = useSelector((state) => state.login);
-
+  const [stateRuta, setStateRuta] = useState(true);
   const [anchorEl, setAnchorEl] = useState({
     programas: null,
     publicaciones: null,
+    multimedia: null
   });
+
+  const [open, setOpen] = useState(false); //este
+  const handleProgramasClick = () => {
+    setOpen(!open);
+  }; //este
 
   const handleClick = (event) => {
     setAnchorEl({
       ...anchorEl,
       programas: null,
       publicaciones: null,
+      multimedia:null
     });
     setAnchorEl({
       ...anchorEl,
@@ -57,36 +65,105 @@ const NavBar = () => {
       ...anchorEl,
       programas: null,
       publicaciones: null,
+      multimedia:null
     });
   };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  useEffect(() => {
+    !isMobile?setMobileOpen(false):null
+  }, [isMobile])  
   const drawer = (
     <div style={{ width: "100%" }}>
       <List>
-        {["/", "/calendar", "/about"].map((text, index) => (
+        {[
+          { key: "inicio", ruta: "/" },
+          { key: "calendario", ruta: "/calendar" },
+          {
+            key: "programas",
+            ruta: "/",
+            subRutas: [{key:"Niños",ruta:"/programs/children"},
+             {key:"Adolescentes",ruta:"/programs/teens"}, 
+             {key:"Adultos",ruta:"/programs/adults"}
+            ],
+          },
+          {
+            key: "multimedia",
+            ruta: "/",
+            subRutas: [{key:"Niños",ruta:"/programs/children"},
+             {key:"Adolescentes",ruta:"/programs/teens"}, 
+             {key:"Adultos",ruta:"/programs/adults"}
+            ],
+          },
+        ].map((text, index) => (
           <div
-            key={text}
+            key={index}
             style={{
               borderBottom: "1px solid #cdd1dc",
               margin: "0 20px 0 20px",
             }}
           >
             <ListItem
-              sx={{}}
-              onClick={handleDrawerToggle}
+              sx={{
+                display:"flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
               component={Link}
-              to={text}
+              to={text.ruta}
+              onClickCapture={() => {
+                if (text.subRutas) {
+                  handleProgramasClick();
+                }
+              }}
             >
               <ListItemText
-                primary={text === "/" ? "Home" : text.replace("/", "")}
+                primary={text.key}
                 sx={{
+                  "&:hover": {
+                    backgroundColor: "#e2e4e9",
+                  },
+                  display:"flex",
+                  paddingLeft:1,
+                alignItems: "center",
                   textTransform: "capitalize",
+                  height:50,
+                  borderRadius:1
                 }}
               />
             </ListItem>
+            {text.subRutas && (
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List
+                  component="div"
+                  disablePadding
+                >
+                  {text.subRutas.map((subRuta, subIndex) => (
+                    <ListItem
+                    onClickCapture={handleDrawerToggle}
+                      key={subIndex}
+                      sx={{ 
+                        "&:hover": {
+                          backgroundColor: "#e5ebff",
+                        },
+                        marginLeft: 5,
+                        width: "91.5%",
+                        borderRadius:1,
+                        marginRight:10,
+                        marginBottom:1
+
+                     }}
+                      component={Link}
+                      to={subRuta.ruta}
+                    >
+                      <ListItemText
+                       primary={subRuta.key} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            )}
           </div>
         ))}
       </List>
@@ -179,7 +256,7 @@ const NavBar = () => {
                   }}
                   color="inherit"
                 >
-                  Login
+                  Iniciar sesion
                 </Button>
               </Link>
             )}
@@ -188,60 +265,52 @@ const NavBar = () => {
           <>
             <Typography
               variant="h6"
-              className="flex gap-20 sm:gap-8 md:gap-5 lg:gap-10 xl:gap-14 2xl:gap-15"
+              className="flex gap-20 sm:gap-8 md:gap-5 lg:gap-7 xl:gap-14 2xl:gap-15"
             >
               CBA
               <Button
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none"
                 }}
-                >
-                <Link
-                to="/"
-                >
-                Inicio
-                </Link>
+              >
+                <Link to="/">Inicio</Link>
               </Button>
               <Button
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none",
                 }}
-                >
-                <Link
-                to="/calendar"
-                >
-                Calendario
-                </Link>
+              >
+                <Link to="/calendar">Calendario</Link>
               </Button>
               {/* inicio */}
               <Button
                 name="programas"
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none",
                 }}
                 onClick={handleClick}
                 endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
@@ -263,6 +332,10 @@ const NavBar = () => {
                   onClick={handleClose}
                   component={Link}
                   to="/programs/children"
+                  sx={{
+                    width:"200px",
+                    padding:"20px"
+                  }}
                 >
                   Niños
                 </MenuItem>
@@ -270,6 +343,10 @@ const NavBar = () => {
                   onClick={handleClose}
                   component={Link}
                   to="/programs/teens"
+                  sx={{
+                    width:"200px",
+                    padding:"20px"
+                  }}
                 >
                   Adolecentes
                 </MenuItem>
@@ -277,23 +354,27 @@ const NavBar = () => {
                   onClick={handleClose}
                   component={Link}
                   to="/programs/adults"
+                  sx={{
+                    width:"200px",
+                    padding:"20px"
+                  }}
                 >
                   Adultos
                 </MenuItem>
               </Menu>
               {/* final */}
               {/* inicio */}
-              <Button 
+              <Button
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none",
                 }}
                 endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
                 name="publicaciones"
@@ -312,47 +393,100 @@ const NavBar = () => {
                   marginTop: "16px",
                 }}
               >
-                <MenuItem component={Link}>Eventos</MenuItem>
-                <MenuItem component={Link}>Cartelera</MenuItem>
+                <MenuItem component={Link}
+                sx={{
+                  width:"200px",
+                  padding:"20px"
+                }}>Eventos</MenuItem>
+                <MenuItem component={Link}
+                sx={{
+                  width:"200px",
+                  padding:"20px"
+                }}>Cartelera</MenuItem>
               </Menu>
               {/* final */}
               <Button
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none",
                 }}
               >
-                <Link
-                  to="/educationUSA"
-                >
-                Educacion USA
-                </Link>
+                <Link to="/educationUSA">Educacion USA</Link>
               </Button>
               <Button
+                name="multimedia"
                 sx={{
-                  '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.2)', // o cualquier otro color que desees
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
                   },
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop:"4px",
-                  textTransform:"none"
+                  paddingTop: "4px",
+                  textTransform: "none",
                 }}
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
+              >
+                Multimedia
+              </Button>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl.multimedia}
+                keepMounted
+                open={Boolean(anchorEl.multimedia)}
+                name="multimedia"
+                onClose={handleClose}
+                sx={{
+                  marginTop: "16px",
+                }}
+              >
+                <MenuItem
+                sx={{
+                  width:"200px",
+                  padding:"20px"
+                }}
+                  onClick={handleClose}
+                  component={Link}
+                  to="/podcast"
                 >
-                <Link
-                to="/about"
+                  Podcast
+                </MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  to="/programs/teens"
+                  sx={{
+                    width:"200px",
+                    padding:"20px"
+                  }}
                 >
-                Acerca de nosotros
-                </Link>
+                  Tutoriales
+                </MenuItem>
+              </Menu>
+
+              <Button
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop: "4px",
+                  textTransform: "none",
+                }}
+              >
+                <Link to="/about">Acerca de nosotros</Link>
               </Button>
             </Typography>
             {authlogin.auth ? (
@@ -378,7 +512,12 @@ const NavBar = () => {
                   onClick={() => {
                     setAuth(!auth);
                   }}
-                  color="inherit"
+                  style={{
+                    color: "inherit",
+                    textDecoration: "none",
+                    display: "grid",
+                    alignContent: "center",
+                  }}
                 >
                   INICIAR SESION
                 </Button>

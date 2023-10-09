@@ -9,19 +9,23 @@ module.exports=(sequelize)=>{
             defaultValue:UUIDV4,
             allowNull:false
         },
-        name:{
+        epi_number:{
+            type:DataTypes.INTEGER,
+            allowNull:false
+        },
+        description:{
             type: DataTypes.TEXT,
             allowNull:false
         },
-        preview_url:{
+        authors:{
             type: DataTypes.TEXT,
             allowNull:false
         },
-        images:{
-            type: DataTypes.ARRAY(DataTypes.TEXT),
+        url_cloudfront:{
+            type: DataTypes.TEXT,
             allowNull:false
         },
-        id_song:{
+        image:{
             type: DataTypes.TEXT,
             allowNull:false
         },
