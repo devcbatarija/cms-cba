@@ -68,8 +68,11 @@ export default function Sidebar() {
         />
         <SidebarItem 
           icon={StoreMallDirectoryOutlinedIcon} 
-          label="Programas" 
-          to="/dashboard/tableprogram" 
+          label="Programas"
+          subItems={[
+            {label:"Tabla",to:"/dashboard/tableprogram"},
+            {label:"Crear nuevo",to:"/dashboard/program/add"}
+          ]}
         />
         <SidebarItem  
           icon={StoreMallDirectoryOutlinedIcon} 
