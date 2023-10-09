@@ -11,7 +11,7 @@ import { styled } from "@mui/system";
 import { useSelector } from "react-redux";
 import multimonth from "@fullcalendar/multimonth";
 import { Button } from "@mui/material";
-import Dropdown from '../dashboard/calendario/test';
+import Dropdown from '../dashboard/calendario/dropdownButton';
 import dayjs from "dayjs";
 import 'dayjs/locale/es';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -56,26 +56,29 @@ const CalendarioClient = () => {
         console.log(e);
     };
 
+    const handleDateClick =(e) => {
+        console.log(e);
+    };
 
     const events = useSelector((state) => state.events.events);
     const [eventsByMonth, setEventsByMonth] = useState([])
 
     return (
         <>
-            <div className={"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 min-h-full lg:gap-10 p-10"}>
+            <div className={"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 min-h-full lg:gap-10 p-5 sm:p-10"}>
                 <div className="calendar col-span-2">
                     {/* seo declarar para consultas slang */}
                     <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl lg:text-2xl '>
                         <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
                             <Button
-                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
+                                sx={{ minWidth: 'fit-content', borderRadius: '50%' }}
                                 onClick={prev}
                             ><NavigateBeforeRoundedIcon /></Button>
+                            <Button onClick={next}
+                                sx={{ minWidth: 'fit-content', borderRadius: '50%' }}
+                            ><NavigateNextRoundedIcon /></Button>
 
                             <h1 className='uppercase font-semibold' >{title}</h1>
-                            <Button onClick={next}
-                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
-                            ><NavigateNextRoundedIcon /></Button>
                         </div>
                         <div className='flex justify-end  text-base'>
                             <Button onClick={goToToday}>Hoy</Button>
@@ -102,9 +105,10 @@ const CalendarioClient = () => {
                         weekends={true}
                         datesSet={updateTitle}
                         eventClick={handleEventClick}
+                        dateClick={handleDateClick}
                     />
                 </div>
-                <div className="">
+                <div className="mt-5 lg:mt-0">
                     <EventList
                         title={titleTable}
                         eventsByMonth={eventsByMonth}
