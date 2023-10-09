@@ -8,8 +8,14 @@ export default {
     extend: {
       height: {
         '118': '28rem',
-        '120':'32rem',
-        '80vh': '80vh'
+        '120': '32rem',
+        '80vh': '80vh',
+        '30': '123px'
+      },
+      colors: {
+        'cbaBlue': '#002E5F',
+        'cbaRed': '#D50032',
+        'azulClaro': '#1976D2'
       }
     },
   },
