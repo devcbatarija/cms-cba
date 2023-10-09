@@ -12,16 +12,14 @@ import axios from "axios";
 import { authValid } from "./redux-toolkit/actions/auth.Actions";
 import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
-
 import ProgramTable from './components/dashboard/Programas/ProgramTables';
 import PublicationNav from './components/dashboard/Publications/Nav';
 import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
-import CalendarioClient from './components/calendar/calendar';
-import { getPodcasts } from './redux-toolkit/actions/podcastActions';
-import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';
+import CalendarioClient from './components/calendar/calendar'; 
+import PodcastDashboard from './components/dashboard/Podcast/PodcastDashboard';  
 import ProgramChildren from './components/programs/children';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
@@ -34,10 +32,7 @@ import ContarinerNewEvent from './components/dashboard/calendario/containerEvent
 import EventNav from './components/dashboard/calendario/eventNav';
 import EducationUSA from './components/educationUSA/EducationUSA';
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
-import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
-import ProgramaNav from "./components/dashboard/Programas/Nav";
-import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
-import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
+import { Podcast } from "./components/multimedia/podcast/podcast";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -84,20 +79,21 @@ function App() {
     <>
       <div className="flex flex-col min-h-screen">
         {!isDashboardRoute && <NavBar />}
-        <div className="flex-grow">
-          <Routes>
-            <Route exact path='/' element={<Home />} />
-            <Route path='/about' element={<About />} />
-            <Route path='/calendar' element={<CalendarioClient />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/programs/children' element={<ProgramChildren />} />
-            <Route path='/publications' element={<Publications />} />
-            <Route path='/programs/adults' element={<ProgramAdults />} />
-            <Route path='/programs/teens' element={<ProgramTeens />} />
-            <Route path='/educationUSA' element={<EducationUSA />} />
-            <Route path="/americanSpaces" element={<AmericanSpaces />} />
-            <Route path='/americanSpaces/Gallery360' element={<GalleryContainer />} />
+      <div className="flex-grow">
+        <Routes>
+        <Route exact path='/' element={<Home />} />
+        <Route path='/about' element={<About />} />
+        <Route path='/calendar' element={<CalendarioClient />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/programs/children' element={<ProgramChildren />} />
+        <Route path='/publications' element={<Publications />} />
+        <Route path='/programs/adults' element={<ProgramAdults />} />
+        <Route path='/programs/teens' element={<ProgramTeens />} />
+        <Route path='/educationUSA' element={<EducationUSA />} />
+        <Route path='/podcast' element={<Podcast />} />
+
+
             {/* Ruta del dashboard, sin verificación de autenticación */}
             {auth && (
               <Route path="/dashboard" element={<Dashboard></Dashboard>}>
@@ -145,7 +141,7 @@ function App() {
                 />
                 <Route
                   path="/dashboard/spotify/podcast"
-                  element={<SpotifyPlayer></SpotifyPlayer>}
+                  element={<PodcastDashboard></PodcastDashboard>}
                 ></Route>
               </Route>
             )}
@@ -176,6 +172,13 @@ function App() {
             },
           },
           success: {
+            duration: 2000,
+            theme: {
+              primary: "green",
+              secondary: "black",
+            },
+          },
+          dismiss: {
             duration: 1500,
             theme: {
               primary: "green",

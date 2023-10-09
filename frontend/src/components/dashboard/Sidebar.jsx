@@ -76,7 +76,7 @@ export default function Sidebar() {
         />
         <SidebarItem  
           icon={StoreMallDirectoryOutlinedIcon} 
-          label="SpotifyPlayer" 
+          label="Podcasts" 
           to="/dashboard/spotify/podcast" 
         />
         <SidebarItem 
