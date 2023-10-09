@@ -19,7 +19,7 @@ import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
-import CalendarioClient from './components/calendar/calendar';
+import CalendarioClient from './components/Calendar/Calendar';
 import { getPodcasts } from './redux-toolkit/actions/podcastActions';
 import SpotifyPlayer from './components/dashboard/Podcast/SpotifyPlayer';  
 import ProgramChildren from './components/programs/children';
