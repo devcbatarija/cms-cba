@@ -13,15 +13,15 @@ const ProgramPreview = ({
 }) => {
    
 
-  const renderAprendizaje = () => {
-    return {
-      __html: aprendizaje.replace(/\n/g, "<br>"),
-    };
-  };
+  // const renderAprendizaje = () => {
+  //   return {
+  //     __html: aprendizaje.replace(/\n/g, "<br>"),
+  //   };
+  // };
 
   return (
     <div className="bg-white shadow-lg rounded-lg border">
-      <header className="flex flex-row gap-5 p-4">
+      {/* <header className="flex flex-row gap-5 p-4">
         <div className="flex flex-col gap-2">
           <p className="text-1xl font-bold">{nombre}</p>
         </div>
@@ -43,8 +43,8 @@ const ProgramPreview = ({
           rel="noopener noreferrer"
         >
           http://localhost:5173/dashboard/publinav/add
-        </a> */}
-      </div>
+        </a> }
+      </div> */}
     </div>
   );
 };
