@@ -6,7 +6,6 @@ import timegrid from "@fullcalendar/timegrid";
 import { useRef, useState } from "react";
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
-// import { Button } from '@mui/base/Button';
 import { styled } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -41,14 +40,10 @@ const Calendario = () => {
         let calendarApi = calendarRef.current.getApi();
         calendarApi.today();
     };
-    const changeView = (view) => {
-        let calendarApi = calendarRef.current.getApi();
-        calendarApi.changeView(view);
-    };
+    
     const [title, setTitle] = useState('');
 
     const updateTitle = (e) => {
-        //   let calendarApi = calendarRef.current.getApi();
         setTitle(e.view.title);
     }
 
@@ -243,7 +238,6 @@ const Calendario = () => {
                 ) : (
                     <>
                         {
-                            // <UseModal setData={setData} data={data} handleOpen={handleOpen} handleClose={handleClose} open={open}  ></UseModal>
                             <ModalAddEvent
                                 setData={setData}
                                 data={data}
@@ -263,7 +257,6 @@ const Calendario = () => {
 
                         <div className={"grid grid-cols-1 lg:grid-cols-5 min-h-full lg:gap-4 p-5 "}>
                             <div className="calendar col-span-4">
-                                {/* seo declarar para consultas slang */}
                                 <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl'>
                                     <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
                                         <Button
@@ -286,16 +279,10 @@ const Calendario = () => {
                                 <FullCalendar
                                     ref={calendarRef}
                                     headerToolbar={false}
-                                    // headerToolbar={{
-                                    //     left: 'title,prev,next',
-                                    //     // center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                                    //     right: 'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
-                                    // }}
                                     plugins={[daygrid, interaction, timegrid, multimonth]}
                                     fixedWeekCount={false}
                                     locales='es'
                                     initialView="dayGridMonth"
-                                    // initialEvents={events}
                                     events={events}
                                     editable={true}
                                     selectable={true}
@@ -309,7 +296,6 @@ const Calendario = () => {
                                     eventClick={handleEventClick}
                                     eventDrop={handleEventDrop}
                                     drop={handleExternalEventDrop}
-                                // dateClick={handleDateSelect}
                                 />
                             </div>
                             <div className="mt-5 lg:mt-0">
