@@ -1,98 +1,71 @@
-const { Programa, Usuario } = require("../db")
+const { Programa, Usuario,ProgramPrices } = require("../db");
+
 module.exports = {
     getAllPrograms: async () => {
         try {
             const data = await Programa.findAll({
-                include:
-                    [{ model: Usuario }]
+                include: [{ model: Usuario }],
+                include:[{model:ProgramPrices}]
             });
             return data;
         } catch (error) {
-            return error
+            throw new Error("Error al obtener los programas");
         }
     },
     addPrograma: async (p) => {
         try {
-            const Program = {
+            const nuevoPrograma = await Programa.create({
                 nombre: p.nombre,
-                descripcion: p.descripcion,
-                imagen: p.imagen,
-                turno: p.turno,
-                modalidad: p.modalidad,
-                estado: p.estado,
-                UsuarioIdUsuario: p.UsuarioIdUsuario
-            };
-            const newPrograma = await Programa.create(Program);
-            return newPrograma;
+                caracteristica: p.caracteristica,
+                requisitos: p.requisitos,
+                UsuarioIdUsuario: p.UsuarioIdUsuario,
+            });
+            return nuevoPrograma;
         } catch (error) {
-            return error;
-        }
-    },
-    hiddenPrograma: async (id) => {
-        try {
-            const program = await Programa.findByPk(id);
-            await program.update({ estado: false });
-            program.save();
-            return program;
-        } catch (error) {
-            return error;
+            throw new Error("Error al agregar el programa");
         }
     },
     updatePrograma: async (id, progr) => {
         try {
             const exist = await Programa.findByPk(id);
             if (!exist) {
-                return "Programa no encontrado"
+                throw new Error("Programa no encontrado");
             }
-            const updateProgramById=await Programa.update(
-                progr,
-                {
-                    where: {
-                        id_Programa: id
-                    },
-                }
-            );
-            if(updateProgramById[0]===1){
-                const dataUpdate=await Programa.findAll();
-                return { message: "Program Updated", results:dataUpdate };
-            }
-            return "Error program update!"
+
+            await Programa.update(progr, {
+                where: {
+                    id_Programa: id,
+                },
+            });
+
+            return { message: "Programa actualizado correctamente" };
         } catch (error) {
-            return error;
+            throw new Error("Error al actualizar el programa");
         }
     },
     deleteProgram: async (id) => {
         try {
             const program = await Programa.findByPk(id);
-            program.destroy(program);
-            return program;
+            if (!program) {
+                throw new Error("Programa no encontrado");
+            }
+            await program.destroy();
+            return { message: "Programa eliminado correctamente" };
         } catch (error) {
-            return error;
+            throw new Error("Error al eliminar el programa");
         }
     },
     getProgram: async (id) => {
         try {
-            const program = await Programa.findByPk(id);
+            const program = await Programa.findByPk(id, {
+                include: [{ model: Usuario }],
+            });
             if (!program) {
                 throw new Error("Programa no encontrado");
             }
             return program;
         } catch (error) {
-            error.statusCode = 404;
-            return error;
+            throw new Error("Error al obtener el programa");
         }
     },
-    deleteSelect: async (Ids) => {
-        try {
-          for (let id of Ids) {
-            const program = await Programa.findByPk(id);
-            await program.destroy();
-          }
-          const remainingProgram = await Programa.findAll();
-          return remainingProgram;
-        } catch (error) {
-          return error;
-        }
-      }  
-
 };
