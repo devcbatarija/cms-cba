@@ -553,6 +553,21 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
+                <Link to="/gallery">Espacios USA</Link>
+              </NavLink>
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop: "4px",
+                  gap: 10,
+                }}
+              >
                 <Link to="/about">Acerca de nosotros</Link>
               </NavLink>
             </Typography>

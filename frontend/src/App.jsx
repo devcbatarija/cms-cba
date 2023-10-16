@@ -45,6 +45,8 @@ import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 import { Podcast } from "./components/multimedia/podcast/podcast";
 import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
 import { getPodcastSongs } from "./redux-toolkit/actions/podcastActions";
+import ProgramaPrecios from "./components/dashboard/Programas/ProgramPrices";
+import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -122,6 +124,8 @@ function App() {
             <Route path="/programs/teens" element={<ProgramTeens />} />
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
+            <Route path="/gallery" element={<GalleryContainer />} />
+
             {/* Protected */}
             <Route
               path="/dashboard"
@@ -235,6 +239,14 @@ function App() {
                 element={
                   <ProtectedRouteRoles>
                     <PodcastDashboard></PodcastDashboard>
+                  </ProtectedRouteRoles>
+                }
+              ></Route>
+              <Route
+                path="/dashboard/program/precio"
+                element={
+                  <ProtectedRouteRoles>
+                    <ProgramaPrecios></ProgramaPrecios>
                   </ProtectedRouteRoles>
                 }
               ></Route>
