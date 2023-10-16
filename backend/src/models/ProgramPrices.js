@@ -1,25 +1,19 @@
 const { DataTypes, UUIDV4 } = require("sequelize");
-
 module.exports = (sequelize) => {
-    const Programa = sequelize.define('Programa', {
-        idPrograma: {
+    sequelize.define('ProgramPrices', {
+        id_Programa: {
             type: DataTypes.UUID,
             primaryKey: true,
             allowNull: false,
             defaultValue: UUIDV4
         },
-        nombre: {
-            type: DataTypes.STRING,
+        columns: {
+            type: DataTypes.ARRAY(DataTypes.JSON),
             allowNull: false
         },
-        caracteristica: {
-            type: DataTypes.TEXT,
+        rows: {
+            type: DataTypes.ARRAY(DataTypes.ARRAY(DataTypes.TEXT)),
             allowNull: false
-        },
-        requisitos: {
-            type: DataTypes.TEXT,
-            allowNull: true
         }
     });
-
-};
+}
