@@ -3,8 +3,9 @@ import CuadroInscripcion from '../inscripcion/incripcion';
 import ListaPreciosCursos from './ProgramComponent/ProgramaPrecios';
 import ProgramaOferta from './ProgramComponent/ProgramaOferta';
 import RequisitosInscripcion from './ProgramComponent/ProgramaRequisitos';
+import ImagenFondo from '../educationUSA/EdUSAComponents/ImagenComponent';
 
-
+const imagen = "https://2.bp.blogspot.com/-0Vr9SJUTc60/Ts_Do3enifI/AAAAAAAAAJs/mHd-sHqTWaU/s1600/horizontal+largo.jpg";
 const ofertaProps = {
   id: "1",
   imagenUrl: "https://costaaraucania.educacionpublica.cl/wp-content/uploads/2020/03/EDUMAT-2020-3.jpeg",
@@ -44,7 +45,9 @@ const ProgramAdults = () => {
     <>
       <div className='w-full sm:w-9/10 md:w-8/10 lg:w-7/10 xl:w-6/10 2xl:w-5/10 mx-auto justify-center bg-gray-50'>
         <div className='InformationContainer'>
-          <ProgramaOferta {...ofertaProps} />
+          <div className='w-full sm:w-9/10 md:w-8/10 lg:w-7/10 xl:w-6/10 2xl:w-5/10'>
+            <ImagenFondo imageUrl={imagen} />
+          </div>
           <div id='2' className="mt-4 p-4 rounded-lg text-gray-700 blur-10 flex flex-col md:flex-row border-b border-gray-300 ">
             <CaracteristicasCurso {...caracteristicasCursoProps} />
             <RequisitosInscripcion {...requisitosInscripcionProps} />

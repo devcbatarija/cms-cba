@@ -36,7 +36,7 @@ export default function ProgramTable() {
   //funcion para seleccionar/deseleccionar los programas
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllPrograms(data.map((pub) => pub.id_Programa)));
+      dispatch(selectAllPrograms(data.map((pub) => pub.idPrograma)));
       setSelectAll(true);
     }
     else {
@@ -44,7 +44,7 @@ export default function ProgramTable() {
       setSelectAll(false);
     }
   };
-
+console.log(data);
   const handModal=(id)=>{
     setSelectedProgramModal(id);
     handleOpen(true);
@@ -135,12 +135,10 @@ export default function ProgramTable() {
               />
             </TableCell>
             {/*Encabezado de las columnas*/}
-            <TableCell align="center">Nombre Programa</TableCell>
+            <TableCell align="center">Programa</TableCell>
             <TableCell align="center">Descripcion</TableCell>
+            <TableCell align="center">Requisitos</TableCell>
             <TableCell align="center">Imagen</TableCell>
-            <TableCell align="center">Turno</TableCell>
-            <TableCell align="center">Modalidad</TableCell>
-            <TableCell align="center">Estado</TableCell>
             <TableCell align="right">Acciones</TableCell>
           </TableRow>
         </TableHead>
@@ -160,14 +158,11 @@ export default function ProgramTable() {
               </TableCell>
               {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.nombre}</TableCell>
-              <TableCell align="center">{row.descripcion}</TableCell>            
+              <TableCell align="center">{row.caracteristica}</TableCell>            
+              <TableCell align="center">{row.requisitos}</TableCell>
               <TableCell align="center">
                 <Avatar alt="Remy Sharp" src={row.imagen ? row.imagen : null} />
               </TableCell>
-              <TableCell align="center">{row.turno}</TableCell>
-              <TableCell align="center">{row.modalidad}</TableCell>
-              <TableCell align="center">{row.estado ? "Visible" : "Oculto"}</TableCell>
-              {/*Boton para editar publicacion*/}
               <TableCell align="center">
                 <Button
                   variant="contained"

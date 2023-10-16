@@ -19,8 +19,8 @@ import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
 import Calendario from './components/dashboard/calendario/calendario';
-import CalendarioClient from './components/calendar/calendar'; 
-import PodcastDashboard from './components/dashboard/Podcast/PodcastDashboard';  
+import CalendarioClient from './components/calendar/calendar';
+import PodcastDashboard from './components/dashboard/Podcast/PodcastDashboard';
 import ProgramChildren from './components/programs/children';
 import TablePublication from './components/dashboard/Publications/PublicationTable'
 import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
@@ -35,6 +35,11 @@ import EducationUSA from './components/educationUSA/EducationUSA';
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 import { Podcast } from "./components/multimedia/podcast/podcast";
 import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
+import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
+import GalleryAddComponent from "./components/dashboard/Gallery360/GalleryAdd";
+import GalleryTable from "./components/dashboard/Gallery360/GalleryTable";
+import GalleryNav from "./components/dashboard/Gallery360/Navegacion";
+import ProgramaPrecios from "./components/dashboard/Programas/ProgramPrices";
 
 
 function App() {
@@ -82,19 +87,20 @@ function App() {
     <>
       <div className="flex flex-col min-h-screen">
         {!isDashboardRoute && <NavBar />}
-      <div className="flex-grow">
-        <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/calendar' element={<CalendarioClient />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/programs/children' element={<ProgramChildren />} />
-        <Route path='/publications' element={<Publications />} />
-        <Route path='/programs/adults' element={<ProgramAdults />} />
-        <Route path='/programs/teens' element={<ProgramTeens />} />
-        <Route path='/educationUSA' element={<EducationUSA />} />
-        <Route path='/podcast' element={<Podcast />} />
+        <div className="flex-grow">
+          <Routes>
+            <Route exact path='/' element={<Home />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/calendar' element={<CalendarioClient />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/programs/children' element={<ProgramChildren />} />
+            <Route path='/publications' element={<Publications />} />
+            <Route path='/programs/adults' element={<ProgramAdults />} />
+            <Route path='/programs/teens' element={<ProgramTeens />} />
+            <Route path='/educationUSA' element={<EducationUSA />} />
+            <Route path='/podcast' element={<Podcast />} />
+            <Route path='/americanspaces' element={<GalleryContainer />} />
 
 
             {/* Ruta del dashboard, sin verificación de autenticación */}
@@ -120,6 +126,7 @@ function App() {
                     element={<ContarinerNewPublication />}
                   />
                 </Route>
+
                 <Route path="/dashboard/program" element={<ProgramaNav />}>
                   <Route
                     path="/dashboard/program/tableprogram"
@@ -129,7 +136,25 @@ function App() {
                     path="/dashboard/program/add"
                     element={<ContarinerNewPrograma />}
                   />
+                  <Route
+                    path="/dashboard/program/prices"
+                    element={<ProgramaPrecios />}
+                  />
                 </Route>
+
+                {/*Final Gallery 360 routes*/}
+                <Route path="/dashboard/gallery" element={<GalleryNav />}>
+                  <Route
+                    path="/dashboard/gallery/table"
+                    element={<GalleryTable />}
+                  />
+                  <Route
+                    path="/dashboard/gallery/add"
+                    element={<GalleryAddComponent />}
+                  />
+                </Route>
+                {/*Final Gallery 360 routes*/}
+                
                 <Route
                   path="/dashboard/testimononios"
                   element={<TestimoniosContainer />}

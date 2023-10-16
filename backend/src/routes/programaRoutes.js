@@ -1,17 +1,20 @@
 const express = require('express');
-const { getAllPrograms, addPrograma, hiddenPrograma,
-     updatePrograma, deletePrograma, getProgram, deleteSelect } = require('../handlers/programaHandler');
-const router=express();
+const router = express.Router();
+const {
+     getAllPrograms,
+     addPrograma,
+     updatePrograma,
+     deletePrograma,
+     getProgram
+} = require('../handlers/programaHandler');
 
-
+// Obtener todos los programas y agregar un nuevo programa
 router.get('/', getAllPrograms);
-router.post('/create',addPrograma);
-router.put('/hidden/:id',hiddenPrograma);
-router.put('/update/:id',updatePrograma);
-router.delete('/delete/:id',deletePrograma);
-router.get('/getOne/:id',getProgram)
+router.post('/', addPrograma);
 
-router.get('/state/update/:id');
+// Actualizar, eliminar y obtener un solo programa por su ID
+router.put('/:id', updatePrograma);
+router.delete('/:id', deletePrograma);
+router.get('/:id', getProgram);
 
-router.post('/delete/select',deleteSelect); //agregar a programas
-module.exports=router;
+module.exports = router;

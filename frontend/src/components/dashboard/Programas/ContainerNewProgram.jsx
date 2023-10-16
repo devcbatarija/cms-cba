@@ -44,7 +44,7 @@ const ContarinerNewPrograma = () => {
     }
   };
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 shadow border  gap-2 bg-zinc-100 p-2">
+    <div className="grid  shadow border  gap-2 bg-zinc-100 p-2">
       <div>
       <PublicationAdd
         programa={programa}
@@ -53,7 +53,7 @@ const ContarinerNewPrograma = () => {
       />
       </div>
       <div>
-      <PublicationPreview
+      {/* <PublicationPreview
         titulo={programa.titulo}
         descripcion={programa.descripcion}
         multimedia={programa.multimedia}
@@ -62,7 +62,7 @@ const ContarinerNewPrograma = () => {
         UsuarioIdUsuario={programa.UsuarioIdUsuario}
         fecha="Hace un momento"
         user={user}
-      ></PublicationPreview>
+      ></PublicationPreview> */}
       </div>
     </div>
   );

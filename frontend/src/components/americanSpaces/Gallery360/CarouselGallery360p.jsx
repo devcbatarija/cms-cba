@@ -2,13 +2,13 @@ const CarouselGallery360 = ({ selected, handleSelectedImage }) => {
     return (
         <div className="flex flex-wrap">
             {selected &&
-                selected.imagen.map((img) => {
+                selected.Galleries.map((img) => {
                     return (
-                        <div key={img} className="p-2">
+                        <div key={img.id_gallery} className="p-2">
                             <img
                                 className="w-24 h-24 object-cover cursor-pointer"
-                                onClick={() => handleSelectedImage(img)}
-                                src={img}
+                                onClick={() => handleSelectedImage(img.image)}
+                                src={img.image}
                                 alt="image"
                             />
                         </div>
