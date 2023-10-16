@@ -1,5 +1,11 @@
 import "./App.css";
-import { Route, Routes, useLocation } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Home from "./components/home/home";
 import NavBar from "./components/navBar/navBar";
 import About from "./components/about/about";
@@ -12,36 +18,41 @@ import axios from "axios";
 import { authValid } from "./redux-toolkit/actions/auth.Actions";
 import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
-import ProgramTable from './components/dashboard/Programas/ProgramTables';
-import PublicationNav from './components/dashboard/Publications/Nav';
-import ProgramaNav from './components/dashboard/Programas/Nav';
-import TableUser from './components/dashboard/Users/tableUser';
-import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
-import { Toaster } from 'react-hot-toast';
-import Calendario from './components/dashboard/calendario/calendario';
-import CalendarioClient from './components/calendar/calendar'; 
-import PodcastDashboard from './components/dashboard/Podcast/PodcastDashboard';  
-import ProgramChildren from './components/programs/children';
-import TablePublication from './components/dashboard/Publications/PublicationTable'
-import ContarinerNewPublication from './components/dashboard/Publications/containerNewPublication';
-import Footer from './components/footer/footer';
-import { Publications } from './components/publications/publications';
-import { TestimoniosContainer } from './components/testimonios/testimoniosContainer';
-import ProgramAdults from './components/programs/adults';
-import ProgramTeens from './components/programs/teens';
-import ContarinerNewEvent from './components/dashboard/calendario/containerEvent';
-import EventNav from './components/dashboard/calendario/eventNav';
-import EducationUSA from './components/educationUSA/EducationUSA';
+import ProgramTable from "./components/dashboard/Programas/ProgramTables";
+import PublicationNav from "./components/dashboard/Publications/Nav";
+import ProgramaNav from "./components/dashboard/Programas/Nav";
+import TableUser from "./components/dashboard/Users/tableUser";
+import {
+  getEvents,
+  getEventsPredefinidos,
+} from "./redux-toolkit/actions/eventActions";
+import { Toaster } from "react-hot-toast";
+import Calendario from "./components/dashboard/calendario/calendario";
+import CalendarioClient from "./components/calendar/calendar";
+import PodcastDashboard from "./components/dashboard/Podcast/PodcastDashboard";
+import ProgramChildren from "./components/programs/children";
+import TablePublication from "./components/dashboard/Publications/PublicationTable";
+import ContarinerNewPublication from "./components/dashboard/Publications/containerNewPublication";
+import Footer from "./components/footer/footer";
+import { Publications } from "./components/publications/publications";
+import { TestimoniosContainer } from "./components/testimonios/testimoniosContainer";
+import ProgramAdults from "./components/programs/adults";
+import ProgramTeens from "./components/programs/teens";
+import ContarinerNewEvent from "./components/dashboard/calendario/containerEvent";
+import EventNav from "./components/dashboard/calendario/eventNav";
+import EducationUSA from "./components/educationUSA/EducationUSA";
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 import { Podcast } from "./components/multimedia/podcast/podcast";
 import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
-
+import { getPodcastSongs } from "./redux-toolkit/actions/podcastActions";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
+  const rol = useSelector((state) => state.login.user.rol);
+
   const dispatch = useDispatch();
   const location = useLocation();
-
+  const navigate = useNavigate();
   // Función para validar el token
   const validToken = async () => {
     const token = Cookie.get("token");
@@ -64,12 +75,27 @@ function App() {
       }
     }
   };
+  const ProtectedRoute = ({ children }) => {
+    //RUTAS POTEGIDAS
+    if (!auth) {
+      return <Navigate to={"/login"}></Navigate>;
+    }
+    return children;
+  };
+  const ProtectedRouteRoles = ({ children }) => {
+    //RUTAS POTEGIDAS
+    if(auth && rol=="Admin") {
+      return children;
+    } 
+    return <Navigate to={"/"}></Navigate>;
+  };
 
   // Validar el token al cargar la página
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllTestimonio());
-    dispatch(getEventsPredefinidos());
+    dispatch(getEventsPredefinidos()); 
+
     if (Cookie.get("token")) {
       validToken();
     }
@@ -80,75 +106,78 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+    {/* min-h-screen */}
+      <div className="flex flex-col">
         {!isDashboardRoute && <NavBar />}
-      <div className="flex-grow">
-        <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route path='/about' element={<About />} />
-        <Route path='/calendar' element={<CalendarioClient />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/programs/children' element={<ProgramChildren />} />
-        <Route path='/publications' element={<Publications />} />
-        <Route path='/programs/adults' element={<ProgramAdults />} />
-        <Route path='/programs/teens' element={<ProgramTeens />} />
-        <Route path='/educationUSA' element={<EducationUSA />} />
-        <Route path='/podcast' element={<Podcast />} />
-
-
-            {/* Ruta del dashboard, sin verificación de autenticación */}
-            {auth && (
-              <Route path="/dashboard" element={<Dashboard></Dashboard>}>
-                <Route path="/dashboard/Calendario" element={<EventNav />}>
-                  <Route
-                    path="/dashboard/Calendario/calendario"
-                    element={<Calendario />}
-                  />
-                  <Route
-                    path="/dashboard/Calendario/addEvent"
-                    element={<ContarinerNewEvent />}
-                  />
-                </Route>
-                <Route path="/dashboard/publinav" element={<PublicationNav />}>
-                  <Route
-                    path="/dashboard/publinav/table"
-                    element={<TablePublication />}
-                  />
-                  <Route
-                    path="/dashboard/publinav/add"
-                    element={<ContarinerNewPublication />}
-                  />
-                </Route>
-                <Route path="/dashboard/program" element={<ProgramaNav />}>
-                  <Route
-                    path="/dashboard/program/tableprogram"
-                    element={<ProgramTable />}
-                  />
-                  <Route
-                    path="/dashboard/program/add"
-                    element={<ContarinerNewPrograma />}
-                  />
-                </Route>
+        <div className="flex-grow">
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route
+              path="/about"
+              element={
+                <ProtectedRoute>
+                  <About />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path="/calendar" element={<CalendarioClient />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/programs/children" element={<ProgramChildren />} />
+            <Route path="/publications" element={<Publications />} />
+            <Route path="/programs/adults" element={<ProgramAdults />} />
+            <Route path="/programs/teens" element={<ProgramTeens />} />
+            <Route path="/educationUSA" element={<EducationUSA />} />
+            <Route path="/podcast" element={<Podcast />} />
+            {/* Protected */}
+            <Route path="/dashboard" element={<ProtectedRouteRoles><Dashboard></Dashboard></ProtectedRouteRoles>}>
+              <Route path="/dashboard/Calendario" element={<ProtectedRouteRoles><EventNav /></ProtectedRouteRoles>}>
                 <Route
-                  path="/dashboard/testimononios"
-                  element={<TestimoniosContainer />}
+                  path="/dashboard/Calendario/calendario"
+                  element={<ProtectedRouteRoles><Calendario /></ProtectedRouteRoles>}
                 />
                 <Route
-                  path="/dashboard/tableuser"
-                  element={<TableUser></TableUser>}
+                  path="/dashboard/Calendario/addEvent"
+                  element={<ProtectedRouteRoles><ContarinerNewEvent /></ProtectedRouteRoles>}
                 />
-                <Route
-                  path="/dashboard/tableprogram"
-                  element={<ProgramTable></ProgramTable>}
-                />
-                <Route
-                  path="/dashboard/spotify/podcast"
-                  element={<PodcastDashboard></PodcastDashboard>}
-                ></Route>
               </Route>
-            )}
-            {/* Ruta para manejar páginas no encontradas */}
+              <Route path="/dashboard/publinav" element={<ProtectedRouteRoles><PublicationNav /></ProtectedRouteRoles>}>
+                <Route
+                  path="/dashboard/publinav/table"
+                  element={<ProtectedRouteRoles><TablePublication /></ProtectedRouteRoles>}
+                />
+                <Route
+                  path="/dashboard/publinav/add"
+                  element={<ProtectedRouteRoles><ContarinerNewPublication /></ProtectedRouteRoles>}
+                />
+              </Route>
+              <Route path="/dashboard/program" element={<ProtectedRouteRoles><ProgramaNav /></ProtectedRouteRoles>}>
+                <Route
+                  path="/dashboard/program/tableprogram"
+                  element={<ProtectedRouteRoles><ProgramTable /></ProtectedRouteRoles>}
+                />
+                <Route
+                  path="/dashboard/program/add"
+                  element={<ProtectedRouteRoles><ContarinerNewPrograma /></ProtectedRouteRoles>}
+                />
+              </Route>
+              <Route
+                path="/dashboard/testimononios"
+                element={<ProtectedRouteRoles><TestimoniosContainer /></ProtectedRouteRoles>}
+              />
+              <Route
+                path="/dashboard/tableuser"
+                element={<ProtectedRouteRoles><TableUser></TableUser></ProtectedRouteRoles>}
+              />
+              <Route
+                path="/dashboard/tableprogram"
+                element={<ProtectedRouteRoles><ProgramTable></ProgramTable></ProtectedRouteRoles>}
+              />
+              <Route
+                path="/dashboard/spotify/podcast"
+                element={<ProtectedRouteRoles><PodcastDashboard></PodcastDashboard></ProtectedRouteRoles>}
+              ></Route>
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

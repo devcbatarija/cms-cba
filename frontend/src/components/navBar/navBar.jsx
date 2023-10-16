@@ -26,20 +26,20 @@ import cbaImage from "../../assets/cba.png";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
+import icono from "../../assets/cba.png";
 // ...
 
 const NavBar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("780"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("946"));
   const [auth, setAuth] = useState(false);
   const authlogin = useSelector((state) => state.login);
   const [stateRuta, setStateRuta] = useState(true);
   const [anchorEl, setAnchorEl] = useState({
     programas: null,
     publicaciones: null,
-    multimedia: null
+    multimedia: null,
   });
 
   const [open, setOpen] = useState(false); //este
@@ -52,7 +52,7 @@ const NavBar = () => {
       ...anchorEl,
       programas: null,
       publicaciones: null,
-      multimedia:null
+      multimedia: null,
     });
     setAnchorEl({
       ...anchorEl,
@@ -65,15 +65,15 @@ const NavBar = () => {
       ...anchorEl,
       programas: null,
       publicaciones: null,
-      multimedia:null
+      multimedia: null,
     });
   };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
   useEffect(() => {
-    !isMobile?setMobileOpen(false):null
-  }, [isMobile])  
+    !isMobile ? setMobileOpen(false) : null;
+  }, [isMobile]);
   const drawer = (
     <div style={{ width: "100%" }}>
       <List>
@@ -83,17 +83,19 @@ const NavBar = () => {
           {
             key: "programas",
             ruta: "/",
-            subRutas: [{key:"Niños",ruta:"/programs/children"},
-             {key:"Adolescentes",ruta:"/programs/teens"}, 
-             {key:"Adultos",ruta:"/programs/adults"}
+            subRutas: [
+              { key: "Niños", ruta: "/programs/children" },
+              { key: "Adolescentes", ruta: "/programs/teens" },
+              { key: "Adultos", ruta: "/programs/adults" },
             ],
           },
           {
             key: "multimedia",
             ruta: "/",
-            subRutas: [{key:"Niños",ruta:"/programs/children"},
-             {key:"Adolescentes",ruta:"/programs/teens"}, 
-             {key:"Adultos",ruta:"/programs/adults"}
+            subRutas: [
+              { key: "Niños", ruta: "/programs/children" },
+              { key: "Adolescentes", ruta: "/programs/teens" },
+              { key: "Adultos", ruta: "/programs/adults" },
             ],
           },
         ].map((text, index) => (
@@ -106,7 +108,7 @@ const NavBar = () => {
           >
             <ListItem
               sx={{
-                display:"flex",
+                display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -124,41 +126,36 @@ const NavBar = () => {
                   "&:hover": {
                     backgroundColor: "#e2e4e9",
                   },
-                  display:"flex",
-                  paddingLeft:1,
-                alignItems: "center",
+                  display: "flex",
+                  paddingLeft: 1,
+                  alignItems: "center",
                   textTransform: "capitalize",
-                  height:50,
-                  borderRadius:1
+                  height: 50,
+                  borderRadius: 1,
                 }}
               />
             </ListItem>
             {text.subRutas && (
               <Collapse in={open} timeout="auto" unmountOnExit>
-                <List
-                  component="div"
-                  disablePadding
-                >
+                <List component="div" disablePadding>
                   {text.subRutas.map((subRuta, subIndex) => (
                     <ListItem
-                    onClickCapture={handleDrawerToggle}
+                      onClickCapture={handleDrawerToggle}
                       key={subIndex}
-                      sx={{ 
+                      sx={{
                         "&:hover": {
                           backgroundColor: "#e5ebff",
                         },
                         marginLeft: 5,
                         width: "91.5%",
-                        borderRadius:1,
-                        marginRight:10,
-                        marginBottom:1
-
-                     }}
+                        borderRadius: 1,
+                        marginRight: 10,
+                        marginBottom: 1,
+                      }}
                       component={Link}
                       to={subRuta.ruta}
                     >
-                      <ListItemText
-                       primary={subRuta.key} />
+                      <ListItemText primary={subRuta.key} />
                     </ListItem>
                   ))}
                 </List>
@@ -173,8 +170,9 @@ const NavBar = () => {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "rgb(0, 46, 95);",
-        color: "white",
+        // backgroundColor: "rgb(0, 46, 95);",
+        backgroundColor: "white",
+        color: "rgb(0, 46, 95);",
         borderBottom: "1px solid #cdd1dc",
         boxShadow: "none",
         top: 0,
@@ -267,56 +265,89 @@ const NavBar = () => {
               variant="h6"
               className="flex gap-20 sm:gap-8 md:gap-5 lg:gap-7 xl:gap-14 2xl:gap-15"
             >
-              CBA
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
-                  fontSize: ".875rem",
                   alignContent: "center",
-                  paddingTop: "4px",
-                  textTransform: "none"
                 }}
+                to="/"
               >
-                <Link to="/">Inicio</Link>
-              </Button>
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+                <img className="w-12" src={icono}></img>
+              </NavLink>
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
+                  gap: 10,
                 }}
+                to="/"
+              >
+                Inicio
+              </NavLink>
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "inherit",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop: "4px",
+                  gap: 10,
+                }}
+                className={({ isActive, isPending }) =>
+                  isPending ? "pending" : isActive ? "active" : ""
+                }
               >
                 <Link to="/calendar">Calendario</Link>
-              </Button>
+              </NavLink>
               {/* inicio */}
-              <Button
+              <NavLink
                 name="programas"
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
-                  color: "inherit",
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center", 
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
+                  gap: 10,
                 }}
                 onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
               >
                 Programas
-              </Button>
+                <svg
+                  style={{ zIndex: "-1" }}
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0.646447 0.646447C0.841709 
+                   0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 
+                   0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 
+                   0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 
+                   1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 
+                   0.451184 0.841709 0.646447 0.646447Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </NavLink>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.programas}
@@ -333,8 +364,8 @@ const NavBar = () => {
                   component={Link}
                   to="/programs/children"
                   sx={{
-                    width:"200px",
-                    padding:"20px"
+                    width: "200px",
+                    padding: "20px",
                   }}
                 >
                   Niños
@@ -344,8 +375,8 @@ const NavBar = () => {
                   component={Link}
                   to="/programs/teens"
                   sx={{
-                    width:"200px",
-                    padding:"20px"
+                    width: "200px",
+                    padding: "20px",
                   }}
                 >
                   Adolecentes
@@ -355,8 +386,8 @@ const NavBar = () => {
                   component={Link}
                   to="/programs/adults"
                   sx={{
-                    width:"200px",
-                    padding:"20px"
+                    width: "200px",
+                    padding: "20px",
                   }}
                 >
                   Adultos
@@ -364,24 +395,38 @@ const NavBar = () => {
               </Menu>
               {/* final */}
               {/* inicio */}
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
-                }}
-                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
+                  gap: 10,
+                }} 
                 name="publicaciones"
                 onClick={handleClick}
               >
                 Publicaciones
-              </Button>
+                <svg
+                  style={{ zIndex: "-1" }}
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </NavLink>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.publicaciones}
@@ -393,51 +438,73 @@ const NavBar = () => {
                   marginTop: "16px",
                 }}
               >
-                <MenuItem component={Link}
-                sx={{
-                  width:"200px",
-                  padding:"20px"
-                }}>Eventos</MenuItem>
-                <MenuItem component={Link}
-                sx={{
-                  width:"200px",
-                  padding:"20px"
-                }}>Cartelera</MenuItem>
+                <MenuItem
+                  component={Link}
+                  sx={{
+                    width: "200px",
+                    padding: "20px",
+                  }}
+                >
+                  Eventos
+                </MenuItem>
+                <MenuItem
+                  component={Link}
+                  sx={{
+                    width: "200px",
+                    padding: "20px",
+                  }}
+                >
+                  Cartelera
+                </MenuItem>
               </Menu>
               {/* final */}
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
+                  gap: 10,
                 }}
               >
                 <Link to="/educationUSA">Educacion USA</Link>
-              </Button>
-              <Button
+              </NavLink>
+              <NavLink
                 name="multimedia"
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
+                  gap: 10,
                 }}
                 onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon></KeyboardArrowDownIcon>}
               >
                 Multimedia
-              </Button>
+                <svg
+                  style={{ zIndex: "-1" }}
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              </NavLink>
               <Menu
                 id="simple-menu"
                 anchorEl={anchorEl.multimedia}
@@ -450,10 +517,10 @@ const NavBar = () => {
                 }}
               >
                 <MenuItem
-                sx={{
-                  width:"200px",
-                  padding:"20px"
-                }}
+                  sx={{
+                    width: "200px",
+                    padding: "20px",
+                  }}
                   onClick={handleClose}
                   component={Link}
                   to="/podcast"
@@ -465,29 +532,29 @@ const NavBar = () => {
                   component={Link}
                   to="/programs/teens"
                   sx={{
-                    width:"200px",
-                    padding:"20px"
+                    width: "200px",
+                    padding: "20px",
                   }}
                 >
                   Tutoriales
                 </MenuItem>
               </Menu>
 
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
-                  },
+              <NavLink
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                   color: "inherit",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
                   paddingTop: "4px",
-                  textTransform: "none",
+                  gap: 10,
                 }}
               >
                 <Link to="/about">Acerca de nosotros</Link>
-              </Button>
+              </NavLink>
             </Typography>
             {authlogin.auth ? (
               <Tooltip>
@@ -513,11 +580,12 @@ const NavBar = () => {
                     setAuth(!auth);
                   }}
                   style={{
-                    color: "inherit",
+                    background:'#DC2626',
+                    color: "white",
                     textDecoration: "none",
                     display: "grid",
                     alignContent: "center",
-                  }}
+                  }} 
                 >
                   INICIAR SESION
                 </Button>

@@ -6,15 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutSession } from "../../redux-toolkit/actions/auth.Actions";
 import Cookie from "js-cookie";
-import toast from "react-hot-toast";
+import toast from "react-hot-toast"; 
 
 
-const PositionedMenu = ({ altImg, srcImg }) => {
+const PositionedMenu = ({ altImg, srcImg,styles }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch=useDispatch(false)
   const navigate=useNavigate();
   const rolUSer=useSelector((state)=>state.login.user)
+  const authlogin = useSelector((state) => state.login);
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -38,8 +41,9 @@ const PositionedMenu = ({ altImg, srcImg }) => {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        alt={altImg}
-        src={srcImg}
+        alt={authlogin.user.correo}
+        src={authlogin.user._profileImage}
+        style={styles}
       />
       <Menu
         id="demo-positioned-menu"
@@ -48,8 +52,8 @@ const PositionedMenu = ({ altImg, srcImg }) => {
         open={open}
         onClose={handleClose}
         sx={{
-            top:"35px",
-            left:"10px"
+          top: "35px",
+          left: "10px",
         }}
         anchorOrigin={{
           vertical: "top",
@@ -61,14 +65,16 @@ const PositionedMenu = ({ altImg, srcImg }) => {
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        {
-          rolUSer.rol && rolUSer.rol=="Admin"?
-          <MenuItem component={Link} to="/" onClick={handleClose}>Vista Cliente</MenuItem>:null
-        }
-        {
-          rolUSer.rol && rolUSer.rol=="Admin"?
-          <MenuItem component={Link} to="/dashboard" onClick={handleClose}>Vista Administrador</MenuItem>:null
-        }
+        {rolUSer.rol && rolUSer.rol == "Admin" ? (
+          <MenuItem component={Link} to="/" onClick={handleClose}>
+            Vista Cliente
+          </MenuItem>
+        ) : null}
+        {rolUSer.rol && rolUSer.rol == "Admin" ? (
+          <MenuItem component={Link} to="/dashboard" onClick={handleClose}>
+            Vista Administrador
+          </MenuItem>
+        ) : null}
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </div>
