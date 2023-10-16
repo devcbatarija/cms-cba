@@ -1,13 +1,10 @@
-import Typography from '@mui/material/Typography';
 import daygrid from "@fullcalendar/daygrid";
-import interaction, { Draggable } from "@fullcalendar/interaction";
+import interaction from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timegrid from "@fullcalendar/timegrid";
 import { useRef, useState } from "react";
 import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
-// import { Button } from '@mui/base/Button';
-import { styled } from "@mui/system";
 import { useSelector } from "react-redux";
 import multimonth from "@fullcalendar/multimonth";
 import { Button } from "@mui/material";
@@ -39,7 +36,6 @@ const CalendarioClient = () => {
     const [titleTable, setTitleTable] = useState('');
 
     const updateTitle = (e) => {
-        //   let calendarApi = calendarRef.current.getApi();
         setTitle(e.view.title);
         const currentMonth = dayjs(e.view.currentStart).format('MMMM')
         setTitleTable(currentMonth);
@@ -67,7 +63,6 @@ const CalendarioClient = () => {
         <>
             <div className={"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 min-h-full lg:gap-10 p-5 sm:p-10"}>
                 <div className="calendar col-span-2">
-                    {/* seo declarar para consultas slang */}
                     <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl lg:text-2xl '>
                         <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
                             <Button
@@ -90,16 +85,10 @@ const CalendarioClient = () => {
                     <FullCalendar
                         ref={calendarRef}
                         headerToolbar={false}
-                        // headerToolbar={{
-                        //     left: 'title,prev,next',
-                        //     // center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                        //     right: 'today,dayGridMonth,timeGridWeek,multiMonthYear' //'prev,today,next'
-                        // }}
                         plugins={[daygrid, interaction, timegrid, multimonth]}
                         fixedWeekCount={false}
                         locales='es'
                         initialView="dayGridMonth"
-                        // initialEvents={events}
                         events={events}
                         dayMaxEvents={true}
                         weekends={true}
