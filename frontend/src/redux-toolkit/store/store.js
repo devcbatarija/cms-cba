@@ -7,7 +7,7 @@ import publicationSlices from '../slices/publicationSlices';
 import programSlices from '../slices/programSlices';
 import podcastSlices from '../slices/podcastSlices';
 import testimonioSlices from '../slices/testimonioSlices';
-
+import gallerySlices from '../slices/gallerySlices';
 const store = configureStore({
   reducer: {
     test: testSlices,
@@ -17,7 +17,8 @@ const store = configureStore({
     publications: publicationSlices,
     programs: programSlices,
     podcasts:podcastSlices,
-    testimonios:testimonioSlices
+    testimonios:testimonioSlices,
+    gallery: gallerySlices
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
