@@ -84,9 +84,9 @@ function App() {
   };
   const ProtectedRouteRoles = ({ children }) => {
     //RUTAS POTEGIDAS
-    if(auth && rol=="Admin") {
+    if (auth && rol == "Admin") {
       return children;
-    } 
+    }
     return <Navigate to={"/"}></Navigate>;
   };
 
@@ -94,7 +94,7 @@ function App() {
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllTestimonio());
-    dispatch(getEventsPredefinidos()); 
+    dispatch(getEventsPredefinidos());
 
     if (Cookie.get("token")) {
       validToken();
@@ -106,20 +106,13 @@ function App() {
 
   return (
     <>
-    {/* min-h-screen */}
+      {/* min-h-screen */}
       <div className="flex flex-col">
         {!isDashboardRoute && <NavBar />}
         <div className="flex-grow">
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route
-              path="/about"
-              element={
-                <ProtectedRoute>
-                  <About />
-                </ProtectedRoute>
-              }
-            ></Route>
+            <Route path="/about" element={<About />}></Route>
             <Route path="/calendar" element={<CalendarioClient />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
@@ -130,52 +123,120 @@ function App() {
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
             {/* Protected */}
-            <Route path="/dashboard" element={<ProtectedRouteRoles><Dashboard></Dashboard></ProtectedRouteRoles>}>
-              <Route path="/dashboard/Calendario" element={<ProtectedRouteRoles><EventNav /></ProtectedRouteRoles>}>
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRouteRoles>
+                  <Dashboard></Dashboard>
+                </ProtectedRouteRoles>
+              }
+            >
+              <Route
+                path="/dashboard/Calendario"
+                element={
+                  <ProtectedRouteRoles>
+                    <EventNav />
+                  </ProtectedRouteRoles>
+                }
+              >
                 <Route
                   path="/dashboard/Calendario/calendario"
-                  element={<ProtectedRouteRoles><Calendario /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <Calendario />
+                    </ProtectedRouteRoles>
+                  }
                 />
                 <Route
                   path="/dashboard/Calendario/addEvent"
-                  element={<ProtectedRouteRoles><ContarinerNewEvent /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <ContarinerNewEvent />
+                    </ProtectedRouteRoles>
+                  }
                 />
               </Route>
-              <Route path="/dashboard/publinav" element={<ProtectedRouteRoles><PublicationNav /></ProtectedRouteRoles>}>
+              <Route
+                path="/dashboard/publinav"
+                element={
+                  <ProtectedRouteRoles>
+                    <PublicationNav />
+                  </ProtectedRouteRoles>
+                }
+              >
                 <Route
                   path="/dashboard/publinav/table"
-                  element={<ProtectedRouteRoles><TablePublication /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <TablePublication />
+                    </ProtectedRouteRoles>
+                  }
                 />
                 <Route
                   path="/dashboard/publinav/add"
-                  element={<ProtectedRouteRoles><ContarinerNewPublication /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <ContarinerNewPublication />
+                    </ProtectedRouteRoles>
+                  }
                 />
               </Route>
-              <Route path="/dashboard/program" element={<ProtectedRouteRoles><ProgramaNav /></ProtectedRouteRoles>}>
+              <Route
+                path="/dashboard/program"
+                element={
+                  <ProtectedRouteRoles>
+                    <ProgramaNav />
+                  </ProtectedRouteRoles>
+                }
+              >
                 <Route
                   path="/dashboard/program/tableprogram"
-                  element={<ProtectedRouteRoles><ProgramTable /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <ProgramTable />
+                    </ProtectedRouteRoles>
+                  }
                 />
                 <Route
                   path="/dashboard/program/add"
-                  element={<ProtectedRouteRoles><ContarinerNewPrograma /></ProtectedRouteRoles>}
+                  element={
+                    <ProtectedRouteRoles>
+                      <ContarinerNewPrograma />
+                    </ProtectedRouteRoles>
+                  }
                 />
               </Route>
               <Route
                 path="/dashboard/testimononios"
-                element={<ProtectedRouteRoles><TestimoniosContainer /></ProtectedRouteRoles>}
+                element={
+                  <ProtectedRouteRoles>
+                    <TestimoniosContainer />
+                  </ProtectedRouteRoles>
+                }
               />
               <Route
                 path="/dashboard/tableuser"
-                element={<ProtectedRouteRoles><TableUser></TableUser></ProtectedRouteRoles>}
+                element={
+                  <ProtectedRouteRoles>
+                    <TableUser></TableUser>
+                  </ProtectedRouteRoles>
+                }
               />
               <Route
                 path="/dashboard/tableprogram"
-                element={<ProtectedRouteRoles><ProgramTable></ProgramTable></ProtectedRouteRoles>}
+                element={
+                  <ProtectedRouteRoles>
+                    <ProgramTable></ProgramTable>
+                  </ProtectedRouteRoles>
+                }
               />
               <Route
                 path="/dashboard/spotify/podcast"
-                element={<ProtectedRouteRoles><PodcastDashboard></PodcastDashboard></ProtectedRouteRoles>}
+                element={
+                  <ProtectedRouteRoles>
+                    <PodcastDashboard></PodcastDashboard>
+                  </ProtectedRouteRoles>
+                }
               ></Route>
             </Route>
             <Route path="*" element={<NotFound />} />
