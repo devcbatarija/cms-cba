@@ -14,6 +14,7 @@ import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
 import ProgramTable from './components/dashboard/Programas/ProgramTables';
 import PublicationNav from './components/dashboard/Publications/Nav';
+import ProgramaNav from './components/dashboard/Programas/Nav';
 import TableUser from './components/dashboard/Users/tableUser';
 import { getEvents, getEventsPredefinidos } from './redux-toolkit/actions/eventActions';
 import { Toaster } from 'react-hot-toast';
@@ -33,6 +34,8 @@ import EventNav from './components/dashboard/calendario/eventNav';
 import EducationUSA from './components/educationUSA/EducationUSA';
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 import { Podcast } from "./components/multimedia/podcast/podcast";
+import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
+
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -119,7 +122,7 @@ function App() {
                 </Route>
                 {/* <Route path="/dashboard/program" element={<ProgramaNav />}>
                   <Route
-                    path="/dashboard/program/table"
+                    path="/dashboard/program/tableprogram"
                     element={<ProgramTable />}
                   />
                   <Route
