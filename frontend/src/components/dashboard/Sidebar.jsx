@@ -128,6 +128,11 @@ export default function Sidebar() {
                 to: "/dashboard/program/add",
                 icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
               },
+              {
+                label: "Crear precios",
+                to: "/dashboard/program/precio",
+                icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+              },
             ]}
           />
           <NavLink to="/dashboard/spotify/podcast">

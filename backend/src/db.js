@@ -44,7 +44,11 @@ const {
   Evento_Predefinido,
   Programa, 
   Podcast,
-  Testimonios
+  Testimonios,
+  Gallery,
+  Ambientes,
+  ProgramPrices
+
 } = sequelize.models;
 Usuario.hasMany(Publicacion);
 Publicacion.belongsTo(Usuario);
@@ -69,6 +73,15 @@ Podcast.belongsTo(Usuario);
 
 Usuario.hasMany(Testimonios);
 Testimonios.belongsTo(Usuario);
+
+Usuario.hasMany(Ambientes);
+Ambientes.belongsTo(Usuario);
+
+Ambientes.hasMany(Gallery);
+Gallery.belongsTo(Ambientes);
+
+Programa.hasOne(ProgramPrices);
+ProgramPrices.belongsTo(Programa);
 
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,

@@ -1,170 +1,115 @@
 import React, { useState } from "react";
-import styled from "styled-components";
-import Uploader from "./Uploader";
 import axios from "axios";
-import { Grid, MenuItem, Select, Button } from "@mui/material";
-import { useEffect } from "react";
+import { FormGroup, TextField, Button, Container, Grid, Typography } from "@mui/material";
+import Uploader from "../Publications/Uploader";
+import { useSelector } from "react-redux";
+import { styled } from "@mui/system";
+import { toast } from "react-hot-toast";
 
-const Container = styled.div`
-  margin: 0 auto;
-  padding: 10px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 90vh;
-  width: 100%;
-  overflow-y: overlay;
-  overflow-x: hidden;
-`;
-const Title = styled.h2`
-  color: #343a40;
-  font-Size:20px;
+const StyledContainer = styled(Container)`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #000;
+  padding: 16px;
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: 15px;
+const StyledForm = styled("form")`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 5px;
-`;
+const ProgramAddForm = () => {
+  const userId = useSelector((state) => state.login.user._userId);
 
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-`;
+  const initialState = {
+    nombre: "",
+    caracteristica: "",
+    multimedia: "",
+    requisitos: "",
+    UsuarioIdUsuario: userId ? userId : "",
+  };
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-  min-height: 100px;
-  overflow-y: hidden;
-`;
-
-function ProgramAdd({
-  programa,
-  setPrograma,
-  handleSubmitPrograma,
-}) {
-  const [urls, setUrls] = useState([]);
-  const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
+  const [programa, setPrograma] = useState(initialState);
 
   const handleChange = (e) => {
-    const property = e.target.name;
-    const value = e.target.value;
-
-    if (property != "multimedia") {
-      setPrograma({
-        ...programa,
-        [property]: value,
-      });
-      return;
-    }
+    const { name, value } = e.target;
+    setPrograma({
+      ...programa,
+      [name]: value,
+    });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/files/upload", {
-        filePath: programa.multimedia,
-        type: "image",
-      });
-      if (response.data.results) {
-        handleSubmitPrograma(response.data.results);
-      }
+      await axios.post("http://localhost:3001/api/Program", programa);
+
+      toast.success("Registro exitoso.");
+      setPrograma(initialState); // Limpiar los campos del formulario
     } catch (error) {
-      return error;
+      toast.success("Error al crear");
     }
   };
-  useEffect(() => {
-    // Calcula la altura del TextArea basándose en su contenido
-    setTextAreaHeight(`${programa.aprendizaje.split("\n").length * 25}px`);
-  }, [programa.aprendizaje]);
 
   return (
-    <>
-      <Container className="rounded-lg border rounded-lg">
-        <div className="flex flex-col items-center justify-center">
-          <Title>Crear publicación</Title>
-        </div>
-        <form onSubmit={handleSubmit} className="flex flex-col rounded-lg ">
-          <FormGroup style={{ width: "100%" }}>
-            <Label>Nombre:</Label>
-            <Input
-              type="text"
-              name="nombre"
-              value={programa.nombre}
-              onChange={handleChange}
-              required
-            />
-          </FormGroup>
-          <FormGroup style={{ width: "100%" }}>
-            <Label>Aprendizaje:</Label>
-            <TextArea
-              name="aprendizaje"
-              value={programa.aprendizaje}
-              onChange={handleChange}
-              style={{ height: textAreaHeight }}
-              required
-            ></TextArea>
-          </FormGroup>
-          <FormGroup
-            style={{ display: "flex", flexDirection: "row", gap: "20px" }}
-          >
-            <div>
-              <Label>Estado</Label>
-              <Select
-                labelId="demo-select-small-label"
-                id="estado"
-                value={programa.estado}
-                label="rol"
-                onChange={handleChange}
-                name="estado"
-              >
-                <MenuItem value="true">Visible</MenuItem>
-                <MenuItem value="false">Oculto</MenuItem>
-              </Select>
-            </div>
-            <div>
-              <Label>Tipo</Label>
-              <Select
-                labelId="demo-select-small-label"
-                id="tipo"
-                value={programa.tipo}
-                label="tipo"
-                onChange={handleChange}
-                name="tipo"
-              >
-                <MenuItem value="General">General</MenuItem>
-                <MenuItem value="Academico">Academico</MenuItem>
-              </Select>
-            </div>
-          </FormGroup>
-        </form>
+    <StyledContainer>
+      <Typography variant="h5" align="center" gutterBottom>
+        Crear programa
+      </Typography>
+      <StyledForm onSubmit={handleSubmit}>
         <FormGroup>
-          <Label>Arrastre y suelte las imagenes:</Label>
-          <Uploader
-            urls={urls}
-            setUrls={setUrls}
-            programa={programa}
-            setPrograma={setPrograma}
-          ></Uploader>
+          <Typography variant="body1">Nombre:</Typography>
+          <TextField
+            name="nombre"
+            value={programa.nombre}
+            onChange={handleChange}
+            required
+            multiline
+            rows={1}
+          />
         </FormGroup>
-        <Grid sx={{ m: 1, width: "100%" }}>
-          <Button
-            variant="contained"
-            sx={{ width: "100%", borderRadius: "0px" }}
-            onClick={handleSubmit}
-          >
-            Publicar
+        <FormGroup>
+          <Typography variant="body1">Características:</Typography>
+          <TextField
+            name="caracteristica"
+            value={programa.caracteristica}
+            onChange={handleChange}
+            required
+            multiline
+            rows={4}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Typography variant="body1">Requisitos:</Typography>
+          <TextField
+            name="requisitos"
+            value={programa.requisitos}
+            onChange={handleChange}
+            multiline
+            rows={4}
+          />
+        </FormGroup>
+        <FormGroup>
+          <Typography variant="body1">Imagen:</Typography>
+          <TextField
+            name="multimedia"
+            value={programa.multimedia}
+            onChange={handleChange}
+            required
+            multiline
+            rows={1}
+          />
+        </FormGroup>
+        <Grid container justifyContent="center">
+          <Button variant="contained" onClick={handleSubmit}>
+            Crear
           </Button>
         </Grid>
-      </Container>
-    </>
+      </StyledForm>
+    </StyledContainer>
   );
-}
+};
 
-export default ProgramAdd;
+export default ProgramAddForm;

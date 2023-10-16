@@ -6,7 +6,6 @@ import { calcularTimestate } from "../../../services/functions";
 
 const ProgramPreview = ({
   nombre,
-  aprendizaje,
   imagen,
   caracteristicas,
   requisitos,

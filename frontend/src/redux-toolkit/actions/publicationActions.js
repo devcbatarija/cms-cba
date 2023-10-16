@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 export const getAllPublication = createAsyncThunk("/getAllPublication", async () => {
   try {
-    const   response=await axios.get("publication");
+    const response = await axios.get("publication");
     return response.data.results
   } catch (error) {
     return error.message;
@@ -10,24 +10,24 @@ export const getAllPublication = createAsyncThunk("/getAllPublication", async ()
 });
 
 export const deleteStateAllPublications = createAsyncThunk("/deleteStateAllPublications", async (payload) => {
-    try {
-      return [];
-    } catch (error) {
-      return error.message;
-    }
-  });
-  export const selectAllPublications = createAsyncThunk("/selectAllPublications", async (publicationIds) => {
-    return publicationIds;
-  });
-  
-  export const deselectAllPublications = createAsyncThunk("/deselectAllPublications", async () => {
+  try {
     return [];
-  });
-  
-  export const selectPublication = createAsyncThunk("/selectPublication", async (publicationId) => {
-    return publicationId;
-  });
-  
-  export const deselectPublication = createAsyncThunk("/deselectPublication", async (publicationId) => {
-    return publicationId;
-  });
+  } catch (error) {
+    return error.message;
+  }
+});
+export const selectAllPublications = createAsyncThunk("/selectAllPublications", async (publicationIds) => {
+  return publicationIds;
+});
+
+export const deselectAllPublications = createAsyncThunk("/deselectAllPublications", async () => {
+  return [];
+});
+
+export const selectPublication = createAsyncThunk("/selectPublication", async (publicationId) => {
+  return publicationId;
+});
+
+export const deselectPublication = createAsyncThunk("/deselectPublication", async (publicationId) => {
+  return publicationId;
+});
