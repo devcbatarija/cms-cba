@@ -488,6 +488,21 @@ const NavBar = () => {
               >
                 <Link to="/about">Acerca de nosotros</Link>
               </Button>
+              <Button
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "rgba(255,255,255,0.2)", // o cualquier otro color que desees
+                  },
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: ".875rem",
+                  alignContent: "center",
+                  paddingTop: "4px",
+                  textTransform: "none",
+                }}
+              >
+                <Link to="/americanspaces">Espacios Americanos</Link>
+              </Button>
             </Typography>
             {authlogin.auth ? (
               <Tooltip>
