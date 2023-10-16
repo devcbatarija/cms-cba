@@ -12,6 +12,9 @@ export default {
         '80vh': '80vh',
         '30': '123px'
       },
+      width: {
+        '86%': '86%'
+      },
       colors: {
         'cbaBlue': '#002E5F',
         'cbaRed': '#D50032',

@@ -120,7 +120,7 @@ function App() {
                     element={<ContarinerNewPublication />}
                   />
                 </Route>
-                <Route path="/dashboard/program" element={<ProgramaNav />}>
+                {/* <Route path="/dashboard/program" element={<ProgramaNav />}>
                   <Route
                     path="/dashboard/program/tableprogram"
                     element={<ProgramTable />}
@@ -129,7 +129,7 @@ function App() {
                     path="/dashboard/program/add"
                     element={<ContarinerNewPrograma />}
                   />
-                </Route>
+                </Route> */}
                 <Route
                   path="/dashboard/testimononios"
                   element={<TestimoniosContainer />}

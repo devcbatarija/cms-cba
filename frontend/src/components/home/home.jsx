@@ -17,6 +17,7 @@ import segunda from "../../assets/2.jpeg";
 import tercera from "../../assets/3.jpeg";
 import cuarta from "../../assets/4.jpeg";
 import { TestimonioPreview } from "../testimonios/testimonioPreview";
+import ImagenesEstilizadas from "../dashboard/widgets/imagenPublicacion";
 
 const dataImage = [primera, segunda, tercera, cuarta];
  
@@ -50,10 +51,7 @@ const Home = () => {
   useEffect(() => {
   }, []);
 
-  const sortedPublications = [...multimediadata].sort((a, b) => {
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-  const latestPublications = sortedPublications.slice(0, 2);
+  const latestPublications = multimediadata.slice(0, 2);
   const renderDescription = (descripcion) => {
     return {
       __html: descripcion.replace(/\n/g, "<br>"),
@@ -82,8 +80,9 @@ const Home = () => {
                 sm:grid-cols-1 md:grid-cols-2
                 items-center justify-center bg-white"
                 >
-                  <div className="">
-                    <Carousel multimedia={m.multimedia} type="home"></Carousel>
+                  <div className="h-72 px-8">
+                    <ImagenesEstilizadas multimedia={m.multimedia}/>
+                    {/* <Carousel multimedia={m.multimedia} type="home"></Carousel> */}
                   </div>
                   <div className="flex flex-col p-6">
                     <h2
