@@ -70,7 +70,7 @@ export default function Sidebar() {
           icon={StoreMallDirectoryOutlinedIcon} 
           label="Programas"
           subItems={[
-            {label:"Tabla",to:"/dashboard/tableprogram"},
+            {label:"Tabla",to:"/dashboard/program/tableprogram"},
             {label:"Crear nuevo",to:"/dashboard/program/add"}
           ]}
         />
