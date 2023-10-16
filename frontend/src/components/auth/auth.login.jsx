@@ -11,13 +11,23 @@ import { signin } from "../../redux-toolkit/actions/auth.Actions";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
+import { useForm } from "react-hook-form";
 const Login = () => {
   const [form, setForm] = useState({
     correo: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [errorBack, setErrorBack] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { error },
+    watch,
+    setValue,
+    reset,
+  } = useForm(); //useFormErrors
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.login);
@@ -41,14 +51,13 @@ const Login = () => {
       });
       const response = await axios.post("users/login", form, {
         withCredentials: true,
-      }); 
+      });
       toast.success("Inicio de sesión exitoso");
       dispatch(signin(response.data));
     } catch (error) {
-      setError(error.response.data.messageError);
+      setErrorBack(error.response.data.messageError);
     }
   };
-
   useEffect(() => {
     if (auth.auth) {
       navigate("/");
@@ -56,7 +65,10 @@ const Login = () => {
   }, [auth.auth, navigate]);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-full p-4 md:px-20  bg-gray-502" style={{ height: "90vh" }}>
+    <div
+      className="flex flex-col md:flex-row min-h-full p-4 md:px-20  bg-gray-502"
+      style={{ height: "90vh" }}
+    >
       <div className="flex flex-col items-center justify-center w-full h-full md:h-auto md:w-6/12 shadow border">
         <div style={{ width: "80%", padding: "15px" }}>
           <Typography variant="h5" component="h2">
@@ -65,50 +77,52 @@ const Login = () => {
         </div>
         <form
           onSubmit={handeSubmit}
-          className="formLogin flex flex-col items-center"
-          style={{ width: "100%", justifyContent: "center" }}
+          className="formLogin flex flex-col items-center w-4/5"
+          style={{
+            justifyContent: "center",
+            color: "rgba(45,45,45,0.8)",
+          }}
         >
-          {error ? <Alert severity="error">{error}</Alert> : null}
+          {errorBack ? <Alert severity="error">{errorBack}</Alert> : null}
           {/* Campo de Correo */}
-          <FormControl sx={{ width: "80%" }}>
-            <TextField
-              onChange={handleChange}
-              value={form.correo}
+          <div className="w-full">
+            <input
+              className="w-full px-3 py-2 border rounded-md outline-none"
+              type="text"
               id="outlined-basic-correo"
               name="correo"
-              type="txt"
-              label="Correo"
-              variant="outlined"
+              onChange={handleChange}
+              value={form.correo}
+              placeholder="Correo"
             />
-          </FormControl>
+          </div>
           {/* Campo de Contraseña */}
-          <FormControl sx={{ width: "80%", mt: 2 }}>
-            <TextField
+          <div className="w-full">
+            <input
+              className="w-full px-3 py-2 border rounded-md outline-none"
+              type="password"
+              id="outlined-basic-correo"
+              name="password"
               onChange={handleChange}
               value={form.password}
-              id="outlined-basic-password"
-              name="password"
-              type="password"
-              label="Contraseña"
-
-              variant="outlined"
+              placeholder="password"
             />
-          </FormControl>
-          <Button
+          </div>
+          <button
             type="submit"
-            variant="contained"
-            sx={{ width: "80%", background: "#002E5F" ,borderRadius:"5px",minHeight:"40px" }}
+            className="w-full bg-blue-900 rounded-lg h-10 text-white"
+            style={{ minHeight: "40px" }}
           >
             Iniciar sesión
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{ width: "80%", borderColor: "#002E5F", color: "#002E5F",borderRadius:"5px",minHeight:"40px" }}
+          </button>
+
+          <button
+            className="w-full bg-white-900 rounded-lg h-10 text-blue-900 border"
+            style={{ minHeight: "40px" }}
             onClick={() => navigate("/register")}
-            className="mt-2"
           >
-            Registrar
-          </Button>
+            Register
+          </button>
         </form>
       </div>
       <div

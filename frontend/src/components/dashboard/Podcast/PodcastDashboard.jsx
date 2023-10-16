@@ -11,20 +11,29 @@ import toast from "react-hot-toast";
 import "./Styles.css";
 import Uploader from "../Publications/Uploader";
 import Percents from "../../progressBar/Percents";
+import styled from "styled-components";
 
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ced4da;
+  min-height: 100px;
+  overflow-y: hidden;
+`;
 const PodcastDashboard = () => {
   const dataCredentials = useSelector((state) => state.podcasts.credentials);
   const userId = useSelector((state) => state.login.user._userId);
   const songs = useSelector((state) => state.podcasts.podcasts);
-  console.log(songs)
+  const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
+
   const [selected, setSelected] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showProgress, setShowProgress] = useState({
     message: false,
     bar: false,
   });
-  const [urls, setUrls] = useState([]);
-
   const [form, setForm] = useState({
     epi_number: "",
     description: "",
@@ -33,7 +42,7 @@ const PodcastDashboard = () => {
     multimedia: [],
     state: false,
     file: "",
-    url_cloudfront:"",
+    url_cloudfront: "",
     UsuarioIdUsuario: userId ? userId : "",
   });
   const dispatch = useDispatch();
@@ -57,11 +66,11 @@ const PodcastDashboard = () => {
         filePath: form.multimedia,
         type: "image",
       });
-      if (response.data.results) {
+      if (response.data) {
         setForm({
           ...form,
-          imageUrl:response.data.results[0]
-        })
+          imageUrl: response.data.results[0],
+        });
         formData.append("media", form.file);
         eventsSSE();
         setShowProgress({
@@ -73,26 +82,22 @@ const PodcastDashboard = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        if(res.data.Key){
-          const registerEnd=await axios.post('podcast/song/upload/database',
-          {
-            epi_number:form.epi_number,
-            description:form.description,
-            authors:form.authors,
-            url_cloudfront:res.data.Key,
-            image:response.data.results[0],
-            state:true,
-            UsuarioIdUsuario:form.UsuarioIdUsuario
-          })
-          if(registerEnd.data){
-            updateState()
+        if (res.data.data.Key) {
+          const registerEnd = await axios.post("podcast/song/upload/database", {
+            epi_number: form.epi_number,
+            description: form.description,
+            authors: form.authors,
+            url_cloudfront: res.data.data.Key,
+            image: response.data.results[0],
+            state: true,
+            UsuarioIdUsuario: form.UsuarioIdUsuario,
+          });
+          if (registerEnd.data.data) {
+            updateState();
           }
-          console.log(registerEnd.data)
         }
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const eventsSSE = () => {
     const eventSource = new EventSource(
@@ -108,12 +113,16 @@ const PodcastDashboard = () => {
     };
   };
   const updateState = () => {
-    dispatch(getPodcastSongs())
-  }
+    dispatch(getPodcastSongs());
+  };
   useEffect(() => {
-    updateState()
+    updateState();
   }, []);
-
+  useEffect(() => {
+    if (form.descripcion) {
+      setTextAreaHeight(`${form.descripcion.split("\n").length * 25}px`);
+    }
+  }, [form.descripcion]);
   return (
     <div className="flex flex-col md:flex-row min-h-full p-2 bg-gray-50 gap-2">
       <div className="bg-zinc-50 w-full h-full md:h-auto md:w-6/12 gap-2 rounded-lg shadow border">
@@ -169,15 +178,14 @@ const PodcastDashboard = () => {
             >
               Descripcion
             </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            <TextArea
               id="description"
-              type="text"
               name="description"
-              placeholder="Descripcion"
+              value={form.descripcion}
               onChange={handleChange}
-              value={form.description}
-            />
+              style={{ height: textAreaHeight }}
+              required
+            ></TextArea>
           </div>
           <div className="mb-4">
             <label
@@ -197,18 +205,14 @@ const PodcastDashboard = () => {
             />
           </div>
           <div className="w-12/12 pr-2">
-            <Uploader
-              setUrls={setUrls}
-              publicacion={form}
-              setPublicacion={setForm}
-            ></Uploader>
+            <Uploader publicacion={form} setPublicacion={setForm}></Uploader>
           </div>
           <div className="flex items-center justify-between">
             <button
               className="bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Agregar
+              Subir
             </button>
           </div>
         </form>
@@ -246,25 +250,23 @@ const PodcastDashboard = () => {
         </div>
         <div className="flex flex-col md:flex-row p-2 gap-2">
           <div className="flex flex-col w-full h-full md:h-auto md:w-12/12 gap-2 gap-2 scroll border-b-2">
-            {
-              songs &&
-                songs.map((s) => {
-                  return (
-                    <div key={s.id_Podcast}>
-                      {s.url_cloudfront ? (
-                        <Reproductor
-                          // key={s.name}
-                          song={s.url_cloudfront}
-                          name={s.description}
-                          album={s.album} 
-                          imgSong={s.image}
-                          authors={s.authors}
-                        ></Reproductor>
-                      ) : null}
-                    </div>
-                  );
-                })
-            }
+            {songs &&
+              songs.map((s) => {
+                return (
+                  <div key={s.id_Podcast}>
+                    {s.url_cloudfront ? (
+                      <Reproductor
+                        // key={s.name}
+                        song={s.url_cloudfront}
+                        name={s.description}
+                        album={s.album}
+                        imgSong={s.image}
+                        authors={s.authors}
+                      ></Reproductor>
+                    ) : null}
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
