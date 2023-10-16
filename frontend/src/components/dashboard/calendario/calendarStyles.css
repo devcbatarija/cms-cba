@@ -1,8 +1,10 @@
+.expandedEvent{
+  height: auto !important;
+  transition: height 8s ease !important;
+}
+
 .eventPred {
-  /* background-color: rgb(243, 243, 245); */
   border-radius: 10px;
-  padding: 8%;
-  height: 80vh;
   overflow: auto; 
 }
 
@@ -11,9 +13,7 @@
 }
 
 .calendar {
-  /* background-color: rgb(243, 243, 245); */
   border-radius: 10px;
-  /* padding: 0px 20px 20px 20px; */
   text-transform: capitalize;
 }
 
@@ -22,22 +22,13 @@
 }
 
 :root {
-  /* --fc-today-bg-color: none; */
+  --fc-today-bg-color:rgb(219, 234, 254) ;
   /* Establece el color de fondo del día actual */
   /* --fc-border-color: none; */
 }
-
-/* .fc-scrollgrid-sync-inner{
-    padding: 10px;
-  }
-  .fc-daygrid-day-frame{
-    background-color: red;
-    border: 1px solid yellow;
-  } */
 .fc-day {
   /* border-radius: 10%; */
 }
-
 /* .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
     color: white; 
     background-color: rgb(137, 194, 227);
@@ -45,18 +36,15 @@
     height: 100%;
     padding-left: 19.38px;
   } */
-.fc-view {
-  background-color: white;
-}
+
 
 .fc-highlight {
-  /* border-radius: 50%; */
-  background-color: rgb(137, 194, 227) !important;
+  background-color: rgb(219, 234, 254) !important;
 }
 
 
-@media (min-width: 640px) {
-  .fc-daygrid-day-top {
-    text-align: center;
+@media (max-width: 640px) {
+  .fc-view {
+    font-size: 10px !important;
   }
 }

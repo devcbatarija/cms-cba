@@ -1,12 +1,7 @@
 /* Sidebar.css */
 
 /* Establece el contenedor principal como una cuadrícula */
-.containerr {
-  display: grid;
-  grid-template-columns: 15% 85%;
-  min-height: 100vh;
-  width: 100%; 
-}
+ 
 
 /* Establece los estilos para la barra lateral */
 .side-container {
@@ -16,42 +11,4 @@
   overflow: hidden;
   z-index: 4;
   border-right:1px solid #ACACAC;
-}
-
- 
-.side-container h1 {
-  padding: 20px;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-.side-container ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.side-container li {
-  margin-bottom: 10px;
-  transition: transform 0.3s;
-  display: flex;
-  align-items: center;
-}
- 
-
-.side-container a {
-  text-decoration: none;
-  color: rgb(0, 0, 0);
-  display: inline-block;
-  width: 100%;
-  padding: 10px 20px;
-}
-
-.side-container .icon {
-  margin-right: 10px;
-}
-
-.sidebar-link:hover {
-  background-color: lightblue;
-  transition: background-color 0.25s;
 }

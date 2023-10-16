@@ -34,4 +34,4 @@
 
 .quote:last-of-type::after {
   transform: rotate(270deg);
-}
+} 
