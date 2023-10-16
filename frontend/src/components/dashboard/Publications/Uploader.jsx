@@ -174,6 +174,7 @@ const clearFileInput = () => {
         name="file"
         onChange={convertBase}
         ref={fileInputRef}
+        multiple
       />
     </UploadContainer>
   );
