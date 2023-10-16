@@ -1,35 +1,30 @@
-const { getPodcastsBd, addPodcastAws,addPodcastBd } = require("../controllers/podcastController") 
-const fs=require('fs');
+const {
+  getPodcastsBd,
+  addPodcastAws,
+  addPodcastBd,
+} = require("../controllers/podcastController");
+const fs = require("fs");
+const { response } = require("../utils");
 
- 
-module.exports={
-    getPodcastsBd:async(req,res)=>{
-        try {
-            const result=await getPodcastsBd();
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json(error);
-        }
-    },
-    addPodcastAws:async(req,res)=>{
-        const filePath=req.files.media;
-        try {
-            console.log(filePath)
-            const result = await addPodcastAws(filePath);
-            fs.unlink(filePath.tempFilePath, err => {
-                if (err) console.error(`Error deleting temp file ${filePath.tempFilePath}:`, err);
-            }); 
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(409).json({error:error.message});
-        }
-    }, 
-    addPodcastBd:async(req,res)=>{ 
-        try { 
-            const result = await addPodcastBd(req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(409).json({error:error.message});
-        }
-    },
-}
+module.exports = {
+  getPodcastsBd: async (req, res) => {
+    const result = await getPodcastsBd();
+    response(res, 200, result);
+  },
+  addPodcastAws: async (req, res) => {
+    const filePath = req.files.media;
+    const result = await addPodcastAws(filePath);
+    fs.unlink(filePath.tempFilePath, (err) => {
+      if (err)
+        console.error(
+          `Error deleting temp file ${filePath.tempFilePath}:`,
+          err
+        );
+    });
+    response(res, 200, result);
+  },
+  addPodcastBd: async (req, res) => {
+      const result = await addPodcastBd(req.body);
+      response(res,200,result)
+  },
+};

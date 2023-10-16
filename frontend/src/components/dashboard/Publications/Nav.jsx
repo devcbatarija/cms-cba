@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 function Publicacion() {
 
   return (
-    <div style={{ backgroundColor: 'white', color: 'black' }}>
+    <div style={{ backgroundColor: 'white', color: 'black'}}>
       <Outlet></Outlet>
     </div>
   );

@@ -28,7 +28,7 @@ function DashNavbar() {
   const menuId = 'primary-search-account-menu';
 
   const navbarStyle = {
-    background: 'white',
+    background: 'black',
     color: 'black',
     borderBottom: '1px solid #ACACAC', // Cambia el color y el grosor de la línea inferior
     boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Añade una sombra
@@ -36,45 +36,41 @@ function DashNavbar() {
 
   return (
     <AppBar position="static" style={navbarStyle}>
-      <Toolbar style={{ justifyContent: 'space-between' }}>
-        <Typography variant="h6" noWrap>
-          <img
-            src="https://www.pagoexpress.com.bo/sitioweb/assets/images/cba.png"
-            style={{ width: '80px', height: '60px', vertical:'top', horizontal:'left' }}
-            alt=""
-            srcSet=""
-          />
-        </Typography>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-            {authlogin.auth ? (
-              <Tooltip>
-                <IconButton
-                  onClick={() => {
-                    setAuth(!auth);
+      <Toolbar style={{ justifyContent: "space-between" }}>
+        <Typography variant="h6" noWrap></Typography>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {authlogin.auth ? (
+            <Tooltip>
+              <IconButton
+                onClick={() => {
+                  setAuth(!auth);
+                }}
+                sx={{ p: 0 }}
+              >
+                <PositionedMenu
+                  styles={{
+                    border: "1px solid white",
+                    width: "45px",
+                    height: "45px",
+                    cursor: "pointer"
                   }}
-                  sx={{ p: 0 }}
-                >
-                  <PositionedMenu
-                    altImg={authlogin.user.correo}
-                    srcImg={authlogin.user._profileImage}
-                  ></PositionedMenu>
-                </IconButton>
-              </Tooltip>
-            ):null
-            }
+                ></PositionedMenu>
+              </IconButton>
+            </Tooltip>
+          ) : null}
         </div>
       </Toolbar>
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         id={menuId}
         keepMounted
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         open={isMenuOpen}
         onClose={handleMenuClose}
