@@ -11,3 +11,47 @@
     color: whitesmoke;
     padding: 20px;
 }
+.rigth-pub{
+    background: rgb(9, 9, 145);
+}
+.text-scroll {
+  overflow: hidden; /* oculta todo el contenido que se salga del elemento */
+}
+.text-scroll h1{ 
+  white-space: nowrap; /* asegura que el texto no se rompa en varias líneas */
+  overflow: hidden; /* oculta todo el contenido que se salga del elemento */
+  animation: scroll-text 8s linear infinite; /* animación para el desplazamiento del texto */
+}
+.text-scroll span{ 
+  white-space: nowrap; /* asegura que el texto no se rompa en varias líneas */
+  overflow: hidden; /* oculta todo el contenido que se salga del elemento */
+  animation: scroll-text 8s linear infinite; /* animación para el desplazamiento del texto */
+}
+@keyframes scroll-text {
+  from {
+    text-indent: 100%; /* empieza con todo el texto oculto */
+  }
+  to {
+    text-indent: -100%; /* mueve el texto hacia la izquierda, revelando letra por letra */
+  }
+}
+.text-scroll span{
+    text-decoration-color: rgba(0,46,95); 
+    text-decoration-style:solid;
+} 
+@keyframes jump {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+.img-logo-shadow { }
+
+.bg-grad{
+  background-color: linear-gradient(to right, rgb(134, 239, 172), rgb(59, 130, 246), rgb(147, 51, 234));
+}

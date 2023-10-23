@@ -240,6 +240,8 @@ const NavBar = () => {
                   <PositionedMenu
                     altImg={authlogin.user.correo}
                     srcImg={authlogin.user._profileImage}
+                    nombres={authlogin.user.nombres}
+                    apellidos={authlogin.user.apellidos}
                   ></PositionedMenu>
                 </IconButton>
               </Tooltip>
@@ -317,7 +319,7 @@ const NavBar = () => {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center", 
+                  alignItems: "center",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
@@ -406,7 +408,7 @@ const NavBar = () => {
                   alignContent: "center",
                   paddingTop: "4px",
                   gap: 10,
-                }} 
+                }}
                 name="publicaciones"
                 onClick={handleClick}
               >
@@ -582,6 +584,8 @@ const NavBar = () => {
                   <PositionedMenu
                     altImg={authlogin.user.correo}
                     srcImg={authlogin.user._profileImage}
+                    nombres={authlogin.user.nombres}
+                    apellidos={authlogin.user.apellidos}
                   ></PositionedMenu>
                 </IconButton>
               </Tooltip>
@@ -595,12 +599,12 @@ const NavBar = () => {
                     setAuth(!auth);
                   }}
                   style={{
-                    background:'#DC2626',
                     color: "white",
                     textDecoration: "none",
                     display: "grid",
                     alignContent: "center",
-                  }} 
+                    background: "#002E5F"
+                  }}
                 >
                   INICIAR SESION
                 </Button>

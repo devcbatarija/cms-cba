@@ -9,7 +9,8 @@ const {
     emailVerifyToken,
     updateState,
     getById,
-    deleteSelect
+    deleteSelect,
+    updateImage
 }=require("../handlers/usuarioHandler");
 
 const { validToken } = require("../services/jwtservice");
@@ -28,5 +29,5 @@ router.put('/state/update/:id',updateState)
 router.get('/get/by/:id',getById);
 
 router.post('/delete/select',deleteSelect); //agregar a programas
-
+router.put('/put/image',updateImage); //editar imagenes
 module.exports=router;
