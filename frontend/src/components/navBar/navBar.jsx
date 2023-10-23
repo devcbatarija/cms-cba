@@ -555,7 +555,7 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
-                <Link to="/gallery">Espacios USA</Link>
+                <Link to="/americanSpaces">Espacios USA</Link>
               </NavLink>
               <NavLink
                 style={{

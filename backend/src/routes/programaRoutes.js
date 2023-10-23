@@ -5,7 +5,8 @@ const {
      addPrograma,
      updatePrograma,
      deletePrograma,
-     getProgram
+     getProgram,
+     deleteProgramSelect
 } = require('../handlers/programaHandler');
 
 // Obtener todos los programas y agregar un nuevo programa
@@ -17,4 +18,6 @@ router.put('/:id', updatePrograma);
 router.delete('/:id', deletePrograma);
 router.get('/:id', getProgram);
 
+
+router.post('/delete/select', deleteProgramSelect);
 module.exports = router;

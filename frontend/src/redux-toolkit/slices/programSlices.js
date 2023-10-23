@@ -4,31 +4,28 @@ import { deleteStateAllPrograms, deselectAllPrograms, deselectProgram, getAllPro
 
 // Define el estado inicial para este slice de Redux.
 const initialState = {
-    programs: [],              // Un array para almacenar programas.
-    selectedPrograms: []   // Un array para almacenar las publicaciones seleccionadas.
+    programs: [],   
+    selectedPrograms: [],
+    programPices:[]
 };
 
 // Crea un slice de Redux llamado "programSlices" con su estado inicial.
 const programSlices = createSlice({
-  name: "programs",           // El nombre del slice.
-  initialState,               // El estado inicial definido anteriormente.
+  name: "programs",
+  initialState,
   extraReducers: (builder) => {
-    // Maneja las acciones asincrónicas relacionadas con `getAllProgram`.
 
-    // Cuando la acción `getAllProgram` está en estado "pending" (en progreso).
     builder.addCase(getAllProgram.pending, (state) => {
-      state.status = "pending";  // Establece el estado a "pending".
+      state.status = "pending";
     });
 
-    // Cuando la acción `getAllProgram` se resuelve exitosamente (fulfilled).
     builder.addCase(getAllProgram.fulfilled, (state, action) => {
-      state.programs = action.payload;  // Actualiza el estado con los programas obtenidos.
-      state.status = "success";            // Establece el estado a "success".
+      state.programs = action.payload;
+      state.status = "success";
     });
 
-    // Cuando la acción `getAllProgram` es rechazada (rejected).
     builder.addCase(getAllProgram.rejected, (state) => {
-      state.status = "rejected";  // Establece el estado a "rejected".
+      state.status = "rejected";
     });
 
 

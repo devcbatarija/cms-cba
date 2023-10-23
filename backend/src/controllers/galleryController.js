@@ -1,4 +1,4 @@
-const { Gallery } = require("../db")
+const { Gallery, Ambientes } = require("../db")
 
 module.exports = {
     getAllGallery: async () => {
@@ -10,6 +10,7 @@ module.exports = {
         }
     },
     addGallery: async (g) => {
+        console.log(g)
         try {
             const galleria = {
                 image: g.imagen,
@@ -28,6 +29,31 @@ module.exports = {
             const gallery = await Gallery.findByPk(id);
             Gallery.destroy();
             return gallery;
+        } catch (error) {
+            return error;
+        }
+    },
+    getGallery: async (id) => {
+        try {
+            const program = await Gallery.findByPk(id, {
+                include: [{ model: Usuario }],
+            });
+            if (!program) {
+                throw new Error("Gallery no encontrado");
+            }
+            return program;
+        } catch (error) {
+            throw new Error("Error al obtener Gallery");
+        }
+    },
+    deleteGallerySelect: async (pubIds) => {
+        try {
+            for (let id of pubIds) {
+                const progra = await Ambientes.findByPk(id);
+                await progra.destroy();
+            }
+            const remainingProgram = await Ambientes.findAll();
+            return remainingProgram;
         } catch (error) {
             return error;
         }

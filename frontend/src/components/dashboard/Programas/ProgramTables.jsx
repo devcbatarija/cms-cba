@@ -1,37 +1,25 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deleteStateAllPrograms, deselectAllPrograms, 
-  deselectProgram, getAllProgram, selectAllPrograms, 
-  selectProgram } from "../../../redux-toolkit/actions/programActions";
+import {
+  deleteStateAllPrograms, deselectAllPrograms,
+  deselectProgram, getAllProgram, selectAllPrograms,
+  selectProgram
+} from "../../../redux-toolkit/actions/programActions";
 import toast from "react-hot-toast";
-import { Avatar, Button, Checkbox, Grid, Paper, Table, 
-  TableBody, TableCell, TableContainer, TableHead, 
-  TableRow } from "@mui/material";
+import {
+  Avatar, Button, Checkbox, Grid, Paper, Table,
+  TableBody, TableCell, TableContainer, TableHead,
+  TableRow
+} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
-import ModalUpdateProgram from './modalUpdateProgram';
-import ModalAddProgram from "./modalAddProgram";
 
 export default function ProgramTable() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.programs.programs);
   const selectedPrograms = useSelector((state) => state.programs.selectedPrograms);
   const [selectAll, setSelectAll] = useState(false);
-
-  //variables y funciones para controlar un modal de detalles del programa
-  const [open, setOpen]=useState(false);
-  const [selectedProgramModal, setSelectedProgramModal]=useState("");
-
-  const handleOpen=()=>setOpen(true);
-  const handleClose=()=>setOpen(false);
-  //Variables y funciones para controlar el modal de agregar un nuevo programa
-  const [openAddProgram, setOpenAddProgram] = useState(false);
-
-  const handleOpenAddProgram = () => setOpenAddProgram(true);
-  const handleCloseAddProgram = () => setOpenAddProgram(false);
 
   //funcion para seleccionar/deseleccionar los programas
   const handleSelectAll = () => {
@@ -44,14 +32,13 @@ export default function ProgramTable() {
       setSelectAll(false);
     }
   };
-console.log(data);
-  const handModal=(id)=>{
+  const handModal = (id) => {
     setSelectedProgramModal(id);
     handleOpen(true);
   };
   //funcion para eliminar los programas
   const handleDelete = async () => {
-    const response=await axios.post('program/delete/select', {ids: selectedPrograms});
+    const response = await axios.post('program/delete/select', { ids: selectedPrograms });
     setTimeout(() => {
       dispatch(getAllProgram());
       dispatch(deselectAllPrograms());
@@ -60,12 +47,12 @@ console.log(data);
     }, 1500);
   };
   //Funcion para seleccionar/deseleccionar una publicacion individual
-  const handleSelectProgram = (id_Programa) => {
-    if (selectedPrograms.includes(id_Programa)) {
-      dispatch(deselectProgram(id_Programa));
+  const handleSelectProgram = (idPrograma) => {
+    if (selectedPrograms.includes(idPrograma)) {
+      dispatch(deselectProgram(idPrograma));
       setSelectAll(false);
     } else {
-      dispatch(selectProgram(id_Programa));
+      dispatch(selectProgram(idPrograma));
     }
   };
   useEffect(() => {
@@ -77,22 +64,7 @@ console.log(data);
     <TableContainer
       sx={{ width: "100%", borderRadius: "0", height: "100vh%" }}
       component={Paper}>
-      {
-        open ? <ModalUpdateProgram
-          id={selectedProgramModal}
-          open={open}
-          handleOpen={handleOpen}
-          handleClose={handleClose}
-        ></ModalUpdateProgram> : null
-      }
-      {/*Renderizar el modal de agregar programa*/}
-      {
-        openAddProgram?<ModalAddProgram
-        open={openAddProgram}
-        handleOpen={handleOpenAddProgram}
-        handleClose={handleCloseAddProgram}
-        ></ModalAddProgram> : null
-      }
+
       <Grid
         container
         direction="row"
@@ -101,24 +73,17 @@ console.log(data);
         style={{ padding: "10px", gap: "10px" }}
       >
         {/*Boton para eliminar publicaciones*/}
-          <Button
-            disabled={selectedPrograms.length > 0 ? false : true}
-            variant="contained"
-            color="error"
-            sx={{ borderRadius: "3px" }}
-            onClick={handleDelete}
-            startIcon={<DeleteIcon />}>
-            Borrar {selectedPrograms.length}
-          </Button>
-        {/*Boton para agregar nueva publicacion*/}
         <Button
+          disabled={selectedPrograms.length > 0 ? false : true}
           variant="contained"
-          sx={{ borderRadius: "0px" }}
-          startIcon={<AddIcon sx={{ color: 'white' }} />}
-          onClick={handleOpenAddProgram}
-        >
-          Añadir
+          color="error"
+          sx={{ borderRadius: "3px" }}
+          onClick={handleDelete}
+          startIcon={<DeleteIcon />}>
+          Borrar {selectedPrograms.length}
         </Button>
+        {/*Boton para agregar nueva publicacion*/}
+
       </Grid>
 
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -139,7 +104,7 @@ console.log(data);
             <TableCell align="center">Descripcion</TableCell>
             <TableCell align="center">Requisitos</TableCell>
             <TableCell align="center">Imagen</TableCell>
-            <TableCell align="right">Acciones</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -152,27 +117,27 @@ console.log(data);
               <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
-                  checked={selectedPrograms.includes(row.id_Programa)}
-                  onChange={() => handleSelectProgram(row.id_Programa)}
+                  checked={selectedPrograms.includes(row.idPrograma)}
+                  onChange={() => handleSelectProgram(row.idPrograma)}
                 />
               </TableCell>
               {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.nombre}</TableCell>
-              <TableCell align="center">{row.caracteristica}</TableCell>            
+              <TableCell align="center">{row.caracteristica}</TableCell>
               <TableCell align="center">{row.requisitos}</TableCell>
-              <TableCell align="center">
-                <Avatar alt="Remy Sharp" src={row.imagen ? row.imagen : null} />
-              </TableCell>
-              <TableCell align="center">
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={()=>handModal(row.id_Programa)}
-                  sx={{ borderRadius: "0px" }}
-                  endIcon={<EditIcon></EditIcon>}
-                >
-                  Editar
-                </Button>
+              <TableCell align="center" sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}>
+                {row.multimedia.map((im, index) => (
+                  <Avatar
+                    key={index}
+                    alt="Remy Sharp"
+                    src={im ? im : null}
+                    sx={{ width: 102, height: 102 }}
+                  />
+                ))}
               </TableCell>
             </TableRow>
           ))}

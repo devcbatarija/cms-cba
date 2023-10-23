@@ -44,7 +44,7 @@ export default function Steps({ steps, index, type, description, color }) {
                             right: 0,
                         }}
                     ></div>
-                    <p>{steps}</p>
+                    <p className="text-sm">{steps}</p>
                 </div>
                 <div className="flex justify-center font-bold uppercase items-center w-2/12 h-8 " style={circleStyle}>
                     <p
@@ -62,10 +62,10 @@ export default function Steps({ steps, index, type, description, color }) {
                             left: 0,
                         }}
                     ></div>
-                    <p>{type}</p>
+                    <p className="text-sm">{type}</p>
                 </div>
             </div>
-            <div className="text-justify   pb-3 pl-10 pr-10 pt-3">
+            <div className="text-justify   pb-3 pl-2 pr-2 pt-3">
                 <p>{description}</p>
             </div>
         </div>
