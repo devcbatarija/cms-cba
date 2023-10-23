@@ -47,6 +47,8 @@ module.exports = {
           _userId: usLogin.id_Usuario,
           _profileImage: usLogin.image,
           correo: usLogin.correo,
+          nombres: usLogin.nombres,
+          apellidos: usLogin.apellidos,
           rol: usLogin.rol,
         };
         return res.status(200).json({ user: usResult });
