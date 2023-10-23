@@ -47,6 +47,12 @@ import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNew
 import { getPodcastSongs } from "./redux-toolkit/actions/podcastActions";
 import ProgramaPrecios from "./components/dashboard/Programas/ProgramPrices";
 import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
+import { getAllProgram } from "./redux-toolkit/actions/programActions";
+import { getAllProgramPrices } from "./redux-toolkit/actions/programPricesActions";
+import GalleryNav from "./components/dashboard/Gallery360/Navegacion";
+import GalleryAddComponent from "./components/dashboard/Gallery360/GalleryAdd";
+import GalleryTable from "./components/dashboard/Gallery360/GalleryTable";
+import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -100,6 +106,8 @@ function App() {
     dispatch(getEvents());
     dispatch(getAllTestimonio());
     dispatch(getEventsPredefinidos());
+    dispatch(getAllProgram());
+    dispatch(getAllProgramPrices());
 
     if (Cookie.get("token")) {
       validToken();
@@ -153,7 +161,7 @@ function App() {
             <Route path="/programs/teens" element={<ProgramTeens />} />
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
-            <Route path="/gallery" element={<GalleryContainer />} />
+            <Route path="/americanSpaces" element={<GalleryContainer />} />
 
             {/* Protected */}
             <Route
@@ -196,6 +204,39 @@ function App() {
                 <Route
                   path="/dashboard/program/add"
                   element={<ContarinerNewPrograma />}
+                />
+              </Route>
+              <Route
+                path="/dashboard/spaces"
+                element={
+                  <ProtectedRouteRoles>
+                    <GalleryNav />
+                  </ProtectedRouteRoles>
+                }
+              >
+                <Route
+                  path="/dashboard/spaces/ambienteAdd"
+                  element={
+                    <ProtectedRouteRoles>
+                      <AmbienteAddComponent />
+                    </ProtectedRouteRoles>
+                  }
+                />
+                <Route
+                  path="/dashboard/spaces/imageAdd"
+                  element={
+                    <ProtectedRouteRoles>
+                      <GalleryAddComponent />
+                    </ProtectedRouteRoles>
+                  }
+                />
+                <Route
+                  path="/dashboard/spaces/table"
+                  element={
+                    <ProtectedRouteRoles>
+                      <GalleryTable />
+                    </ProtectedRouteRoles>
+                  }
                 />
               </Route>
               <Route

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { FormGroup, TextField, Button, Container, Grid, Typography } from "@mui/material";
-import Uploader from "../Publications/Uploader";
 import { useSelector } from "react-redux";
 import { styled } from "@mui/system";
 import { toast } from "react-hot-toast";
@@ -20,29 +19,25 @@ const StyledForm = styled("form")`
   gap: 16px;
 `;
 
-const ProgramAddForm = () => {
+const AmbienteAddComponent = () => {
   const userId = useSelector((state) => state.login.user._userId);
+  console.log(userId)
 
   const initialState = {
     nombre: "",
-    caracteristica: "",
-    multimedia: "",
-    requisitos: "",
+    descripcion: "",
     UsuarioIdUsuario: userId ? userId : "",
   };
-  const [urls, setUrls] = useState([]);
-  const [programa, setPrograma] = useState({
+  const [ambiente, setAmbiente] = useState({
     nombre: "",
-    caracteristica: "",
-    requisitos: "",
-    multimedia: [],
+    descripcion: "",
     UsuarioIdUsuario: userId ? userId : "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPrograma({
-      ...programa,
+    setAmbiente({
+      ...ambiente,
       [name]: value,
     });
   };
@@ -50,28 +45,17 @@ const ProgramAddForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const res = await axios.post("http://localhost:3001/api/environment", {
+        nombre: ambiente.nombre,
+        descripcion: ambiente.descripcion,
+        UsuarioIdUsuario: userId ? userId : "",
+      });
 
-      const response = await axios.post("/files/upload", {
-        filePath: programa.multimedia,
-        type: "image",
-      })
-      if(response.data){
-        setPrograma({
-          ...programa,
-          multimedia: response.data.results[0],
-        });
-        const res = await axios.post("http://localhost:3001/api/Program", {
-          nombre: programa.nombre,
-          caracteristica: programa.caracteristica,
-          requisitos: programa.requisitos,
-          multimedia:[response.data.results[0]],
-          UsuarioIdUsuario: userId ? userId : "",
-        });
+      if (res.data) {
+        // Handle successful response here
+        toast.success("Registro exitoso.");
       }
-     
-     
-      toast.success("Registro exitoso.");
-      setPrograma(initialState); // Limpiar los campos del formulario
+      setAmbiente(initialState); // Limpiar los campos del formulario
     } catch (error) {
       toast.error("Error al crear");
     }
@@ -80,14 +64,14 @@ const ProgramAddForm = () => {
   return (
     <StyledContainer>
       <Typography variant="h5" align="center" gutterBottom>
-        Crear programa
+        Crear ambiente
       </Typography>
       <StyledForm onSubmit={handleSubmit}>
         <FormGroup>
           <Typography variant="body1">Nombre:</Typography>
           <TextField
             name="nombre"
-            value={programa.nombre}
+            value={ambiente.nombre}
             onChange={handleChange}
             required
             multiline
@@ -95,32 +79,17 @@ const ProgramAddForm = () => {
           />
         </FormGroup>
         <FormGroup>
-          <Typography variant="body1">Características:</Typography>
+          <Typography variant="body1">descripcion:</Typography>
           <TextField
-            name="caracteristica"
-            value={programa.caracteristica}
+            name="descripcion"
+            value={ambiente.descripcion}
             onChange={handleChange}
             required
             multiline
             rows={4}
           />
         </FormGroup>
-        <FormGroup>
-          <Typography variant="body1">Requisitos:</Typography>
-          <TextField
-            name="requisitos"
-            value={programa.requisitos}
-            onChange={handleChange}
-            multiline
-            rows={4}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Uploader
-            publicacion={programa}
-            setPublicacion={setPrograma}
-          />
-        </FormGroup>
+       
         <Grid container justifyContent="center">
           <Button variant="contained" onClick={handleSubmit}>
             Crear
@@ -131,4 +100,4 @@ const ProgramAddForm = () => {
   );
 };
 
-export default ProgramAddForm;
+export default AmbienteAddComponent;

@@ -4,13 +4,12 @@ import ImagenFondo from "./ImagenComponent";
 
 const AcercadeNosotros = ({ texto, imageUrl }) => {
   return (
-    <div className="flex flex-col text-justify text-blue-900 bg-white shadow-lg rounded-lg">
+    <div className="flex flex-col text-justify text-blue-900 bg-white rounded-lg">
       <div className="flex flex-row pr-5 pl-5 pb-5 pt-5 ">
         <div className="textos w-4/5 sm:w-4/5 md:w-4/5 lg:w-4/5 ">
           <div className="text-justify pr-5 ">
-            <strong>
-              <h1>Acerca de nosotros</h1>
-            </strong>
+            <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">Acerca de nosotros</h1>
+
             <p>{texto}</p>
           </div>
         </div>

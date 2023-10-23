@@ -6,7 +6,13 @@ import ServicioComponent from "./EdUSAComponents/ServicioComponent";
 import ImagenFondo from "./EdUSAComponents/ImagenComponent";
 import AcercadeNosotros from "./EdUSAComponents/AcercadeComponent";
 import InformacionEducacion from "./EdUSAComponents/ImformationComponent";
+import Rectangulo from "./EdUSAComponents/RectanguloComponent";
 
+const rectangleStyle1 = {
+    width: "20px",
+    height: "30px",
+    position: "relative",
+};
 
 function EducationUSA() {
     const pasos = [
@@ -50,12 +56,75 @@ function EducationUSA() {
     return (
         <>
             <ImagenFondo imageUrl={imageBanner} />
-            <div className="px-2 sm:px4 pt-5 pb-5   ">
-                <h2 className="font-bold uppercase text-3xl text-center mb-4 text-blue-900">
-                    ¿Quieres estudiar en los Estados Unidos?
-                </h2>
+            <div className="px-2 sm:px4 pt-5 pb-1">
                 <div className="flex flex-wrap ">
-                    <div className="w-full lg:w-2/5 text-blue-900 text-justify bg-white shadow-lg rounded-lg">
+                    <div className="w-full lg:w-2/6 text-blue-900 text-justify bg-white rounded-lg">
+                        <div className="flex flex-wrap p-5">
+                            <div className="w-1/6">
+                                <br />
+                                <br />
+                                <Rectangulo color="rgb(3, 121, 137)" /> {/* turquesa */}
+                                <Rectangulo color="rgb(128, 160, 0)" /> {/* mostaza */}
+                                <Rectangulo color="rgb(179, 80, 0)" /> {/* naranja */}
+                                <Rectangulo color="rgb(0, 56, 152)" /> {/* azul pastel */}
+                                <Rectangulo color="rgb(0, 22, 60)" /> {/* azul marino */}
+                            </div>
+                            <div className="w-5/6 pl-5">
+                                <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">EDUCATION<span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
+                                <ul className="list-disc pl-2">
+                                    <li><strong style={{ color: 'rgb(128, 160, 0)' }}>Te informamos</strong> sobre las distintas ofertas academicas de nivel superior en los Estados Unidos</li>
+                                    <li><strong style={{ color: 'rgb(179, 80, 0)' }}>Orientamos tu investigacion</strong> sobre programas de eestudio y unoversidades que se ajusten a tus necesidades y metas academicas</li>
+                                    <li><strong style={{ color: 'rgb(0,56,152)' }}>Asesoramos tu proceso</strong> de postulacion y busquedas de financiamiento</li>
+                                </ul>
+                                <strong style={{ color: 'rgb(3,121,137)' }}>Todos los servicios son gratuitos</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-full lg:w-2/6 text-blue-900 text-justify bg-white rounded-lg p-5">
+                        <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">COMO ESTUDIAR EN LOS ESTADOS UNIDOS?</h1>
+                        <p>Estudiar en Estados Unidos a nivel Universitario requiere mucha investigacion y planificacion.
+                            En EducationUSA te brindaremos <strong>informacion</strong> relevante sobre universidades y <strong>oportunidades de apoyo financiero</strong>
+                            disponibles para estudiantes internacionales.
+                        </p>
+                        <br />
+                        <p>Recuerda que el <strong>proceso de busqueda y postulacion a</strong> universidades requiere esfuerzo y dedicacion, por eso, nuestros <strong>asesores estan aqui
+                            para guiarte</strong> y que puedas tener exito en tu busqueda.</p>
+
+                    </div>
+                    <div className="w-full lg:w-2/6 text-blue-900  bg-white rounded-lg p-5">
+                        <div>
+                            <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">| NUESTROS SERVICIOS</h1>
+                        </div>
+                        <div className="text-justify">
+                            <div>
+                                <Rectangulo color="rgb(3, 121, 137)" text={"ASESORAMIENTO EDUCATIVO"} />
+                                <p>Te ayudamos a identificar las <strong>opciones de estudio</strong> mas adecuadas para ti, tanto a nivel tecnico, pregrado, postgrado, investigacion como de ingles intensivo.</p>
+                            </div>
+                            <div>
+                                <Rectangulo color="rgb(128, 160, 0)" text={"TALLERES EDUCATIONUSA"} />
+                                <p>De <strong>orientacion general</strong> y preparacion para el proceso de estudiar en los Estados Unidos.</p>
+                            </div>
+                            <div>
+                                <Rectangulo color="rgb(179, 80, 0)" text={"ORIENTACION SOBRE EXAMENES"} />
+                                <p>Pruebas de ingles, incluyendo el TOEFL y <strong>recursos para la preparacion.</strong></p>
+                            </div>
+                            <div>
+                                <Rectangulo color="rgb(0, 56, 152)" text={"ACCESO A INFORMACION"} />
+                                <p>
+                                    Acerca de programas de becas parciales y <strong>oportunidades de apoyo financiero</strong>
+                                    en universidades de los Estados Unidos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="px-2 sm:px4 pt-1 pb-2   ">
+
+                <div className="flex flex-wrap ">
+                    <div className="w-full lg:w-2/5 text-blue-900 text-justify bg-white rounded-lg p-5">
+                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">QUIERES ESTUDIAR EN LOS <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-400 from-sky-400">ESTADOS UNIDOS? </span></h1>
+
                         {
                             pasos.map((p, index) => {
                                 if (index + 1 > 0) {
@@ -94,7 +163,7 @@ function EducationUSA() {
             </div>
             <CuadroInscripcion />
             <div className="flex-row" >
-                <ServicioComponent {...servicioProps} />
+                {/* <ServicioComponent {...servicioProps} /> */}
             </div>
         </>
     );
