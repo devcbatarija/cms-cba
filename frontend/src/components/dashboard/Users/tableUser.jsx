@@ -30,6 +30,7 @@ import AddIcon from '@mui/icons-material/Add';  // Importa un ícono de agregar.
 import axios from "axios";  // Importa axios para hacer peticiones HTTP.
 import toast from "react-hot-toast";  // Importa una librería para mostrar notificaciones emergentes.
 import ModalUnstyledAdd from "./modalAddUser";  // Importa un componente modal personalizado para agregar usuarios.
+import { SuccessAlert } from "../../toastAlerts/success";
 
 // Función para calcular la edad a partir de una fecha.
 function calculateAge(dateString) {
@@ -58,18 +59,13 @@ export default function TableUser() {
   const handleClose = () => setOpen(false);  // Función para cerrar el modal.
 
   // Variables y funciones para controlar un modal de correo electrónico.
-  const [openEmail, setOpenEmail] = useState(false);  // Estado para abrir/cerrar el modal de correo electrónico.
+  const [openEmail, setOpenEmail] = useState(false); 
+  const handleOpenEmail = () => setOpenEmail(true); 
+  const handleCloseEmail = () => setOpenEmail(false); 
+  const [openAddUser, setOpenAddUser] = useState(false); 
+  const handleOpenAddUser = () => setOpenAddUser(true);
+  const handleCloseAddUser = () => setOpenAddUser(false);
 
-  const handleOpenEmail = () => setOpenEmail(true);  // Función para abrir el modal de correo electrónico.
-  const handleCloseEmail = () => setOpenEmail(false);  // Función para cerrar el modal de correo electrónico.
-
-  // Variables y funciones para controlar un modal de agregar usuario.
-  const [openAddUser, setOpenAddUser] = useState(false);  // Estado para abrir/cerrar el modal de agregar usuario.
-
-  const handleOpenAddUser = () => setOpenAddUser(true);  // Función para abrir el modal de agregar usuario.
-  const handleCloseAddUser = () => setOpenAddUser(false);  // Función para cerrar el modal de agregar usuario.
-
-  // Función para seleccionar/deseleccionar todos los usuarios.
   const handleSelectAll = () => {
     if (!selectAll) {
       dispatch(selectAllUsers(data.map((user) => user.id_Usuario)));  // Activa la selección de todos los usuarios.
@@ -85,13 +81,13 @@ export default function TableUser() {
   }
   // Función para eliminar usuarios seleccionados.
   const handleDelete = async() => {
-    const response = await axios.post('/users/delete/select', { ids: selectedUsers });  // Envía una solicitud para eliminar usuarios seleccionados.
-    setTimeout(() => {
+    const response = await axios.post('/users/delete/select', { ids: selectedUsers });
       dispatch(getallusers());  // Actualiza la lista de usuarios después de la eliminación.
       dispatch(deselectAllUsers());  // Deselecciona a todos los usuarios.
       dispatch(deleteStateAllUsers());  // Elimina el estado de los usuarios seleccionados.
-      toast.success("Borrado exitoso!");  // Muestra una notificación de éxito.
-    }, 1500);
+      toast.custom((t) => (
+        <SuccessAlert t={t} w={"w-4/12"} message="Borrado exitoso" />
+      ));  // Muestra una notificación de éxito.
   }
 
   // Función para seleccionar/deseleccionar un usuario individual.

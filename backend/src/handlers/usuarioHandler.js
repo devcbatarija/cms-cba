@@ -8,88 +8,93 @@ const {
     emailVerifyToken, 
     updateState, 
     getById, 
-    deleteSelect } = require("../controllers/usuarioController")
+    deleteSelect, 
+    updateImage} = require("../controllers/usuarioController");
+const { ClientError } = require("../utils/errors");
 
 module.exports = {
-    getAllUsuarios:async(req,res)=>{
-        try {
-            const result=await getAllUsuarios();
-            res.status(200).json({result});
-        } catch (error) {
-            res.status(401).json({messageError:error.message});
-        }
-    },
-    postUser:async(req,res)=>{
-        try {
-            if(!req.body){
-                res.status(401).json({messageError:'No user data'});
-            }
-            const result=await postUsuario(req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(401).json({messageError:error.message})
-        }
-    },
-    deleteById:async(req,res)=>{
-        try {
-            if(!req.params.id){
-                res.status(401).json({messageError:'No user id'});
-            }
-            const result=await deleteById(req.params.id);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(500).json({messageError:error.message});
-            
-        }
-    },
-    updateById:async(req,res)=>{
-        try {
-            if(!req.params.id)res.status(401).json({messageError:'No user id'});
-            if(!req.body)res.status(401).json({messageError:'No user data'});
-            const result=await updateById(req.params.id,req.body);
-            res.status(200).json(result);
-        } catch (error) {
-            res.status(500).json({ messageError: error.message });
-        }
-    },
-    authLogin:async(req,res)=>{
-        try {
-            if(!req.body.correo && !req.body.password )return res.status(400).json({messageError:'Todos los datos son necesarios'});
-            if(!req.body.correo || req.body.correo===" ")return res.status(400).json({messageError:'Correo no puede estar vacío'});
-            if(!req.body.password || req.body.password===" ")return res.status(400).json({messageError:'Password no puede estar vacío'});
-        
-            const result=await authLogin(req.body);
-            if(result.messageError){
-                res.status(200).json(result.messageError)
-            }
-            else{
-                res.cookie('token',result.token)
-                res.status(200).json(result.usLogin);
-            }
-        } catch (error) {
-            res.status(401).json({messageError:error.message});
-        }
-    },
-    getById:async(req,res)=>{
-        try {
-            const response=await getById(req.params.id);
-            res.status(200).json(response)
-        } catch (error) {
-            res.status(error.statusCode).json(error);
-        }
-    },
-    emailVerify : async(req,res)=>{ //verificar si ya existe un email
-        try {
-            const result=await emailVerify(req.body);
-            res.status(200).json(result)
-        } catch (error) {
-            res.status(500).json({messageError:error.message});
-        }
-    },
-    emailVerifyToken : async(req,res)=>{ //verificar el registro mediante token con email
-        try {
-            const result=await emailVerifyToken(req.query.token);
-            res.status(200).send(`
+  getAllUsuarios: async (req, res) => {
+    try {
+      const result = await getAllUsuarios();
+      res.status(200).json({ result });
+    } catch (error) {
+      res.status(401).json({ messageError: error.message });
+    }
+  },
+  postUser: async (req, res) => {
+    try {
+      if (!req.body) {
+        res.status(401).json({ messageError: "No user data" });
+      }
+      const result = await postUsuario(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(401).json({ messageError: error.message });
+    }
+  },
+  deleteById: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        res.status(401).json({ messageError: "No user id" });
+      }
+      const result = await deleteById(req.params.id);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+  updateById: async (req, res) => {
+    try {
+      if (!req.params.id) res.status(401).json({ messageError: "No user id" });
+      if (!req.body) res.status(401).json({ messageError: "No user data" });
+      const result = await updateById(req.params.id, req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+  authLogin: async (req, res) => {
+    try {
+      if (!req.body.correo && !req.body.password)
+        throw new ClientError("Todos los datos son necesarios", 400);
+      if (!req.body.correo || req.body.correo === " ")
+        throw new ClientError("Correo no puede estar vacío", 400);
+      if (!req.body.password || req.body.password === " ")
+        throw new ClientError("Password no puede estar vacío", 400);
+
+      const result = await authLogin(req.body);
+      if (result.messageError) {
+        res.status(200).json(result.messageError);
+      } else {
+        res.cookie("token", result.token);
+        res.status(200).json(result.usLogin);
+      }
+    } catch (error) {
+      res.status(401).json({ messageError: error.message });
+    }
+  },
+  getById: async (req, res) => {
+    try {
+      const response = await getById(req.params.id);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(error.statusCode).json(error);
+    }
+  },
+  emailVerify: async (req, res) => {
+    //verificar si ya existe un email
+    try {
+      const result = await emailVerify(req.body);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+  emailVerifyToken: async (req, res) => {
+    //verificar el registro mediante token con email
+    try {
+      const result = await emailVerifyToken(req.query.token);
+      res.status(200).send(`
             <div 
             style="
             display:flex; 
@@ -124,26 +129,34 @@ module.exports = {
                 >Iniciar secion</a>
                 </p>
             </div>
-            `)
-        } catch (error) {
-            res.status(500).json({messageError:error.message});
-        }
-    },
-    updateState:async(req,res)=>{
-        try {
-            const response=await updateState(req.params.id,req.body.estado);
-            res.status(200).json(response)
-        } catch (error) {
-            res.status(500).json({messageError:error.message});
-        }
-    },
-    deleteSelect:async(req,res)=>{
-        try {
-            const response=await deleteSelect(req.body.ids);
-            res.status(200).json(response)
-        } catch (error) {
-            res.status(500).json({messageError:error.message});
-        }
+            `);
+    } catch (error) {
+      res.status(500).send(`<h1>${error.message}</h1>`);
     }
-}
+  },
+  updateState: async (req, res) => {
+    try {
+      const response = await updateState(req.params.id, req.body.estado);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+  deleteSelect: async (req, res) => {
+    try {
+      const response = await deleteSelect(req.body.ids);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+  updateImage: async (req, res) => {
+    try {
+      const response = await updateImage(req.body);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).json({ messageError: error.message });
+    }
+  },
+};
 //cambiar propertys colors primary secondary
