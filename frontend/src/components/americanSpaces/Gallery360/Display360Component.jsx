@@ -1,22 +1,45 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { sRGBEncoding } from 'three';
 import './Gallery360.css';
 
 const Gallery360 = ({ image }) => {
+    if (!image) {
+        return <div className="w-full h-80 flex items-center justify-center">
+            <h1 className="text-1xl font-extrabold text-gray-900 dark:text-white text-center md:text-1xl lg:text-1xl">
+                Debes seleccionar un ambiente
+            </h1>
+        </div>;
+    }
+
     const canvasRef = useRef(null);
+    const requestRef = useRef();
 
     useEffect(() => {
         const canvas = canvasRef.current;
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas });
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        const camera = new THREE.PerspectiveCamera(100, canvas.clientWidth / canvas.clientHeight, 0.3, 2000);
 
-        // Obtener la textura del objeto proporcionado por props
+        // Crear el renderer y configurar el antialiasing, la codificación de salida y el factor gamma
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputEncoding = sRGBEncoding;
+        renderer.gammaFactor = 2.2;
+
+        camera.position.z = 5;
+
+        // Cargar la textura y configurar el mapeo de color
         const texture = new THREE.TextureLoader().load(image);
+        texture.generateMipmaps = false;
+        texture.minFilter = THREE.LinearFilter;
+        texture.encoding = sRGBEncoding;
+        texture.needsUpdate = true;
+
         const geometry = new THREE.SphereGeometry(5, 32, 32);
         const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
         const sphere = new THREE.Mesh(geometry, material);
+        sphere.rotation.y = Math.PI; // Rotar la esfera para que la imagen no esté invertida
         scene.add(sphere);
 
         let isDragging = false;
@@ -81,7 +104,7 @@ const Gallery360 = ({ image }) => {
         window.addEventListener('mouseup', handleMouseUp);
 
         const animate = () => {
-            requestAnimationFrame(animate);
+            requestRef.current = requestAnimationFrame(animate);
             renderer.render(scene, camera);
         };
         animate();
@@ -91,13 +114,15 @@ const Gallery360 = ({ image }) => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
-            window.addEventListener('touchstart', handleTouchStart);
-            window.addEventListener('touchmove', handleTouchMove);
-            window.addEventListener('touchend', handleTouchEnd);
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleTouchEnd);
+            cancelAnimationFrame(requestRef.current); // Cancelar la animación cuando el componente se desmonte
         };
     }, [image]); // Asegúrate de pasar textureObject como una dependencia si quieres que cambie cuando las props cambien
 
     return (
+
         <div className="w-full h-full">
             <canvas ref={canvasRef} className="w-full h-full" />
         </div>

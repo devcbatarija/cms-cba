@@ -1,124 +1,114 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Grid, MenuItem, Select, Button } from "@mui/material";
+import axios from "axios";
+import { FormGroup, TextField, Button, Container, Grid, Typography, Select, MenuItem } from "@mui/material";
 import Uploader from "../Publications/Uploader";
+import { useDispatch, useSelector } from "react-redux";
+import { styled } from "@mui/system";
+import { toast } from "react-hot-toast";
+import { getAllAmbientes } from "../../../redux-toolkit/actions/galleryActions";
 
-const Container = styled.div`
-  margin: 0 auto;
-  padding: 10px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 90vh;
-  width: 100%;
-  overflow-y: overlay;
-  overflow-x: hidden;
-`;
-const Title = styled.h2`
-  color: #343a40;
-  font-Size:20px;
+const StyledContainer = styled(Container)`
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #000;
+  padding: 16px;
 `;
 
-const FormGroup = styled.div`
-  margin-bottom: 15px;
+const StyledForm = styled("form")`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 5px;
-`;
+const GalleryAddComponent = () => {
+  const dispatch=useDispatch();
+  const ambientes=useSelector((state)=>state.gallery.ambient)
+  const initialState = {
+    imagen: "",
+    AmbienteIdAmbiente: ""
+  };
 
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-`;
+  const [form, setForm] = useState({
+    imagen: '',
+    multimedia: [],
+    AmbienteIdAmbiente:''
+  });
 
-const TextArea = styled.textarea`
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-  min-height: 100px;
-  overflow-y: hidden;
-`;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
-function GalleryAddComponent({
-    ambiente, setAmbiente, handleSubmitAmbiente
-}) {
-    const [urls, setUrls]=useState([]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
 
-    const handleChange=(e)=>{
-        const property = e.target.name;
-        const value = e.target.value;
-        if(property!="imagen"){
-            setAmbiente({
-                ...ambiente,
-                [property]: value
-            });
-            return;
-        }
-    };
-    const handleSubmit =async(e)=>{
-        e.preventDefault();
-        try {
-            const response=await axios.post("",{
-                filePath: ambiente.gallery.image,
-                type:"image"
-            });
-            if (response.data.results) {
-                handleSubmitAmbiente(response.data.results);
-            }
-        } catch (error) {
-            return error;
-        }
-    };
-    useEffect(()=>{
-    },[]);
-    return (
-        <>
-            <Container className="rounded-lg border rounded-lg">
-                <div className="flex flex-col items-center justify-center">
-                    <Title>Agregar imagen 360</Title>
-                </div>
-                <form className="flex flex-col rounded-lg ">
-                    <FormGroup style={{ width: "100%" }}>
-                        <Label>Título:</Label>
-                        <Input
-                            type="text"
-                            name="titulo"
-                            required
-                        />
-                    </FormGroup>
-                    <FormGroup style={{ width: "100%" }}>
-                        <Label>Descripción:</Label>
-                        <TextArea
-                            name="descripcion"
-                            required
-                        ></TextArea>
-                    </FormGroup>
-                    
-                </form>
-                <FormGroup>
-                    <Label>Arrastre y suelte las imagenes:</Label>
-                    {/* <Uploader
-                        urls={urls}
-                        setUrls={setUrls}
-                        publicacion={ambiente}
-                        setPublicacion={setAmbiente}
-                    ></Uploader> */}
-                </FormGroup>
-                <Grid sx={{ m: 1, width: "100%" }}>
-                    <Button
-                        variant="contained"
-                        sx={{ width: "100%", borderRadius: "0px" }}
-                    >
-                        Publicar
-                    </Button>
-                </Grid>
-            </Container>
-        </>
-    );
-}
+      const response = await axios.post("/files/upload", {
+        filePath: form.multimedia,
+        type: "image",
+      })
+      if (response.data) {
+        setForm({
+          ...form,
+          multimedia: response.data.results[0],
+        });
+        console.log(response.data.results[0])
+        const res = await axios.post("gallery", {
+          AmbienteIdAmbiente: form.AmbienteIdAmbiente,
+          imagen: response.data.results[0]
+        });
+        console.log(res)
+      }
+
+
+      toast.success("Registro exitoso."); 
+    } catch (error) {
+      console.log(error)
+      toast.error("Error al crear");
+    }
+  };
+  useEffect(()=>{
+    dispatch(getAllAmbientes())
+  },[])
+  return (
+    <StyledContainer>
+      <Typography variant="h5" align="center" gutterBottom>
+        Agregar imagenes
+      </Typography>
+      <StyledForm onSubmit={handleSubmit}>
+        <label htmlFor="AmbienteIdAmbiente" className="sr-only">Ambientes</label>
+        <select
+          onChange={handleChange}
+          name="AmbienteIdAmbiente"
+         id="AmbienteIdAmbiente" className="block py-2.5 px-0 w-full text-sm text-gray-500
+         bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400
+          dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+          {
+            ambientes && ambientes.map((ambient)=>{
+              return(
+                <option key={ambient.id_ambiente} value={ambient.id_ambiente}>{ambient.nombre}</option>
+              )
+            })
+          }
+        </select>
+        <FormGroup>
+          <Uploader
+            publicacion={form}
+            setPublicacion={setForm}
+          />
+        </FormGroup>
+        <Grid container justifyContent="center">
+          <Button variant="contained" onClick={handleSubmit}>
+            Crear
+          </Button>
+        </Grid>
+      </StyledForm>
+    </StyledContainer>
+  );
+};
 
 export default GalleryAddComponent;

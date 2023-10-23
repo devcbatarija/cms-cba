@@ -1,11 +1,11 @@
-const { Programa, Usuario,ProgramPrices } = require("../db");
+const { Programa, Usuario, ProgramPrices } = require("../db");
 
 module.exports = {
     getAllPrograms: async () => {
         try {
             const data = await Programa.findAll({
                 include: [{ model: Usuario }],
-                include:[{model:ProgramPrices}]
+                include: [{ model: ProgramPrices }]
             });
             return data;
         } catch (error) {
@@ -13,13 +13,16 @@ module.exports = {
         }
     },
     addPrograma: async (p) => {
+        console.log(p)
         try {
             const nuevoPrograma = await Programa.create({
                 nombre: p.nombre,
                 caracteristica: p.caracteristica,
                 requisitos: p.requisitos,
+                multimedia: p.multimedia,
                 UsuarioIdUsuario: p.UsuarioIdUsuario,
             });
+            console.log(nuevoPrograma)
             return nuevoPrograma;
         } catch (error) {
             throw new Error("Error al agregar el programa");
@@ -68,4 +71,16 @@ module.exports = {
             throw new Error("Error al obtener el programa");
         }
     },
+    deleteProgramSelect: async (pubIds) => {
+        try {
+            for (let id of pubIds) {
+                const progra = await Programa.findByPk(id);
+                await progra.destroy();
+            }
+            const remainingProgram = await Programa.findAll();
+            return remainingProgram;
+        } catch (error) {
+            return error;
+        }
+    }
 };
