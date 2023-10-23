@@ -35,7 +35,8 @@ const PodcastDashboard = () => {
     bar: false,
   });
   const [form, setForm] = useState({
-    epi_number: "",
+    epi_number:songs.length+1,
+    title:"",
     description: "",
     authors: "",
     imageUrl: "",
@@ -85,6 +86,7 @@ const PodcastDashboard = () => {
         if (res.data.data.Key) {
           const registerEnd = await axios.post("podcast/song/upload/database", {
             epi_number: form.epi_number,
+            title:form.title,
             description: form.description,
             authors: form.authors,
             url_cloudfront: res.data.data.Key,
@@ -124,7 +126,7 @@ const PodcastDashboard = () => {
     }
   }, [form.descripcion]);
   return (
-    <div className="flex flex-col md:flex-row min-h-full p-2 bg-gray-50 gap-2">
+    <div className="flex flex-col md:flex-row h-auto p-2 bg-gray-50 gap-2">
       <div className="bg-zinc-50 w-full h-full md:h-auto md:w-6/12 gap-2 rounded-lg shadow border">
         <form onSubmit={handleSubmit} className="px-8 pt-6 pb-8 mb-4">
           <div className="flex justify-center w-full">
@@ -147,6 +149,7 @@ const PodcastDashboard = () => {
                 name="epi_number"
                 placeholder="Numero"
                 onChange={handleChange}
+                disabled
                 value={form.epi_number}
               />
             </div>
@@ -170,6 +173,23 @@ const PodcastDashboard = () => {
                 }
               />
             </div>
+          </div>
+          <div className="w-2/2">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="title"
+            >
+              Title
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="title"
+              type="text"
+              name="title"
+              placeholder="Title"
+              onChange={handleChange}
+              value={form.title}
+            />
           </div>
           <div className="w-2/2">
             <label
@@ -205,6 +225,12 @@ const PodcastDashboard = () => {
             />
           </div>
           <div className="w-12/12 pr-2">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="authors"
+            >
+              Inserte una imagen de portada
+            </label>
             <Uploader publicacion={form} setPublicacion={setForm}></Uploader>
           </div>
           <div className="flex items-center justify-between">
@@ -258,7 +284,7 @@ const PodcastDashboard = () => {
                       <Reproductor
                         // key={s.name}
                         song={s.url_cloudfront}
-                        name={s.description}
+                        name={s.title}
                         album={s.album}
                         imgSong={s.image}
                         authors={s.authors}

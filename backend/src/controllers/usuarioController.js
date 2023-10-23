@@ -1,6 +1,8 @@
 const { Usuario } = require("../db");
 const { signIn } = require("../services/jwtservice");
 const { sentTokenVerify } = require("../services/nodemailerservice");
+const { ClientError } = require("../utils/errors");
+const { uploadImage } = require("./uploadController");
 
 function formatDate(dateString) {
     const parts = dateString.split('/');
@@ -23,33 +25,43 @@ module.exports = {
   },
   postUsuario: async (user) => {
     try {
-      
+      let upload = "";
+      if (user.image) {
+        console.log([user.image]);
+        upload = await uploadImage({ filePath: [user.image], type: "image" });
+      }
+      console.log(upload);
       const newUser = await Usuario.create({
         correo: user.correo,
-        celular:user.celular,
+        celular: user.celular,
         nombres: user.nombres,
+        image: user.image ? upload.results[0] : "",
         apellidos: user.apellidos,
-        fecha_Nacimiento:  user.fecha_Nacimiento,
+        fecha_Nacimiento: user.fecha_Nacimiento,
         ci: user.ci,
         password: user.password,
         rol: user.rol,
-        estado:false
+        estado: false,
       });
       if (!newUser) {
         return "Internal Error!";
       }
-      const emailsend=await sentTokenVerify(newUser.verificacion,newUser.correo)
-      if(emailsend.error){
-        console.log(error)
+      const emailsend = await sentTokenVerify(
+        newUser.verificacion,
+        newUser.correo
+      );
+      if (emailsend.error) {
+        await newUser.destroy();
         throw new Error(emailsend.error);
       }
-      console.log(emailsend)
-      return {user:newUser,emailState:emailsend.success};
+      console.log(emailsend);
+      return { user: newUser, emailState: emailsend.success };
     } catch (error) {
+      console.log(error);
       throw error;
     }
   },
-  
+
   deleteById: async (id) => {
     try {
       const deleteUSer = await Usuario.findOne({ where: { id_Usuario: id } });
@@ -68,40 +80,41 @@ module.exports = {
       if (!exist) {
         return "Usuario no encontrado.";
       }
-      const updateUserById = await Usuario.update(
-        user,
-        {
-          where: {
-            id_Usuario: id 
-          },
-        }
-      );
+      const updateUserById = await Usuario.update(user, {
+        where: {
+          id_Usuario: id,
+        },
+      });
       if (updateUserById[0] === 1) {
-        const dataUpdate=await Usuario.findAll();
-        return { message: "User update success",results:dataUpdate};
+        const dataUpdate = await Usuario.findAll();
+        return { message: "User update success", results: dataUpdate };
       }
-      return "Error user update!"
+      return "Error user update!";
     } catch (error) {
       return error;
     }
   },
   authLogin: async (user) => {
     try {
-      const userExist = await Usuario.findOne({ where: { correo: user.correo } });
+      const userExist = await Usuario.findOne({
+        where: { correo: user.correo },
+      });
       if (!userExist) {
-        throw new Error("Usuario no encontrado.");
+        throw new ClientError("Usuario no encontrado.", 401);
       }
       if (userExist.password !== user.password) {
-        throw new Error("La contraseña es incorrcta.");
+        throw new ClientError("La contraseña es incorrecta.", 401);
       }
       if (!userExist.estado) {
-        throw new Error("El usuario no tiene acceso.");
+        throw new ClientError("El usuario no tiene acceso.", 401);
       }
       const tokengen = await signIn(userExist);
       const usLogin = {
         _userId: userExist.id_Usuario,
-        _profileImage:userExist.image,
+        _profileImage: userExist.image,
         correo: userExist.correo,
+        nombres: userExist.nombres,
+        apellidos: userExist.apellidos,
         rol: userExist.rol,
       };
       return { usLogin: usLogin, token: tokengen };
@@ -109,54 +122,55 @@ module.exports = {
       throw error;
     }
   },
-  getById:async(id)=>{
+  getById: async (id) => {
     try {
-      const us=await Usuario.findByPk(id);
-      if(!us){
+      const us = await Usuario.findByPk(id);
+      if (!us) {
         throw new Error("Usuario no encontrado.");
       }
       return us;
     } catch (error) {
-      error.statusCode=404;
+      error.statusCode = 404;
       throw error;
     }
   },
-  emailVerify : async(body)=>{
-      try {
-      const user=await Usuario.findOne({ where: { correo: body.correo }})
-      if(!user){
-        return "Email valido"
+  emailVerify: async (body) => {
+    try {
+      const user = await Usuario.findOne({ where: { correo: body.correo } });
+      if (!user) {
+        return "Email valido";
       }
       throw new Error("El usuario ya existe.");
     } catch (error) {
       throw error;
     }
   },
-  emailVerifyToken : async(token)=>{
-       try {
-      const user=await Usuario.findOne({ where: { verificacion: token }})
-      if(!user){
+  emailVerifyToken: async (token) => {
+    try {
+      const user = await Usuario.findOne({ where: { verificacion: token } });
+      if (!user) {
         throw new Error("El token de usuario no encontrado.");
       }
-      user.estado=true;
+      if (user.estado == true) {
+        throw new Error("El token ya a sido usado.");
+      }
+      user.estado = true;
       await user.save();
-      return { user:user,verificacion:"Success!"};
+      return { user: user, verificacion: "Success!" };
     } catch (error) {
       throw error;
     }
   },
-  updateState:async(id,estado)=>{
-
+  updateState: async (id, estado) => {
     try {
-      const update=await Usuario.findByPk(id);
-      if(!update){
+      const update = await Usuario.findByPk(id);
+      if (!update) {
         throw new Error("El token no se encontró.");
       }
-    
-      update.dataValues.estado=estado;
+
+      update.dataValues.estado = estado;
       return update;
-    } catch (error) {
-         }
+    } catch (error) {}
   },
   deleteSelect: async (userIds) => {
     try {
@@ -169,5 +183,15 @@ module.exports = {
     } catch (error) {
       return error;
     }
-  }  
+  },
+  updateImage: async ({image,id}) => {
+    try {
+      const user = await Usuario.findByPk(id);
+      user.update({ image: image });
+      user.save();
+      return user;
+    } catch (error) {
+      return error;
+    }
+  },
 };
