@@ -1,5 +1,7 @@
 const express = require('express');
-const { obtenerTodosLosProgramasPrecios, crearProgramaPrecios, actualizarProgramaPrecios, eliminarProgramaPrecios } = require('../controllers/ProgramPriceController');
+const { obtenerTodosLosProgramasPrecios, 
+    crearProgramaPrecios, actualizarProgramaPrecios,
+     eliminarProgramaPrecios } = require('../controllers/programPriceController');
 
 module.exports = {
     obtenerTodosLosProgramasPrecios: async (req, res) => {

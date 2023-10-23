@@ -111,7 +111,7 @@ export const Podcast = () => {
                 ></div> */}
                 <Player
                   epiNumber={selectedSong.epi_number}
-                  description={selectedSong.description}
+                  description={selectedSong.title}
                   authors={selectedSong.authors}
                   uriSong={selectedSong.url_cloudfront}
                   imgSong={selectedSong.image}
