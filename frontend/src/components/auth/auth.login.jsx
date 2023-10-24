@@ -9,7 +9,7 @@ import { Alert } from "@mui/material";
 import axios from "axios";
 import { signin } from "../../redux-toolkit/actions/auth.Actions";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import logo from "../../assets/cba.png";
@@ -24,7 +24,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.login);
-
+  
   const handleOnSubmit = async () => {
     try {
       setForm({
@@ -39,6 +39,7 @@ const Login = () => {
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
+      <Navigate to={'/'} ></Navigate>
       dispatch(signin(response.data));
     } catch (error) {
       setErrorBack(error.response.data.messageError);
