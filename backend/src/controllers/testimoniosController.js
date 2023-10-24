@@ -35,5 +35,17 @@ module.exports={
         } catch (error) {
             
         }
+    },
+    deleteTestimonioSelect: async (testId) => {
+        try {
+            for (let id of testId) {
+                const progra = await Testimonios.findByPk(id);
+                await progra.destroy();
+            }
+            const remainingTestimonio = await Testimonios.findAll();
+            return remainingTestimonio;
+        } catch (error) {
+            return error;
+        }
     }
 }
