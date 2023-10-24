@@ -209,33 +209,25 @@ function App() {
               <Route
                 path="/dashboard/spaces"
                 element={
-                  <ProtectedRouteRoles>
                     <GalleryNav />
-                  </ProtectedRouteRoles>
                 }
               >
                 <Route
-                  path="/dashboard/spaces/ambienteAdd"
+                  path="/dashboard/spaces/ambienteadd"
                   element={
-                    <ProtectedRouteRoles>
                       <AmbienteAddComponent />
-                    </ProtectedRouteRoles>
                   }
                 />
                 <Route
-                  path="/dashboard/spaces/imageAdd"
+                  path="/dashboard/spaces/imageadd"
                   element={
-                    <ProtectedRouteRoles>
                       <GalleryAddComponent />
-                    </ProtectedRouteRoles>
                   }
                 />
                 <Route
                   path="/dashboard/spaces/table"
                   element={
-                    <ProtectedRouteRoles>
                       <GalleryTable />
-                    </ProtectedRouteRoles>
                   }
                 />
               </Route>
