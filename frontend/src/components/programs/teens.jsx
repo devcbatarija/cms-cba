@@ -10,9 +10,7 @@ import ListaPreciosCursos from './ProgramComponent/ProgramaPrecios';
 const ProgramAdults = () => {
   const programa = useSelector((state) => state.programs.programs.find((p) => p.nombre == "Teens"));
   // const {multimedia}=programa;
-  console.log(programa)
-  const programPrice = programa.ProgramPrice
-  console.log(programPrice)
+  const programPrice = programa ? programa.ProgramPrice : null;
   // Este useEffect se ejecuta cuando los programas se cargan o cuando el usuario recarga la página.
   useEffect(() => {
   }, []);
