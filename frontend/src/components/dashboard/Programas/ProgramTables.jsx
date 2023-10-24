@@ -17,7 +17,7 @@ import axios from "axios";
 
 export default function ProgramTable() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.programs.programs);
+  const data =[]
   const selectedPrograms = useSelector((state) => state.programs.selectedPrograms);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -60,11 +60,10 @@ export default function ProgramTable() {
   }, []);
   //Reenderizado del componente
   return (
-
     <TableContainer
       sx={{ width: "100%", borderRadius: "0", height: "100vh%" }}
-      component={Paper}>
-
+      component={Paper}
+    >
       <Grid
         container
         direction="row"
@@ -79,11 +78,11 @@ export default function ProgramTable() {
           color="error"
           sx={{ borderRadius: "3px" }}
           onClick={handleDelete}
-          startIcon={<DeleteIcon />}>
+          startIcon={<DeleteIcon />}
+        >
           Borrar {selectedPrograms.length}
         </Button>
         {/*Boton para agregar nueva publicacion*/}
-
       </Grid>
 
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -104,11 +103,10 @@ export default function ProgramTable() {
             <TableCell align="center">Descripcion</TableCell>
             <TableCell align="center">Requisitos</TableCell>
             <TableCell align="center">Imagen</TableCell>
-
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row, index) => (
+          {data && data.map((row, index) => (
             <TableRow
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -125,11 +123,14 @@ export default function ProgramTable() {
               <TableCell align="center">{row.nombre}</TableCell>
               <TableCell align="center">{row.caracteristica}</TableCell>
               <TableCell align="center">{row.requisitos}</TableCell>
-              <TableCell align="center" sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}>
+              <TableCell
+                align="center"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 {row.multimedia.map((im, index) => (
                   <Avatar
                     key={index}

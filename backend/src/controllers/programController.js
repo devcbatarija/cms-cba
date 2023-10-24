@@ -9,6 +9,7 @@ module.exports = {
             });
             return data;
         } catch (error) {
+            console.log(error)
             throw new Error("Error al obtener los programas");
         }
     },
