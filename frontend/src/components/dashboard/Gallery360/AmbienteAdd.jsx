@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { FormGroup, TextField, Button, Container, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
@@ -10,7 +11,7 @@ const StyledContainer = styled(Container)`
   border-radius: 8px;
   background-color: #fff;
   color: #000;
-  padding: 16px;
+  padding: 20px;
 `;
 
 const StyledForm = styled("form")`
@@ -19,84 +20,72 @@ const StyledForm = styled("form")`
   gap: 16px;
 `;
 
+const customStyle = {
+  backgroundColor: "#070e4b",
+  color: "#fff"
+};
+
+
 const AmbienteAddComponent = () => {
   const userId = useSelector((state) => state.login.user._userId);
-  console.log(userId)
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const initialState = {
-    nombre: "",
-    descripcion: "",
-    UsuarioIdUsuario: userId ? userId : "",
-  };
-  const [ambiente, setAmbiente] = useState({
-    nombre: "",
-    descripcion: "",
-    UsuarioIdUsuario: userId ? userId : "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setAmbiente({
-      ...ambiente,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:3001/api/environment", {
-        nombre: ambiente.nombre,
-        descripcion: ambiente.descripcion,
+        nombre: data.nombre,
+        descripcion: data.descripcion,
         UsuarioIdUsuario: userId ? userId : "",
       });
 
       if (res.data) {
-        // Handle successful response here
         toast.success("Registro exitoso.");
+        reset();
       }
-      setAmbiente(initialState); // Limpiar los campos del formulario
     } catch (error) {
       toast.error("Error al crear");
     }
   };
 
   return (
-    <StyledContainer>
-      <Typography variant="h5" align="center" gutterBottom>
-        Crear ambiente
-      </Typography>
-      <StyledForm onSubmit={handleSubmit}>
-        <FormGroup>
-          <Typography variant="body1">Nombre:</Typography>
-          <TextField
-            name="nombre"
-            value={ambiente.nombre}
-            onChange={handleChange}
-            required
-            multiline
-            rows={1}
-          />
-        </FormGroup>
-        <FormGroup>
-          <Typography variant="body1">descripcion:</Typography>
-          <TextField
-            name="descripcion"
-            value={ambiente.descripcion}
-            onChange={handleChange}
-            required
-            multiline
-            rows={4}
-          />
-        </FormGroup>
-       
-        <Grid container justifyContent="center">
-          <Button variant="contained" onClick={handleSubmit}>
-            Crear
-          </Button>
-        </Grid>
-      </StyledForm>
-    </StyledContainer>
+    <div className="p-10 bg-cl-red">
+      <StyledContainer >
+        <div class="flex justify-center items-center">
+          <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">AGREGAR AMBIENTES</h1>
+
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormGroup>
+            <Typography variant="body1">Nombre:</Typography>
+            <TextField
+              {...register("nombre", { required: "Este campo es obligatorio" })}
+              error={errors.nombre ? true : false}
+              helperText={errors.nombre && errors.nombre.message}
+              required
+              multiline
+              rows={1}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Typography variant="body1">Descripción:</Typography>
+            <TextField
+              {...register("descripcion", { required: "Este campo es obligatorio" })}
+              error={errors.descripcion ? true : false}
+              helperText={errors.descripcion && errors.descripcion.message}
+              required
+              multiline
+              rows={4}
+            />
+          </FormGroup>
+          <br />
+          <Grid container justifyContent="center">
+            <Button type="submit" variant="contained" style={customStyle}>
+              Crear
+            </Button>
+          </Grid>
+        </form>
+      </StyledContainer>
+    </div>
   );
 };
 

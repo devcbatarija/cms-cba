@@ -18,7 +18,7 @@ const Gallery360 = ({ image }) => {
     useEffect(() => {
         const canvas = canvasRef.current;
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(100, canvas.clientWidth / canvas.clientHeight, 0.3, 2000);
+        const camera = new THREE.PerspectiveCamera(100, canvas.clientWidth / canvas.clientHeight, 1, 2000);
 
         // Crear el renderer y configurar el antialiasing, la codificación de salida y el factor gamma
         const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
