@@ -6,6 +6,7 @@ module.exports = {
   getPodcastsBd: async () => { 
       const response = await Podcast.findAll();
       return { results: response }; 
+      
   },
   addPodcastAws: async (filePath) => {
       const result = await uploadFile(filePath);
