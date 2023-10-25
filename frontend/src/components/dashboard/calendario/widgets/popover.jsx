@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import ModalAddEvent from '../modalAddEvent';
@@ -80,15 +79,9 @@ export default function BasicPopover({
                 >
                     <Button fullWidth={true} onClick={()=>abrirModal("EventoPredifinido")}>Evento Predefinido</Button>
                     <Button fullWidth={true} onClick={()=>abrirModal("Evento")}>Evento</Button>
-                    {/* <Typography style={styles} sx={{ p: 2 }}>The content of the Popover.</Typography> */}
                 </Popover>
             </div>
         </>
 
     );
-}
-
-const styles = {
-    // padding: "15px",
-    // backgroundColor:"red"
 }

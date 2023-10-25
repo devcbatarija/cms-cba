@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import FiberManualRecordRoundedIcon from '@mui/icons-material/FiberManualRecordRounded';
 import ModalUpdateEvent from '../modalUpdateEvent';
-import Icon from '@mui/material/Icon';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',

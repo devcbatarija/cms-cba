@@ -12,25 +12,30 @@ dayjs.locale('es');
 
 export default function EventList({
   title,
-  eventsByMonth
+  eventsByMonth,
 }) {
-
-
   return (
-    <div className='overflow-auto h-screen relative'>
-      <div className="px-4 sm:px-0 flex flex-row justify-center">
-        <h1 className='uppercase leading-7 text-base font-light text-gray-900'>Eventos para {title}</h1>
-      </div>
-      <div className="mt-6 border-t border-gray-300">
-        <div className="divide-y divide-gray-300">
-          {eventsByMonth.length > 0 ? eventsByMonth.map((event) => (
-            <Event key={event.Evento ? event.id_Evento : event.id} event={event} />
-          )) : <div></div>}
+    <>
+      <div className={''}>
+        <div className="px-4 sm:px-0 flex flex-col items-center justify-center">
+          <h1 className='uppercase leading-7 text-base font-medium text-cbaBlue'>Eventos para {title.title}</h1>
+          {
+            title.type == 'day'||title.type == 'timeGridWeek'?
+            <div className={`items-center justify-center flex border-2 border-cbaBlue h-12 ${title.type=='timeGridWeek'?'w-16':'w-12'}`}>
+              <span className={'text-lg font-bold text-cbaBlue'}>{dayjs(title.day).format('DD')}{title.type == 'timeGridWeek'&&`-${dayjs(title.day).add(6,'days').format('DD')}`}</span>
+            </div>:null
+          }
+        </div>
+        <div className="mt-5 border-t border-gray-300 max-h-80vh overflow-auto md:max-h-screen lg:max-h-[440px] xl:max-h-[97vh]">
+          <div className="divide-y divide-gray-300">
+            {eventsByMonth.length > 0 ? eventsByMonth.map((event) => (
+              <Event key={event.Evento ? event.id_Evento : event.id} event={event} />
+            )) : <div></div>}
+          </div>
 
         </div>
-
       </div>
-    </div>
+    </>
   )
 }
 
@@ -99,7 +104,7 @@ function Event({ event }) {
       <div className="grid justify-items-center">{event.Evento ? <img className='h-20 w-20' src={event.multimedia[0]} alt="" /> : <EventNoteRoundedIcon sx={{ width: '80px', height: '80px', color: '#002E5F' }} />}</div>
       <div className='mt-1 text-sm leading-6 text-gray-700 col-span-3 sm:mt-0'>
         <span className='flex items-center text-xs text-azulClaro font-medium'><AccessTimeIcon sx={{ width: '15px' }} /> {formatDate(event)}</span>
-        <h1 className=" uppercase font-medium">{event.Evento ? event.Evento.title : event.title}</h1>
+        <h1 className=" uppercase font-medium text-cbaBlue">{event.Evento ? event.Evento.title : event.title}</h1>
         <span>{event.Evento ? event.descripcion : generateDescription(event)}</span>
       </div>
     </div>

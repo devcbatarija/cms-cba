@@ -71,10 +71,9 @@ function PublicationAdd({
       const response = await axios.post("/files/upload", {
         filePath: publicacion.multimedia,
         type: "image",
+      }).then(res=>{
+        handleSubmitPublication(res.data.results);
       });
-      if (response.data.results) {
-        handleSubmitPublication(response.data.results);
-      }
     } catch (error) {
       return error;
     }
