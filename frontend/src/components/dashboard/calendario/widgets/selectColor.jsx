@@ -61,8 +61,8 @@ export default function SelectColorList({
                     key={color.color}
                     className={({ active }) =>
                       classNames(
-                        active ? 'bg-zinc-200 text-white' : 'text-gray-900',
-                        'relative cursor-pointer select-none py-2 pl-3 pr-9'
+                        active ? 'bg-gray-100 text-white' : 'text-gray-900',
+                        'relative cursor-pointer select-none py-2 pl-3 pr-9',
                       )
                     }
                     value={color}
