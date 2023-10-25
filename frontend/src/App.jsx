@@ -10,7 +10,7 @@ import Home from "./components/home/home";
 import NavBar from "./components/navBar/navBar";
 import About from "./components/about/about";
 import Login from "./components/auth/auth.login";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Register from "./components/auth/auth.register";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
@@ -47,10 +47,17 @@ import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNew
 import { getPodcastSongs } from "./redux-toolkit/actions/podcastActions";
 import ProgramaPrecios from "./components/dashboard/Programas/ProgramPrices";
 import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
+import { getAllProgram } from "./redux-toolkit/actions/programActions";
+import { getAllProgramPrices } from "./redux-toolkit/actions/programPricesActions";
+import GalleryNav from "./components/dashboard/Gallery360/Navegacion";
+import GalleryAddComponent from "./components/dashboard/Gallery360/GalleryAdd";
+import GalleryTable from "./components/dashboard/Gallery360/GalleryTable";
+import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
   const rol = useSelector((state) => state.login.user.rol);
+  const [tokenValidated, setTokenValidated] = useState(false);
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -71,32 +78,36 @@ function App() {
       if (response.data.user) {
         dispatch(authValid(response.data.user));
       }
+      setTokenValidated(true);
+      console.log(tokenValidated);
     } catch (error) {
       if (error.response.data.messageError) {
+        setTokenValidated(true);
         Cookie.remove("token");
       }
     }
   };
-  const ProtectedRoute = ({ children }) => {
-    //RUTAS POTEGIDAS
-    if (!auth) {
-      return <Navigate to={"/login"}></Navigate>;
+  const ValidateRedir = ({ auth, validate, redirecTo, children }) => {
+    //RUTAS REDIRECT
+    if (auth && validate) {
+      return <Navigate to={redirecTo}></Navigate>;
     }
-    return children;
-  };
-  const ProtectedRouteRoles = ({ children }) => {
-    //RUTAS POTEGIDAS
-    if (auth && rol == "Admin") {
-      return children;
-    }
-    return <Navigate to={"/"}></Navigate>;
+    if (!auth) return children;
   };
 
-  // Validar el token al cargar la página
+  const ProtectedRouteRoles = ({ rol, auth, validate, children }) => {
+    if (auth && rol == "Admin" && validate) {
+      return children;
+    }
+    if (validate) return <Navigate to={"/"}></Navigate>;
+  };
+
   useEffect(() => {
     dispatch(getEvents());
     dispatch(getAllTestimonio());
     dispatch(getEventsPredefinidos());
+    dispatch(getAllProgram());
+    dispatch(getAllProgramPrices());
 
     if (Cookie.get("token")) {
       validToken();
@@ -105,156 +116,146 @@ function App() {
 
   // Verificar si estamos en la ruta /dashboard
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
+  const isLoginRoute = location.pathname === "/login";
+  const isRegisterRoute = location.pathname === "/register";
 
   return (
     <>
       {/* min-h-screen */}
-      <div className="flex flex-col">
-        {!isDashboardRoute && <NavBar />}
-        <div className="flex-grow">
+      <div className="flex flex-col ">
+        {!isDashboardRoute && !isLoginRoute && !isRegisterRoute && <NavBar />}
+        <div className="flex-grow min-h-[50vh]">
           <Routes>
-            <Route exact path="/" element={<Home />} />
+            <Route exact index path="/" element={<Home />} />
             <Route path="/about" element={<About />}></Route>
             <Route path="/calendar" element={<CalendarioClient />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            {
+              <Route
+                path="/login"
+                element={
+                  <ValidateRedir
+                    auth={auth}
+                    validate={tokenValidated}
+                    redirecTo={"/"}
+                  >
+                    <Login />
+                  </ValidateRedir>
+                }
+              />
+            }
+            <Route
+              path="/register"
+              element={
+                <ValidateRedir
+                  auth={auth}
+                  validate={tokenValidated}
+                  redirecTo={"/"}
+                >
+                  <Register />
+                </ValidateRedir>
+              }
+            />
             <Route path="/programs/children" element={<ProgramChildren />} />
             <Route path="/publications" element={<Publications />} />
             <Route path="/programs/adults" element={<ProgramAdults />} />
             <Route path="/programs/teens" element={<ProgramTeens />} />
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
-            <Route path="/gallery" element={<GalleryContainer />} />
+            <Route path="/americanSpaces" element={<GalleryContainer />} />
 
             {/* Protected */}
             <Route
               path="/dashboard"
               element={
-                <ProtectedRouteRoles>
-                  <Dashboard></Dashboard>
+                <ProtectedRouteRoles
+                  rol={rol}
+                  auth={auth}
+                  validate={tokenValidated}
+                >
+                  <Dashboard />
                 </ProtectedRouteRoles>
               }
             >
-              <Route
-                path="/dashboard/Calendario"
-                element={
-                  <ProtectedRouteRoles>
-                    <EventNav />
-                  </ProtectedRouteRoles>
-                }
-              >
+              <Route path="/dashboard/Calendario" element={<EventNav />}>
                 <Route
                   path="/dashboard/Calendario/calendario"
-                  element={
-                    <ProtectedRouteRoles>
-                      <Calendario />
-                    </ProtectedRouteRoles>
-                  }
+                  element={<Calendario />}
                 />
                 <Route
                   path="/dashboard/Calendario/addEvent"
-                  element={
-                    <ProtectedRouteRoles>
-                      <ContarinerNewEvent />
-                    </ProtectedRouteRoles>
-                  }
+                  element={<ContarinerNewEvent />}
                 />
               </Route>
-              <Route
-                path="/dashboard/publinav"
-                element={
-                  <ProtectedRouteRoles>
-                    <PublicationNav />
-                  </ProtectedRouteRoles>
-                }
-              >
+              <Route path="/dashboard/publinav" element={<PublicationNav />}>
                 <Route
                   path="/dashboard/publinav/table"
-                  element={
-                    <ProtectedRouteRoles>
-                      <TablePublication />
-                    </ProtectedRouteRoles>
-                  }
+                  element={<TablePublication />}
                 />
                 <Route
                   path="/dashboard/publinav/add"
-                  element={
-                    <ProtectedRouteRoles>
-                      <ContarinerNewPublication />
-                    </ProtectedRouteRoles>
-                  }
+                  element={<ContarinerNewPublication />}
                 />
               </Route>
-              <Route
-                path="/dashboard/program"
-                element={
-                  <ProtectedRouteRoles>
-                    <ProgramaNav />
-                  </ProtectedRouteRoles>
-                }
-              >
+              <Route path="/dashboard/program" element={<ProgramaNav />}>
                 <Route
                   path="/dashboard/program/tableprogram"
-                  element={
-                    <ProtectedRouteRoles>
-                      <ProgramTable />
-                    </ProtectedRouteRoles>
-                  }
+                  element={<ProgramTable />}
                 />
                 <Route
                   path="/dashboard/program/add"
+                  element={<ContarinerNewPrograma />}
+                />
+              </Route>
+              <Route
+                path="/dashboard/spaces"
+                element={
+                    <GalleryNav />
+                }
+              >
+                <Route
+                  path="/dashboard/spaces/ambienteadd"
                   element={
-                    <ProtectedRouteRoles>
-                      <ContarinerNewPrograma />
-                    </ProtectedRouteRoles>
+                      <AmbienteAddComponent />
+                  }
+                />
+                <Route
+                  path="/dashboard/spaces/imageadd"
+                  element={
+                      <GalleryAddComponent />
+                  }
+                />
+                <Route
+                  path="/dashboard/spaces/table"
+                  element={
+                      <GalleryTable />
                   }
                 />
               </Route>
               <Route
                 path="/dashboard/testimononios"
-                element={
-                  <ProtectedRouteRoles>
-                    <TestimoniosContainer />
-                  </ProtectedRouteRoles>
-                }
+                element={<TestimoniosContainer />}
               />
               <Route
                 path="/dashboard/tableuser"
-                element={
-                  <ProtectedRouteRoles>
-                    <TableUser></TableUser>
-                  </ProtectedRouteRoles>
-                }
+                element={<TableUser></TableUser>}
               />
               <Route
                 path="/dashboard/tableprogram"
-                element={
-                  <ProtectedRouteRoles>
-                    <ProgramTable></ProgramTable>
-                  </ProtectedRouteRoles>
-                }
+                element={<ProgramTable></ProgramTable>}
               />
               <Route
                 path="/dashboard/spotify/podcast"
-                element={
-                  <ProtectedRouteRoles>
-                    <PodcastDashboard></PodcastDashboard>
-                  </ProtectedRouteRoles>
-                }
+                element={<PodcastDashboard></PodcastDashboard>}
               ></Route>
               <Route
                 path="/dashboard/program/precio"
-                element={
-                  <ProtectedRouteRoles>
-                    <ProgramaPrecios></ProgramaPrecios>
-                  </ProtectedRouteRoles>
-                }
+                element={<ProgramaPrecios></ProgramaPrecios>}
               ></Route>
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
-        {!isDashboardRoute && <Footer />}
+        {!isDashboardRoute && !isLoginRoute && !isRegisterRoute && <Footer />}
       </div>
       <Toaster
         position="top-right"

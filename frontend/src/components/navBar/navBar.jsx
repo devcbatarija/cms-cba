@@ -42,10 +42,20 @@ const NavBar = () => {
     multimedia: null,
   });
 
-  const [open, setOpen] = useState(false); //este
+  const [openProgramas, setOpenProgramas] = useState(false);
+  const [openMultimedia, setOpenMultimedia] = useState(false);
+  const [openSub, setOpenSub] = useState({
+    programas: false,
+    publicaciones: false,
+    multimedia: false,
+  });
   const handleProgramasClick = () => {
-    setOpen(!open);
-  }; //este
+    setOpenProgramas(!openProgramas);
+  };
+
+  const handleMultimediaClick = () => {
+    setOpenMultimedia(!openMultimedia);
+  };
 
   const handleClick = (event) => {
     setAnchorEl({
@@ -89,6 +99,7 @@ const NavBar = () => {
               { key: "Adultos", ruta: "/programs/adults" },
             ],
           },
+          { key: "Educacion USA", ruta: "/educationUSA" },
           {
             key: "multimedia",
             ruta: "/",
@@ -98,6 +109,8 @@ const NavBar = () => {
               { key: "Adultos", ruta: "/programs/adults" },
             ],
           },
+          { key: "Espacios USA", ruta: "/americanSpaces" },
+          { key: "Acerca de nosotros", ruta: "/about" },
         ].map((text, index) => (
           <div
             key={index}
@@ -115,8 +128,10 @@ const NavBar = () => {
               component={Link}
               to={text.ruta}
               onClickCapture={() => {
-                if (text.subRutas) {
+                if (text.key === "programas") {
                   handleProgramasClick();
+                } else if (text.key === "multimedia") {
+                  handleMultimediaClick();
                 }
               }}
             >
@@ -134,31 +149,87 @@ const NavBar = () => {
                   borderRadius: 1,
                 }}
               />
+              {text.subRutas && (
+                <svg
+                  style={{ zIndex: "-1" }}
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M0.646447 0.646447C0.841709 
+                   0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 
+                   0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 
+                   0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 
+                   1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 
+                   0.451184 0.841709 0.646447 0.646447Z"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              )}
             </ListItem>
-            {text.subRutas && (
-              <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  {text.subRutas.map((subRuta, subIndex) => (
-                    <ListItem
-                      onClickCapture={handleDrawerToggle}
-                      key={subIndex}
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "#e5ebff",
-                        },
-                        marginLeft: 5,
-                        width: "91.5%",
-                        borderRadius: 1,
-                        marginRight: 10,
-                        marginBottom: 1,
-                      }}
-                      component={Link}
-                      to={subRuta.ruta}
-                    >
-                      <ListItemText primary={subRuta.key} />
-                    </ListItem>
-                  ))}
-                </List>
+            {text.key === "programas" && (
+              <Collapse in={openProgramas} timeout="auto" unmountOnExit>
+                {text.subRutas && (
+                  <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {text.subRutas.map((subRuta, subIndex) => (
+                        <ListItem
+                          onClickCapture={handleDrawerToggle}
+                          key={subIndex}
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "#e5ebff",
+                            },
+                            marginLeft: 5,
+                            width: "91.5%",
+                            borderRadius: 1,
+                            marginRight: 10,
+                            marginBottom: 1,
+                          }}
+                          component={Link}
+                          to={subRuta.ruta}
+                        >
+                          <ListItemText primary={subRuta.key} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                )}
+              </Collapse>
+            )}
+            {text.key === "multimedia" && (
+              <Collapse in={openMultimedia} timeout="auto" unmountOnExit>
+                {text.subRutas && (
+                  <Collapse in={open} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {text.subRutas.map((subRuta, subIndex) => (
+                        <ListItem
+                          onClickCapture={handleDrawerToggle}
+                          key={subIndex}
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "#e5ebff",
+                            },
+                            marginLeft: 5,
+                            width: "91.5%",
+                            borderRadius: 1,
+                            marginRight: 10,
+                            marginBottom: 1,
+                          }}
+                          component={Link}
+                          to={subRuta.ruta}
+                        >
+                          <ListItemText primary={subRuta.key} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                )}
               </Collapse>
             )}
           </div>
@@ -240,6 +311,8 @@ const NavBar = () => {
                   <PositionedMenu
                     altImg={authlogin.user.correo}
                     srcImg={authlogin.user._profileImage}
+                    nombres={authlogin.user.nombres}
+                    apellidos={authlogin.user.apellidos}
                   ></PositionedMenu>
                 </IconButton>
               </Tooltip>
@@ -263,7 +336,7 @@ const NavBar = () => {
           <>
             <Typography
               variant="h6"
-              className="flex gap-20 sm:gap-8 md:gap-5 lg:gap-7 xl:gap-14 2xl:gap-15"
+              className="flex gap-20 sm:gap-8 md:gap-4 lg:gap-7 xl:gap-14 2xl:gap-15"
             >
               <NavLink
                 style={{
@@ -305,9 +378,6 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
-                className={({ isActive, isPending }) =>
-                  isPending ? "pending" : isActive ? "active" : ""
-                }
               >
                 <Link to="/calendar">Calendario</Link>
               </NavLink>
@@ -317,7 +387,7 @@ const NavBar = () => {
                 style={{
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: "center", 
+                  alignItems: "center",
                   textDecoration: "none",
                   fontSize: ".875rem",
                   alignContent: "center",
@@ -406,7 +476,7 @@ const NavBar = () => {
                   alignContent: "center",
                   paddingTop: "4px",
                   gap: 10,
-                }} 
+                }}
                 name="publicaciones"
                 onClick={handleClick}
               >
@@ -553,7 +623,7 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
-                <Link to="/gallery">Espacios USA</Link>
+                <Link to="/americanSpaces">Espacios USA</Link>
               </NavLink>
               <NavLink
                 style={{
@@ -582,6 +652,8 @@ const NavBar = () => {
                   <PositionedMenu
                     altImg={authlogin.user.correo}
                     srcImg={authlogin.user._profileImage}
+                    nombres={authlogin.user.nombres}
+                    apellidos={authlogin.user.apellidos}
                   ></PositionedMenu>
                 </IconButton>
               </Tooltip>
@@ -595,12 +667,12 @@ const NavBar = () => {
                     setAuth(!auth);
                   }}
                   style={{
-                    background:'#DC2626',
                     color: "white",
                     textDecoration: "none",
                     display: "grid",
                     alignContent: "center",
-                  }} 
+                    background: "#002E5F",
+                  }}
                 >
                   INICIAR SESION
                 </Button>
