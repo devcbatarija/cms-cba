@@ -13,6 +13,10 @@ module.exports=(sequelize)=>{
             type:DataTypes.INTEGER,
             allowNull:false
         },
+        title:{
+            type:DataTypes.TEXT,
+            allownull:false
+        },
         description:{
             type: DataTypes.TEXT,
             allowNull:false

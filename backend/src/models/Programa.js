@@ -19,6 +19,10 @@ module.exports = (sequelize) => {
         requisitos: {
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        multimedia:{
+            type:DataTypes.ARRAY(DataTypes.TEXT), 
+            allowNull:false
         }
     });
 

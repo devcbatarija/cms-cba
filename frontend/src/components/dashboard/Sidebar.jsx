@@ -14,6 +14,7 @@ import BookRoundedIcon from "@mui/icons-material/BookRounded";
 import SchoolIcon from "@mui/icons-material/School";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import PositionedMenu from "../navBar/positionedMenu";
+import CollectionsRoundedIcon from '@mui/icons-material/CollectionsRounded';
 
 function SidebarItem({ icon: Icon, label, to, subItems }) { 
   const [open, setOpen] = useState(false); // Nuevo estado para controlar el submenú
@@ -133,6 +134,27 @@ export default function Sidebar() {
                 to: "/dashboard/program/precio",
                 icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
               },
+            ]}
+          />
+          <SidebarItem
+            icon={CollectionsRoundedIcon  }
+            label="American Spaces"
+            subItems={[
+              {
+                label: "Tabla",
+                to: "/dashboard/spaces/table",
+                icon: <TocRoundedIcon></TocRoundedIcon>,
+              },
+              {
+                label: "Crear ambiente",
+                to: "/dashboard/spaces/ambienteAdd",
+                icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+              },
+              {
+                label: "Agregar imagen",
+                to: "/dashboard/spaces/imageadd",
+                icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+              }
             ]}
           />
           <NavLink to="/dashboard/spotify/podcast">

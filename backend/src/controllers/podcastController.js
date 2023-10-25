@@ -15,6 +15,7 @@ module.exports = {
     try {
       const obj = {
         epi_number: podcast.epi_number,
+        title:podcast.title,
         description: podcast.description,
         authors: podcast.authors,
         url_cloudfront: AWS_CLOUDFRONT + podcast.url_cloudfront,
