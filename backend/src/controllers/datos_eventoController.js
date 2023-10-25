@@ -7,7 +7,7 @@ module.exports = {
 
     getAllDatosEvento: async () => {
         try {
-            
+
             const datosEvento = await Dato_Evento.findAll({
                 include: [{
                     model: Evento
@@ -35,10 +35,24 @@ module.exports = {
             return error;
         }
     },
-    getEventsByMonth: async (date) => {
+    getEventsByDate: async (obj) => {
         try {
-            const startOfMonth = dayjs(date).startOf('month').toDate();
-            const endOfMonth = dayjs(date).endOf('month').toDate();
+            const date = obj.date;
+            let startOfMonth, endOfMonth;
+            if (obj.type == 'multiMonthYear') {
+                startOfMonth = dayjs(date).startOf('year').toDate();
+                endOfMonth = dayjs(date).endOf('year').toDate();
+            } else if (obj.type == 'dayGridMonth') {
+                startOfMonth = dayjs(date).startOf('month').toDate();
+                endOfMonth = dayjs(date).endOf('month').toDate();
+            } else if (obj.type == 'timeGridWeek') {
+                startOfMonth = dayjs(date).toDate();
+                endOfMonth = dayjs(obj.endDate).toDate();
+            } else if (obj.type == 'day') {
+                startOfMonth = dayjs(date).startOf('day').toDate();
+                endOfMonth = dayjs(date).endOf('day').toDate();
+            }
+
             const datosEvento = await Dato_Evento.findAll({
                 include: [{
                     model: Evento,
@@ -80,7 +94,7 @@ module.exports = {
                 const dateB = new Date(b.Evento ? b.Evento.start : b.start);
                 return dateA - dateB;
             });
-            
+
             return { Eventos: sortedArray };
         } catch (error) {
             return error;
