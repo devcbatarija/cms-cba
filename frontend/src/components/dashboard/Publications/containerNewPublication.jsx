@@ -21,7 +21,6 @@ const ContarinerNewPublication = () => {
 
   const navigate=useNavigate();
   const handleSubmitPublication = async (urls) => {
-    console.log("prueba de envio")
     try {
       const response = await axios.post("publication/create", {
         titulo: publicacion.titulo,

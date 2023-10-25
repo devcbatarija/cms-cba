@@ -15,6 +15,9 @@ export default {
       width: {
         '86%': '86%'
       },
+      maxHeight: {
+        '80vh': '80vh',
+      },
       colors: {
         'cbaBlue': '#002E5F',
         'cbaRed': '#D50032',
