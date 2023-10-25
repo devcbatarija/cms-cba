@@ -108,11 +108,6 @@ export default function ModalAddEvent({
                 <Box sx={style}>
                     <form
                         onSubmit={handleSubmit}
-                        style={{
-                            // display: "grid",
-                            // gridTemplateColumns: "repeat(2,1fr)",
-                            // gap: "10px",
-                        }}
                     >
                         <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                             <InputLabel htmlFor="outlined-adornment-title">
@@ -264,23 +259,6 @@ export default function ModalAddEvent({
                                 </div>
                             </Grid>
                         </div>
-                        {/* <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-estado">
-                                Estado
-                            </InputLabel>
-                            <Select
-                                sx={{ width: "100%" }}
-                                labelId="demo-select-small-label"
-                                id="demo-select-small"
-                                value={form.estado}
-                                label="estado"
-                                onChange={handleChange}
-                                name="estado"
-                            >
-                                <MenuItem value={true}>Activo</MenuItem>
-                                <MenuItem value={false}>Baja</MenuItem>
-                            </Select>
-                        </Grid> */}
                         <div className="grid grid-cols-2 gap-2">
                             <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
                                 {!spinner ? (
@@ -391,35 +369,9 @@ const style = (theme) => ({
     display: "flex",
     flexDirection: "column",
     width: 780,
-    // borderRadius: "12px",
     padding: "16px 32px 24px 32px",
     backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",
     boxShadow: `0px 2px 24px ${theme.palette.mode === "dark" ? "#000" : "#383838"
         }`,
 });
 
-const TriggerButton = styled("button")(
-    ({ theme }) => `
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
-  border-radius: 12px;
-  padding: 6px 12px;
-  line-height: 1.5;
-  background: transparent;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
-  color: ${theme.palette.mode === "dark" ? grey[100] : grey[900]};
-
-  &:hover {
-    background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
-    border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
-  }
-
-  &:focus-visible {
-    border-color: ${blue[400]};
-    outline: 3px solid ${theme.palette.mode === "dark" ? blue[500] : blue[200]};
-  }
-  `
-);

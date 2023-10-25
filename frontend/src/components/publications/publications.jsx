@@ -1,26 +1,45 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getAllPublication } from "../../redux-toolkit/actions/publicationActions";
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar } from '@mui/material';
 import ImagenesEstilizadas from '../dashboard/widgets/imagenPublicacion';
 import { calcularTimestate } from '../../services/functions';
+import FilterPublications from '../dashboard/widgets/botonfiltarpublicaciones';
+import Pagination from '../dashboard/widgets/pagination';
+import CuadroInscripcion from '../inscripcion/incripcion';
 export const Publications = () => {
     const dispatch = useDispatch();
-    const publicaciones = useSelector((state) => state.publications.publications)
+    const arrayPublicaciones = useSelector((state) => state.publications.publications)
+    const [publicaciones, setPublicaciones] = useState([])
+    const [currentPage, setCurrentPage] = useState(0);
+    const itemsPerPage = 5;
+    const totalPages = Math.ceil(publicaciones.length / itemsPerPage);
 
+    const onPageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const ActualizarFiltroPublicaciones = (newData) => {
+        setPublicaciones(newData);
+    }
+    useEffect(() => {
+        setPublicaciones(arrayPublicaciones)
+    }, [arrayPublicaciones])
     useEffect(() => {
         dispatch(getAllPublication())
     }, []);
     return (
         <>
-            <div className="pt-4 px-4 sm:px-6 md:pt-10 md:px-8 bg-zinc-50">
-                <div className='items-center max-w-4xl mx-auto grid grid-cols-1 lg:max-w-6xl lg:grid-cols-2'>
+            <div className="pt-4 px-4 sm:px-6 md:pt-5 md:px-8 bg-zinc-50">
+                <div className='items-center max-w-4xl mx-auto flex flex-row justify-between lg:max-w-6xl'>
                     <h1 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">Publicaciones</h1>
-                    <button>filtrar</button>
+                    <FilterPublications
+                        ActualizarFiltroPublicaciones={ActualizarFiltroPublicaciones}
+                    />
                 </div>
             </div>
             {publicaciones.length > 0 ?
-                publicaciones.map((publicacion) => (
+                publicaciones.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage).map((publicacion) => (
                     <div key={publicacion.id_Publicacion} className="py-4 px-4 sm:p-6 md:py-10 md:px-8 bg-zinc-50">
                         <div className="p-10 rounded-lg shadow-md  bg-white items-center max-w-4xl mx-auto grid grid-cols-1 lg:max-w-6xl lg:gap-x-20 lg:grid-cols-2">
                             <div className="col-start-1 flex flex-col-reverse row-start-2 lg:row-start-1">
@@ -62,6 +81,15 @@ export const Publications = () => {
                 )) : <div>
                     No hay datos
                 </div>}
+            <div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={onPageChange}
+                    topRank={10}
+                />
+            </div>
+            <CuadroInscripcion/>
         </>
     )
 }

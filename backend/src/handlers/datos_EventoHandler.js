@@ -1,4 +1,4 @@
-const { addDatosEvento, getAllDatosEvento, getEventsByMonth } = require("../controllers/datos_eventoController");
+const { addDatosEvento, getAllDatosEvento, getEventsByDate } = require("../controllers/datos_eventoController");
 const { addEvento, getAllEvento, updateEvento, getEventById } = require("../controllers/eventoController")
 
 
@@ -13,10 +13,11 @@ module.exports={
             res.status(404).json({error:error.message});
         }
     },
-    getEventsByMonth: async (req, res)=>{
+    getEventsByDate: async (req, res)=>{
         try {
-            const date= req.params.date;
-            const response= await getEventsByMonth(date);
+            
+            const date= req.body;
+            const response= await getEventsByDate(date);
             res.status(200).json({
                 results: response
             });
