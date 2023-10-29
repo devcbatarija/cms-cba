@@ -14,6 +14,7 @@ const {
 }=require("../handlers/usuarioHandler");
 
 const { validToken } = require("../services/jwtservice");
+const catchedAsync = require("../utils/catchedAsync");
 const router=express();
 
 router.get('/',getAllUsuarios); //http://localhost:3001/api/users/   GET
@@ -25,8 +26,8 @@ router.post('/login',authLogin) //Iniciar sesion
 router.post('/valid/token',validToken); //Validar valides de token e iniciar sesion
 router.get('/valid/token/email',emailVerifyToken)
 
-router.put('/state/update/:id',updateState)
-router.get('/get/by/:id',getById);
+router.put('/state/update/:id',catchedAsync(updateState))
+router.get("/get/by/:id", catchedAsync(getById));
 
 router.post('/delete/select',deleteSelect); //agregar a programas
 router.put('/put/image',updateImage); //editar imagenes

@@ -35,13 +35,15 @@ const Login = () => {
       const response = await axios.post("users/login", watch(), {
         withCredentials: true,
       });
+      navigate("/");
       reset();
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      <Navigate to={'/'} ></Navigate>
+      
       dispatch(signin(response.data));
     } catch (error) {
+      console.log(error)
       setErrorBack(error.response.data.messageError);
       setTimeout(() => {
         setErrorBack("");

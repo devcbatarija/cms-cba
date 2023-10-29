@@ -231,7 +231,7 @@ const PodcastDashboard = () => {
             >
               Inserte una imagen de portada
             </label>
-            <Uploader publicacion={form} setPublicacion={setForm}></Uploader>
+            <Uploader publicacion={form} setPublicacion={setForm} cantMax={3}></Uploader>
           </div>
           <div className="flex items-center justify-between">
             <button
