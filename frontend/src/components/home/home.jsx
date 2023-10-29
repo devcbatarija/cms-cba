@@ -89,10 +89,10 @@ const Home = () => {
             latestPublications.map((m, index) => {
               return (
                 <div
-                  key={m.descripcion}
+                  key={`${m.titulo}-${m.id_Publicacion}`}
                   className="
                 grid grid-cols-1
-                sm:grid-cols-1 md:grid-cols-2
+                sm:grid-cols-1 lg:grid-cols-2
                 items-center justify-center bg-white"
                 >
                   <div className="h-72 px-8">
