@@ -53,6 +53,8 @@ import GalleryNav from "./components/dashboard/Gallery360/Navegacion";
 import GalleryAddComponent from "./components/dashboard/Gallery360/GalleryAdd";
 import GalleryTable from "./components/dashboard/Gallery360/GalleryTable";
 import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd";
+import TestimonioNav from "./components/dashboard/Testimonios/Nav";
+import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -235,6 +237,20 @@ function App() {
                 path="/dashboard/testimononios"
                 element={<TestimoniosContainer />}
               />
+
+
+              <Route path="/dashboard/testimonio" element={<TestimonioNav />}>
+                <Route
+                  path="/dashboard/testimonio/table"
+                  element={<TestimonioTable />}
+                />
+                <Route
+                  path="/dashboard/testimonio/add"
+                  element={<TestimoniosContainer />}
+                />
+              </Route>
+
+              ///
               <Route
                 path="/dashboard/tableuser"
                 element={<TableUser></TableUser>}

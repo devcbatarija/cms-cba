@@ -24,7 +24,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.login);
-  
+
   const handleOnSubmit = async () => {
     try {
       setForm({
@@ -32,6 +32,7 @@ const Login = () => {
         correo: "",
         password: "",
       });
+      console.log(watch())
       const response = await axios.post("users/login", watch(), {
         withCredentials: true,
       });

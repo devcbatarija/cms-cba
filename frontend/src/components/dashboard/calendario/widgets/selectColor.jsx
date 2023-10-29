@@ -37,7 +37,6 @@ export default function SelectColorList({
     <Listbox value={selected} onChange={setSelected} >
       {({ open }) => (
         <>
-          {/* <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Assigned to</Listbox.Label> */}
           <div className="relative" style={{ flex: 1 }}>
             <Listbox.Button className="h-full relative w-full cursor-pointer rounded-md bg-white py-3 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
               <span className="flex items-center">
@@ -62,8 +61,8 @@ export default function SelectColorList({
                     key={color.color}
                     className={({ active }) =>
                       classNames(
-                        active ? 'bg-zinc-200 text-white' : 'text-gray-900',
-                        'relative cursor-pointer select-none py-2 pl-3 pr-9'
+                        active ? 'bg-gray-100 text-white' : 'text-gray-900',
+                        'relative cursor-pointer select-none py-2 pl-3 pr-9',
                       )
                     }
                     value={color}
@@ -75,7 +74,6 @@ export default function SelectColorList({
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
-                            {/* {color.nombre} */}
                           </span>
                         </div>
 
