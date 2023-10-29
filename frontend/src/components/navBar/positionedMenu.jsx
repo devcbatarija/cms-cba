@@ -91,7 +91,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>Perfil</MenuItem>
         {rolUSer.rol && rolUSer.rol == "Admin" ? (
           <MenuItem component={Link} to="/" onClick={handleClose}>
             Vista Cliente
@@ -102,9 +102,9 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
             Vista Administrador
           </MenuItem>
         ) : null}
-        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Cerrar sesion</MenuItem>
       </Menu>
     </div>
   );
 };
-export default PositionedMenu;
+export default PositionedMenu;  

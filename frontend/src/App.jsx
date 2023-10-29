@@ -96,7 +96,7 @@ function App() {
   };
 
   const ProtectedRouteRoles = ({ rol, auth, validate, children }) => {
-    if (auth && rol == "Admin" && validate) {
+    if (auth && rol == "Admin") {
       return children;
     }
     if (validate) return <Navigate to={"/"}></Navigate>;
