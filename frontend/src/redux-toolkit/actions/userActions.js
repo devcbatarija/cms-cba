@@ -1,10 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const getallusers = createAsyncThunk("/getallusers", async (payload) => {
+export const getallusers = createAsyncThunk("/getallusers", async () => {
   try {
     const response=await axios.get('/users');
-    return response.data.result;
+    console.log(response)
+    return response.data.data;
   } catch (error) {
     return error.message;
   }
