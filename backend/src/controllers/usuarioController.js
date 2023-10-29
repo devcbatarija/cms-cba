@@ -13,24 +13,15 @@ function formatDate(dateString) {
 }
 module.exports = {
   getAllUsuarios: async () => {
-    try {
-      const response = await Usuario.findAll();
-      if (!response) {
-        return "Users not found!";
-      }
+      const response = await Usuario.findAll(); 
       return response;
-    } catch (error) {
-      return error;
-    }
   },
   postUsuario: async (user) => {
     try {
       let upload = "";
       if (user.image) {
-        console.log([user.image]);
         upload = await uploadImage({ filePath: [user.image], type: "image" });
       }
-      console.log(upload);
       const newUser = await Usuario.create({
         correo: user.correo,
         celular: user.celular,
@@ -54,10 +45,8 @@ module.exports = {
         await newUser.destroy();
         throw new Error(emailsend.error);
       }
-      console.log(emailsend);
       return { user: newUser, emailState: emailsend.success };
     } catch (error) {
-      console.log(error);
       throw error;
     }
   },
