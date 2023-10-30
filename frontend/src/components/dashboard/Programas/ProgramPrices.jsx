@@ -28,7 +28,6 @@ const ProgramaPrecios = () => {
                 setProgramas(response.data.results);
             })
             .catch(error => {
-                console.error('Error al obtener programas:', error);
             });
     }, []);
 
@@ -41,7 +40,7 @@ const ProgramaPrecios = () => {
             setNuevoCampoNombre('');
             setNuevoCampoTipo('texto');
         } else {
-            console.log("Nombre o tipo de campo no válidos");
+
         }
     };
 
