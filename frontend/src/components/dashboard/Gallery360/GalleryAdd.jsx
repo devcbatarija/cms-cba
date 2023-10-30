@@ -22,8 +22,8 @@ const StyledForm = styled("form")`
 `;
 
 const GalleryAddComponent = () => {
-  const dispatch=useDispatch();
-  const ambientes=useSelector((state)=>state.gallery.ambient)
+  const dispatch = useDispatch();
+  const ambientes = useSelector((state) => state.gallery.ambient);
   const initialState = {
     imagen: "",
     AmbienteIdAmbiente: ""
@@ -32,7 +32,7 @@ const GalleryAddComponent = () => {
   const [form, setForm] = useState({
     imagen: '',
     multimedia: [],
-    AmbienteIdAmbiente:''
+    AmbienteIdAmbiente: ''
   });
 
   const handleChange = (e) => {
@@ -45,55 +45,62 @@ const GalleryAddComponent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
+    if (!form.AmbienteIdAmbiente) {
+      toast.error("Debes seleccionar un ambiente antes de agregar una imagen.");
+      return;
+    }
 
+    try {
       const response = await axios.post("/files/upload", {
         filePath: form.multimedia,
         type: "image",
-      })
+      });
+
       if (response.data) {
         setForm({
           ...form,
           multimedia: response.data.results[0],
         });
-        console.log(response.data.results[0])
+
         const res = await axios.post("gallery", {
           AmbienteIdAmbiente: form.AmbienteIdAmbiente,
           imagen: response.data.results[0]
         });
-        console.log(res)
+
+        console.log(res);
+        toast.success("Registro exitoso.");
       }
-
-
-      toast.success("Registro exitoso."); 
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error("Error al crear");
     }
   };
-  useEffect(()=>{
-    dispatch(getAllAmbientes())
-  },[])
+
+  useEffect(() => {
+    dispatch(getAllAmbientes());
+  }, []);
+
   return (
     <StyledContainer>
       <Typography variant="h5" align="center" gutterBottom>
-        Agregar imagenes
+        <div className="flex justify-center items-center">
+          <h1 className="mb-4 text-1xl font-extrabold text-gray-900 dark:text-white ">Agregar Imagenes</h1>
+        </div>
       </Typography>
       <StyledForm onSubmit={handleSubmit}>
         <label htmlFor="AmbienteIdAmbiente" className="sr-only">Ambientes</label>
         <select
           onChange={handleChange}
           name="AmbienteIdAmbiente"
-         id="AmbienteIdAmbiente" className="block py-2.5 px-0 w-full text-sm text-gray-500
-         bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400
-          dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-          {
-            ambientes && ambientes.map((ambient)=>{
-              return(
-                <option key={ambient.id_ambiente} value={ambient.id_ambiente}>{ambient.nombre}</option>
-              )
-            })
-          }
+          id="AmbienteIdAmbiente"
+          className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+        >
+          <option value="">Selecciona un ambiente</option>
+          {ambientes && ambientes.map((ambient) => (
+            <option key={ambient.id_ambiente} value={ambient.id_ambiente}>
+              {ambient.nombre}
+            </option>
+          ))}
         </select>
         <FormGroup>
           <Uploader

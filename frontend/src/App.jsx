@@ -43,7 +43,7 @@ import EventNav from "./components/dashboard/calendario/eventNav";
 import EducationUSA from "./components/educationUSA/EducationUSA";
 import { getAllTestimonio } from "./redux-toolkit/actions/testimonioActions";
 import { Podcast } from "./components/multimedia/podcast/podcast";
-import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
+// import ContarinerNewPrograma from "./components/dashboard/Programas/ContainerNewProgram";
 import { getPodcastSongs } from "./redux-toolkit/actions/podcastActions";
 import ProgramaPrecios from "./components/dashboard/Programas/ProgramPrices";
 import GalleryContainer from "./components/americanSpaces/Gallery360/GalleryContainer";
@@ -55,6 +55,7 @@ import GalleryTable from "./components/dashboard/Gallery360/GalleryTable";
 import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd";
 import TestimonioNav from "./components/dashboard/Testimonios/Nav";
 import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable";
+import ProgramAddForm from "./components/dashboard/Programas/ProgramAdd";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -81,7 +82,6 @@ function App() {
         dispatch(authValid(response.data.user));
       }
       setTokenValidated(true);
-      console.log(tokenValidated);
     } catch (error) {
       if (error.response.data.messageError) {
         setTokenValidated(true);
@@ -198,6 +198,7 @@ function App() {
                   element={<ContarinerNewPublication />}
                 />
               </Route>
+              
               <Route path="/dashboard/program" element={<ProgramaNav />}>
                 <Route
                   path="/dashboard/program/tableprogram"
@@ -205,31 +206,31 @@ function App() {
                 />
                 <Route
                   path="/dashboard/program/add"
-                  element={<ContarinerNewPrograma />}
+                  element={<ProgramAddForm />}
                 />
               </Route>
               <Route
                 path="/dashboard/spaces"
                 element={
-                    <GalleryNav />
+                  <GalleryNav />
                 }
               >
                 <Route
                   path="/dashboard/spaces/ambienteadd"
                   element={
-                      <AmbienteAddComponent />
+                    <AmbienteAddComponent />
                   }
                 />
                 <Route
                   path="/dashboard/spaces/imageadd"
                   element={
-                      <GalleryAddComponent />
+                    <GalleryAddComponent />
                   }
                 />
                 <Route
                   path="/dashboard/spaces/table"
                   element={
-                      <GalleryTable />
+                    <GalleryTable />
                   }
                 />
               </Route>
