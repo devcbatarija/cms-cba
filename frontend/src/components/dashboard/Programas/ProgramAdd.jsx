@@ -50,28 +50,33 @@ const ProgramAddForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
-      const response = await axios.post("/files/upload", {
-        filePath: programa.multimedia,
-        type: "image",
-      })
-      if(response.data){
-        setPrograma({
-          ...programa,
-          multimedia: response.data.results[0],
-        });
-        const res = await axios.post("http://localhost:3001/api/Program", {
-          nombre: programa.nombre,
-          caracteristica: programa.caracteristica,
-          requisitos: programa.requisitos,
-          multimedia:[response.data.results[0]],
-          UsuarioIdUsuario: userId ? userId : "",
-        });
+      if (!programa.nombre || !programa.caracteristica || !programa.requisitos || programa.multimedia.length === 0) {
+        toast.error("Por favor, complete todos los campos obligatorios.");
+        return;
       }
-     
-     
-      toast.success("Registro exitoso.");
-      setPrograma(initialState); // Limpiar los campos del formulario
+      else {
+        const response = await axios.post("/files/upload", {
+          filePath: programa.multimedia,
+          type: "image",
+        })
+        if (response.data) {
+          setPrograma({
+            ...programa,
+            multimedia: response.data.results[0],
+          });
+          const res = await axios.post("http://localhost:3001/api/Program", {
+            nombre: programa.nombre,
+            caracteristica: programa.caracteristica,
+            requisitos: programa.requisitos,
+            multimedia: [response.data.results[0]],
+            UsuarioIdUsuario: userId ? userId : "",
+          });
+        }
+
+
+        toast.success("Registro exitoso.");
+        setPrograma(initialState);
+      }
     } catch (error) {
       toast.error("Error al crear");
     }

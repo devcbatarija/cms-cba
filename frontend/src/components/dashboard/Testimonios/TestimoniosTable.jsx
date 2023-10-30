@@ -15,9 +15,6 @@ export default function TestimonioTable() {
   const data = useSelector((state) => state.testimonios.testimonios);
   const selectedTestimonios = useSelector((state) => state.testimonios.selectedTestimonios);
   const [selectAll, setSelectAll] = useState(false);
-
-  console.log(data)
-  //funcion para seleccionar/deseleccionar los programas
   const handleSelectAll = () => {
     if (!selectAll) {
       dispatch(selectAllTestimonio(data.map((pub) => pub.id_Testimonios)));
@@ -28,10 +25,7 @@ export default function TestimonioTable() {
       setSelectAll(false);
     }
   };
-  const handModal = (id) => {
-    setSelectedProgramModal(id);
-    handleOpen(true);
-  };
+
   //funcion para eliminar los programas
   const handleDelete = async () => {
     const response = await axios.post('testimonios/delete/select', { ids: selectedTestimonios });
@@ -67,7 +61,6 @@ export default function TestimonioTable() {
         alignItems="center"
         style={{ padding: "10px", gap: "10px" }}
       >
-        {/*Boton para eliminar publicaciones*/}
         <Button
           disabled={selectedTestimonios.length > 0 ? false : true}
           variant="contained"
@@ -92,7 +85,6 @@ export default function TestimonioTable() {
                 onChange={handleSelectAll}
               />
             </TableCell>
-            {/*Encabezado de las columnas*/}
             <TableCell align="center">Nombres</TableCell>
             <TableCell align="center">Apellidos</TableCell>
             <TableCell align="center">Cargo</TableCell>
@@ -106,7 +98,6 @@ export default function TestimonioTable() {
               key={index}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {/*Celda de seleccion de publicacion individual*/}
               <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
@@ -114,7 +105,6 @@ export default function TestimonioTable() {
                   onChange={() => handleSelectProgram(row.id_Testimonios)}
                 />
               </TableCell>
-              {/*Datos de las publicaciones*/}
               <TableCell align="center">{row.nombre}</TableCell>
               <TableCell align="center">{row.apellidos}</TableCell>
               <TableCell align="center">{row.cargo}</TableCell>
