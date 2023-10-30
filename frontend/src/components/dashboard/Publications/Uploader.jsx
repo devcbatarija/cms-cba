@@ -6,7 +6,16 @@ import ImageIcon from "@mui/icons-material/Image";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import { Button as Btn, Card, CardActionArea, CardMedia } from "@mui/material";
+import {
+  Alert,
+  Button as Btn,
+  Card,
+  CardActionArea,
+  CardMedia,
+} from "@mui/material";
+import toast from "react-hot-toast";
+import { SuccessAlert } from "../../toastAlerts/success";
+
 const UploadContainer = styled.div`
   margin: 0 auto;
   background-color: #f8f9fa;
@@ -25,35 +34,53 @@ const InputContainer = styled.div`
   margin-bottom: 10px;
   width: 100%;
 `;
-const Uploader = ({ setUrls, publicacion, setPublicacion }) => {
+const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax=1 }) => {
   //COMPONENT
   const [image, setImage] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = React.useRef();
+  const [errors, setErrors] = useState({
+    errorLength: "",
+  });
   const convertBase = async (e) => {
     e.preventDefault();
 
-    const files = Array.from(e.target.files); // Obtén los archivos desde el input de tipo file
+    const files = Array.from(e.target.files);
     let format = [];
     for (let [index, file] of files.entries()) {
       format.push({ name: file.name, type: file.type });
     }
-    setImage(format);
-    const promises = await handleUpload(files);
+    if (format.length <= cantMax) {
+      console.log("pruebita1 ");
+      setImage((prevImages) => [...prevImages, ...format]);
+      const promises = await handleUpload(files);
 
-    const base64DataArray = await Promise.all(promises);
- 
-    setIsDragging(false);
-    setPublicacion({
-      ...publicacion,
-      multimedia: base64DataArray,
-    });
+      const base64DataArray = await Promise.all(promises);
+
+      setIsDragging(false);
+      setPublicacion((prevPublicacion) => {
+        return {
+          ...prevPublicacion,
+          multimedia: [...prevPublicacion.multimedia, ...base64DataArray],
+        };
+      });
+      setErrors({
+        ...errors,
+        errorLength: "",
+      });
+    } else {
+      setErrors({
+        ...errors,
+        errorLength: `Cantidad permitida ${cantMax}`,
+      });
+      fileInputRef.current.value = ""; 
+    }
   };
-const clearFileInput = () => {
-  if (fileInputRef.current) {
-    fileInputRef.current.value = ""; // Establece el valor del input a vacío
-  }
-};
+  const clearFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; // Establece el valor del input a vacío
+    }
+  };
   const handleDragEnter = (event) => {
     event.preventDefault();
     setIsDragging(true);
@@ -64,7 +91,7 @@ const clearFileInput = () => {
     setIsDragging(false);
   };
   const handleDelete = async (selectName) => {
-    clearFileInput()
+    clearFileInput();
     const newImage = await image.filter((f) => f.name != selectName);
     const newUploaderFiles = await publicacion.multimedia.filter(
       (f, index) => image[index].name != selectName
@@ -75,8 +102,7 @@ const clearFileInput = () => {
       multimedia: newUploaderFiles,
     });
   };
-  useEffect(() => { 
-  }, []);
+  useEffect(() => {}, []);
   return (
     <UploadContainer>
       <InputContainer>
@@ -157,6 +183,9 @@ const clearFileInput = () => {
             </div>
           </label>
         </div>
+        {errors.errorLength ? (
+          <Alert severity="error">{errors.errorLength}</Alert>
+        ) : null}
       </InputContainer>
       <input
         className="relative m-0 block w-full min-w-0 
