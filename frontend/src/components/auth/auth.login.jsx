@@ -133,7 +133,6 @@ const Login = () => {
                   message: "Ingrese un correo válido",
                 },
               })}
-              autoComplete="current-correo"
             />
             {errors.correo ? (
               <Alert severity="error">{errors.correo.message}</Alert>
@@ -161,7 +160,6 @@ const Login = () => {
                   message: "Password debe tener máximo 30 caracteres",
                 },
               })}
-              autoComplete="current-password"
             />
             {errors.password ? (
               <Alert severity="error">{errors.password.message}</Alert>

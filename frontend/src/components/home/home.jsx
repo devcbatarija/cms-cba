@@ -62,7 +62,7 @@ const Home = () => {
     });
   };
   const latestPublications = multimediadata.slice(0, 2);
-  const latestEvents = events.slice(0, 2);
+  const latestEvents = events.slice(0, 3);
 
   const renderDescription = (descripcion) => {
     return {
