@@ -50,8 +50,8 @@ const AmbienteAddComponent = () => {
   return (
     <div className="p-10 bg-cl-red">
       <StyledContainer >
-        <div class="flex justify-center items-center">
-          <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">AGREGAR AMBIENTES</h1>
+        <div className="flex justify-center items-center">
+          <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">AGREGAR AMBIENTES</h1>
 
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
