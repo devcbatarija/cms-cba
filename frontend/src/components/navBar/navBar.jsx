@@ -449,7 +449,7 @@ const NavBar = () => {
                     padding: "20px",
                   }}
                 >
-                  Adolecentes
+                  Adolescentes
                 </MenuItem>
                 <MenuItem
                   onClick={handleClose}
