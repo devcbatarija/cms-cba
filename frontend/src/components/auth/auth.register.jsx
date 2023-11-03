@@ -48,7 +48,7 @@ const Register = () => {
   const handleOnSubmit = async () => {
     try {
       setSpinner(true);
-      const response = await axios.post("http://localhost:3001/api/users", {
+      const response = await axios.post("users", {
         correo: watch("correo"),
         celular: watch("celular"),
         nombres: watch("nombres"),
@@ -83,7 +83,7 @@ const Register = () => {
   const handleSubmitVerify = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/users/valid/email",
+        "users/valid/email",
         {
           correo: watch("correo"),
         }
@@ -92,7 +92,6 @@ const Register = () => {
         setEmailValid(true);
         return;
       }
-      console.log(response);
     } catch (error) {
       setError({
         ...error,
