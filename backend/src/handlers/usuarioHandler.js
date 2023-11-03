@@ -48,26 +48,18 @@ module.exports = {
     const result = await updateById(req.params.id, req.body);
     response(res, 200, result);
   },
-  authLogin: async (req, res) => {
-    try {
-      if (!req.body.correo && !req.body.password)
-        throw new ClientError("Todos los datos son necesarios", 400);
-      if (!req.body.correo || req.body.correo === " ")
-        throw new ClientError("Correo no puede estar vacío", 400);
-      if (!req.body.password || req.body.password === " ")
-        throw new ClientError("Password no puede estar vacío", 400);
 
+
+  
+  authLogin: async (req, res) => {
       const result = await authLogin(req.body);
-      if (result.messageError) {
-        throw new ClientError(result.messageError, 400);
-      } else {
+      console.log(result)
         res.cookie("token", result.token);
         res.status(200).json(result.usLogin);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   },
+
+
+
   getById: async (req, res) => {
     response(res, 200, response);
   },
