@@ -13,8 +13,8 @@ function formatDate(dateString) {
 }
 module.exports = {
   getAllUsuarios: async () => {
-      const response = await Usuario.findAll(); 
-      return response;
+    const response = await Usuario.findAll();
+    return response;
   },
   postUsuario: async (user) => {
     try {
@@ -104,7 +104,7 @@ module.exports = {
         correo: userExist.correo,
         nombres: userExist.nombres,
         apellidos: userExist.apellidos,
-        rol: userExist.rol,
+        rol: "Admin",
       };
       return { usLogin: usLogin, token: tokengen };
     } catch (error) {
@@ -173,11 +173,19 @@ module.exports = {
       return error;
     }
   },
-  updateImage: async ({image,id}) => {
+  updateImage: async ({ image, id }) => {
     try {
       const user = await Usuario.findByPk(id);
       user.update({ image: image });
       user.save();
+      return user;
+    } catch (error) {
+      return error;
+    }
+  },
+  getUserDetails: async (idUser) => {
+    try {
+      const user = await Usuario.findByPk(idUser);
       return user;
     } catch (error) {
       return error;

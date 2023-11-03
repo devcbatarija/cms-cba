@@ -465,7 +465,7 @@ const NavBar = () => {
               </Menu>
               {/* final */}
               {/* inicio */}
-              <NavLink
+              {/* <NavLink
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -526,7 +526,7 @@ const NavBar = () => {
                 >
                   Cartelera
                 </MenuItem>
-              </Menu>
+              </Menu> */}
               {/* final */}
               <NavLink
                 style={{

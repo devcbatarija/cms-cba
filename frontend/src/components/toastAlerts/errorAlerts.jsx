@@ -1,6 +1,6 @@
 import { toast } from "react-hot-toast";
 
-export const SuccessAlert = ({ t, w, message }) => {
+export const ErrorAlert = ({ t, w, message }) => {
   return (
     <div
       className={`w-[100%] sm:${w} md:${w} lg:${w} xl:${w} bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
@@ -11,7 +11,7 @@ export const SuccessAlert = ({ t, w, message }) => {
             <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 text-green-500"
+                className="h-6 w-6 text-red-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -20,7 +20,7 @@ export const SuccessAlert = ({ t, w, message }) => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
+                  d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
               <p className="ml-2 text-sm font-medium text-gray-900">

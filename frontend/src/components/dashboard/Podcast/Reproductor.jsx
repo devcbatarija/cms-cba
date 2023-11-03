@@ -62,7 +62,7 @@ const Reproductor = ({song, name,imgSong,authors}) => {
                 {authors}
               </Typography>
             </CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}> 
+            {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}> 
               <IconButton
               >
               <AddIcon sx={{color:"gray",border:"1px solid gray",borderRadius:"50%"}} ></AddIcon>
@@ -76,14 +76,14 @@ const Reproductor = ({song, name,imgSong,authors}) => {
               <StopIcon sx={{ height: 38, width: 38 }} />
             </IconButton>
               } 
-            </Box>
+            </Box> */}
           </Box>
-          <CardMedia
+          {/* <CardMedia
             component="img"
             sx={{ width: 148,height:148 }}
             image={imgSong}
             alt="Live from space album cover"
-          />
+          /> */}
         </Card>
     );
 }

@@ -1,5 +1,10 @@
+import { Alert } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { ErrorAlert } from "../toastAlerts/errorAlerts";
+import { SuccessAlert } from "../toastAlerts/success";
 
 const Form = ({ setIsOpen }) => {
   const {
@@ -10,22 +15,79 @@ const Form = ({ setIsOpen }) => {
     setValue,
     reset,
   } = useForm();
+  const handleOnSubmit=handleSubmit(async(data)=>{
+    const obj = {
+      correo:watch('correo'),
+      celular:watch('celular'),
+      nombres:watch('nombres'),
+      apellidos:watch('apellidos'),
+      fecha_Nacimiento:watch('date'),
+      ci:watch('ci')
+    };
+    const response = await axios.post("users/form/register", obj);
+    if(!response.data.error){
+      toast.custom((t) => (
+        <SuccessAlert
+          t={t}
+          w={"w-4/12"}
+          message="Registro completo!"
+        />
+      ));
+      setIsOpen()
+      return
+    }
+    toast.custom((t) => (
+      <ErrorAlert
+        t={t}
+        w={"w-4/12"}
+        message="No se pudo completar el registro!"
+      />
+    ));
+  })
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
+    <div className="fixed z-10 inset-0 overflow-y-hidden">
       <div
         className="flex items-end justify-center min-h-screen 
-                      pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+                      pt-1 px-1 pb-20 text-center sm:block sm:p-0"
       >
         <div className="fixed inset-0 transition-opacity" ariaHidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden  transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div className="w-full flex items-center justify-center pt-1">
-            <h2 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">
-              Pre-Registro
-            </h2>
+        <div
+          className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden 
+        transform transition-all  w-full  sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        >
+          <div className="w-full flex justify-between items-center pt-1">
+            <div className="mx-auto">
+              <h2 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">
+                Pre-Registro
+              </h2>
+            </div>
+            <button
+              onClick={() => setIsOpen()}
+              className="py-2 px-4 focus:outline-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="gray"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
-          <form className="bg-white rounded px-8 pt-6 pb-8 mb-4">
+
+          <form
+            onSubmit={handleOnSubmit}
+            className="bg-white rounded px-8 pt-6 pb-2 mb-1 overflow-y-auto max-h-[500px]"
+          >
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -59,6 +121,9 @@ const Form = ({ setIsOpen }) => {
                   },
                 })}
               />
+              {errors.correo ? (
+                <Alert severity="error">{errors.correo.message}</Alert>
+              ) : null}
             </div>
             <div className="mb-4">
               <label
@@ -89,6 +154,9 @@ const Form = ({ setIsOpen }) => {
                 })}
               />
             </div>
+            {errors.celular ? (
+              <Alert severity="error">{errors.celular.message}</Alert>
+            ) : null}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -117,6 +185,9 @@ const Form = ({ setIsOpen }) => {
                 })}
               />
             </div>
+            {errors.nombres ? (
+              <Alert severity="error">{errors.nombres.message}</Alert>
+            ) : null}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -129,8 +200,27 @@ const Form = ({ setIsOpen }) => {
                 id="apellidos"
                 type="text"
                 placeholder="Apellidos"
+                {...register("apellidos", {
+                  required: {
+                    value: true,
+                    message: "El campo apellido es requerido",
+                  },
+                  minLength: {
+                    value: 5,
+                    message:
+                      "El campo apellido debe tener almenos 5 caracteres",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message:
+                      "El campo apellido debe tener máximo 30 caracteres",
+                  },
+                })}
               />
             </div>
+            {errors.apellidos ? (
+              <Alert severity="error">{errors.apellidos.message}</Alert>
+            ) : null}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -142,8 +232,17 @@ const Form = ({ setIsOpen }) => {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="fecha_Nacimiento"
                 type="date"
+                {...register("date", {
+                  required: {
+                    value: true,
+                    message: "La fecha de nacimiento es requerida",
+                  },
+                })}
               />
             </div>
+            {errors.date ? (
+              <Alert severity="error">{errors.date.message}</Alert>
+            ) : null}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -156,8 +255,25 @@ const Form = ({ setIsOpen }) => {
                 id="ci"
                 type="text"
                 placeholder="CI"
+                {...register("ci", {
+                  required: {
+                    value: true,
+                    message: "El campo ci es requerido",
+                  },
+                  minLength: {
+                    value: 5,
+                    message: "El campo ci debe tener almenos 5 caracteres",
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: "El campo ci debe tener máximo 30 caracteres",
+                  },
+                })}
               />
             </div>
+            {errors.ci ? (
+              <Alert severity="error">{errors.ci.message}</Alert>
+            ) : null}
             <div className="flex items-center justify-between">
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -167,18 +283,7 @@ const Form = ({ setIsOpen }) => {
               </button>
             </div>
           </form>
-          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              onClick={() => setIsOpen()}
-              className="mt-3 w-full inline-flex justify-center rounded-md
-              border border-transparent shadow-sm px-4 py-2 bg-cbaBlue 
-              text-base font-medium text-white hover:bg-blue-700 
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 
-              sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Cerrar
-            </button>
-          </div>
+          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"></div>
         </div>
       </div>
     </div>
