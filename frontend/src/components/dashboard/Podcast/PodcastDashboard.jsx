@@ -66,7 +66,9 @@ const PodcastDashboard = () => {
       const response = await axios.post("/files/upload", {
         filePath: form.multimedia,
         type: "image",
-      });
+      },
+        { contentType: "application/json" }
+      );
       if (response.data) {
         setForm({
           ...form,
@@ -79,9 +81,9 @@ const PodcastDashboard = () => {
           bar: true,
         });
         const res = await axios.post("podcast/song/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+
+          ContentType: "multipart/form-data",
+
         });
         if (res.data.data.Key) {
           const registerEnd = await axios.post("podcast/song/upload/database", {
@@ -99,8 +101,8 @@ const PodcastDashboard = () => {
             await setUploadProgress(0);
             await setShowProgress({
               ...showProgress,
-              message:false,
-              bar:false
+              message: false,
+              bar: false
             });
             setForm({
               epi_number: + 1,
@@ -117,11 +119,11 @@ const PodcastDashboard = () => {
           }
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const eventsSSE = () => {
     const eventSource = new EventSource(
-      "http://localhost:3001/api/podcast/song/events"
+      "http://181.188.144.150/api/podcast/song/events"
     );
     eventSource.onmessage = (event) => {
       const progress = parseInt(event.data);
