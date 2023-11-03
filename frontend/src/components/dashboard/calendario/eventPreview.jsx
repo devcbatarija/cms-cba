@@ -38,7 +38,7 @@ const EventPreview = ({
           dangerouslySetInnerHTML={renderDescription()}
         ></p>
       </div>
-      <div className="flex flex-row gap-5 p-4">
+      {/* <div className="flex flex-row gap-5 p-4">
         <a
           className="text-blue-500 underline"
           href="link"
@@ -47,7 +47,7 @@ const EventPreview = ({
         >
           http://localhost:5173/dashboard/publinav/add
         </a>
-      </div>
+      </div> */}
     </div>
   );
 };

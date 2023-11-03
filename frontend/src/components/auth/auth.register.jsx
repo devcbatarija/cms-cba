@@ -64,7 +64,7 @@ const Register = () => {
         toast.custom(
           <SuccessAlert
             w={"w-4/12"}
-            message={response.data.emailState}
+            message={"Registro exitoso."}
           ></SuccessAlert>
         );
         navigate("/login");

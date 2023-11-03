@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     celular: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     nombres: {

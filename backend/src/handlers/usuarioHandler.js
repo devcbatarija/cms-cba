@@ -10,6 +10,7 @@ const {
   getById,
   deleteSelect,
   updateImage,
+  getUserDetails,
 } = require("../controllers/usuarioController");
 const { ClientError } = require("../utils/errors");
 const response = require("../utils/response");
@@ -17,6 +18,10 @@ const response = require("../utils/response");
 module.exports = {
   getAllUsuarios: async (req, res) => {
     const result = await getAllUsuarios();
+    response(res, 200, result);
+  },
+  getUserDetails: async (req, res) => {
+    const result = await getUserDetails(req.params.id);
     response(res, 200, result);
   },
   postUser: async (req, res) => {
@@ -61,10 +66,10 @@ module.exports = {
       }
     } catch (error) {
       console.log(error);
-    };
+    }
   },
   getById: async (req, res) => {
-      response(res,200,response)
+    response(res, 200, response);
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
