@@ -1,17 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { test } from "../../redux-toolkit/actions/testActions";
-import NavBar from "../navBar/navBar";
 import CarouselHome from "../dashboard/widgets/carruselHome";
 import ComponentComunication from "./componentComunication";
-import PublicationPreview from "../dashboard/Publications/PublicationPreview";
 import { getAllPublication } from "../../redux-toolkit/actions/publicationActions";
 import CuadroInscripcion from "../inscripcion/incripcion";
 import { calcularTimestate } from "../../services/functions";
-import Carousel from "../dashboard/widgets/carrousel";
 import { StatisticsBanner } from "../statisticsBanner/statisticsBanner";
 import { Link } from "react-router-dom";
-import { Comments } from "../publications/comments";
 import primera from "../../assets/1.jpeg";
 import segunda from "../../assets/2.jpeg";
 import tercera from "../../assets/3.jpeg";
@@ -30,12 +25,12 @@ const Home = () => {
   const openModal = () => {
     setIsOpen(true);
   };
-
   const multimediadata = useSelector(
     (state) => state.publications.publications
   );
   const events = useSelector((state) => state.events.datosEvents);
   const testimonios = useSelector((state) => state.testimonios.testimonios);
+
   const calc = () => {
     let calcData = [];
     for (let c of multimediadata) {
@@ -54,7 +49,7 @@ const Home = () => {
     if (multimediadata) {
       calc();
     }
-  }, [multimediadata]); // Agrega multimediadata como dependencia
+  }, [multimediadata, events]); // Agrega multimediadata como dependencia
 
   useEffect(() => {}, []);
   const converFecha = (fech) => {
@@ -67,6 +62,8 @@ const Home = () => {
     });
   };
   const latestPublications = multimediadata.slice(0, 2);
+  const latestEvents = events.slice(0, 3);
+
   const renderDescription = (descripcion) => {
     return {
       __html: descripcion.replace(/\n/g, "<br>"),
@@ -84,7 +81,9 @@ const Home = () => {
       <ComponentComunication></ComponentComunication>
       <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
         <div className="flex flex-col md:w-8/12 w-full gap-4 p-4 bg-white shadow-md">
-          <h2 className="text-1xl ">Comunicados</h2>
+          <h2 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">
+            Publicaciones
+          </h2>
           {latestPublications &&
             latestPublications.map((m, index) => {
               return (
@@ -125,14 +124,18 @@ const Home = () => {
           )}
         </div>
         <div className="flex flex-col md:w-4/12 w-full gap-4 p-2 rounded-lg bg-white shadow-md">
-          {events.length>0 ? (
-            events.map((ev) => {
+          <h2 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">
+            Eventos próximos
+          </h2>
+
+          {latestEvents.length > 0 ? (
+            latestEvents.map((ev, index) => {
               return (
                 <div
                   className="flex flex-col w-full p-6 bg-white border 
           border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
                 >
-                  {ev.categoria != "Cine" ? (
+                  {ev.categoria == "Cine" && ev.Evento.tipo == "General" ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       id="Layer_1"
@@ -140,6 +143,7 @@ const Home = () => {
                       viewBox="0 0 24 24"
                       width="30"
                       height="30"
+                      fill="#3b50b2"
                     >
                       <path d="m9,4c0,2.209-1.791,4-4,4S1,6.209,1,4,2.791,0,5,0s4,1.791,4,4ZM14,0c-2.209,0-4,1.791-4,4s1.791,4,4,4,4-1.791,4-4S16.209,0,14,0Zm5,14v6c0,2.209-1.791,4-4,4H4c-2.209,0-4-1.791-4-4v-6c0-2.209,1.791-4,4-4h11c2.209,0,4,1.791,4,4Zm2.765-2.114l-.765.765v7.75l.765.765c.825.825,2.235.241,2.235-.926v-7.429c0-1.166-1.41-1.75-2.235-.926Z" />
                     </svg>
@@ -151,6 +155,7 @@ const Home = () => {
                       viewBox="0 0 24 24"
                       width="30"
                       height="30"
+                      fill="#3b50b2"
                     >
                       <path d="M1,24c-.552,0-1-.447-1-1V4C0,1.794,1.794,0,4,0H21.998c1.6-.055,2.604,1.958,1.598,3.203l-3.237,4.297,3.237,4.297c1.007,1.245,.003,3.258-1.598,3.203H2v8c0,.553-.448,1-1,1Z" />
                     </svg>
@@ -197,8 +202,37 @@ const Home = () => {
                                 </div>
                               </div>
                             </div>
+                            <div className="sm:ml-4">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                id="Layer_1"
+                                data-name="Layer 1"
+                                viewBox="0 0 24 24"
+                                width="15"
+                                height="15"
+                              >
+                                <path d="M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm2.5,16.33c-.157,.091-.329,.134-.499,.134-.346,0-.682-.179-.867-.5l-2-3.464c-.088-.152-.134-.324-.134-.5V6c0-.552,.447-1,1-1s1,.448,1,1v5.732l1.866,3.232c.276,.478,.112,1.09-.366,1.366Z" />
+                              </svg>
+                              <p className="inline-flex text-sm items-center text-gray-600 hover:underline">
+                                {"Empieza: " + converFecha(ev.Evento.start)}
+                              </p>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                id="Layer_1"
+                                data-name="Layer 1"
+                                viewBox="0 0 24 24"
+                                width="15"
+                                height="15"
+                              >
+                                <path d="M12,24C5.383,24,0,18.617,0,12S5.383,0,12,0s12,5.383,12,12-5.383,12-12,12Zm0-22C6.486,2,2,6.486,2,12s4.486,10,10,10,10-4.486,10-10S17.514,2,12,2Zm3.397,13.803l-2.397-4.076V5h-2v7.272l2.673,4.544,1.725-1.014Z" />
+                              </svg>
+
+                              <p className="inline-flex text-sm items-center text-gray-600 hover:underline">
+                                {"Termina: " + converFecha(ev.Evento.end)}
+                              </p>
+                            </div>
                           </div>
-                          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                          <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                             <button
                               onClick={() => setIsOpen(false)}
                               type="button"
@@ -215,35 +249,6 @@ const Home = () => {
                       </div>
                     </div>
                   )}
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="Layer_1"
-                      data-name="Layer 1"
-                      viewBox="0 0 24 24"
-                      width="15"
-                      height="15"
-                    >
-                      <path d="M12,0C5.383,0,0,5.383,0,12s5.383,12,12,12,12-5.383,12-12S18.617,0,12,0Zm2.5,16.33c-.157,.091-.329,.134-.499,.134-.346,0-.682-.179-.867-.5l-2-3.464c-.088-.152-.134-.324-.134-.5V6c0-.552,.447-1,1-1s1,.448,1,1v5.732l1.866,3.232c.276,.478,.112,1.09-.366,1.366Z" />
-                    </svg>
-                    <p className="inline-flex text-sm items-center text-gray-600 hover:underline">
-                      {"Empieza: " + converFecha(ev.Evento.start)}
-                    </p>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      id="Layer_1"
-                      data-name="Layer 1"
-                      viewBox="0 0 24 24"
-                      width="15"
-                      height="15"
-                    >
-                      <path d="M12,24C5.383,24,0,18.617,0,12S5.383,0,12,0s12,5.383,12,12-5.383,12-12,12Zm0-22C6.486,2,2,6.486,2,12s4.486,10,10,10,10-4.486,10-10S17.514,2,12,2Zm3.397,13.803l-2.397-4.076V5h-2v7.272l2.673,4.544,1.725-1.014Z" />
-                    </svg>
-
-                    <p className="inline-flex text-sm items-center text-gray-600 hover:underline">
-                      {"Termina: " + converFecha(ev.Evento.start)}
-                    </p>
-                  </div>
                 </div>
               );
             })
@@ -254,9 +259,7 @@ const Home = () => {
       </div>
       <StatisticsBanner></StatisticsBanner>
       <div className="flex flex-col w-full items-center">
-        {!testimonios.length > 0 ? (
-          <div>Aún no hay testimonios.</div>
-        ) : null}
+        {!testimonios.length > 0 ? <div>Aún no hay testimonios.</div> : null}
         {testimonios &&
           testimonios.map((t, index) => {
             if (index == testimonios.length - 1)
