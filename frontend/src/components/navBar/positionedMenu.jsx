@@ -8,6 +8,7 @@ import { logoutSession } from "../../redux-toolkit/actions/auth.Actions";
 import Cookie from "js-cookie";
 import toast from "react-hot-toast";
 import { SuccessAlert } from "../toastAlerts/success";
+import { Profile } from "./profileUser";
 
 const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -16,6 +17,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   const navigate = useNavigate();
   const rolUSer = useSelector((state) => state.login.user);
   const authlogin = useSelector((state) => state.login);
+  const [openProfile,setOpenProfile]=useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -52,7 +54,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
           className="border p-2 rounded-[50%] 
           w-[50px] h-[50px] text-white font-bold uppercase"
           style={{
-            background: localStorage.getItem("color")
+            background: localStorage.getItem("color"),
           }}
           onClick={handleClick}
         >
@@ -91,7 +93,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleClose}>Perfil</MenuItem>
+        <MenuItem onClick={() => setOpenProfile(true)}>Perfil</MenuItem>
         {rolUSer.rol && rolUSer.rol == "Admin" ? (
           <MenuItem component={Link} to="/" onClick={handleClose}>
             Vista Cliente
@@ -103,6 +105,12 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
           </MenuItem>
         ) : null}
         <MenuItem onClick={handleLogout}>Cerrar sesion</MenuItem>
+        {openProfile ? (
+          <Profile
+            setOpenProfile={setOpenProfile}
+            userId={authlogin.user._userId}
+          ></Profile>
+        ) : null}
       </Menu>
     </div>
   );

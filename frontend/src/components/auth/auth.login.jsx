@@ -41,14 +41,14 @@ const Login = () => {
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      
-      dispatch(signin(response.data));
+      console.log(response)
+      // dispatch(signin(response.data));
     } catch (error) {
       console.log(error)
-      setErrorBack(error.response.data.messageError);
-      setTimeout(() => {
-        setErrorBack("");
-      }, 5000);
+      // setErrorBack(error.response.data.messageError);
+      // setTimeout(() => {
+      //   setErrorBack("");
+      // }, 5000);
     }
   };
   useEffect(() => {

@@ -20,7 +20,7 @@ module.exports = {
         description: podcast.description,
         authors: podcast.authors,
         url_cloudfront: AWS_CLOUDFRONT + podcast.url_cloudfront,
-        image: podcast.image,
+        image: podcast.image?podcast.image:"",
         state: podcast.state,
         UsuarioIdUsuario: podcast.UsuarioIdUsuario,
       };
