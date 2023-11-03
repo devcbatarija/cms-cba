@@ -24,7 +24,7 @@ export const handleUpload = (files) => {
   });
 };
 export const handleUpdateImage = async(props) => {
-  const response=await axios.put('http://localhost:3001/api/users/put/image',props);
+  const response=await axios.put('users/put/image',props);
   console.log(response)
 };
 const convertFileToBase64 = (file) => {
