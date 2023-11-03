@@ -83,13 +83,14 @@ module.exports = {
       return error;
     }
   },
+
+  
   authLogin: async (user) => {
-    try {
       const userExist = await Usuario.findOne({
         where: { correo: user.correo },
       });
       if (!userExist) {
-        throw new ClientError("Usuario no encontrado.", 401);
+        throw new ClientError("Usuario no encontrado.", 400);
       }
       if (userExist.password !== user.password) {
         throw new ClientError("La contraseña es incorrecta.", 401);
@@ -107,10 +108,10 @@ module.exports = {
         rol: "Admin",
       };
       return { usLogin: usLogin, token: tokengen };
-    } catch (error) {
-      throw error;
-    }
   },
+
+
+
   getById: async (id) => {
     try {
       const us = await Usuario.findByPk(id);
