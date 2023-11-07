@@ -32,27 +32,30 @@ const Login = () => {
         correo: "",
         password: "",
       });
-      console.log(watch())
-      const response = await axios.post("users/login", watch(), {
-        withCredentials: true,
-      });
+      console.log(watch());
+      const response = await axios.post(
+        "users/login",
+        { correo: watch("correo"), password: watch("password") },
+        {
+          ContentType: "application/json",
+        }
+      );
       navigate("/");
       reset();
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      console.log(response)
-      // dispatch(signin(response.data));
+      console.log(response);
+      dispatch(signin(response.data));
     } catch (error) {
-      console.log(error)
-      // setErrorBack(error.response.data.messageError);
-      // setTimeout(() => {
-      //   setErrorBack("");
-      // }, 5000);
+      console.log(error);
+      setErrorBack(error.response.data.messageError);
+      setTimeout(() => {
+        setErrorBack("");
+      }, 5000);
     }
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   const {
     register,
     handleSubmit,

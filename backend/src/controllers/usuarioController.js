@@ -84,6 +84,7 @@ module.exports = {
     }
   },
   authLogin: async (user) => {
+    console.log(user);
     try {
       const userExist = await Usuario.findOne({
         where: { correo: user.correo },
@@ -106,6 +107,7 @@ module.exports = {
         apellidos: userExist.apellidos,
         rol: "Admin",
       };
+      console.log({ usLogin: usLogin, token: tokengen });
       return { usLogin: usLogin, token: tokengen };
     } catch (error) {
       throw error;
