@@ -58,6 +58,7 @@ module.exports = {
     }
   },
   isAdmin: async(req, res, next)=>{
+    console.log(req.headers.authorization);
     try {
       if(!req.headers.authorization){
         return res.status(401).json({messageError:"Usuario no autorizado"});

@@ -1,6 +1,8 @@
 import { Avatar } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { ErrorAlert } from "../toastAlerts/errorAlerts";
 
 export const Profile = ({ setOpenProfile, userId }) => {
   const [user, setUser] = useState(null);
@@ -14,13 +16,13 @@ export const Profile = ({ setOpenProfile, userId }) => {
     return Math.floor(ageInYears);
   }
   useEffect(() => {
-    const update = async () => {
-      const response = await axios.get(`users/details/${userId}`);
-      if (response.data) {
-        setUser(response.data.data);
-      }
-    };
-    userId ? update() : null;
+      const update = async () => {
+        const response = await axios.get(`users/details/${userId}`);
+        if (response.data) {
+          setUser(response.data.data);
+        }
+      };
+      userId ? update() : null;
   }, []);
   return (
     <div className="fixed z-1 inset-0 overflow-y-hidden">
