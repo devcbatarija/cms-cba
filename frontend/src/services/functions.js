@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const handleUpload = (files) => {
   console.log(files);
@@ -24,7 +25,7 @@ export const handleUpload = (files) => {
   });
 };
 export const handleUpdateImage = async(props) => {
-  const response=await axios.put('http://localhost:3001/api/users/put/image',props);
+  const response=await axios.put('users/put/image',props);
   console.log(response)
 };
 const convertFileToBase64 = (file) => {
@@ -79,4 +80,14 @@ export const uploadImgbb = async (base64DataArray) => {
   } catch (error) {
     return { status: "error", message: error.message };
   }
+};
+
+export const tokenGet = async () => {
+  const token = await Cookies.get("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return config;
 };

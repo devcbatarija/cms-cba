@@ -48,40 +48,25 @@ module.exports = {
     const result = await updateById(req.params.id, req.body);
     response(res, 200, result);
   },
+
+
+  
   authLogin: async (req, res) => {
-    console.log(req)
-    try {
-      if (!req.body.correo && !req.body.password)
-        throw new ClientError("Todos los datos son necesarios", 400);
-      if (!req.body.correo || req.body.correo === " ")
-        throw new ClientError("Correo no puede estar vacío", 400);
-      if (!req.body.password || req.body.password === " ")
-        throw new ClientError("Password no puede estar vacío", 400);
-
       const result = await authLogin(req.body);
-      if (result.messageError) {
-        throw new ClientError(result.messageError, 400);
-      } else {
-        console.log(result.token, "aqui token");
-
+      console.log(result)
         res.cookie("token", result.token);
         res.status(200).json(result.usLogin);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   },
+
+
+
   getById: async (req, res) => {
     response(res, 200, response);
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
-    try {
       const result = await emailVerify(req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ messageError: error.message });
-    }
+      response(res,200,result);
   },
   emailVerifyToken: async (req, res) => {
     //verificar el registro mediante token con email

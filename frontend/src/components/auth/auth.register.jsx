@@ -92,11 +92,10 @@ const Register = () => {
         setEmailValid(true);
         return;
       }
-      console.log(response);
     } catch (error) {
       setError({
         ...error,
-        z_errorEmail: error.response.data.messageError,
+        z_errorEmail: error.response.data,
       });
     }
   };

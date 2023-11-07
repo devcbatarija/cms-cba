@@ -8,19 +8,15 @@ import AcercadeNosotros from "./EdUSAComponents/AcercadeComponent";
 import InformacionEducacion from "./EdUSAComponents/ImformationComponent";
 import Rectangulo from "./EdUSAComponents/RectanguloComponent";
 
-const rectangleStyle1 = {
-    width: "20px",
-    height: "30px",
-    position: "relative",
-};
+
 
 function EducationUSA() {
     const pasos = [
         { id: 1, steps: "Paso", type: "Investigacion", description: "Descubre tus opciones y encuentra una universidad que se adapte a tus necesidades. Visítanos para recibir orientación sobre programas de estudio y universidades." },
         { id: 2, steps: "Paso", type: "Financiamiento", description: "Conoce los requisitos para obtener becas parciales y los costos asociados con tus estudios. Te ayudamos a planificar como financiar tu educacion." },
-        { id: 3, steps: "Paso", type: "Solicitud", description: "Completa los formularios y documentos necesarios para las univeridades, inlcueyendo examenes como TOELF, SAT, GRE, GMAT." },
+        { id: 3, steps: "Paso", type: "Solicitud", description: "Completa los formularios y documentos necesarios para las univeridades, incluyendo examenes como TOELF, SAT, GRE, GMAT." },
         { id: 4, steps: "Paso", type: "Visa", description: "Familiarizarte con los requisitos para la visa de estudiante y solicitar la cita de entevista con la embajada." },
-        { id: 5, steps: "Paso", type: "Viaja", description: "Organiza tu viaje, siste a una orientacion en EducationUSA y asegurate de tener todos los documentos necesarios." },
+        { id: 5, steps: "Paso", type: "Viaja", description: "Organiza tu viaje, asiste a una orientacion en EducationUSA y asegurate de tener todos los documentos necesarios." },
     ];
     const colores = [
         "rgb(3, 121, 137)",   // Turquesa
@@ -29,14 +25,7 @@ function EducationUSA() {
         "rgb(0, 56, 152)",  // Azul Pastel
         "rgb(0, 22, 60)",      // Azul Marino
     ];
-    const servicioProps = {
-        titulo: "OTROS SERVICIOS",
-        contenido: {
-            title: "Traducción de documentos",
-            text: "Recuerda que también contamos con el servicio de traducción de documentos. Los documentos pueden ser traducidos del Inglés al Español y viceversa. El tiempo para la traducción de un documento es variable dependiendo del tipo y del tamaño del documento. Recuerda que también contamos con el servicio de traducción de documentos. Los documentos pueden ser traducidos del Inglés al Español y viceversa. El tiempo para la traducción de un documento es variable dependiendo del tipo y del tamaño del documento."
-        },
-        imagenUrl: "https://image.freepik.com/free-photo/beautiful-woman-dressed-formally-office-writing_273609-4786.jpg"
-    };
+
     const imageUrl = "https://th.bing.com/th/id/R.169a44cef96cc4d44c78663afb2a43fd?rik=67VHGtHLvgIFjA&riu=http%3a%2f%2fmidliferoadtrip.tv%2fwp-content%2fuploads%2f2010%2f08%2fpassport-stamps-1.png&ehk=ikz67Xo5MSMjz1IGA2Q1KLU%2ffBOabK%2flvsfZOm5BRpA%3d&risl=&pid=ImgRaw&r=0";
     const imageqr = "https://traders.studio/wp-content/uploads/2021/04/qr-code-bc94057f452f4806af70fd34540f72ad.png";
     const imageBanner = "https://i.ibb.co/QK7Sdh2/image.png";
@@ -49,7 +38,7 @@ function EducationUSA() {
         contenido: [
             "Te informamos sobre las distintas ofertas académicas de nivel superior en los Estados Unidos.",
             "Orientamos tu investigación sobre programas de estudio y universidades que se ajustan a tus necesidades y metas académicas.",
-            "Asesoramos tu proceso de postulación y búsqueda de financiamiento"
+            "Asesoramos tu proceso de postulación y búsqueda de financiamiento."
         ],
         serviciosGratis: "Todos estos servicios son gratuitos"
     };
@@ -72,9 +61,9 @@ function EducationUSA() {
                             <div className="w-5/6 pl-5">
                                 <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">EDUCATION<span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
                                 <ul className="list-disc pl-2">
-                                    <li><strong style={{ color: 'rgb(128, 160, 0)' }}>Te informamos</strong> sobre las distintas ofertas academicas de nivel superior en los Estados Unidos</li>
-                                    <li><strong style={{ color: 'rgb(179, 80, 0)' }}>Orientamos tu investigacion</strong> sobre programas de eestudio y unoversidades que se ajusten a tus necesidades y metas academicas</li>
-                                    <li><strong style={{ color: 'rgb(0,56,152)' }}>Asesoramos tu proceso</strong> de postulacion y busquedas de financiamiento</li>
+                                    <li><strong style={{ color: 'rgb(128, 160, 0)' }}>Te informamos</strong> sobre las distintas ofertas academicas de nivel superior en los Estados Unidos.</li>
+                                    <li><strong style={{ color: 'rgb(179, 80, 0)' }}>Orientamos tu investigacion</strong> sobre programas de estudio y universidades que se ajusten a tus necesidades y metas academicas.</li>
+                                    <li><strong style={{ color: 'rgb(0,56,152)' }}>Asesoramos tu proceso</strong> de postulacion y busquedas de financiamiento.</li>
                                 </ul>
                                 <strong style={{ color: 'rgb(3,121,137)' }}>Todos los servicios son gratuitos</strong>
                             </div>
@@ -111,7 +100,7 @@ function EducationUSA() {
                             <div>
                                 <Rectangulo color="rgb(0, 56, 152)" text={"ACCESO A INFORMACION"} />
                                 <p>
-                                    Acerca de programas de becas parciales y <strong>oportunidades de apoyo financiero</strong>
+                                    Acerca de programas de becas parciales y <strong>oportunidades de apoyo financiero </strong>
                                     en universidades de los Estados Unidos.
                                 </p>
                             </div>
@@ -152,7 +141,7 @@ function EducationUSA() {
                     </div>
                     <div className="w-full lg:w-1/5 flex flex-col md:flex-row lg:flex-col">
                         <div className="imagen pt-6 pb-3 pr-3 pl-3">
-                            <ImagenFondo imageUrl={imageqr} />
+                            <img src={imageqr} alt="QR" />
                         </div>
                         <div className="info">
                             <InformacionEducacion {...informacionData} />
