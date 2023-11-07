@@ -49,6 +49,7 @@ module.exports = {
     response(res, 200, result);
   },
   authLogin: async (req, res) => {
+    console.log(req)
     try {
       if (!req.body.correo && !req.body.password)
         throw new ClientError("Todos los datos son necesarios", 400);
@@ -61,6 +62,8 @@ module.exports = {
       if (result.messageError) {
         throw new ClientError(result.messageError, 400);
       } else {
+        console.log(result.token, "aqui token");
+
         res.cookie("token", result.token);
         res.status(200).json(result.usLogin);
       }
