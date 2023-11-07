@@ -65,12 +65,8 @@ module.exports = {
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
-    try {
       const result = await emailVerify(req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ messageError: error.message });
-    }
+      response(res,200,result);
   },
   emailVerifyToken: async (req, res) => {
     //verificar el registro mediante token con email
