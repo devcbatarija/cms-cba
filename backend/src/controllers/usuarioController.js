@@ -84,7 +84,7 @@ module.exports = {
     }
   },
 
-  
+  //model to update
   authLogin: async (user) => {
       const userExist = await Usuario.findOne({
         where: { correo: user.correo },
