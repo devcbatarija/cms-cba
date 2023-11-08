@@ -49,7 +49,7 @@ module.exports = {
     response(res, 200, result);
   },
 
-
+///model to update
   
   authLogin: async (req, res) => {
       const result = await authLogin(req.body);
