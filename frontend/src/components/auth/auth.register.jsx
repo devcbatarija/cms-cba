@@ -95,7 +95,7 @@ const Register = () => {
     } catch (error) {
       setError({
         ...error,
-        z_errorEmail: error.response.data.messageError,
+        z_errorEmail: error.response.data,
       });
     }
   };
