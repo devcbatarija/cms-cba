@@ -2,26 +2,23 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Uploader from "../Publications/Uploader";
 import axios from "axios";
-import { 
+import {
   Button,
   Fade,
   Grid,
   InputLabel,
   MenuItem,
   Select,
-  TextField,} from "@mui/material";
+  TextField,
+} from "@mui/material";
 import { useEffect } from "react";
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import Checkboxes from "./widgets/checkbox";
 import SelectColorList from "./widgets/selectColor";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
-  margin: 0 auto;
-  padding: 10px;
-  background-color: white;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 90vh;
-  width: 100%;
   overflow-y: overlay;
   overflow-x: hidden;
 `;
@@ -62,6 +59,7 @@ function EventAdd({
   data,
   setData
 }) {
+  const navigate=useNavigate();
   const [urls, setUrls] = useState([]);
   const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
 
@@ -84,6 +82,9 @@ function EventAdd({
       ...data,
       [property]: value,
     })
+    if(property == 'tipo'){
+      navigate('/dashboard/Calendario/calendario', { state: { prevPath: '/dashboard/Calendario/addEvent' ,tipo: value} })
+    }
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -106,7 +107,7 @@ function EventAdd({
 
   return (
     <>
-      <Container className="rounded-lg border rounded-lg">
+      <Container className="rounded-lg border rounded-lg p-10 bg-white w-full lg:w-3/4">
         <div className="flex flex-col items-center justify-center">
           <Title>Crear Evento</Title>
         </div>
@@ -132,75 +133,71 @@ function EventAdd({
             ></TextArea>
           </FormGroup>
 
-          <div className="flex flex-row">
-              <Grid sx={{ m: 1 }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-start">
-                  Fecha de Inicio
-                </InputLabel>
-                <TextField
-                  sx={!data.allDay ? { width: "58%", marginRight: "2%" } : { width: "100%" }}
-                  onChange={handleChangeData}
-                  value={data.start}
-                  id="outlined-basic-start"
-                  name="start"
-                  type="date"
-                  size="small"
-                  variant="outlined" />
-                {data.allDay === false ?
-                  <Fade in={!data.allDay}>
-                    <TextField
-                      sx={{ width: "40%" }}
-                      onChange={handleChangeData}
-                      value={data.start_Time}
-                      id="outlined-basic-start_Time"
-                      name="start_Time"
-                      type="time"
-                      size="small"
-                      variant="outlined" />
-                  </Fade>
-                  : null}
-              </Grid>
-              <div className="grid content-center">
-                <ArrowRightAltRoundedIcon />
-              </div>
-              <Grid sx={{ m: 1 }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-end">
-                  Fecha de finalizacion
-                </InputLabel>
-                {data.allDay === false ?
+          <div className="flex flex-col lg:flex-row lg:items-center">
+            <Grid sx={{ marginY:1 }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-start">
+                Fecha de Inicio
+              </InputLabel>
+              <TextField
+                sx={!data.allDay ? { width: "58%", marginRight: "2%" } : { width: "100%" }}
+                onChange={handleChangeData}
+                value={data.start}
+                id="outlined-basic-start"
+                name="start"
+                type="date"
+                size="small"
+                variant="outlined" />
+              {data.allDay === false ?
+                <Fade in={!data.allDay}>
                   <TextField
-                    sx={{ width: "40%", marginRight: "2%" }}
+                    sx={{ width: "40%" }}
                     onChange={handleChangeData}
-                    value={data.end_Time}
-                    id="outlined-basic-end_Time"
-                    name="end_Time"
+                    value={data.start_Time}
+                    id="outlined-basic-start_Time"
+                    name="start_Time"
                     type="time"
                     size="small"
                     variant="outlined" />
-                  : null}
+                </Fade>
+                : null}
+            </Grid>
+            <div className="grid content-center hidden lg:block">
+              <ArrowRightAltRoundedIcon />
+            </div>
+            <Grid sx={{ marginY:1 }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-end">
+                Fecha de finalizacion
+              </InputLabel>
+              <TextField
+                sx={!data.allDay ? { width: "58%" } : { width: "100%" }}
+                onChange={handleChangeData}
+                value={data.end}
+                id="outlined-basic-end"
+                name="end"
+                type="date"
+                size="small"
+                variant="outlined" />
+              {data.allDay === false ?
                 <TextField
-                  sx={!data.allDay ? { width: "58%" } : { width: "100%" }}
+                  sx={{ width: "40%", marginLeft: "2%" }}
                   onChange={handleChangeData}
-                  value={data.end}
-                  id="outlined-basic-end"
-                  name="end"
-                  type="date"
+                  value={data.end_Time}
+                  id="outlined-basic-end_Time"
+                  name="end_Time"
+                  type="time"
                   size="small"
                   variant="outlined" />
-              </Grid>
-            <div className="grid content-center">
+                : null}
+            </Grid>
+            <div className="grid content-center lg:ml-2">
               <Checkboxes
                 data={data}
                 setData={setData}
               />
             </div>
           </div>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2,1fr)",
-            gap: "10px",
-          }}>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-2">
+            <Grid sx={{ marginY: 1, width: "100%" }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-tipo">Tipo de evento</InputLabel>
               <Select
                 sx={{ width: "100%" }}
@@ -228,8 +225,8 @@ function EventAdd({
             </Grid>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-          <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:gap-2">
+            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-tipo">Estado</InputLabel>
               <Select
                 sx={{ width: "100%" }}
@@ -258,7 +255,7 @@ function EventAdd({
               </Select>
             </Grid>
           </div>
-          
+
         </form>
         <FormGroup>
           <Label>Arrastre y suelte las imagenes:</Label>

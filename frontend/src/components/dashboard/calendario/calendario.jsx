@@ -22,6 +22,7 @@ import BasicPopover from "./widgets/popover";
 import ModalUpdateEvent from './modalUpdateEvent';
 import ContarinerNewEvent from './containerEvent';
 import Dropdown from './dropdownButton';
+import { useLocation } from 'react-router-dom';
 
 const views = [
     { id: 1, view: 'dayGridMonth', txt: 'Mes' },
@@ -30,6 +31,7 @@ const views = [
 ]
 
 const Calendario = () => {
+    const location = useLocation();
     const calendarRef = useRef(null);
     const dispatch = useDispatch();
     const changeView = (view) => {
@@ -165,9 +167,13 @@ const Calendario = () => {
     }
 
     useEffect(() => {
+        if (location.state?.prevPath === '/dashboard/Calendario/addEvent') {
+            setOpen(!open)
+        }
         setData({
             ...data,
-            UsuarioIdUsuario: userLogin._userId
+            UsuarioIdUsuario: userLogin._userId,
+            tipo: location.state!=null ? location.state.tipo : data.tipo
         })
     }, [])
     const handleExternalEventDrop = async (e) => {

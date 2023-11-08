@@ -278,7 +278,6 @@ export default function ModalUpdateEvent({
                                         labelId="demo-select-small-label"
                                         id="demo-select-small"
                                         value={data.tipo}
-                                        label="Tipo"
                                         onChange={handleChange}
                                         name="tipo"
                                     >
@@ -308,7 +307,6 @@ export default function ModalUpdateEvent({
                                     labelId="demo-select-small-label"
                                     id="demo-select-small"
                                     value={data.state}
-                                    label="state"
                                     onChange={handleChange}
                                     name="state"
                                 >
