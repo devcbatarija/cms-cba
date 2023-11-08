@@ -9,14 +9,16 @@ const {
 server.get("/", (req, res) => {
     res.status(200).send("<h1>Server is running</h1>")
 })
+//model to update
 server.use((err, req, res, next) => {
     const { statusCode, message } = err;
+    console.log('Muestrame el error ',statusCode,message); 
     resError(res, statusCode, message);
 });
 
 conn.sync({ force: false }).then(() => {
     server.listen(PORT, () => {
-        console.log(`Server is running in port: http://localhost:${PORT}`);
+        console.log('SERVER IS RUNNING')
     })
 });
  

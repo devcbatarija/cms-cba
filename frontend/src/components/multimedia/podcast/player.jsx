@@ -91,7 +91,15 @@ export const Player = ({
         src={uriSong}
         controls
       ></audio> */}
-      <div></div>
+      <div>
+        {/* <button onClick={playAudio}>
+          {audioState ? (
+            <PauseRoundedIcon sx={{ color: "red", fontSize: "100px" }} />
+          ) : (
+            <PlayArrowRoundedIcon sx={{ color: "red", fontSize: "100px" }} />
+          )}
+        </button> */}
+      </div>
       <video
         className="h-w-full rounded-lg"
         ref={audioRef}

@@ -17,10 +17,9 @@ import axios from "axios";
 
 export default function ProgramTable() {
   const dispatch = useDispatch();
-  const data =[]
+  const data = useSelector((state)=> state.programs.programs)
   const selectedPrograms = useSelector((state) => state.programs.selectedPrograms);
   const [selectAll, setSelectAll] = useState(false);
-
   //funcion para seleccionar/deseleccionar los programas
   const handleSelectAll = () => {
     if (!selectAll) {
@@ -84,7 +83,6 @@ export default function ProgramTable() {
         </Button>
         {/*Boton para agregar nueva publicacion*/}
       </Grid>
-
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

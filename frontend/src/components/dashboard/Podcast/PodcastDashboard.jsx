@@ -12,7 +12,7 @@ import "./Styles.css";
 import Uploader from "../Publications/Uploader";
 import Percents from "../../progressBar/Percents";
 import styled from "styled-components";
-
+import { useNavigate } from "react-router-dom";
 
 const TextArea = styled.textarea`
   width: 100%;
@@ -27,7 +27,7 @@ const PodcastDashboard = () => {
   const userId = useSelector((state) => state.login.user._userId);
   const songs = useSelector((state) => state.podcasts.podcasts);
   const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
-
+  const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showProgress, setShowProgress] = useState({
@@ -35,8 +35,8 @@ const PodcastDashboard = () => {
     bar: false,
   });
   const [form, setForm] = useState({
-    epi_number:songs.length+1,
-    title:"",
+    epi_number: songs.length + 1,
+    title: "",
     description: "",
     authors: "",
     imageUrl: "",
@@ -66,7 +66,9 @@ const PodcastDashboard = () => {
       const response = await axios.post("/files/upload", {
         filePath: form.multimedia,
         type: "image",
-      });
+      },
+        { contentType: "application/json" }
+      );
       if (response.data) {
         setForm({
           ...form,
@@ -79,14 +81,14 @@ const PodcastDashboard = () => {
           bar: true,
         });
         const res = await axios.post("podcast/song/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+
+          ContentType: "multipart/form-data",
+
         });
         if (res.data.data.Key) {
           const registerEnd = await axios.post("podcast/song/upload/database", {
             epi_number: form.epi_number,
-            title:form.title,
+            title: form.title,
             description: form.description,
             authors: form.authors,
             url_cloudfront: res.data.data.Key,
@@ -95,15 +97,33 @@ const PodcastDashboard = () => {
             UsuarioIdUsuario: form.UsuarioIdUsuario,
           });
           if (registerEnd.data.data) {
-            updateState();
+            await updateState();
+            await setUploadProgress(0);
+            await setShowProgress({
+              ...showProgress,
+              message: false,
+              bar: false
+            });
+            setForm({
+              epi_number: + 1,
+              title: "",
+              description: "",
+              authors: "",
+              imageUrl: "",
+              multimedia: [],
+              state: false,
+              file: "",
+              url_cloudfront: "",
+              UsuarioIdUsuario: userId ? userId : "",
+            });
           }
         }
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   const eventsSSE = () => {
     const eventSource = new EventSource(
-      "http://localhost:3001/api/podcast/song/events"
+      "http://181.188.144.150/api/podcast/song/events"
     );
     eventSource.onmessage = (event) => {
       const progress = parseInt(event.data);
@@ -231,7 +251,11 @@ const PodcastDashboard = () => {
             >
               Inserte una imagen de portada
             </label>
-            <Uploader publicacion={form} setPublicacion={setForm}></Uploader>
+            <Uploader
+              publicacion={form}
+              setPublicacion={setForm}
+              cantMax={3}
+            ></Uploader>
           </div>
           <div className="flex items-center justify-between">
             <button
@@ -275,7 +299,7 @@ const PodcastDashboard = () => {
           </h1>
         </div>
         <div className="flex flex-col md:flex-row p-2 gap-2">
-          <div className="flex flex-col w-full h-full md:h-auto md:w-12/12 gap-2 gap-2 scroll border-b-2">
+          <div className="flex flex-col w-full h-full md:h-auto md:w-12/12 gap-2 gap-2 scroll overflow-y-auto max-h-[90vh] border-b-2">
             {songs &&
               songs.map((s) => {
                 return (
