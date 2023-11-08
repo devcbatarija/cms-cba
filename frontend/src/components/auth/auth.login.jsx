@@ -32,7 +32,6 @@ const Login = () => {
         correo: "",
         password: "",
       });
-      console.log(watch())
       const response = await axios.post("users/login", watch(), {
         withCredentials: true,
         contentType: "application/json"
@@ -42,7 +41,6 @@ const Login = () => {
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      console.log(response.data)
       dispatch(signin(response.data));
     } catch (error) {
       setErrorBack(error.response.data);
