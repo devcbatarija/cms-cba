@@ -28,7 +28,6 @@ export default function GalleryTable() {
     (state) => state.gallery.selectedAmbients
   );
   const [selectAll, setSelectAll] = useState(false);
-  console.log(ambient);
 
   //Funcion para seleccionar/deseleccionar
   const handleSelectAll = () => {

@@ -16,7 +16,7 @@ import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import PositionedMenu from "../navBar/positionedMenu";
 import CollectionsRoundedIcon from '@mui/icons-material/CollectionsRounded';
 
-function SidebarItem({ icon: Icon, label, to, subItems }) { 
+function SidebarItem({ icon: Icon, label, to, subItems }) {
   const [open, setOpen] = useState(false); // Nuevo estado para controlar el submenú
 
   const handleOpen = () => setOpen(!open); // Función para manejar el clic
@@ -137,7 +137,7 @@ export default function Sidebar() {
             ]}
           />
           <SidebarItem
-            icon={CollectionsRoundedIcon  }
+            icon={CollectionsRoundedIcon}
             label="American Spaces"
             subItems={[
               {
@@ -168,17 +168,22 @@ export default function Sidebar() {
               </span>
             </button>
           </NavLink>
-          <NavLink to="/dashboard/testimononios">
-            <button
-              type="button"
-              className="hover:bg-purple-600 flex items-center w-full py-2 px-0 text-base text-white transition  gap-4  duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-            >
-              <AssessmentOutlinedIcon className="flex-shrink-0 w-5 h-5 text-white transition duration-75 group-hover:text-white dark:text-gray-400 dark:group-hover:text-white"></AssessmentOutlinedIcon>
-              <span className="flex-1 ml-3 text-left whitespace-nowrap">
-                Testimonios
-              </span>
-            </button>
-          </NavLink>
+          <SidebarItem
+            icon={AssessmentOutlinedIcon}
+            label="Testimonios"
+            subItems={[
+              {
+                label: "Tabla",
+                to: "/dashboard/testimonio/table",
+                icon: <TocRoundedIcon></TocRoundedIcon>,
+              },
+              {
+                label: "Crear testimonio",
+                to: "/dashboard/testimonio/add",
+                icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+              }
+            ]}
+          />
         </ul>
       </div>
     </>

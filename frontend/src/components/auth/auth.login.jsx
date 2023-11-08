@@ -24,7 +24,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.login);
-  
+
   const handleOnSubmit = async () => {
     try {
       setForm({
@@ -34,22 +34,22 @@ const Login = () => {
       });
       const response = await axios.post("users/login", watch(), {
         withCredentials: true,
+        contentType: "application/json"
       });
+      navigate("/");
       reset();
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      <Navigate to={'/'} ></Navigate>
       dispatch(signin(response.data));
     } catch (error) {
-      setErrorBack(error.response.data.messageError);
+      setErrorBack(error.response.data);
       setTimeout(() => {
         setErrorBack("");
       }, 5000);
     }
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   const {
     register,
     handleSubmit,
@@ -130,7 +130,6 @@ const Login = () => {
                   message: "Ingrese un correo válido",
                 },
               })}
-              autoComplete="current-correo"
             />
             {errors.correo ? (
               <Alert severity="error">{errors.correo.message}</Alert>
@@ -158,7 +157,6 @@ const Login = () => {
                   message: "Password debe tener máximo 30 caracteres",
                 },
               })}
-              autoComplete="current-password"
             />
             {errors.password ? (
               <Alert severity="error">{errors.password.message}</Alert>

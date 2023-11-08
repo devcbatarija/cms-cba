@@ -79,7 +79,6 @@ const Uploader = ({
     })
   };
   useEffect(() => {
-    // publicacion.multimedia.length<1?setImage([]):console.log("si hay");
   }, [])
   return (
     <UploadContainer>

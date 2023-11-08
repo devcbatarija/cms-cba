@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./inscripcion.css";
+import Form from "../formPreregister/form";
 
 const CuadroInscripcion = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="bg-gray-100 w-full shadow-md">
       <main className="w-full">
@@ -22,19 +24,10 @@ const CuadroInscripcion = () => {
                   width: "100px",
                 }}
                 className="bg-white text-red-600 py-2 px-4 rounded shadow-md"
+                onClick={() => setIsOpen(true)}
               >
                 Inscribirse
               </button>
-              {/* <button
-                style={{
-                  background: "rgb(0, 46, 95)",
-                  color: "white",
-                  width: "100px",
-                }}
-                className="text-red-600 py-2 px-4 rounded shadow-md"
-              >
-                Ver mas
-              </button> */}
             </div>
           </div>
           <div className="flex">
@@ -44,6 +37,7 @@ const CuadroInscripcion = () => {
           </div>
         </section>
       </main>
+      {isOpen ? <Form setIsOpen={setIsOpen}></Form> : null}
     </div>
   );
 };

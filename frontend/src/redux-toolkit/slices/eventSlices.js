@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getEvents, getEventsPredefinidos } from "../actions/eventActions";
+import { getDatosEvents, getEvents, getEventsPredefinidos } from "../actions/eventActions";
 
 
 const initialState = {
     events:[],
-    eventsPredefinidos:[]
+    eventsPredefinidos:[],
+    datosEvents:[]
 }
 const eventsSlices = createSlice({
     name:"events",
@@ -30,6 +31,17 @@ const eventsSlices = createSlice({
         });
         builder.addCase(getEventsPredefinidos.rejected, (state, action)=>{
             state.status = "rejected";
+        });
+
+        builder.addCase(getDatosEvents.pending, (state, action) => {
+          state.status = "pending";
+        });
+        builder.addCase(getDatosEvents.fulfilled, (state, action) => {
+          state.datosEvents = action.payload;
+          state.status = "success";
+        });
+        builder.addCase(getDatosEvents.rejected, (state, action) => {
+          state.status = "rejected";
         });
     }
 });

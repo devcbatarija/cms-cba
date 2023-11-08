@@ -1,94 +1,72 @@
-const { 
-    getAllUsuarios,
-    postUsuario,
-    deleteById,
-    updateById, 
-    authLogin, 
-    emailVerify, 
-    emailVerifyToken, 
-    updateState, 
-    getById, 
-    deleteSelect, 
-    updateImage} = require("../controllers/usuarioController");
+const {
+  getAllUsuarios,
+  postUsuario,
+  deleteById,
+  updateById,
+  authLogin,
+  emailVerify,
+  emailVerifyToken,
+  updateState,
+  getById,
+  deleteSelect,
+  updateImage,
+  getUserDetails,
+} = require("../controllers/usuarioController");
 const { ClientError } = require("../utils/errors");
+const response = require("../utils/response");
 
 module.exports = {
   getAllUsuarios: async (req, res) => {
-    try {
-      const result = await getAllUsuarios();
-      res.status(200).json({ result });
-    } catch (error) {
-      res.status(401).json({ messageError: error.message });
-    }
+    const result = await getAllUsuarios();
+    response(res, 200, result);
+  },
+  getUserDetails: async (req, res) => {
+    const result = await getUserDetails(req.params.id);
+    response(res, 200, result);
   },
   postUser: async (req, res) => {
-    try {
-      if (!req.body) {
-        res.status(401).json({ messageError: "No user data" });
-      }
-      const result = await postUsuario(req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(401).json({ messageError: error.message });
+    if (!req.body) {
+      throw new ClienteError("No hay datos para cargar", 400);
     }
+    const result = await postUsuario(req.body);
+    response(res, 200, result);
   },
   deleteById: async (req, res) => {
-    try {
-      if (!req.params.id) {
-        res.status(401).json({ messageError: "No user id" });
-      }
-      const result = await deleteById(req.params.id);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ messageError: error.message });
+    if (!req.params.id) {
+      throw new ClientError("Se necesita Id", 400);
     }
+    const result = await deleteById(req.params.id);
+    response(res, 200, result);
   },
   updateById: async (req, res) => {
-    try {
-      if (!req.params.id) res.status(401).json({ messageError: "No user id" });
-      if (!req.body) res.status(401).json({ messageError: "No user data" });
-      const result = await updateById(req.params.id, req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ messageError: error.message });
+    if (!req.params.id) {
+      throw new ClientError("Se necesita Id", 400);
     }
+    if (!req.body) {
+      throw new ClientError("Se necesita datos", 400);
+    }
+    const result = await updateById(req.params.id, req.body);
+    response(res, 200, result);
   },
-  authLogin: async (req, res) => {
-    try {
-      if (!req.body.correo && !req.body.password)
-        throw new ClientError("Todos los datos son necesarios", 400);
-      if (!req.body.correo || req.body.correo === " ")
-        throw new ClientError("Correo no puede estar vacío", 400);
-      if (!req.body.password || req.body.password === " ")
-        throw new ClientError("Password no puede estar vacío", 400);
 
+///model to update
+  
+  authLogin: async (req, res) => {
       const result = await authLogin(req.body);
-      if (result.messageError) {
-        res.status(200).json(result.messageError);
-      } else {
+      console.log(result)
         res.cookie("token", result.token);
         res.status(200).json(result.usLogin);
-      }
-    } catch (error) {
-      res.status(401).json({ messageError: error.message });
-    }
   },
+
+
+
   getById: async (req, res) => {
-    try {
-      const response = await getById(req.params.id);
-      res.status(200).json(response);
-    } catch (error) {
-      res.status(error.statusCode).json(error);
-    }
+    response(res, 200, response);
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
-    try {
       const result = await emailVerify(req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      res.status(500).json({ messageError: error.message });
-    }
+      response(res,200,result);
   },
   emailVerifyToken: async (req, res) => {
     //verificar el registro mediante token con email
