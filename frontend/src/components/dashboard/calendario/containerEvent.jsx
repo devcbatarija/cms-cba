@@ -110,8 +110,8 @@ const ContarinerNewEvent = ({
     }) : null
   }, [])
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 shadow border  gap-2 bg-zinc-100 p-2">
-      <div>
+    <div className="grid shadow border bg-zinc-100 lg:py-5 ">
+      <div className="w-full flex justify-center">
         <EventAdd
           datosEvento={datosEvento}
           setDatosEvento={setDatosEvento}
@@ -119,13 +119,6 @@ const ContarinerNewEvent = ({
           data={data ? data : Evento}
           setData={setData ? setData : setEvento}
         />
-      </div>
-      <div>
-        <EventPreview
-          titulo={data ? data.title : Evento.title}
-          descripcion={datosEvento.descripcion}
-          multimedia={datosEvento.multimedia}
-        ></EventPreview>
       </div>
     </div>
   );

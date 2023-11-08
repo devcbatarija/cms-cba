@@ -236,7 +236,6 @@ export default function ModalAddEvent({
                                     labelId="demo-select-small-label"
                                     id="demo-select-small"
                                     value={data.tipo}
-                                    label="Tipo"
                                     onChange={handleChange}
                                     name="tipo"
                                 >

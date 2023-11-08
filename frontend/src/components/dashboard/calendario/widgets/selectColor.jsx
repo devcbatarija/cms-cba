@@ -3,11 +3,11 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const colors = [
-  { nombre: 'Azul', color: '#0000FF' },
-  { nombre: 'Verde', color: '#00FF00' },
-  { nombre: 'Rojo', color: '#FF0000' },
-  { nombre: 'Amarillo', color: '#FFFF00' },
-  { nombre: 'Rosa', color: '#FF00FF' },
+  { nombre: 'Azul', color: '#003785' },
+  { nombre: 'Verde', color: '#98ff96' },
+  { nombre: 'Rojo', color: '#D50032' },
+  { nombre: 'Lila', color: '#b0c2f2' },
+  { nombre: 'Turquesa', color: '#96c4c4' },
 ];
 
 function classNames(...classes) {
