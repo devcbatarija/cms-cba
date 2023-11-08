@@ -9,6 +9,7 @@ const {
 server.get("/", (req, res) => {
     res.status(200).send("<h1>Server is running</h1>")
 })
+//model to update
 server.use((err, req, res, next) => {
     const { statusCode, message } = err;
     console.log('Muestrame el error ',statusCode,message); 

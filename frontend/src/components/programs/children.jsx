@@ -18,8 +18,8 @@ const ProgramAdults = () => {
         <div className='InformationContainer'>
           {
             programa && <>
-              <div className='w-full sm:w-9/10 md:w-8/10 lg:w-7/10 xl:w-6/10 2xl:w-5/10'>
-                <ImagenFondo imageUrl={programa.multimedia[0]}  />
+             <div className='w-full sm:w-9/10 md:w-8/10 lg:w-7/10 xl:w-6/10 2xl:w-5/10'>
+                <ImagenFondo imageUrl={programa.multimedia[0]} title={programa.nombre} />
               </div>
               <div id='2' className="mt-4 p-4 rounded-lg text-gray-700 blur-10 flex flex-col md:flex-row border-b border-gray-300 ">
                 <CaracteristicasCurso
