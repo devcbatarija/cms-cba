@@ -5,11 +5,11 @@ const { ClientError } = require("../utils/errors");
 const { uploadImage } = require("./uploadController");
 
 function formatDate(dateString) {
-    const parts = dateString.split('/');
-    const year = parts[2];
-    const month = parts[1].padStart(2, '0');
-    const day = parts[0].padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const parts = dateString.split("/");
+  const year = parts[2];
+  const month = parts[1].padStart(2, "0");
+  const day = parts[0].padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 module.exports = {
   getAllUsuarios: async () => {
@@ -17,38 +17,34 @@ module.exports = {
     return response;
   },
   postUsuario: async (user) => {
-    try {
-      let upload = "";
-      if (user.image) {
-        upload = await uploadImage({ filePath: [user.image], type: "image" });
-      }
-      const newUser = await Usuario.create({
-        correo: user.correo,
-        celular: user.celular,
-        nombres: user.nombres,
-        image: user.image ? upload.results[0] : "",
-        apellidos: user.apellidos,
-        fecha_Nacimiento: user.fecha_Nacimiento,
-        ci: user.ci,
-        password: user.password,
-        rol: user.rol,
-        estado: false,
-      });
-      if (!newUser) {
-        return "Internal Error!";
-      }
-      const emailsend = await sentTokenVerify(
-        newUser.verificacion,
-        newUser.correo
-      );
-      if (emailsend.error) {
-        await newUser.destroy();
-        throw new Error(emailsend.error);
-      }
-      return { user: newUser, emailState: emailsend.success };
-    } catch (error) {
-      throw error;
+    let upload = "";
+    if (user.image) {
+      upload = await uploadImage({ filePath: [user.image], type: "image" });
     }
+    const newUser = await Usuario.create({
+      correo: user.correo,
+      celular: user.celular,
+      nombres: user.nombres,
+      image: user.image ? upload.results[0] : "",
+      apellidos: user.apellidos,
+      fecha_Nacimiento: user.fecha_Nacimiento,
+      ci: user.ci,
+      password: user.password,
+      rol: user.rol,
+      estado: false,
+    });
+    if (!newUser) {
+      throw new ClientError("No se pudo completar el registro.");
+    }
+    const emailsend = await sentTokenVerify(
+      newUser.verificacion,
+      newUser.correo
+    );
+    if (!emailsend.success) {
+      await newUser.destroy();
+      throw new Error(emailsend.error);
+    }
+    return { user: newUser, emailState: emailsend.success };
   },
 
   deleteById: async (id) => {
@@ -83,34 +79,32 @@ module.exports = {
       return error;
     }
   },
-
-  //model to update
+//model to update
   authLogin: async (user) => {
-      const userExist = await Usuario.findOne({
-        where: { correo: user.correo },
-      });
-      if (!userExist) {
-        throw new ClientError("Usuario no encontrado.", 400);
-      }
-      if (userExist.password !== user.password) {
-        throw new ClientError("La contraseña es incorrecta.", 401);
-      }
-      if (!userExist.estado) {
-        throw new ClientError("El usuario no tiene acceso.", 401);
-      }
-      const tokengen = await signIn(userExist);
-      const usLogin = {
-        _userId: userExist.id_Usuario,
-        _profileImage: userExist.image,
-        correo: userExist.correo,
-        nombres: userExist.nombres,
-        apellidos: userExist.apellidos,
-        rol: "Admin",
-      };
-      return { usLogin: usLogin, token: tokengen };
+    const userExist = await Usuario.findOne({
+      where: { correo: user.correo },
+    });
+    if (!userExist) {
+      throw new ClientError("Usuario no encontrado.", 400);
+    }
+    if (userExist.password !== user.password) {
+      throw new ClientError("La contraseña es incorrecta.", 401);
+    }
+    if (!userExist.estado) {
+      throw new ClientError("El usuario no tiene acceso.", 401);
+    }
+    const tokengen = await signIn(userExist);
+    const usLogin = {
+      _userId: userExist.id_Usuario,
+      _profileImage: userExist.image,
+      correo: userExist.correo,
+      nombres: userExist.nombres,
+      apellidos: userExist.apellidos,
+      rol: "Admin",
+    };
+    console.log({ usLogin: usLogin, token: tokengen });
+    return { usLogin: usLogin, token: tokengen };
   },
-
-
 
   getById: async (id) => {
     try {
@@ -125,15 +119,11 @@ module.exports = {
     }
   },
   emailVerify: async (body) => {
-    try {
-      const user = await Usuario.findOne({ where: { correo: body.correo } });
-      if (!user) {
-        return "Email valido";
-      }
-      throw new Error("El usuario ya existe.");
-    } catch (error) {
-      throw error;
+    const user = await Usuario.findOne({ where: { correo: body.correo } });
+    if (!user) {
+      return "Email valido";
     }
+    throw new ClientError("El usuario ya existe.");
   },
   emailVerifyToken: async (token) => {
     try {
@@ -185,11 +175,7 @@ module.exports = {
     }
   },
   getUserDetails: async (idUser) => {
-    try {
       const user = await Usuario.findByPk(idUser);
       return user;
-    } catch (error) {
-      return error;
-    }
   },
 };

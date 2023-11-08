@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const handleUpload = (files) => {
   console.log(files);
@@ -79,4 +80,14 @@ export const uploadImgbb = async (base64DataArray) => {
   } catch (error) {
     return { status: "error", message: error.message };
   }
+};
+
+export const tokenGet = async () => {
+  const token = await Cookies.get("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  return config;
 };

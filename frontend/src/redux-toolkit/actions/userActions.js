@@ -1,13 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { tokenGet } from "../../services/functions";
+
 
 export const getallusers = createAsyncThunk("/getallusers", async () => {
   try {
-    const response=await axios.get('/users');
-    console.log(response)
+    const config = await tokenGet();
+    const response = await axios.get("/users", config); 
     return response.data.data;
   } catch (error) {
-    return error.message;
+    console.log(error)
   }
 });
 
