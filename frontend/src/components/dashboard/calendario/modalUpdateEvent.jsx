@@ -75,7 +75,6 @@ export default function ModalUpdateEvent({
                 });
             })
             .catch(error => {
-                console.log(error)
                 toast.error(error.message)
                 handleClose();
             });
@@ -115,7 +114,6 @@ export default function ModalUpdateEvent({
                     setSpinner(false);
                 }, 1500);
             }).catch(error => {
-                console.log(error);
                 setTimeout(() => {
                     if (error.response.status == 401) {
                         toast.error(error.response.data.messageError)

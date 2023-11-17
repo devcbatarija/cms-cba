@@ -67,7 +67,7 @@ export default function ModalAddEvent({
                         tipo: "",
                         start_Time: "",
                         end_Time: "",
-                        state:true,
+                        state: true,
                         allDay: true
                     })
                     // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().
@@ -76,17 +76,16 @@ export default function ModalAddEvent({
                     setSpinner(false);
                 }, 1500);
             }).catch(error => {
-                console.log(error);
                 setTimeout(() => {
                     if (error.response.status == 401) {
                         toast.error(error.response.data.messageError)
                     }
-                    else{
+                    else {
                         toast.error(error.message)
                     }
                     setSpinner(false);
-                },1500);
-                    
+                }, 1500);
+
             })
         } catch (error) {
             console.log(error)
@@ -130,7 +129,7 @@ export default function ModalAddEvent({
                                         Fecha de Inicio
                                     </InputLabel>
                                     <TextField
-                                        sx={!data.allDay?{ width: "58%",marginRight:"2%" }:{ width: "100%"}}
+                                        sx={!data.allDay ? { width: "58%", marginRight: "2%" } : { width: "100%" }}
                                         onChange={handleChange}
                                         value={data.start}
                                         id="outlined-basic-start"
@@ -140,16 +139,16 @@ export default function ModalAddEvent({
                                         variant="outlined" />
                                     {data.allDay === false ?
                                         <Fade in={!data.allDay}>
-                                        <TextField
-                                            sx={{ width: "40%" }}
-                                            onChange={handleChange}
-                                            value={data.start_Time}
-                                            id="outlined-basic-start_Time"
-                                            name="start_Time"
-                                            type="time"
-                                            size="small"
-                                            variant="outlined" />
-                                            </Fade>
+                                            <TextField
+                                                sx={{ width: "40%" }}
+                                                onChange={handleChange}
+                                                value={data.start_Time}
+                                                id="outlined-basic-start_Time"
+                                                name="start_Time"
+                                                type="time"
+                                                size="small"
+                                                variant="outlined" />
+                                        </Fade>
                                         : null}
                                 </Grid>
                                 : null}
@@ -197,7 +196,7 @@ export default function ModalAddEvent({
                                     </InputLabel>
                                     {data.allDay === false ?
                                         <TextField
-                                            sx={{ width: "40%", marginRight:"2%" }}
+                                            sx={{ width: "40%", marginRight: "2%" }}
                                             onChange={handleChange}
                                             value={data.end_Time}
                                             id="outlined-basic-end_Time"
@@ -207,7 +206,7 @@ export default function ModalAddEvent({
                                             variant="outlined" />
                                         : null}
                                     <TextField
-                                        sx={!data.allDay?{ width: "58%" }:{ width: "100%"}}
+                                        sx={!data.allDay ? { width: "58%" } : { width: "100%" }}
                                         onChange={handleChange}
                                         value={data.end}
                                         id="outlined-basic-end"
@@ -243,19 +242,19 @@ export default function ModalAddEvent({
                                     <MenuItem value="Administrativo">Administrativo</MenuItem>
                                     <MenuItem value="Academico">Academico</MenuItem>
                                     {tipoModal === "Evento" ?
-                                        <MenuItem value="General">General</MenuItem>:null
+                                        <MenuItem value="General">General</MenuItem> : null
                                     }
                                 </Select>
                             </Grid>
-                            <Grid sx={{ m: 1, width: "40%"}} variant="outlined">
+                            <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
                                 <InputLabel htmlFor="outlined-adornment-color" >
                                     Color
                                 </InputLabel>
-                                <div style={{display:'flex'}} className=''>
-                                <SelectColorList
-                                    data={data}
-                                    setData={setData}
-                                />
+                                <div style={{ display: 'flex' }} className=''>
+                                    <SelectColorList
+                                        data={data}
+                                        setData={setData}
+                                    />
                                 </div>
                             </Grid>
                         </div>

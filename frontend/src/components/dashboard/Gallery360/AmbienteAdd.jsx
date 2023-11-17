@@ -33,7 +33,7 @@ const AmbienteAddComponent = () => {
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("/environment", {
+      const res = await axios.post("environment", {
         nombre: data.nombre,
         descripcion: data.descripcion,
         UsuarioIdUsuario: userId ? userId : "",

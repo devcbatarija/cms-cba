@@ -71,30 +71,25 @@ const About = () => {
                 </div>
             </div>
             <div className="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
-                    <div className="flex flex-col justify-center items-center">
-                        <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-4xl dark:sm:text-white">Valores</h1>
-                        <div className="w-60 h-px bg-zinc-300 mt-2"></div>
-                    </div>
-                        <div className="relative overflow-auto">
-                            <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
-                            {
-                                valores.map((v) => (
-                                    <div key={v.id} className="w-60 h-72 rounded-lg shadow-lg p-5">
-                                        <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-xl dark:sm:text-white">{v.valor}</h1>
-                                        <p className="mt-4 text-center text-sm leading-6 dark:text-slate-400">
-                                            {v.descripcion}
-                                        </p>
-                                    </div>
-                                ))
-                            }
-                            </div>
-                        </div>
-                    {/* <div className="flex justify-center">
-                        <img
-                            className="rounded-lg w-96 h-72"
-                            src="https://www.questionpro.com/blog/wp-content/uploads/2018/08/Encuestas-estudiantes.jpg" alt="" />
-                    </div> */}
+                <div className="flex flex-col justify-center items-center">
+                    <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-4xl dark:sm:text-white">Valores</h1>
+                    <div className="w-60 h-px bg-zinc-300 mt-2"></div>
                 </div>
+                <div className="relative overflow-auto">
+                    <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
+                        {
+                            valores.map((v) => (
+                                <div key={v.id} className="w-60 h-72 rounded-lg shadow-lg p-5">
+                                    <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-xl dark:sm:text-white">{v.valor}</h1>
+                                    <p className="mt-4 text-center text-sm leading-6 dark:text-slate-400">
+                                        {v.descripcion}
+                                    </p>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
             <CuadroInscripcion />
         </>
     );
