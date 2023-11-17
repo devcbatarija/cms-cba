@@ -15,17 +15,17 @@ const Form = ({ setIsOpen }) => {
     setValue,
     reset,
   } = useForm();
-  const handleOnSubmit=handleSubmit(async(data)=>{
+  const handleOnSubmit = handleSubmit(async (data) => {
     const obj = {
-      correo:watch('correo'),
-      celular:watch('celular'),
-      nombres:watch('nombres'),
-      apellidos:watch('apellidos'),
-      fecha_Nacimiento:watch('date'),
-      ci:watch('ci')
+      correo: watch('correo'),
+      celular: watch('celular'),
+      nombres: watch('nombres'),
+      apellidos: watch('apellidos'),
+      fecha_Nacimiento: watch('date'),
+      ci: watch('ci')
     };
     const response = await axios.post("users/form/register", obj);
-    if(!response.data.error){
+    if (!response.data.error) {
       toast.custom((t) => (
         <SuccessAlert
           t={t}

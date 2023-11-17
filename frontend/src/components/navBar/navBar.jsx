@@ -597,17 +597,7 @@ const NavBar = () => {
                 >
                   Podcast
                 </MenuItem>
-                <MenuItem
-                  onClick={handleClose}
-                  component={Link}
-                  to="/programs/teens"
-                  sx={{
-                    width: "200px",
-                    padding: "20px",
-                  }}
-                >
-                  Tutoriales
-                </MenuItem>
+                
               </Menu>
 
               <NavLink

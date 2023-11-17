@@ -34,7 +34,7 @@ const InputContainer = styled.div`
   margin-bottom: 10px;
   width: 100%;
 `;
-const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax=1 }) => {
+const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax = 1 }) => {
   //COMPONENT
   const [image, setImage] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -51,7 +51,6 @@ const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax=1 }) => {
       format.push({ name: file.name, type: file.type });
     }
     if (format.length <= cantMax) {
-      console.log("pruebita1 ");
       setImage((prevImages) => [...prevImages, ...format]);
       const promises = await handleUpload(files);
 
@@ -73,12 +72,12 @@ const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax=1 }) => {
         ...errors,
         errorLength: `Cantidad permitida ${cantMax}`,
       });
-      fileInputRef.current.value = ""; 
+      fileInputRef.current.value = "";
     }
   };
   const clearFileInput = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Establece el valor del input a vacío
+      fileInputRef.current.value = "";
     }
   };
   const handleDragEnter = (event) => {
@@ -102,14 +101,13 @@ const Uploader = ({ setUrls, publicacion, setPublicacion, cantMax=1 }) => {
       multimedia: newUploaderFiles,
     });
   };
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   return (
     <UploadContainer>
       <InputContainer>
         <div
-          className={`flex items-center justify-center w-full ${
-            isDragging ? "border-red-500 border-4" : "border-gray-300 border-2"
-          } border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600`}
+          className={`flex items-center justify-center w-full ${isDragging ? "border-red-500 border-4" : "border-gray-300 border-2"
+            } border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600`}
           onDragEnter={handleDragEnter}
           onDragOver={handleDragEnter}
           onDragLeave={handleDragLeave}

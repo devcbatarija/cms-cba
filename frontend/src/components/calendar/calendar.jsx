@@ -94,7 +94,7 @@ const CalendarioClient = () => {
     }
 
     const handleEventClick = (e) => {
-        
+
     };
 
     const handleDateClick = (e) => {
