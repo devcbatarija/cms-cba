@@ -64,7 +64,7 @@ const ProgramAddForm = () => {
             ...programa,
             multimedia: response.data.results[0],
           });
-          const res = await axios.post("http://localhost:3001/api/Program", {
+          const res = await axios.post("Program", {
             nombre: programa.nombre,
             caracteristica: programa.caracteristica,
             requisitos: programa.requisitos,

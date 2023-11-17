@@ -25,7 +25,7 @@ export const TestimoniosContainer = () => {
     });
   const handleSubmitTestimonio = async (url) => {
     try {
-      const response = await axios.post("testimonios/", {
+      const response = await axios.post("testimonios", {
         nombre: testimonios.nombre,
         apellidos: testimonios.apellidos,
         cargo:

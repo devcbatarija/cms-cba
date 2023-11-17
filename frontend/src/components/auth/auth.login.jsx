@@ -49,7 +49,7 @@ const Login = () => {
       }, 5000);
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const {
     register,
     handleSubmit,

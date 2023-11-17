@@ -50,7 +50,7 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
 
   const getPublicationById = async () => {
     try {
-      const response = await axios.get(`/publication/getone/${id}`);
+      const response = await axios.get(`publication/getone/${id}`);
       console.log(response);
       setForm(response.data.results);
       setSkeleton(false);
@@ -63,7 +63,7 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.put(`/publication/update/${id}`, form);
+      const response = await axios.put(`publication/update/${id}`, form);
       console.log(response);
       setTimeout(() => {
         toast.success("Actualización exitosa!");
