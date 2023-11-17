@@ -78,20 +78,15 @@ export default function TableUser() {
     handleOpen(true);
   };
   // Función para eliminar usuarios seleccionados.
-  const handleDelete = async () => {
-    const config=await tokenGet();
-    const response = await axios.post(
-      "/users/delete/select",
-      { ids: selectedUsers },
-      config
-    );
-    dispatch(getallusers()); // Actualiza la lista de usuarios después de la eliminación.
-    dispatch(deselectAllUsers()); // Deselecciona a todos los usuarios.
-    dispatch(deleteStateAllUsers()); // Elimina el estado de los usuarios seleccionados.
-    toast.custom((t) => (
-      <SuccessAlert t={t} w={"w-4/12"} message="Borrado exitoso" />
-    )); // Muestra una notificación de éxito.
-  };
+  const handleDelete = async() => {
+    const response = await axios.post('users/delete/select', { ids: selectedUsers });
+      dispatch(getallusers());  // Actualiza la lista de usuarios después de la eliminación.
+      dispatch(deselectAllUsers());  // Deselecciona a todos los usuarios.
+      dispatch(deleteStateAllUsers());  // Elimina el estado de los usuarios seleccionados.
+      toast.custom((t) => (
+        <SuccessAlert t={t} w={"w-4/12"} message="Borrado exitoso" />
+      ));  // Muestra una notificación de éxito.
+  }
 
   // Función para seleccionar/deseleccionar un usuario individual.
   const handleSelectUser = (userId) => {

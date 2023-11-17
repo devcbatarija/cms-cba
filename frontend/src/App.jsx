@@ -77,7 +77,7 @@ function App() {
       validation: "Validation",
     };
     try {
-      const response = await axios.post("/users/valid/token", data, config);
+      const response = await axios.post("users/valid/token", data, config);
       if (response.data.user) {
         dispatch(authValid(response.data.user));
       }
