@@ -3,8 +3,7 @@ import axios from "axios";
 
 export const getallusers = createAsyncThunk("/getallusers", async () => {
   try {
-    const response=await axios.get('/users');
-    console.log(response)
+    const response=await axios.get('users');
     return response.data.data;
   } catch (error) {
     return error.message;
