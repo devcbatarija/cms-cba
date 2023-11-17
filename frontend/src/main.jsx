@@ -7,8 +7,8 @@ import { Provider } from 'react-redux'
 import store from './redux-toolkit/store/store.js';
 import axios from 'axios';
 
-// axios.defaults.baseURL="http://181.188.144.150:3001/api/";
-axios.defaults.baseURL="http://localhost:3001/api/";
+axios.defaults.baseURL="https://www.webpage.cba.org.bo/api/";
+// axios.defaults.baseURL="https://backendcba.onrender.com/";
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}> 
         <BrowserRouter>

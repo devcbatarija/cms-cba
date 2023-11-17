@@ -123,7 +123,7 @@ const PodcastDashboard = () => {
   };
   const eventsSSE = () => {
     const eventSource = new EventSource(
-      "http://181.188.144.150/api/podcast/song/events"
+      "https://181.188.144.150/api/podcast/song/events"
     );
     eventSource.onmessage = (event) => {
       const progress = parseInt(event.data);
