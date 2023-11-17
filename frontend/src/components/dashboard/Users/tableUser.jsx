@@ -81,7 +81,7 @@ export default function TableUser() {
   }
   // Función para eliminar usuarios seleccionados.
   const handleDelete = async() => {
-    const response = await axios.post('/users/delete/select', { ids: selectedUsers });
+    const response = await axios.post('users/delete/select', { ids: selectedUsers });
       dispatch(getallusers());  // Actualiza la lista de usuarios después de la eliminación.
       dispatch(deselectAllUsers());  // Deselecciona a todos los usuarios.
       dispatch(deleteStateAllUsers());  // Elimina el estado de los usuarios seleccionados.
