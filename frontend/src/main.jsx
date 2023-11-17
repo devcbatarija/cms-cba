@@ -10,11 +10,9 @@ import axios from 'axios';
 axios.defaults.baseURL="https://www.webpage.cba.org.bo/api/";
 // axios.defaults.baseURL="https://backendcba.onrender.com/";
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store}>
-    <React.StrictMode>
+    <Provider store={store}> 
         <BrowserRouter>
           <App />
-        </BrowserRouter>
-    </React.StrictMode>
+        </BrowserRouter> 
     </Provider>
 )
