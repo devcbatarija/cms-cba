@@ -43,6 +43,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
     rol: "",
     estado: "",
   });
+  console.log(id)
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -64,7 +65,9 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
     const response = await axios.get(`users/get/by/${id}`);
     setForm(response.data);
     setSkelet(false);
+    console.log(form.data)
   };
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -122,7 +125,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                 <label htmlFor="file-upload" className="cursor-pointer">
                   <Avatar
                     sx={{ width: "100px", height: "100px" }}
-                    src={form.image}
+                    src={form.data.image}
                     alt="perfil-image"
                   />
                 </label>
@@ -134,7 +137,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                   name="image"
                   onChange={convertBase}
                 />
-                {buttonSave && form.image[0] != "h" ? (
+                {buttonSave && form.data.image[0] != "h" ? (
                   <button
                     onClick={handleUpdateImg}
                     className={`w-full border h-10 text-white bg-[#33C368] hover:bg-[#33C398]`}
@@ -159,7 +162,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                   <TextField
                     sx={{ width: "100%" }}
                     onChange={handleChange}
-                    value={form.correo}
+                    value={form.data.correo}
                     id="outlined-basic-correo"
                     name="correo"
                     type="text"
@@ -173,7 +176,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                   <TextField
                     sx={{ width: "100%" }}
                     onChange={handleChange}
-                    value={form.nombres}
+                    value={form.data.nombres}
                     id="outlined-basic-nombres"
                     name="nombres"
                     type="text"
@@ -187,7 +190,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                   <TextField
                     sx={{ width: "100%" }}
                     onChange={handleChange}
-                    value={form.apellidos}
+                    value={form.data.apellidos}
                     id="outlined-basic-apellidos"
                     name="apellidos"
                     type="text"
@@ -201,7 +204,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                   <TextField
                     sx={{ width: "100%" }}
                     onChange={handleChange}
-                    value={form.celular}
+                    value={form.data.celular}
                     id="outlined-basic-celular"
                     name="celular"
                     type="text"
@@ -217,7 +220,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     onChange={handleChange}
-                    value={form.password}
+                    value={form.data.password}
                     name="password"
                     endAdornment={
                       <InputAdornment position="end">
@@ -242,11 +245,12 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                     sx={{ width: "100%" }}
                     labelId="demo-select-small-label"
                     id="demo-select-small"
-                    value={form.rol}
+                    value={form.data.rol}
                     label="rol"
                     onChange={handleChange}
                     name="rol"
                   >
+                    {/* <MenuItem value={form.data.rol}>{form.data.rol}</MenuItem> */}
                     <MenuItem value="Admin">Admin</MenuItem>
                     <MenuItem value="Client">Client</MenuItem>
                   </Select>
@@ -259,7 +263,7 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
                     sx={{ width: "100%" }}
                     labelId="demo-select-small-label"
                     id="demo-select-small"
-                    value={form.estado}
+                    value={form.data.estado}
                     label="estado"
                     onChange={handleChange}
                     name="estado"

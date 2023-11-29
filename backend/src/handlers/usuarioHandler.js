@@ -61,7 +61,8 @@ module.exports = {
 
 
   getById: async (req, res) => {
-    response(res, 200, response);
+    const result = await getById(req.params.id);
+    response(res, 200, result);
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
