@@ -122,8 +122,8 @@ const PodcastDashboard = () => {
     } catch (error) { }
   };
   const eventsSSE = () => {
-    const eventSource = new EventSource(
-      "http://localhost:3001/api/podcast/song/events"
+    const eventSource = new EventSource( //CAMBIAR DIRECCION
+      "https://www.webpage.org.bo/appi/podcast/song/events"
     );
     eventSource.onmessage = (event) => {
       const progress = parseInt(event.data);
