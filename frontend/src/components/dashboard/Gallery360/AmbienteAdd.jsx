@@ -26,13 +26,14 @@ const customStyle = {
 };
 
 
+
 const AmbienteAddComponent = () => {
   const userId = useSelector((state) => state.login.user._userId);
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     try {
-      const res = await axios.post("http://localhost:3001/api/environment", {
+      const res = await axios.post("environment", {
         nombre: data.nombre,
         descripcion: data.descripcion,
         UsuarioIdUsuario: userId ? userId : "",

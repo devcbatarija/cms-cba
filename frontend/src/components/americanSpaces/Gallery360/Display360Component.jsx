@@ -117,9 +117,9 @@ const Gallery360 = ({ image }) => {
             window.removeEventListener('touchstart', handleTouchStart);
             window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('touchend', handleTouchEnd);
-            cancelAnimationFrame(requestRef.current); // Cancelar la animación cuando el componente se desmonte
+            cancelAnimationFrame(requestRef.current);
         };
-    }, [image]); // Asegúrate de pasar textureObject como una dependencia si quieres que cambie cuando las props cambien
+    }, [image]);
 
     return (
 

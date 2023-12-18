@@ -47,7 +47,7 @@ export default function TableEvents() {
   const [selectAll, setSelectAll] = useState(false);
   //modal
   const [open, setOpen] = useState(false);
-  const [selectedUserModal,setSelectedUserModal]=useState("")
+  const [selectedUserModal, setSelectedUserModal] = useState("")
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -68,8 +68,8 @@ export default function TableEvents() {
       setSelectAll(false);
     }
   };
-  const handleDelete = async() => {
-    const response=await axios.post('/users/delete/select',{ids:selectedUsers});
+  const handleDelete = async () => {
+    const response = await axios.post('users/delete/select', { ids: selectedUsers });
     setTimeout(() => {
       dispatch(getallusers());
       dispatch(deselectAllUsers());
@@ -85,7 +85,7 @@ export default function TableEvents() {
       dispatch(selectUser(userId));
     }
   };
-  const handleModal=(id)=>{
+  const handleModal = (id) => {
     handleOpen()
     setSelectedUserModal(id)
   }
@@ -93,49 +93,49 @@ export default function TableEvents() {
     dispatch(getallusers());
   }, []);
   return (
-    <TableContainer 
-    sx={{width:"100%",borderRadius:'0', height:"100vh%" }}
-    component={Paper}>
+    <TableContainer
+      sx={{ width: "100%", borderRadius: '0', height: "100vh%" }}
+      component={Paper}>
       {
-        open?<ModalUnstyled 
-        id={selectedUserModal} 
-        open={open} 
-        handleOpen={handleOpen} 
-        handleClose={handleClose} ></ModalUnstyled>:null
+        open ? <ModalUnstyled
+          id={selectedUserModal}
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose} ></ModalUnstyled> : null
       }
       {
-        openAddUser?<ModalUnstyledAdd
-        open={openAddUser} 
-        handleOpen={handleOpenAddUser} 
-        handleClose={handleCloseAddUser}
-        ></ModalUnstyledAdd>:null
+        openAddUser ? <ModalUnstyledAdd
+          open={openAddUser}
+          handleOpen={handleOpenAddUser}
+          handleClose={handleCloseAddUser}
+        ></ModalUnstyledAdd> : null
       }
-        <Grid
-          container
-          direction="row"
-          justifyContent="flex-end"
-          alignItems="center"
-          style={{ padding: "10px",gap:"10px" }}
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+        style={{ padding: "10px", gap: "10px" }}
+      >
+        <Button
+          disabled={selectedUsers.length > 0 ? false : true}
+          variant="contained"
+          color="error"
+          sx={{ borderRadius: "0px" }}
+          onClick={handleDelete}
+          startIcon={<DeleteIcon />}>
+          Borrar {selectedUsers.length}
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ borderRadius: "0px" }}
+          startIcon={<AddIcon sx={{ color: 'white' }} />}
+          onClick={handleOpenAddUser}
         >
-          <Button 
-            disabled={selectedUsers.length>0?false:true}
-            variant="contained" 
-            color="error" 
-            sx={{borderRadius:"0px"}}
-            onClick={handleDelete}
-            startIcon={<DeleteIcon />}>
-            Borrar {selectedUsers.length}
-          </Button>
-          <Button 
-            variant="contained"
-            sx={{borderRadius:"0px"}}
-            startIcon={<AddIcon sx={{color:'white'}} />}
-            onClick={handleOpenAddUser}
-          >
-            Añadir 
-          </Button>
-        </Grid>
-        
+          Añadir
+        </Button>
+      </Grid>
+
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -186,14 +186,14 @@ export default function TableEvents() {
               <TableCell align="center">
                 <Avatar alt="Remy Sharp" src={row.image ? row.image : null} />
               </TableCell>
-              <TableCell align="center">{row.estado?"true":"false"}</TableCell>
+              <TableCell align="center">{row.estado ? "true" : "false"}</TableCell>
               <TableCell align="center">
-                <Button 
-                variant="contained" 
-                color="success"
-                onClick={()=>handleModal(row.id_Usuario)}
-                sx={{borderRadius:"0px"}}
-                endIcon={<EditIcon></EditIcon>}
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => handleModal(row.id_Usuario)}
+                  sx={{ borderRadius: "0px" }}
+                  endIcon={<EditIcon></EditIcon>}
                 >
                   Editar
                 </Button>

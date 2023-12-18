@@ -6,7 +6,7 @@ import { tokenGet } from "../../services/functions";
 export const getallusers = createAsyncThunk("/getallusers", async () => {
   try {
     const config = await tokenGet();
-    const response = await axios.get("/users", config); 
+    const response = await axios.get("users", config); 
     return response.data.data;
   } catch (error) {
     console.log(error)
