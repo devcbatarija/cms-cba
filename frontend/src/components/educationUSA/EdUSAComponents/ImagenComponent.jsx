@@ -44,13 +44,16 @@ const ImagenFondo = ({ imageUrl, title }) => {
 
   return (
     <div className="ImagenPrincipal" style={imagenEstilo}>
+      {!imagenCargada && (
+        <div className="loading-indicator">
+          LOADING...
+        </div>
+      )}
       {imagenCargada && title && (
         <div className='uppercase w-full mb-2 text-1xl font-extrabold text-gray-900 dark:text-white text-center' style={tituloEstilo}>
           ENGLISH FOR {title}
         </div>
-
       )}
-      {!imagenCargada && <p>Error al cargar la imagen</p>}
     </div>
   );
 };

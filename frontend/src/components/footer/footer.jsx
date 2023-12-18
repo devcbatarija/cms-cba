@@ -79,11 +79,8 @@ const Footer = () => {
                                     </svg>
                                 </a>
                             </li>
-
-
                         </ul>
                     </div>
-
                     <div
                         className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4 lg:col-span-2"
                     >
@@ -161,7 +158,7 @@ const Footer = () => {
                                         className="text-gray-300 transition hover:text-gray-300/75"
                                         href="https://api.whatsapp.com/send/?phone=59176192765&text&type=phone_number&app_absent=0"
                                     >
-                                        Contacto: 76192765
+                                        Telefono: 66 - 48626
                                     </a>
                                 </li>
 
@@ -170,7 +167,9 @@ const Footer = () => {
                                         className="text-gray-300 transition hover:text-gray-300/75"
                                         href="https://maps.app.goo.gl/MB7X3yBXWV3UETna9"
                                     >
-                                        Direccion:  Calle 15 de Abril 624 entre Junin y O'Connor.
+                                        <span>
+                                            Direccion:  Calle 15 de Abril 624 entre Junin y O'Connor.
+                                        </span>
                                     </a>
                                 </li>
 
@@ -179,7 +178,7 @@ const Footer = () => {
                                         className="text-gray-300 transition hover:text-gray-300/75"
                                         href=""
                                     >
-                                        Soporte
+                                        <span>Soporte: sistemascba@cba.org.bo</span>
                                     </a>
                                 </li>
 
