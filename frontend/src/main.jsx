@@ -9,6 +9,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL="https://www.webpage.cba.org.bo/appi/";
 //axios.defaults.baseURL="http://localhost:3001/api/";
+
 ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}> 
         <BrowserRouter>
