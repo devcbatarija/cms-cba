@@ -1,6 +1,7 @@
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Select, MenuItem, Button, TextField, Box, Typography } from "@mui/material";
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import toast from "react-hot-toast";
 
 const ProgramaPrecios = () => {
     const [campos, setCampos] = useState([]);
@@ -23,7 +24,7 @@ const ProgramaPrecios = () => {
 
     // Efecto que se ejecuta una vez al cargar el componente para obtener la lista de programas
     useEffect(() => {
-        axios.get('http://localhost:3001/api/Program')
+        axios.get('Program')
             .then(response => {
                 setProgramas(response.data.results);
             })
@@ -80,14 +81,13 @@ const ProgramaPrecios = () => {
             };
             let response;
             if (programaSeleccionado.ProgramPrice != null) {
-                response = await axios.put(`http://localhost:3001/api/ProgramPrices/?id=${programaSeleccionado.ProgramPrice.id_Programa}`, datos);
+                response = await axios.put(`ProgramPrices/?id=${programaSeleccionado.ProgramPrice.id_Programa}`, datos);
             } else {
-                response = await axios.post('http://localhost:3001/api/ProgramPrices/add', datos);
+                response = await axios.post('ProgramPrices/add', datos);
             }
-            alert('Guardado exitosamente');
+            toast.success('Guardado exitosamente');
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error al guardar los datos');
+            toast.error('Error al guardar los datos');
         }
     };
 

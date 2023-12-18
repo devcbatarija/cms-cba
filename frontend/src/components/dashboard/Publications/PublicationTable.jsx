@@ -29,79 +29,76 @@ import AddIcon from "@mui/icons-material/Add";
 import ModalUpdatePublication from "./modalUpdatePublication";
 import axios from "axios";
 
-//Componente principal PublicationTable
+
 export default function PublicationTable() {
-  const dispatch = useDispatch(); //Obtiene la funcion dispatch de Redux para enviar acciones
-  const data = useSelector((state) => state.publications.publications); //selectedPublications. Obtiene la lista de los usuarios del estado global de Redux
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.publications.publications); 
   const selectedPublications = useSelector(
     (state) => state.publications.selectedPublications
-  ); //Obtiene la lista de los usuarios seleccionados del estado global de Redux
-  const [selectAll, setSelectAll] = useState(false); //Estado local para el control de seleccion de todos los usuarios
+  );
+  const [selectAll, setSelectAll] = useState(false);
 
-  // //Modal para editar publicacion seleccionada
   const [open, setOpen] = useState(false);
   const [selectedPublicationModal, setSelectedPublicationModal] = useState("");
 
-  //funciones para abrir y cerrar el modal
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  //Variables y funciones para controlar el modal de agregar una publicacion
+ 
   const [openAddPublication, setOpenAddPublication] = useState(false);
 
   const handleOpenAddPublication = () => setOpenAddPublication(true);
   const handleCloseAddPublication = () => setOpenAddPublication(false);
 
-  //Funcion para seleccionar/deseleccionar las publicaciones
+  
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllPublications(data.map((pub) => pub.id_Publicacion))); //Activa la seleccion de todos las publicaciones
-      setSelectAll(true); //Actualiza el estado local
+      dispatch(selectAllPublications(data.map((pub) => pub.id_Publicacion)));
+      setSelectAll(true);
     } else {
-      dispatch(deselectAllPublications()); //Deselecciona todas las publicaciones
-      setSelectAll(false); // Actualiza el estado local
+      dispatch(deselectAllPublications());
+      setSelectAll(false);
     }
   };
-  //Funcion para seleccionar la publicacion que se va a editar
+
   const handleModal = (id) => {
     setSelectedPublicationModal(id);
     handleOpen(true);
   };
 
-  //funcion para eliminar publicaciones http://localhost:3001/api/publication/create
+  
   const handleDelete = async () => {
     const response = await axios.post("publication/delete/select", {
       ids: selectedPublications,
     });
     setTimeout(() => {
-      dispatch(getAllPublication()); //Actualiza la lista de publicaciones despues de la eliminacion
-      dispatch(deselectAllPublications()); //Deselecciona a todos los usuarios.
-      dispatch(deleteStateAllPublications()); //Elimina el estado de los usuarios seleccionados
-      toast.success("Borrado exitoso!"); //Muestra una notificacion de exito
+      dispatch(getAllPublication());
+      dispatch(deselectAllPublications());
+      dispatch(deleteStateAllPublications());
+      toast.success("Borrado exitoso!");
     }, 1500);
   };
 
-  //funcion para seleccionar/deseleccionar una publicacion infividual
+ 
   const handleSelectPublication = (pubId) => {
     if (selectedPublications.includes(pubId)) {
-      dispatch(deselectPublication(pubId)); //Deselecciona la publicacion
-      setSelectAll(false); //actualiza el estado local
+      dispatch(deselectPublication(pubId));
+      setSelectAll(false);
     } else {
-      dispatch(selectPublication(pubId)); //Selecciona la publicacion
+      dispatch(selectPublication(pubId));
     }
   };
-  //Efecto para cargar la lista de las publicaciones al cargar el componente
+
   useEffect(() => {
-    dispatch(getAllPublication()); //Obtiene la lista de las publicaciones al montaar el componente
+    dispatch(getAllPublication()); 
   }, [dispatch]);
 
-  //Renderizado del componente
   return (
     <TableContainer
       sx={{ width: "100%", borderRadius: "0", height: "100vh%" }}
       component={Paper}
     >
-      {/*rederiza el modal de modificacion*/}
+    
       {open ? (
         <ModalUpdatePublication
           id={selectedPublicationModal}
@@ -117,7 +114,7 @@ export default function PublicationTable() {
         alignItems="center"
         style={{ padding: "10px", gap: "10px" }}
       >
-        {/*Boton para eliminar publicaciones*/}
+       
         <Button
           disabled={selectedPublications.length > 0 ? false : true}
           variant="contained"
@@ -128,17 +125,8 @@ export default function PublicationTable() {
         >
           Borrar {selectedPublications.length}
         </Button>
-        {/*Boton para agregar nueva publicacion*/}
-        {/* <Button
-          variant="contained"
-          sx={{ borderRadius: "0px" }}
-          startIcon={<AddIcon sx={{ color: 'white' }} />}
-          onClick={handleOpenAddPublication}
-        >
-          Añadir
-        </Button> */}
       </Grid>
-      {/*Tabla de publicaciones*/}
+     
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -152,7 +140,7 @@ export default function PublicationTable() {
                 onChange={handleSelectAll}
               />
             </TableCell>
-            {/*Encabezado de las columnas*/}
+        
             <TableCell align="center">Titulo</TableCell>
             <TableCell align="center">Descripcion</TableCell>
             <TableCell align="center">Estado</TableCell>

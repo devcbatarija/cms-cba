@@ -20,10 +20,10 @@ export default function EventList({
         <div className="px-4 sm:px-0 flex flex-col items-center justify-center">
           <h1 className='uppercase leading-7 text-base font-medium text-cbaBlue'>Eventos para {title.title}</h1>
           {
-            title.type == 'day'||title.type == 'timeGridWeek'?
-            <div className={`items-center justify-center flex border-2 border-cbaBlue h-12 ${title.type=='timeGridWeek'?'w-16':'w-12'}`}>
-              <span className={'text-lg font-bold text-cbaBlue'}>{dayjs(title.day).format('DD')}{title.type == 'timeGridWeek'&&`-${dayjs(title.day).add(6,'days').format('DD')}`}</span>
-            </div>:null
+            title.type == 'day' || title.type == 'timeGridWeek' ?
+              <div className={`items-center justify-center flex border-2 border-cbaBlue h-12 ${title.type == 'timeGridWeek' ? 'w-16' : 'w-12'}`}>
+                <span className={'text-lg font-bold text-cbaBlue'}>{dayjs(title.day).format('DD')}{title.type == 'timeGridWeek' && `-${dayjs(title.day).add(6, 'days').format('DD')}`}</span>
+              </div> : null
           }
         </div>
         <div className="mt-5 border-t border-gray-300 max-h-80vh overflow-auto md:max-h-screen lg:max-h-[440px] xl:max-h-[97vh]">

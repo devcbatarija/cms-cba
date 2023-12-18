@@ -79,7 +79,7 @@ module.exports = {
       return error;
     }
   },
-
+//model to update
   authLogin: async (user) => {
     const userExist = await Usuario.findOne({
       where: { correo: user.correo },
@@ -121,6 +121,7 @@ module.exports = {
   emailVerify: async (body) => {
     const user = await Usuario.findOne({ where: { correo: body.correo } });
     if (!user) {
+      console.log(user)
       return "Email valido";
     }
     throw new ClientError("El usuario ya existe.");

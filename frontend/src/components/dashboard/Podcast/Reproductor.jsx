@@ -20,9 +20,8 @@ const Reproductor = ({song, name,imgSong,authors}) => {
     const [play,setPlay]=useState(false);
     const audioRef = useRef();
     const handleAddSong = async (songAdd) => {
-      console.log(songAdd)
       try {
-        const response=await axios.post('/podcast/song',{
+        const response=await axios.post('podcast/song',{
           song:{
             name: songMedatada.name,
             preview_url: songMedatada.preview_url,

@@ -100,7 +100,7 @@ const Login = () => {
           <div className="flex w-full items-center justify-center ">
             <h1
               className="mb-4 text-xl font-extrabold leading-none tracking-tight 
-          text-gray-900 md:text-2xl lg:text-3xl dark:text-white"
+          text-gray-900 md:text-2xl lg:text-3xl"
             >
               INICIAR SESION
             </h1>
@@ -197,18 +197,18 @@ const Login = () => {
         >
           <h1
             className="mb-4 text-4xl font-extrabold leading-none 
-          tracking-tight text-gray-800 md:text-5xl lg:text-6xl dark:text-white"
+          tracking-tight text-gray-800 md:text-5xl lg:text-6xl"
           >
             Bienvenido de{" "}
             <span
               className="underline underline-offset-3 decoration-8 
-                text-cbaRed dark:decoration-blue-600 animated-text"
+                text-cbaRed  animated-text"
             >
               Vuelta
             </span>
           </h1>
           <div className="flex w-full items-center justify-center">
-            <p className="text-lg font-normal lg:text-xl dark:text-gray-400">
+            <p className="text-lg font-normal lg:text-xl">
               Centro Boliviano Americano
             </p>
           </div>

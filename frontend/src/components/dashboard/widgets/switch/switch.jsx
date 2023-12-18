@@ -65,7 +65,7 @@ const  CustomizedSwitches=({id,userestado})=>{
     updatePromise()
     .then(()=>{
       console.log(estado)
-      axios.put(`/users/state/update/${id}`,{estado:estado})
+      axios.put(`users/state/update/${id}`,{estado:estado})
       .then((response)=>{
         console.log(response)
       })
