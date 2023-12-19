@@ -68,7 +68,7 @@ export const calcularTimestate = (fecha) => {
 export const uploadImgbb = async (base64DataArray) => {
   try {
     const response = await axios.post("/files/upload", {
-      filePath: base64DataArray,
+      filePath: [base64DataArray],
       type: "image",
     });
     if (response.data.code == "ETIMEDOUT") {
