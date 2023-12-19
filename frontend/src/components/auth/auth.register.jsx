@@ -59,8 +59,7 @@ const Register = () => {
         ci: watch("ci"),
         password: watch("password"),
         rol: watch("rol"),
-      }); ///valid/email
-      if (response.status === 200) {
+      }); ///valid/email 
         setSpinner(false);
         toast.custom(
           <SuccessAlert
@@ -68,22 +67,21 @@ const Register = () => {
             message={"Registro exitoso."}
           ></SuccessAlert>
         );
-        navigate("/login");
-      }
-      if (response.data.messageError) {
-        setSpinner(false);
-        setError({
-          ...error,
-          z_errorForm: response.data.messageError,
-        });
-        return;
-      }
-    } catch (error) {
+        navigate("/login"); 
+      // if (response.data.messageError) {
+      //   setSpinner(false);
+      //   setError({
+      //     ...error,
+      //     z_errorForm: response.data.messageError,
+      //   });
+      //   return;
+      // }
+    } catch (error) { 
       setSpinner(false);
       toast.custom(
         <ErrorAlert
           w={"w-4/12"}
-          message={"Error al enviar el correo."}></ErrorAlert>
+          message={error.message}></ErrorAlert>
       )
       console.log(error);
     }
