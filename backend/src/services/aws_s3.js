@@ -7,11 +7,11 @@ const fs=require('fs');
 const {
     AWS_ACCESS_KEY_ID,
     AWS_SECRET_ACCESS_KEY,
-    ASW_BUCKET_NAME,
-    ASW_BUCKET_REGION  
+    AWS_BUCKET_NAME,
+    AWS_BUCKET_REGION  
 }=require('./s3');
 const client=new S3Client({
-    region:ASW_BUCKET_REGION,
+    region:"us-east-2",
     accessKeyId:AWS_ACCESS_KEY_ID,
     secretAccessKey:AWS_SECRET_ACCESS_KEY
 
@@ -28,7 +28,7 @@ module.exports={
         const parallelUploads3 = new Upload({
             client:client,
             params:{
-                Bucket:ASW_BUCKET_NAME,
+                Bucket:"mispodcastscba",
                 Key:file.name,
                 Body:stream
             },
@@ -36,6 +36,7 @@ module.exports={
             partSize:1024 * 1024 *5,
             leavePartsOnError: false
         })
+        console.log(parallelUploads3)
         parallelUploads3.on("httpUploadProgress", (progress) => {
             const percentage = Math.round((progress.loaded / progress.total) * 100);
             emitter.emit("progress", percentage);
@@ -43,6 +44,7 @@ module.exports={
         const result = await parallelUploads3.done();
         return result;
         } catch (error) {
+            console.log(error)
             return error;
         }
     }
