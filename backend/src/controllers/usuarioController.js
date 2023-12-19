@@ -100,7 +100,7 @@ module.exports = {
       correo: userExist.correo,
       nombres: userExist.nombres,
       apellidos: userExist.apellidos,
-      rol: "Admin",
+      rol: userExist.rol,
     };
     console.log({ usLogin: usLogin, token: tokengen });
     return { usLogin: usLogin, token: tokengen };
