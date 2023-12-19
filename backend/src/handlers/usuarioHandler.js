@@ -29,6 +29,7 @@ module.exports = {
       throw new ClienteError("No hay datos para cargar", 400);
     }
     const result = await postUsuario(req.body);
+    console.log("result ",result)
     response(res, 200, result);
   },
   deleteById: async (req, res) => {
