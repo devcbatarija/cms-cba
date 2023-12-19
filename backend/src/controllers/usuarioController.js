@@ -36,15 +36,16 @@ module.exports = {
     if (!newUser) {
       throw new ClientError("No se pudo completar el registro.");
     }
-    const emailsend = await sentTokenVerify(
-      newUser.verificacion,
-      newUser.correo
-    );
-    if (!emailsend.success) {
+    try {
+      const emailsend = await sentTokenVerify(
+        newUser.verificacion,
+        newUser.correo
+      );
+      return { emailsend };
+    } catch (error) {
       await newUser.destroy();
-      throw new Error(emailsend.error);
+      throw new ClientError(emailsend, 401);
     }
-    return { user: newUser, emailState: emailsend.success };
   },
 
   deleteById: async (id) => {
@@ -79,7 +80,7 @@ module.exports = {
       return error;
     }
   },
-//model to update
+  //model to update
   authLogin: async (user) => {
     const userExist = await Usuario.findOne({
       where: { correo: user.correo },
@@ -121,7 +122,7 @@ module.exports = {
   emailVerify: async (body) => {
     const user = await Usuario.findOne({ where: { correo: body.correo } });
     if (!user) {
-      console.log(user)
+      console.log(user);
       return "Email valido";
     }
     throw new ClientError("El usuario ya existe.");
@@ -176,7 +177,7 @@ module.exports = {
     }
   },
   getUserDetails: async (idUser) => {
-      const user = await Usuario.findByPk(idUser);
-      return user;
+    const user = await Usuario.findByPk(idUser);
+    return user;
   },
 };
