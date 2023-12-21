@@ -48,6 +48,7 @@ const {
   Gallery,
   Ambientes,
   ProgramPrices,
+  Beca,
   PreRegistro
 } = sequelize.models;
 Usuario.hasMany(Publicacion);
@@ -82,6 +83,10 @@ Gallery.belongsTo(Ambientes);
 
 Programa.hasOne(ProgramPrices);
 ProgramPrices.belongsTo(Programa);
+
+Usuario.hasMany(Beca);
+Beca.belongsTo(Usuario);
+
 
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,
