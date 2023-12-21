@@ -12,9 +12,20 @@ const InformacionEducacion = ({ titulo, contenido }) => {
       </div>
       <div className="space-y-4">
         <div className="d-flex justify-content-center">
-          <WhatsAppIcon style={{ fontSize: 40 }} />
-          <FacebookIcon style={{ fontSize: 40 }} />
-          <InstagramIcon style={{ fontSize: 40 }} />
+          {/* Enlace de WhatsApp */}
+          <a href="https://api.whatsapp.com/send/?phone=59176192765&text&type=phone_number&app_absent=0" target="_blank" rel="noopener noreferrer">
+            <WhatsAppIcon style={{ fontSize: 40 }} />
+          </a>
+
+          {/* Enlace de Facebook */}
+          <a href="https://www.facebook.com/centrobolivianoamericano.tarija" target="_blank" rel="noopener noreferrer">
+            <FacebookIcon style={{ fontSize: 40 }} />
+          </a>
+
+          {/* Enlace de Instagram */}
+          <a href="https://www.instagram.com/cbatarija/" target="_blank" rel="noopener noreferrer">
+            <InstagramIcon style={{ fontSize: 40 }} />
+          </a>
         </div>
       </div>
     </div>
@@ -22,4 +33,3 @@ const InformacionEducacion = ({ titulo, contenido }) => {
 };
 
 export default InformacionEducacion;
-  

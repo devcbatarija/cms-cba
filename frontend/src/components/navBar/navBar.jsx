@@ -40,6 +40,7 @@ const NavBar = () => {
     programas: null,
     publicaciones: null,
     multimedia: null,
+    becas: null
   });
 
   const [openProgramas, setOpenProgramas] = useState(false);
@@ -48,6 +49,7 @@ const NavBar = () => {
     programas: false,
     publicaciones: false,
     multimedia: false,
+    becas: false
   });
   const handleProgramasClick = () => {
     setOpenProgramas(!openProgramas);
@@ -63,6 +65,7 @@ const NavBar = () => {
       programas: null,
       publicaciones: null,
       multimedia: null,
+      becas: null
     });
     setAnchorEl({
       ...anchorEl,
@@ -76,6 +79,7 @@ const NavBar = () => {
       programas: null,
       publicaciones: null,
       multimedia: null,
+      becas: null,
     });
   };
   const handleDrawerToggle = () => {
@@ -94,9 +98,10 @@ const NavBar = () => {
             key: "programas",
             ruta: "/",
             subRutas: [
-              { key: "Niños", ruta: "/programs/children" },
-              { key: "Adolescentes", ruta: "/programs/teens" },
-              { key: "Adultos", ruta: "/programs/adults" },
+              { key: "Para niños", ruta: "/programs/children" },
+              { key: "Para adolescentes", ruta: "/programs/teens" },
+              { key: "Para adultos", ruta: "/programs/adults" },
+              { key: "Becas CBA", ruta: "/becas" },
             ],
           },
           { key: "Educacion USA", ruta: "/educationUSA" },
@@ -104,9 +109,7 @@ const NavBar = () => {
             key: "multimedia",
             ruta: "/",
             subRutas: [
-              { key: "Niños", ruta: "/programs/children" },
-              { key: "Adolescentes", ruta: "/programs/teens" },
-              { key: "Adultos", ruta: "/programs/adults" },
+              { key: "Podcast", ruta: "/podcast" }
             ],
           },
           { key: "Espacios USA", ruta: "/americanSpaces" },
@@ -279,7 +282,7 @@ const NavBar = () => {
               }}
             >
               <div className="flex flex-row drawner-css">
-                <Typography>hola</Typography>
+                <Typography><strong>Centro Boliviano Americano</strong></Typography>
                 <span onClick={handleDrawerToggle}>
                   <svg
                     width="14"
@@ -438,7 +441,7 @@ const NavBar = () => {
                     padding: "20px",
                   }}
                 >
-                  Niños
+                 Para niños
                 </MenuItem>
                 <MenuItem
                   onClick={handleClose}
@@ -449,7 +452,7 @@ const NavBar = () => {
                     padding: "20px",
                   }}
                 >
-                  Adolescentes
+                  Para adolescentes
                 </MenuItem>
                 <MenuItem
                   onClick={handleClose}
@@ -460,7 +463,18 @@ const NavBar = () => {
                     padding: "20px",
                   }}
                 >
-                  Adultos
+                  Para adultos
+                </MenuItem>
+                <MenuItem
+                  onClick={handleClose}
+                  component={Link}
+                  to="/becas"
+                  sx={{
+                    width: "200px",
+                    padding: "20px",
+                  }}
+                >
+                  Becas CBA
                 </MenuItem>
               </Menu>
               {/* final */}
