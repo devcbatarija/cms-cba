@@ -20,6 +20,7 @@ import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
 import ProgramTable from "./components/dashboard/Programas/ProgramTables";
 import PublicationNav from "./components/dashboard/Publications/Nav";
+import BecaNav from "./components/dashboard/Becas/Nav";
 import ProgramaNav from "./components/dashboard/Programas/Nav";
 import TableUser from "./components/dashboard/Users/tableUser";
 import {
@@ -32,7 +33,9 @@ import CalendarioClient from "./components/calendar/calendar";
 import PodcastDashboard from "./components/dashboard/Podcast/PodcastDashboard";
 import ProgramChildren from "./components/programs/children";
 import TablePublication from "./components/dashboard/Publications/PublicationTable";
+import TableBeca from "./components/dashboard/Becas/BecaTable";
 import ContarinerNewPublication from "./components/dashboard/Publications/containerNewPublication";
+import ContarinerNewBeca from "./components/dashboard/Becas/containerNewBeca";
 import Footer from "./components/footer/footer";
 import { Publications } from "./components/publications/publications";
 import { TestimoniosContainer } from "./components/testimonios/testimoniosContainer";
@@ -56,6 +59,7 @@ import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd"
 import TestimonioNav from "./components/dashboard/Testimonios/Nav";
 import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable";
 import ProgramAddForm from "./components/dashboard/Programas/ProgramAdd";
+import {Becas} from "./components/Becas/becas";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -157,6 +161,8 @@ function App() {
                 </ValidateRedir>
               }
             />
+            
+            <Route path="/becas" element={<Becas />} />
             <Route path="/programs/children" element={<ProgramChildren />} />
             <Route path="/publications" element={<Publications />} />
             <Route path="/programs/adults" element={<ProgramAdults />} />
@@ -198,7 +204,17 @@ function App() {
                   element={<ContarinerNewPublication />}
                 />
               </Route>
-              
+              <Route path="/dashboard/becanav" element={<BecaNav />}>
+                <Route
+                  path="/dashboard/becanav/table"
+                  element={<TableBeca />}
+                />
+                <Route
+                  path="/dashboard/becanav/add"
+                  element={<ContarinerNewBeca />}
+                />
+              </Route>
+
               <Route path="/dashboard/program" element={<ProgramaNav />}>
                 <Route
                   path="/dashboard/program/tableprogram"
