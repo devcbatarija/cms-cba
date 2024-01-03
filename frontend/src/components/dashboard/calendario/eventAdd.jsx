@@ -59,7 +59,7 @@ function EventAdd({
   data,
   setData
 }) {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [urls, setUrls] = useState([]);
   const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
 
@@ -82,10 +82,13 @@ function EventAdd({
       ...data,
       [property]: value,
     })
-    if(property == 'tipo'){
-      navigate('/dashboard/Calendario/calendario', { state: { prevPath: '/dashboard/Calendario/addEvent' ,tipo: value} })
-    }
   }
+  useEffect(() => {
+    if (data.tipo != 'General') {
+      navigate('/dashboard/Calendario/calendario', { state: { prevPath: '/dashboard/Calendario/addEvent', data: data } })
+    }
+  }, [data])
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -134,7 +137,7 @@ function EventAdd({
           </FormGroup>
 
           <div className="flex flex-col lg:flex-row lg:items-center">
-            <Grid sx={{ marginY:1 }} variant="outlined">
+            <Grid sx={{ marginY: 1 }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-start">
                 Fecha de Inicio
               </InputLabel>
@@ -164,7 +167,7 @@ function EventAdd({
             <div className="grid content-center hidden lg:block">
               <ArrowRightAltRoundedIcon />
             </div>
-            <Grid sx={{ marginY:1 }} variant="outlined">
+            <Grid sx={{ marginY: 1 }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-end">
                 Fecha de finalizacion
               </InputLabel>

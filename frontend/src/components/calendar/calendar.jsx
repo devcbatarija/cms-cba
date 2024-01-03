@@ -94,7 +94,7 @@ const CalendarioClient = () => {
     }
 
     const handleEventClick = (e) => {
-        
+
     };
 
     const handleDateClick = (e) => {
@@ -116,6 +116,23 @@ const CalendarioClient = () => {
 
     const events = useSelector((state) => state.events.events);
     const [eventsByMonth, setEventsByMonth] = useState([])
+
+    const EventContent = (e) => {
+        console.log(e.event)
+        return (
+            <>
+                <div className="w-full bg-white flex flex-row text-cbaBlue items-center justify-center bg-zinc-100">
+                    <div className="w-1/5 p-1 h-full">
+                        <span>{e.event.allDay?'true':'false'}</span>
+                    </div>
+                    <span className="h-5 w-1 bg-red-500"></span>
+                    <div className="w-4/5 p-1 overflow-hidden">
+                        <h1 className=" font-semibold">{e.event.title}</h1>
+                    </div>
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
@@ -156,6 +173,7 @@ const CalendarioClient = () => {
                         datesSet={updateTitle}
                         eventClick={handleEventClick}
                         dateClick={handleDateClick}
+                        // eventContent={EventContent}
                     />
                 </div>
                 <div className="mt-5 lg:mt-0">

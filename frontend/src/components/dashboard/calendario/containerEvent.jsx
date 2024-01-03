@@ -4,16 +4,14 @@ import EventPreview from "./eventPreview";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getEvents } from "../../../redux-toolkit/actions/eventActions";
 
 
-const ContarinerNewEvent = ({
-  setData,
-  data
-}) => {
-  const dispatch= useDispatch();
+const ContarinerNewEvent = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
   const [Evento, setEvento] = useState({
     id: "",
     title: "",
@@ -37,7 +35,7 @@ const ContarinerNewEvent = ({
   const navigate = useNavigate();
   const handleSubmitEvent = async (urls) => {
     try {
-      const enviar = data ? data : Evento
+      const enviar = Evento
       const response = await axios.post("datosevento/create", {
         evento: {
           title: enviar.title,
@@ -65,49 +63,23 @@ const ContarinerNewEvent = ({
           multimedia: [],
           categoria: "Cine",
         });
-        if (data) {
-          setData({
-            ...data,
-            id: "",
-            title: "",
-            start: "",
-            end: "",
-            color: "",
-            tipo: "",
-            start_Time: "",
-            end_Time: "",
-            allDay: true,
-            state: true
-          })
         navigate('/dashboard/Calendario/calendario')
-      }
-        else {
-          setEvento({
-            ...Evento,
-            id: "",
-            title: "",
-            start: "",
-            end: "",
-            color: "",
-            tipo: "General",
-            start_Time: "",
-            end_Time: "",
-            state: true,
-            allDay: true,
-          })
-        navigate('/dashboard/Calendario/addEvent')
-      }
-      dispatch(getEvents())
+        dispatch(getEvents())
       }
     } catch (error) {
-      console.log(error)
     }
   };
   useEffect(() => {
-    idUser ? setEvento({
-      ...Evento,
-      UsuarioIdUsuario: idUser
-    }) : null
+    if (location.state?.prevPath === '/dashboard/Calendario/calendario' && location.state?.data) {
+      setEvento(location.state.data)
+      location.state = null
+    }
+    else {
+      idUser ? setEvento({
+        ...Evento,
+        UsuarioIdUsuario: idUser
+      }) : null
+    }
   }, [])
   return (
     <div className="grid shadow border bg-zinc-100 lg:py-5 ">
@@ -116,8 +88,8 @@ const ContarinerNewEvent = ({
           datosEvento={datosEvento}
           setDatosEvento={setDatosEvento}
           handleSubmitEvent={handleSubmitEvent}
-          data={data ? data : Evento}
-          setData={setData ? setData : setEvento}
+          data={location.state?.data ? location.state.data : Evento}
+          setData={setEvento}
         />
       </div>
     </div>

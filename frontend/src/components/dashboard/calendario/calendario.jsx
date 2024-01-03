@@ -20,9 +20,8 @@ import { toast } from "react-hot-toast";
 import dayjs from "dayjs";
 import BasicPopover from "./widgets/popover";
 import ModalUpdateEvent from './modalUpdateEvent';
-import ContarinerNewEvent from './containerEvent';
 import Dropdown from './dropdownButton';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const views = [
     { id: 1, view: 'dayGridMonth', txt: 'Mes' },
@@ -31,9 +30,37 @@ const views = [
 ]
 
 const Calendario = () => {
+
+    // declaracion de variables 
     const location = useLocation();
+    const navigate = useNavigate();
     const calendarRef = useRef(null);
     const dispatch = useDispatch();
+    const [title, setTitle] = useState('');
+    const [tipoModal, setTipoModal] = useState('Evento');
+    const [myDraggable, setMyDraggable] = useState(null);
+    const events = useSelector((state) => state.events.events);
+    const eventsPredefinidos = useSelector((state) => state.events.eventsPredefinidos);
+    const [containerEl, setContainerEl] = useState(null);
+    const userLogin = useSelector((state) => state.login.user)
+    const [open, setOpen] = useState(false);
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [idEvent, setIdEvent] = useState(null);
+    const [data, setData] = useState({
+        id: "",
+        title: "",
+        start: "",
+        end: "",
+        color: "",
+        tipo: "",
+        start_Time: "",
+        end_Time: "",
+        state: true,
+        allDay: true,
+        UsuarioIdUsuario: userLogin._userId
+    })
+
+
     const changeView = (view) => {
         let calendarApi = calendarRef.current.getApi();
         calendarApi.changeView(view.view);
@@ -52,46 +79,19 @@ const Calendario = () => {
         calendarApi.today();
     };
 
-    const [title, setTitle] = useState('');
-
     const updateTitle = (e) => {
         setTitle(e.view.title);
     }
 
-
-
-    const [tipoModal, setTipoModal] = useState('Evento');
-    const [myDraggable, setMyDraggable] = useState(null);
-    const events = useSelector((state) => state.events.events);
-    const eventsPredefinidos = useSelector((state) => state.events.eventsPredefinidos);
-    const [containerEl, setContainerEl] = useState(null);
-    const userLogin = useSelector((state) => state.login.user)
-    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
         limpiarDatos()
     }
 
-    const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const handleOpenModalUpdate = () => setOpenModalUpdate(true);
     const handleCloseModalUpdate = () => setOpenModalUpdate(false);
 
-    const [idEvent, setIdEvent] = useState(null);
-
-    const [data, setData] = useState({
-        id: "",
-        title: "",
-        start: "",
-        end: "",
-        color: "",
-        tipo: "",
-        start_Time: "",
-        end_Time: "",
-        state: true,
-        allDay: true,
-        UsuarioIdUsuario: userLogin._userId
-    })
     useEffect(() => {
         setContainerEl(document.getElementById("myeventlist"));
         if (containerEl != null && myDraggable == null) {
@@ -169,12 +169,15 @@ const Calendario = () => {
     useEffect(() => {
         if (location.state?.prevPath === '/dashboard/Calendario/addEvent') {
             setOpen(!open)
+            setData(location.state.data)
+            location.state = null
         }
-        setData({
-            ...data,
-            UsuarioIdUsuario: userLogin._userId,
-            tipo: location.state!=null ? location.state.tipo : data.tipo
-        })
+        else {
+            setData({
+                ...data,
+                UsuarioIdUsuario: userLogin._userId,
+            })
+        }
     }, [])
     const handleExternalEventDrop = async (e) => {
         const token = Cookies.get('token');
@@ -242,100 +245,94 @@ const Calendario = () => {
             allDay: true
         })
     }
+    useEffect(() => {
+        if (data.tipo == 'General') {
+            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: data } })
+        }
+    }, [data])
     return (
         <>
             {
-                data.tipo == 'General' ? (
-                    <ContarinerNewEvent
+                <ModalAddEvent
+                    setData={setData}
+                    data={data}
+                    open={open}
+                    handleClose={handleClose}
+                    tipoModal={tipoModal}
+                />
+            }
+            {
+                openModalUpdate ? <ModalUpdateEvent
+                    id={idEvent}
+                    open={openModalUpdate}
+                    handleClose={handleCloseModalUpdate}
+                    tipoModal={tipoModal}
+                /> : null
+            }
+
+            <div className={"grid grid-cols-1 lg:grid-cols-5 min-h-full lg:gap-4 p-5 "}>
+                <div className="calendar col-span-4">
+                    <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl'>
+                        <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
+                            <Button
+                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
+                                onClick={prev}
+                            ><NavigateBeforeRoundedIcon /></Button>
+
+                            <h1 className='uppercase font-semibold' >{title}</h1>
+                            <Button onClick={next}
+                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
+                            ><NavigateNextRoundedIcon /></Button>
+                        </div>
+                        <div className='flex justify-end  text-base'>
+                            <Button onClick={goToToday}>Hoy</Button>
+                            <Dropdown
+                                handleFunction={changeView}
+                                datos={views}
+                                initialSelected={views[0]}
+                                disabled={false}
+                            />
+                        </div>
+                    </div>
+                    <FullCalendar
+                        ref={calendarRef}
+                        headerToolbar={false}
+                        plugins={[daygrid, interaction, timegrid, multimonth]}
+                        fixedWeekCount={false}
+                        locales='es'
+                        initialView="dayGridMonth"
+                        events={events}
+                        editable={true}
+                        selectable={true}
+                        selectMirror={true}
+                        dayMaxEvents={true}
+                        weekends={true}
+                        droppable={true}
+                        eventDurationEditable={false}
+                        datesSet={updateTitle}
+                        select={handleDateSelect}
+                        eventClick={handleEventClick}
+                        eventDrop={handleEventDrop}
+                        drop={handleExternalEventDrop}
+                    />
+                </div>
+                <div className="mt-5 lg:mt-0">
+                    <div id="myeventlist" className="eventPred mb-3 bg-zinc-100 p-5 lg:h-80vh">
+                        <Typography sx={{}}>Eventos Predefinidos</Typography>
+                        <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
+                    </div>
+                    <BasicPopover
                         setData={setData}
                         data={data}
-                    />
-                ) : (
-                    <>
-                        {
-                            <ModalAddEvent
-                                setData={setData}
-                                data={data}
-                                open={open}
-                                handleClose={handleClose}
-                                tipoModal={tipoModal}
-                            />
-                        }
-                        {
-                            openModalUpdate ? <ModalUpdateEvent
-                                id={idEvent}
-                                open={openModalUpdate}
-                                handleClose={handleCloseModalUpdate}
-                                tipoModal={tipoModal}
-                            /> : null
-                        }
-
-                        <div className={"grid grid-cols-1 lg:grid-cols-5 min-h-full lg:gap-4 p-5 "}>
-                            <div className="calendar col-span-4">
-                                <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl'>
-                                    <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
-                                        <Button
-                                            sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
-                                            onClick={prev}
-                                        ><NavigateBeforeRoundedIcon /></Button>
-
-                                        <h1 className='uppercase font-semibold' >{title}</h1>
-                                        <Button onClick={next}
-                                            sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
-                                        ><NavigateNextRoundedIcon /></Button>
-                                    </div>
-                                    <div className='flex justify-end  text-base'>
-                                        <Button onClick={goToToday}>Hoy</Button>
-                                        <Dropdown
-                                            handleFunction={changeView}
-                                            datos={views}
-                                            initialSelected={views[0]}
-                                            disabled={false}
-                                        />
-                                    </div>
-                                </div>
-                                <FullCalendar
-                                    ref={calendarRef}
-                                    headerToolbar={false}
-                                    plugins={[daygrid, interaction, timegrid, multimonth]}
-                                    fixedWeekCount={false}
-                                    locales='es'
-                                    initialView="dayGridMonth"
-                                    events={events}
-                                    editable={true}
-                                    selectable={true}
-                                    selectMirror={true}
-                                    dayMaxEvents={true}
-                                    weekends={true}
-                                    droppable={true}
-                                    eventDurationEditable={false}
-                                    datesSet={updateTitle}
-                                    select={handleDateSelect}
-                                    eventClick={handleEventClick}
-                                    eventDrop={handleEventDrop}
-                                    drop={handleExternalEventDrop}
-                                />
-                            </div>
-                            <div className="mt-5 lg:mt-0">
-                                <div id="myeventlist" className="eventPred mb-3 bg-zinc-100 p-5 lg:h-80vh">
-                                    <Typography sx={{}}>Eventos Predefinidos</Typography>
-                                    <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
-                                </div>
-                                <BasicPopover
-                                    setData={setData}
-                                    data={data}
-                                    openModal={open}
-                                    handleCloseModal={handleClose}
-                                    tipoModal={tipoModal}
-                                    setTipoModal={setTipoModal}
-                                    handleOpen={handleOpen}
-                                    calendarRef={calendarRef}
-                                ></BasicPopover>
-                            </div>
-                        </div>
-                    </>
-                )
-            }
+                        openModal={open}
+                        handleCloseModal={handleClose}
+                        tipoModal={tipoModal}
+                        setTipoModal={setTipoModal}
+                        handleOpen={handleOpen}
+                        calendarRef={calendarRef}
+                    ></BasicPopover>
+                </div>
+            </div>
         </>
     );
 }
