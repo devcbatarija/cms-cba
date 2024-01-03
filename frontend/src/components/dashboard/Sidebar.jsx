@@ -100,6 +100,22 @@ export default function Sidebar() {
             ]}
           />
           <SidebarItem
+            icon={BookRoundedIcon}
+            label="Becas"
+            subItems={[
+              {
+                label: "Tabla",
+                to: "/dashboard/becanav/table",
+                icon: <TocRoundedIcon></TocRoundedIcon>,
+              },
+              {
+                label: "Crear nueva",
+                to: "/dashboard/becanav/add",
+                icon: <BookmarkAddRoundedIcon></BookmarkAddRoundedIcon>,
+              },
+            ]}
+          />
+          <SidebarItem
             icon={CalendarMonthRoundedIcon}
             label="Calendario"
             subItems={[

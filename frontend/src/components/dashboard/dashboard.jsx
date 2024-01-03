@@ -4,7 +4,6 @@ import { Outlet } from "react-router-dom";
 import DashNavbar from "./DashboardNavbar/DashNavbar";
 
 function DashboardPage() {
-  console.log("hola dashboard")
   return (
     <>
       <DashNavbar />

@@ -29,6 +29,7 @@ module.exports = {
       throw new ClienteError("No hay datos para cargar", 400);
     }
     const result = await postUsuario(req.body);
+    console.log("result ",result)
     response(res, 200, result);
   },
   deleteById: async (req, res) => {
@@ -61,7 +62,8 @@ module.exports = {
 
 
   getById: async (req, res) => {
-    response(res, 200, response);
+    const result = await getById(req.params.id);
+    response(res, 200, result);
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
@@ -103,7 +105,7 @@ module.exports = {
                     cursor:pointes;
                     width:100px;
                     height:30px;
-                " href="http://localhost:5173/login"
+                " href="https://www.webpage.cba.org.bo/login"
                 >Iniciar secion</a>
                 </p>
             </div>

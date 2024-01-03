@@ -27,8 +27,8 @@ function EducationUSA() {
     ];
 
     const imageUrl = "https://th.bing.com/th/id/R.169a44cef96cc4d44c78663afb2a43fd?rik=67VHGtHLvgIFjA&riu=http%3a%2f%2fmidliferoadtrip.tv%2fwp-content%2fuploads%2f2010%2f08%2fpassport-stamps-1.png&ehk=ikz67Xo5MSMjz1IGA2Q1KLU%2ffBOabK%2flvsfZOm5BRpA%3d&risl=&pid=ImgRaw&r=0";
-    const imageqr = "https://traders.studio/wp-content/uploads/2021/04/qr-code-bc94057f452f4806af70fd34540f72ad.png";
-    const imageBanner = "https://i.ibb.co/QK7Sdh2/image.png";
+    const imageqr = "https://i.ibb.co/B3HL9vF/R.jpg";
+    const imageBanner = "https://i.ibb.co/p0j0nCn/education-USa.png";
     const acercadenos = `En Bolivia estamos ubicados en 5 centros, ubicados en las ciudades de La Paz, Cochabamba, Tarija y Sucre.
     Nos comprometemos a proporcionar informacion precisa y actualizada sobre las oportunidades academicas
     y de financiamiento de unstituciones acreditadas en los Estados Unidos.`;

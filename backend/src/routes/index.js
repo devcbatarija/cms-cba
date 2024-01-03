@@ -12,6 +12,7 @@ const datos_EventoRoutes = require('./datos_EventoRoutes');
 const galleryRoutes=require('./gallery_Routes');
 const ambienteRoutes=require('./ambiente_Routes');
 const programPrices=require('./programPriceRoute')
+const becaRoutes=require('./becaRoutes')
 
 const router=Router();
 
@@ -28,6 +29,7 @@ router.use('/datosevento',datos_EventoRoutes)
 router.use('/gallery', galleryRoutes)
 router.use('/environment', ambienteRoutes)
 router.use('/programPrices', programPrices)
+router.use('/beca', becaRoutes)
 
 
 module.exports=router;

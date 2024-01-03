@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { handleUpload } from "../../services/functions";
 import { SuccessAlert } from "../toastAlerts/success";
+import { ErrorAlert } from "../toastAlerts/errorAlerts";
 const Register = () => {
   const [form, setForm] = useState({
     correo: "",
@@ -58,8 +59,7 @@ const Register = () => {
         ci: watch("ci"),
         password: watch("password"),
         rol: watch("rol"),
-      }); ///valid/email
-      if (response.status === 200) {
+      }); ///valid/email 
         setSpinner(false);
         toast.custom(
           <SuccessAlert
@@ -67,16 +67,22 @@ const Register = () => {
             message={"Registro exitoso."}
           ></SuccessAlert>
         );
-        navigate("/login");
-      }
-      if (response.data.messageError) {
-        setError({
-          ...error,
-          z_errorForm: response.data.messageError,
-        });
-        return;
-      }
-    } catch (error) {
+        navigate("/login"); 
+      // if (response.data.messageError) {
+      //   setSpinner(false);
+      //   setError({
+      //     ...error,
+      //     z_errorForm: response.data.messageError,
+      //   });
+      //   return;
+      // }
+    } catch (error) { 
+      setSpinner(false);
+      toast.custom(
+        <ErrorAlert
+          w={"w-4/12"}
+          message={error.message}></ErrorAlert>
+      )
       console.log(error);
     }
   };
@@ -119,7 +125,7 @@ const Register = () => {
   const onSubmitFinal = handleSubmit(async () => {
     handleOnSubmit();
   });
-  const isObjectEmpty = (obj)=> {
+  const isObjectEmpty = (obj) => {
     return Object.keys(obj).length === 0;
   }
   return (
@@ -194,7 +200,7 @@ const Register = () => {
                   value: 8,
                   message: "Celular debe tener máximo 8 caracteres",
                 },
-                validate:(value)=>{
+                validate: (value) => {
                   if (value <= 0) {
                     return "Celular debe ser mayor a -1";
                   }
@@ -307,7 +313,6 @@ const Register = () => {
             {spinner ? (
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <CircularProgress />
-                hola
               </Box>
             ) : (
               <button
@@ -480,13 +485,13 @@ const Register = () => {
                 </li>
                 <li className="mb-10 ml-6">
                   {watch("ci") &&
-                  watch("image") &&
-                  watch("correo") &&
-                  watch("celular") &&
-                  watch("password") &&
-                  watch("apellidos") &&
-                  watch("fecha_Nacimiento") &&
-                  isObjectEmpty(errors) ? (
+                    watch("image") &&
+                    watch("correo") &&
+                    watch("celular") &&
+                    watch("password") &&
+                    watch("apellidos") &&
+                    watch("fecha_Nacimiento") &&
+                    isObjectEmpty(errors) ? (
                     <span className="absolute flex items-center justify-center w-8 h-8 bg-green-300 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-gray-700">
                       <svg
                         className="w-3.5 h-3.5 text-green-500 dark:text-green-400"
