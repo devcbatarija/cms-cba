@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "@mui/material/Table";
 import {
-  deleteStateAllPublications,
-  deselectAllPublications,
-  deselectPublication,
-  getAllPublication,
-  selectAllPublications,
-  selectPublication,
-} from "../../../redux-toolkit/actions/publicationActions";
+  deleteStateAllBecas,
+  deselectAllBecas,
+  deselectBeca,
+  getAllBeca,
+  selectAllBecas,
+  selectBeca,
+} from "../../../redux-toolkit/actions/becaActions";
 import {
   Avatar,
   Button,
@@ -26,71 +26,71 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import AddIcon from "@mui/icons-material/Add";
-import ModalUpdatePublication from "./modalUpdatePublication";
+import ModalUpdateBeca from "./modalUpdateBeca";
 import axios from "axios";
 
 
-export default function PublicationTable() {
+export default function BecaTable() {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.publications.publications); 
-  const selectedPublications = useSelector(
-    (state) => state.publications.selectedPublications
+  const data = useSelector((state) => state.becas.becas); 
+  const selectedBecas = useSelector(
+    (state) => state.becas.selectedBecas
   );
   const [selectAll, setSelectAll] = useState(false);
 
   const [open, setOpen] = useState(false);
-  const [selectedPublicationModal, setSelectedPublicationModal] = useState("");
+  const [selectedBecaModal, setSelectedBecaModal] = useState("");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
  
-  const [openAddPublication, setOpenAddPublication] = useState(false);
+  const [openAddBeca, setOpenAddBeca] = useState(false);
 
-  const handleOpenAddPublication = () => setOpenAddPublication(true);
-  const handleCloseAddPublication = () => setOpenAddPublication(false);
+  const handleOpenAddBeca = () => setOpenAddBeca(true);
+  const handleCloseAddBeca = () => setOpenAddBeca(false);
 
   
   const handleSelectAll = () => {
     if (!selectAll) {
-      dispatch(selectAllPublications(data.map((pub) => pub.id_Publicacion)));
+      dispatch(selectAllBecas(data.map((pub) => pub.id_Beca)));
       setSelectAll(true);
     } else {
-      dispatch(deselectAllPublications());
+      dispatch(deselectAllBecas());
       setSelectAll(false);
     }
   };
 
   const handleModal = (id) => {
-    setSelectedPublicationModal(id);
+    setSelectedBecaModal(id);
     handleOpen(true);
   };
 
   
   const handleDelete = async () => {
-    const response = await axios.post("publication/delete/select", {
-      ids: selectedPublications,
+    const response = await axios.post("beca/delete/select", {
+      ids: selectedBecas,
     });
     setTimeout(() => {
-      dispatch(getAllPublication());
-      dispatch(deselectAllPublications());
-      dispatch(deleteStateAllPublications());
+      dispatch(getAllBeca());
+      dispatch(deselectAllBecas());
+      dispatch(deleteStateAllBecas());
       toast.success("Borrado exitoso!");
     }, 1500);
   };
 
  
-  const handleSelectPublication = (pubId) => {
-    if (selectedPublications.includes(pubId)) {
-      dispatch(deselectPublication(pubId));
+  const handleSelectBeca = (pubId) => {
+    if (selectedBecas.includes(pubId)) {
+      dispatch(deselectBeca(pubId));
       setSelectAll(false);
     } else {
-      dispatch(selectPublication(pubId));
+      dispatch(selectBeca(pubId));
     }
   };
 
   useEffect(() => {
-    dispatch(getAllPublication()); 
+    dispatch(getAllBeca()); 
   }, [dispatch]);
 
   return (
@@ -100,12 +100,12 @@ export default function PublicationTable() {
     >
     
       {open ? (
-        <ModalUpdatePublication
-          id={selectedPublicationModal}
+        <ModalUpdateBeca
+          id={selectedBecaModal}
           open={open}
           handleOpen={handleOpen}
           handleClose={handleClose}
-        ></ModalUpdatePublication>
+        ></ModalUpdateBeca>
       ) : null}
       <Grid
         container
@@ -116,14 +116,14 @@ export default function PublicationTable() {
       >
        
         <Button
-          disabled={selectedPublications.length > 0 ? false : true}
+          disabled={selectedBecas.length > 0 ? false : true}
           variant="contained"
           color="error"
           sx={{ borderRadius: "3px" }}
           onClick={handleDelete}
           startIcon={<DeleteIcon />}
         >
-          Borrar {selectedPublications.length}
+          Borrar {selectedBecas.length}
         </Button>
       </Grid>
      
@@ -157,8 +157,8 @@ export default function PublicationTable() {
               <TableCell component="th" scope="row" padding="checkbox">
                 <Checkbox
                   color="primary"
-                  checked={selectedPublications.includes(row.id_Publicacion)}
-                  onChange={() => handleSelectPublication(row.id_Publicacion)}
+                  checked={selectedBecas.includes(row.id_Beca)}
+                  onChange={() => handleSelectBeca(row.id_Beca)}
                 />
               </TableCell>
               <TableCell align="center">{row.titulo}</TableCell>
@@ -193,7 +193,7 @@ export default function PublicationTable() {
                 <Button
                   variant="contained"
                   color="success"
-                  onClick={() => handleModal(row.id_Publicacion)}
+                  onClick={() => handleModal(row.id_Beca)}
                   sx={{ borderRadius: "0px" }}
                   endIcon={<EditIcon></EditIcon>}
                 >

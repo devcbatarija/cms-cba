@@ -23,13 +23,13 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { getAllPublication } from "../../../redux-toolkit/actions/publicationActions";
+import { getAllBeca } from "../../../redux-toolkit/actions/becaActions";
 
-export default function ModalUpdatePublication({ id, open, handleClose }) {
+export default function ModalUpdateBeca({ id, open, handleClose }) {
   const [spinner, setSpinner] = useState(false);
   const [skeleton, setSkeleton] = useState(true);
   const [form, setForm] = useState({
-    id_Publicacion: "",
+    id_Beca: "",
     titulo: "",
     descripcion: "",
     multimedia: [],
@@ -48,9 +48,9 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
     });
   };
 
-  const getPublicationById = async () => {
+  const getBecaById = async () => {
     try {
-      const response = await axios.get(`publication/getone/${id}`);
+      const response = await axios.get(`beca/getone/${id}`);
       console.log(response);
       setForm(response.data.results);
       setSkeleton(false);
@@ -63,11 +63,11 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.put(`publication/update/${id}`, form);
+      const response = await axios.put(`beca/update/${id}`, form);
       console.log(response);
       setTimeout(() => {
         toast.success("Actualización exitosa!");
-        dispatch(getAllPublication()); // Actualizar el estado global
+        dispatch(getAllBeca()); // Actualizar el estado global
         setSpinner(false);
         handleClose();
       }, 1500);
@@ -77,14 +77,14 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
   };
 
   useEffect(() => {
-    getPublicationById();
+    getBecaById();
   }, []);
 
   return (
     <div>
       <StyledModal
-        aria-labelledby="modal-update-publication-title"
-        aria-describedby="modal-update-publication-description"
+        aria-labelledby="modal-update-beca-title"
+        aria-describedby="modal-update-beca-description"
         open={open}
         onClose={handleClose}
       >
@@ -246,7 +246,7 @@ export default function ModalUpdatePublication({ id, open, handleClose }) {
   );
 }
 
-ModalUpdatePublication.propTypes = {
+ModalUpdateBeca.propTypes = {
   id: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,

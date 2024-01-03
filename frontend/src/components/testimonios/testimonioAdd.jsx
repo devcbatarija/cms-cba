@@ -105,7 +105,7 @@ export const TestimonioAdd = ({
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >Insertar imagen</label>
         <div name="up">
-        <Uploader publicacion={image} setPublicacion={setImage} cantMax={1} ></Uploader>
+          <Uploader publicacion={image} setPublicacion={setImage} cantMax={1} ></Uploader>
         </div>
       </div>
       <form
