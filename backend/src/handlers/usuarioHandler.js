@@ -105,7 +105,7 @@ module.exports = {
                     cursor:pointes;
                     width:100px;
                     height:30px;
-                " href="https://www.webpage.cba.org.bo/login"
+                " href="https://cba.org.bo/login"
                 >Iniciar secion</a>
                 </p>
             </div>
