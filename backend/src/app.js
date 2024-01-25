@@ -13,13 +13,13 @@ server.disable("x-powered-by"); //eliminar el express service
 
 server.name="CBA"; //nombre api
 
-
+//http://localhost:5173
 server.use(morgan("dev"));
 server.use(bodyParser.urlencoded({extended:true,limit:"50mb"}));
 server.use(bodyParser.json({limit:"50mb"}));
 server.use(cookieParser());
 server.use((req,res,next)=>{
-    res.header("Access-Control-Allow-Origin","https://cba.org.bo");
+    res.header("Access-Control-Allow-Origin","http://localhost:5173");
     res.header("Access-Control-Allow-Credentials","true");
     res.header("Access-Control-Allow-Headers","Origin,X-Request-With, Content-Type,Accept,Authorization");
     res.header("Access-Control-Allow-Methods","GET,POST,PUT,DELETE");
@@ -36,7 +36,7 @@ server.use(fileUpload({
 server.use("/appi",router); //rutas
 //http://localhost:3001/api/
 server.use(cors({
-    origin: 'https://cba.org.bo/', // reemplaza esto con el origen de tu frontend
+    origin: '*', // reemplaza esto con el origen de tu frontend
     credentials: true
 })); 
 server.use((err,req,res,next)=>{
