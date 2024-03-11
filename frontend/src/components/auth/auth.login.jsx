@@ -37,6 +37,7 @@ const Login = () => {
         withCredentials: true,
         contentType: "application/json"
       });
+      console.log(response)
       navigate("/");
       reset();
       toast.custom((t) => (
