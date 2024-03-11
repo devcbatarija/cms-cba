@@ -1,6 +1,6 @@
 // Importa la biblioteca Day.js
 const dayjs= require('dayjs');
-const { Evento } = require("../db")
+const { Evento, Dato_Evento } = require("../db")
 
 module.exports = {
 
@@ -32,6 +32,14 @@ module.exports = {
             const clonedEvento = JSON.parse(JSON.stringify(event));
             clonedEvento.start=dayjs(clonedEvento.start).format("YYYY-MM-DD");
             clonedEvento.end=dayjs(clonedEvento.end).format("YYYY-MM-DD");
+            if(event.tipo=='General'){
+              const datosEvento = await Dato_Evento.findAll({
+                where:{
+                  EventoId: id
+                }
+              })
+              return {clonedEvento, datosEvento}
+            }
             return clonedEvento
         } catch (error) {
             return error;

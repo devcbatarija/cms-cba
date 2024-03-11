@@ -59,6 +59,7 @@ export default function ModalUpdateEvent({
         const path=tipoModal=='Evento'?'event':'eventpredefinido'
         const event = axios.get(`${path}/getById/${id}`)
             .then(response => {
+                console.log(response.data)
                 const event = response.data.results;
                 setData({
                     ...data,

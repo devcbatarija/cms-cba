@@ -14,7 +14,6 @@ module.exports = {
 
                 }]
             });
-            console.log("aqui")
 
             const eventos = await Evento.findAll({
                 where: {
