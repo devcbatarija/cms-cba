@@ -11,6 +11,8 @@ const {
   deleteSelect,
   updateImage,
   getUserDetails,
+  getUsersFromGraficsCookie,
+  qrReader,
 } = require("../controllers/usuarioController");
 const { ClientError } = require("../utils/errors");
 const response = require("../utils/response");
@@ -29,7 +31,7 @@ module.exports = {
       throw new ClienteError("No hay datos para cargar", 400);
     }
     const result = await postUsuario(req.body);
-    console.log("result ",result)
+    console.log("result ", result);
     response(res, 200, result);
   },
   deleteById: async (req, res) => {
@@ -50,16 +52,14 @@ module.exports = {
     response(res, 200, result);
   },
 
-///model to update
-  
+  ///model to update
+
   authLogin: async (req, res) => {
-      const result = await authLogin(req.body);
-      console.log(result)
-        res.cookie("token", result.token);
-        res.status(200).json(result.usLogin);
+    const result = await authLogin(req.body);
+    console.log(result);
+    res.cookie("token", result.token);
+    res.status(200).json(result.usLogin);
   },
-
-
 
   getById: async (req, res) => {
     const result = await getById(req.params.id);
@@ -67,8 +67,8 @@ module.exports = {
   },
   emailVerify: async (req, res) => {
     //verificar si ya existe un email
-      const result = await emailVerify(req.body);
-      response(res,200,result);
+    const result = await emailVerify(req.body);
+    response(res, 200, result);
   },
   emailVerifyToken: async (req, res) => {
     //verificar el registro mediante token con email
@@ -138,5 +138,22 @@ module.exports = {
       res.status(500).json({ messageError: error.message });
     }
   },
+  getUsersFromGraficsCookie: async (req,res)=> {
+    try {
+      const results = await getUsersFromGraficsCookie();
+      response(res,200,results)
+    } catch (error) {
+      throw new ClientError('Error no se pudo obtener la información',401)
+    }
+  },
+  qrReader:async(req,res)=>{
+    const data = req.body;
+    try {
+      const result = await qrReader(data);
+      response(res,200,result)
+    } catch (error) {
+      throw new ClientError('Error no se pudo obtener la información',401)
+    }
+  }
 };
 //cambiar propertys colors primary secondary

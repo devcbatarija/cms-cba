@@ -11,7 +11,9 @@ const {
   getById,
   deleteSelect,
   updateImage,
-  getUserDetails
+  getUserDetails,
+  getUsersFromGraficsCookie,
+  qrReader
 } = require("../handlers/usuarioHandler");
 
 const { validToken, isAdmin } = require("../services/jwtservice");
@@ -37,4 +39,8 @@ router.post("/delete/select", isAdmin,deleteSelect); //agregar a programas
 router.put('/put/image',updateImage); //editar imagenes
 
 router.post("/form/register", formRegister); //registrar formulario
+
+router.get("/range/ages", catchedAsync(getUsersFromGraficsCookie));
+
+router.post("/qr/reader/", catchedAsync(qrReader));
 module.exports=router;
