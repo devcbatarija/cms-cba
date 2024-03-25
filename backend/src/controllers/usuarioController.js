@@ -1,6 +1,7 @@
 const { Usuario } = require("../db");
 const { signIn } = require("../services/jwtservice");
 const { sentTokenVerify } = require("../services/nodemailerservice");
+const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
 const { uploadImage } = require("./uploadController");
 
@@ -14,6 +15,7 @@ function formatDate(dateString) {
 module.exports = {
   getAllUsuarios: async () => {
     const response = await Usuario.findAll();
+    console.log(response);
     return response;
   },
   postUsuario: async (user) => {
@@ -180,4 +182,71 @@ module.exports = {
     const user = await Usuario.findByPk(idUser);
     return user;
   },
+  getUsersFromGraficsCookie: async () => {
+    try {
+      // Obtener todos los usuarios
+      const users = await Usuario.findAll();
+
+      const usersFormatDate = []; //aqui llenare todo
+
+      for (const [index, date] of users.entries()) {
+        if (usersFormatDate.length == 0) {
+          //aqui comprobare
+          const comprobar = calculateAge(data.fecha_Nacimiento);
+          usersFormatDate.push({ comprobar, count: 1 });
+        } else {
+          for (const [indextwo, datetwo] of usersFormatDate.entries()) {
+            if (calculateAge(date.fecha_Nacimiento) == datetwo[indextwo].age) {
+              usersFormatDate[index].age = +1;
+            } else {
+              const comprobar = calculateAge(data.fecha_Nacimiento);
+              usersFormatDate.push({ comprobar, count: 1 });
+            }
+          }
+        }
+      }
+      console.log(usersFormatDate);
+      const usuariosActivos = users.filter((user) => user.estado === true);
+      const usuariosInactivos = users.filter((user) => user.estado === false);
+
+      const usuariosPorRol = {};
+      users.forEach((user) => {
+        if (usuariosPorRol[user.rol]) {
+          usuariosPorRol[user.rol]++;
+        } else {
+          usuariosPorRol[user.rol] = 1;
+        }
+      });
+
+      // Ahora tienes los datos clasificados, puedes enviarlos para graficar
+      return {
+        usuariosActivos,
+        usuariosInactivos,
+        usuariosPorRol,
+        usersFormatDate,
+      };
+    } catch (error) {
+      return error;
+    }
+  },
+  qrReader:async(data)=>{
+    try { 
+      return true;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
 };
+const calculateAge = (dateString) => {
+  const userDate = new Date(dateString);
+  const currentDate = new Date();
+
+  const ageInMilliseconds = currentDate - userDate;
+  const ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
+
+  return Math.floor({ageInYears:ageInYears,count:1});
+}
+// const comprobar = (data,usersFormat) => {
+//   const test = usersFormat.find((user) => user.ageInYears==);
+// }
