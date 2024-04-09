@@ -1,6 +1,5 @@
 import { useState } from "react";
 import EventAdd from "./eventAdd";
-import EventPreview from "./eventPreview";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";

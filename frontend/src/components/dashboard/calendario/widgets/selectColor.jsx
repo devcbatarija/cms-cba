@@ -70,23 +70,22 @@ export default function SelectColorList({
                     {({ selected, active }) => (
                       <>
                         <div className="flex items-center">
-                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor: color.color }} />
+                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor: color.color }}>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  active ? 'text-white' : 'text-white'
+                                )}
+                              >
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            ) : null}
+                          </span>
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
                           </span>
                         </div>
-
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              active ? 'text-white' : 'text-white',
-                              'absolute inset-y-0 right-0 flex items-center pr-4'
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
                       </>
                     )}
                   </Listbox.Option>

@@ -59,7 +59,6 @@ export default function ModalUpdateEvent({
         const path=tipoModal=='Evento'?'event':'eventpredefinido'
         const event = axios.get(`${path}/getById/${id}`)
             .then(response => {
-                console.log(response.data)
                 const event = response.data.results;
                 setData({
                     ...data,
@@ -309,8 +308,8 @@ export default function ModalUpdateEvent({
                                     onChange={handleChange}
                                     name="state"
                                 >
-                                    <MenuItem value={true}>Activo</MenuItem>
-                                    <MenuItem value={false}>Baja</MenuItem>
+                                    <MenuItem value={true}>Visible</MenuItem>
+                                    <MenuItem value={false}>Oculto</MenuItem>
                                 </Select>
                             </Grid>
                             <div className="grid grid-cols-2 gap-2">

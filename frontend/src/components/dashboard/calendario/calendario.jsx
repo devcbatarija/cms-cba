@@ -131,10 +131,18 @@ const Calendario = () => {
         handleOpen()
     }
 
-    const handleEventClick = (e) => {
-        setTipoModal("Evento");
-        setIdEvent(e.event.id)
-        handleOpenModalUpdate()
+    const handleEventClick = async (e) => {
+        const result = await axios.get(`event/getById/${e.event.id}`).then(response => {
+            const res = response.data.results
+            if (res.General) {
+                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: res } })
+            }
+            else {
+                setTipoModal("Evento");
+                setIdEvent(e.event.id)
+                handleOpenModalUpdate()
+            }
+        })
     }
     const handleEventDrop = async (e) => {
         const token = Cookies.get('token');
