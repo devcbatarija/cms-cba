@@ -117,6 +117,7 @@ module.exports = {
         }
     },
     addDatosEvento: async (e) => {
+        console.log(e);
         try {
             const evento = {
                 title: e.evento.title,
@@ -133,7 +134,7 @@ module.exports = {
             const newEvento = await Evento.create(evento);
             const datosEvento = {
                 descripcion: e.datos_Evento.descripcion,
-                multimedia: e.datos_Evento.multimedia,
+                multimedia: e.datos_Evento.multimedia, //url imagen
                 categoria: e.datos_Evento.categoria,
                 EventoId: newEvento.id,
             }
