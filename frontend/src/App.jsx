@@ -71,6 +71,7 @@ function App() {
   const navigate = useNavigate();
   // Función para validar el token
   const validToken = async () => {
+    console.log("VALIDAMOS SESION");
     const token = Cookie.get("token");
     const config = {
       headers: {
@@ -161,7 +162,6 @@ function App() {
                 </ValidateRedir>
               }
             />
-            
             <Route path="/becas" element={<Becas />} />
             <Route path="/programs/children" element={<ProgramChildren />} />
             <Route path="/publications" element={<Publications />} />
@@ -214,7 +214,6 @@ function App() {
                   element={<ContarinerNewBeca />}
                 />
               </Route>
-
               <Route path="/dashboard/program" element={<ProgramaNav />}>
                 <Route
                   path="/dashboard/program/tableprogram"
@@ -225,37 +224,24 @@ function App() {
                   element={<ProgramAddForm />}
                 />
               </Route>
-              <Route
-                path="/dashboard/spaces"
-                element={
-                  <GalleryNav />
-                }
-              >
+              <Route path="/dashboard/spaces" element={<GalleryNav />}>
                 <Route
                   path="/dashboard/spaces/ambienteadd"
-                  element={
-                    <AmbienteAddComponent />
-                  }
+                  element={<AmbienteAddComponent />}
                 />
                 <Route
                   path="/dashboard/spaces/imageadd"
-                  element={
-                    <GalleryAddComponent />
-                  }
+                  element={<GalleryAddComponent />}
                 />
                 <Route
                   path="/dashboard/spaces/table"
-                  element={
-                    <GalleryTable />
-                  }
+                  element={<GalleryTable />}
                 />
               </Route>
               <Route
                 path="/dashboard/testimononios"
                 element={<TestimoniosContainer />}
               />
-
-
               <Route path="/dashboard/testimonio" element={<TestimonioNav />}>
                 <Route
                   path="/dashboard/testimonio/table"
@@ -266,7 +252,6 @@ function App() {
                   element={<TestimoniosContainer />}
                 />
               </Route>
-
               ///
               <Route
                 path="/dashboard/tableuser"

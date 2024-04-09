@@ -104,8 +104,8 @@ module.exports = {
       nombres: userExist.nombres,
       apellidos: userExist.apellidos,
       rol: userExist.rol,
-    };
-    console.log({ usLogin: usLogin, token: tokengen });
+      token:tokengen
+    }; 
     return { usLogin: usLogin, token: tokengen };
   },
 

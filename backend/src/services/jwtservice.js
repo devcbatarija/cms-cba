@@ -32,16 +32,18 @@ module.exports = {
   },
   validToken: async (req, res) => {
     try {
-      
-      const token = req.headers.authorization.split("Bearer ")[1];
+      const token = req.headers.authorization.split("Bearer ")[1]; 
+      console.log(token);
       // if(!token){
       //   return res.status(200).json({ user: usResult });
       // }
       jwt.verify(token, keymaster, async (error, decoded) => {
         const currentTime = Math.floor(Date.now() / 1000);
         const usLogin = await Usuario.findByPk(decoded._userId);
-        if(!usLogin){
-          return res.status(404).json({ messageError: "El usuario no existe." });
+        if (!usLogin) {
+          return res
+            .status(404)
+            .json({ messageError: "El usuario no existe." });
         }
         const usResult = {
           _userId: usLogin.id_Usuario,
@@ -50,32 +52,67 @@ module.exports = {
           nombres: usLogin.nombres,
           apellidos: usLogin.apellidos,
           rol: usLogin.rol,
+          token,
         };
+        console.log(usResult);
         return res.status(200).json({ user: usResult });
       });
     } catch (error) {
       return res.status(400).json({ messageError: error.message });
     }
   },
-  isAdmin: async(req, res, next)=>{
+  validTokenMobile: async (req, res) => {
+    try { 
+      const { token } = req.body;
+      console.log(token);
+      // if(!token){
+      //   return res.status(200).json({ user: usResult });
+      // }
+      jwt.verify(token, keymaster, async (error, decoded) => {
+        const currentTime = Math.floor(Date.now() / 1000);
+        const usLogin = await Usuario.findByPk(decoded._userId);
+        if (!usLogin) {
+          return res
+            .status(404)
+            .json({ messageError: "El usuario no existe." });
+        }
+        const usResult = {
+          _userId: usLogin.id_Usuario,
+          _profileImage: usLogin.image,
+          correo: usLogin.correo,
+          nombres: usLogin.nombres,
+          apellidos: usLogin.apellidos,
+          rol: usLogin.rol,
+          token,
+        };
+        console.log(usResult);
+        return res.status(200).json({ user: usResult });
+      });
+    } catch (error) {
+      return res.status(400).json({ messageError: error.message });
+    }
+  },
+  isAdmin: async (req, res, next) => {
     console.log(req.headers.authorization);
     try {
-      if(!req.headers.authorization){
-        return res.status(401).json({messageError:"Usuario no autorizado"});
+      if (!req.headers.authorization) {
+        return res.status(401).json({ messageError: "Usuario no autorizado" });
       }
       const token = req.headers.authorization.split("Bearer ")[1];
       jwt.verify(token, keymaster, async (error, decoded) => {
         const usLogin = await Usuario.findByPk(decoded._userId);
-        if(usLogin){
-          if(usLogin.rol=="Admin"){
+        if (usLogin) {
+          if (usLogin.rol == "Admin") {
             return next();
           }
-          return res.status(401).json({messageError:"Usuario no autorizado"})
+          return res
+            .status(401)
+            .json({ messageError: "Usuario no autorizado" });
         }
-        return res.status(404).json({messageError:"Usuario no encontrado"})
+        return res.status(404).json({ messageError: "Usuario no encontrado" });
       });
     } catch (error) {
-      return res.status(401).json({messageError:error.message})
+      return res.status(401).json({ messageError: error.message });
     }
-  }
+  },
 };
