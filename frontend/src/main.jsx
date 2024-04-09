@@ -7,13 +7,16 @@ import { Provider } from 'react-redux'
 import store from './redux-toolkit/store/store.js';
 import axios from 'axios';
 
-//axios.defaults.baseURL="https://www.cba.org.bo/appi/";
+// axios.defaults.baseURL="https://www.cba.org.bo/appi/";
 axios.defaults.baseURL="http://localhost:3001/appi/";
+// axios.defaults.baseURL = "https://www.oliviodev.com/appi/";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <Provider store={store}> 
-        <BrowserRouter>
-          <App />
-        </BrowserRouter> 
-    </Provider>
-)
+ 
+
+http: ReactDOM.createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+);

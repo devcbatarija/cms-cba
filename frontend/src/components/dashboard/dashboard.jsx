@@ -1,9 +1,12 @@
 import React from "react";
 import Sidebar from "./Sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import DashNavbar from "./DashboardNavbar/DashNavbar";
+import { InitDashboardGrafics } from "./InitDashboardGrafics";
+import LayoutGrafics from "./LayoutGrafics";
 
 function DashboardPage() {
+  const location = useLocation(); 
   return (
     <>
       <DashNavbar />
@@ -16,7 +19,11 @@ function DashboardPage() {
         </div>
         <div className=" w-11/12 sm:w-11/12 md:w-9/12 lg:w-10/12 xl:w-10/12">
           {/* El componente Outlet representa las rutas anidadas */}
-          <Outlet />
+          {location.pathname == "/dashboard" ? (
+            <LayoutGrafics/>
+          ) : (
+            <Outlet />
+          )}
         </div>
       </div>
     </>
