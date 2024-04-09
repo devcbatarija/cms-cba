@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const Dropdown = ({
+const DropdownTypeQR = ({
     handleFunction,
     datos,
     initialSelected,
@@ -34,10 +34,10 @@ const Dropdown = ({
                 disabled={disabled}
                 id="dropdown-button"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`${disabled ? 'cursor-not-allowed' : ''} inline-flex justify-center w-full px-3 py-1 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm `}
+                className={`${disabled ? 'cursor-not-allowed' : ''} flex flex-col justify-center items-center w-full px-3 py-1 text-[10px] font-medium text-white bg-cbaBlue rounded-r-md`}
             >
                 {selected.txt}
-                <div className='flex justify-center items-center h-6 ml-2'>
+                <div className=''>
                     {
                         isDropdownOpen ?
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
@@ -69,4 +69,4 @@ const Dropdown = ({
     );
 };
 
-export default Dropdown;
+export default DropdownTypeQR;
