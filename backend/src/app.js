@@ -13,7 +13,7 @@ server.disable("x-powered-by"); //eliminar el express service
 
 server.name="CBA"; //nombre api
 
-
+//http://localhost:5173
 server.use(morgan("dev"));
 server.use(bodyParser.urlencoded({extended:true,limit:"50mb"}));
 server.use(bodyParser.json({limit:"50mb"}));
@@ -33,7 +33,7 @@ server.use(fileUpload({
     useTempFiles : true,
     tempFileDir : './assets'
   }));
-server.use("/api",router); //rutas  /appi
+server.use("/appi",router); //rutas  /appi
 //http://localhost:3001/api/
 server.use(cors({
     origin: 'http://localhost:5173', // reemplaza esto con el origen de tu frontend https://cba.org.bo/

@@ -1,7 +1,8 @@
 // Importa la biblioteca Day.js
 const dayjs = require('dayjs');
-const { Dato_Evento, Evento } = require("../db")
+const { Dato_Evento, Evento, QR } = require("../db")
 const Sequelize = require('sequelize');
+const { ClientError } = require('../utils/errors');
 
 module.exports = {
 
@@ -58,7 +59,8 @@ module.exports = {
                     where: {
                         start: {
                             [Sequelize.Op.between]: [startOfMonth, endOfMonth]
-                        }
+                        },
+                        state: true
                     }
 
                 }]
@@ -70,7 +72,8 @@ module.exports = {
                     },
                     start: {
                         [Sequelize.Op.between]: [startOfMonth, endOfMonth]
-                    }
+                    },
+                    state: true
                 }
             });
             const clonedEventos = JSON.parse(JSON.stringify(eventos));
@@ -174,7 +177,7 @@ module.exports = {
                 },
                 {
                     where: {
-                        id: id,
+                        id_Evento: id,
                     },
                 }
             )

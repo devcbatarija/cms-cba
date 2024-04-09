@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const {
-  DB_USER, DB_PASSWORD, DB_HOST,DB_PORT,DB_NAME
+  DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME
 } = process.env;
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`, {
@@ -49,8 +49,16 @@ const {
   Ambientes,
   ProgramPrices,
   Beca,
-  PreRegistro
+  PreRegistro,
+  QR,
+  Consigna_Evento
 } = sequelize.models;
+Dato_Evento.hasMany(QR, { foreignKey: 'id_Evento' });
+QR.belongsTo(Dato_Evento, { foreignKey: 'id_Evento' });
+
+Dato_Evento.hasMany(Consigna_Evento, { foreignKey: 'id_Evento' });
+Consigna_Evento.belongsTo(Dato_Evento, { foreignKey: 'id_Evento' });
+
 Usuario.hasMany(Publicacion);
 Publicacion.belongsTo(Usuario);
 
