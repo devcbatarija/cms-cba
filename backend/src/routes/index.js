@@ -13,6 +13,7 @@ const galleryRoutes=require('./gallery_Routes');
 const ambienteRoutes=require('./ambiente_Routes');
 const programPrices=require('./programPriceRoute')
 const becaRoutes=require('./becaRoutes')
+const QR_Routes=require('./QR_Routes')
 
 const router=Router();
 
@@ -30,6 +31,7 @@ router.use('/gallery', galleryRoutes)
 router.use('/environment', ambienteRoutes)
 router.use('/programPrices', programPrices)
 router.use('/beca', becaRoutes)
+router.use('/QR', QR_Routes)
 
 
 module.exports=router;

@@ -3,11 +3,11 @@ import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 const colors = [
-  { nombre: 'Azul', color: '#0000FF' },
-  { nombre: 'Verde', color: '#00FF00' },
-  { nombre: 'Rojo', color: '#FF0000' },
-  { nombre: 'Amarillo', color: '#FFFF00' },
-  { nombre: 'Rosa', color: '#FF00FF' },
+  { nombre: 'Azul', color: '#003785' },
+  { nombre: 'Verde', color: '#98ff96' },
+  { nombre: 'Rojo', color: '#D50032' },
+  { nombre: 'Lila', color: '#b0c2f2' },
+  { nombre: 'Turquesa', color: '#96c4c4' },
 ];
 
 function classNames(...classes) {
@@ -70,23 +70,22 @@ export default function SelectColorList({
                     {({ selected, active }) => (
                       <>
                         <div className="flex items-center">
-                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor: color.color }} />
+                          <span className="h-5 w-5 flex-shrink-0 rounded-full" style={{ backgroundColor: color.color }}>
+                            {selected ? (
+                              <span
+                                className={classNames(
+                                  active ? 'text-white' : 'text-white'
+                                )}
+                              >
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            ) : null}
+                          </span>
                           <span
                             className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
                           >
                           </span>
                         </div>
-
-                        {selected ? (
-                          <span
-                            className={classNames(
-                              active ? 'text-white' : 'text-white',
-                              'absolute inset-y-0 right-0 flex items-center pr-4'
-                            )}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
                       </>
                     )}
                   </Listbox.Option>
