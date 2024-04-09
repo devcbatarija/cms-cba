@@ -57,7 +57,11 @@ module.exports = {
   authLogin: async (req, res) => {
     const result = await authLogin(req.body);
     console.log(result);
-    res.cookie("token", result.token);
+    res.cookie("token", result.token, {
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
+      httpOnly: true,
+    });
+    console.log(result.usLogin);
     res.status(200).json(result.usLogin);
   },
 
