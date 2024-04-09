@@ -15,7 +15,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import axios from "axios";
 import EventList from './eventList';
 import CuadroInscripcion from "../inscripcion/incripcion";
-import ModalQR from "./modalQR";
+import ModalQR from "./modalqr";
 dayjs.extend(localizedFormat);
 dayjs.locale('es');
 
