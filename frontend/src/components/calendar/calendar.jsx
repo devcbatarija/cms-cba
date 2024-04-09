@@ -15,6 +15,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import axios from "axios";
 import EventList from './eventList';
 import CuadroInscripcion from "../inscripcion/incripcion";
+import ModalQR from "./modalqr";
 dayjs.extend(localizedFormat);
 dayjs.locale('es');
 
@@ -25,6 +26,18 @@ const views = [
 ]
 
 const CalendarioClient = () => {
+    const [event, setEvent] = useState({})
+    const [openModalQR, setOpenModalQR] = useState(false)
+    const toggleOpenModalQr = () => {
+        setOpenModalQR(!openModalQR)
+        if (!openModalQR) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+
     const calendarRef = useRef(null);
     const changeView = (view) => {
         let calendarApi = calendarRef.current.getApi();
@@ -93,8 +106,13 @@ const CalendarioClient = () => {
         })
     }
 
-    const handleEventClick = (e) => {
-
+    const handleEventClick = async (e) => {
+        const result = await axios.get(`event/getById/${e.event.id}`).then(res => {
+            setEvent(res.data.results)
+        }).catch(err => {
+            console.log(err)
+        })
+        toggleOpenModalQr()
     };
 
     const handleDateClick = (e) => {
@@ -117,8 +135,38 @@ const CalendarioClient = () => {
     const events = useSelector((state) => state.events.events);
     const [eventsByMonth, setEventsByMonth] = useState([])
 
+    const EventContent = (e) => {
+        // console.log(e.event)
+        return (
+            <>
+                <div class="notification items-center ">
+                    <div class="notiglow bg-red-100 h-[20px] w-[5px] rounded-full"></div>
+                    <div class="notititle">{e.event.title}</div>
+                    {/* <div class="notibody">Contribute to Open Source UI Elements</div> */}
+                </div>
+
+                {/* <div className="w-full bg-white flex flex-row text-cbaBlue items-center justify-center bg-zinc-100">
+                    <div className="w-1/5 p-1 h-full">
+                        <span>{e.event.allDay ? 'true' : 'false'}</span>
+                    </div>
+                    <span className="h-5 w-1 bg-red-500"></span>
+                    <div className="w-4/5 p-1 overflow-hidden">
+                        <h1 className=" font-semibold"></h1>
+                    </div>
+                </div> */}
+            </>
+        )
+    }
+
     return (
         <>
+            {
+                openModalQR &&
+                <ModalQR
+                    toggleOpenModalQr={toggleOpenModalQr}
+                    event={event}
+                />
+            }
             <div className={"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 min-h-full lg:gap-10 p-5 sm:p-10"}>
                 <div className="calendar col-span-2">
                     <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl lg:text-2xl '>
@@ -156,6 +204,7 @@ const CalendarioClient = () => {
                         datesSet={updateTitle}
                         eventClick={handleEventClick}
                         dateClick={handleDateClick}
+                    // eventContent={EventContent}
                     />
                 </div>
                 <div className="mt-5 lg:mt-0">

@@ -276,7 +276,6 @@ export default function ModalUpdateEvent({
                                         labelId="demo-select-small-label"
                                         id="demo-select-small"
                                         value={data.tipo}
-                                        label="Tipo"
                                         onChange={handleChange}
                                         name="tipo"
                                     >
@@ -306,12 +305,11 @@ export default function ModalUpdateEvent({
                                     labelId="demo-select-small-label"
                                     id="demo-select-small"
                                     value={data.state}
-                                    label="state"
                                     onChange={handleChange}
                                     name="state"
                                 >
-                                    <MenuItem value={true}>Activo</MenuItem>
-                                    <MenuItem value={false}>Baja</MenuItem>
+                                    <MenuItem value={true}>Visible</MenuItem>
+                                    <MenuItem value={false}>Oculto</MenuItem>
                                 </Select>
                             </Grid>
                             <div className="grid grid-cols-2 gap-2">

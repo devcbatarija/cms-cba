@@ -1,5 +1,6 @@
-const { addDatosEvento, getAllDatosEvento, getEventsByDate } = require("../controllers/datos_eventoController");
-const { addEvento, getAllEvento, updateEvento, getEventById } = require("../controllers/eventoController")
+const { addDatosEvento, getAllDatosEvento, getEventsByDate, updateDatosEvento } = require("../controllers/datos_eventoController");
+const { getEventById } = require("../controllers/eventoController");
+const { response } = require("../utils");
 
 
 module.exports={
@@ -47,11 +48,11 @@ module.exports={
             res.status(400).json({error:error.message});
         }
     },
-    updateEvento:async(req, res)=>{
+    updateDatosEvento:async(req, res)=>{
         try {
             const id=req.params.id;
             const changes=req.body;
-            const response= await updateEvento(id, changes);
+            const response= await updateDatosEvento(id, changes);
             res.status(200).json({
                 results:response,
                 successMessage:"Se actualizaron los datos del evento correctamente"

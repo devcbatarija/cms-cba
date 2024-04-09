@@ -1,7 +1,8 @@
 // Importa la biblioteca Day.js
 const dayjs = require('dayjs');
-const { Dato_Evento, Evento } = require("../db")
+const { Dato_Evento, Evento, QR } = require("../db")
 const Sequelize = require('sequelize');
+const { ClientError } = require('../utils/errors');
 
 module.exports = {
 
@@ -14,7 +15,6 @@ module.exports = {
 
                 }]
             });
-            console.log("aqui")
 
             const eventos = await Evento.findAll({
                 where: {
@@ -59,7 +59,8 @@ module.exports = {
                     where: {
                         start: {
                             [Sequelize.Op.between]: [startOfMonth, endOfMonth]
-                        }
+                        },
+                        state: true
                     }
 
                 }]
@@ -71,7 +72,8 @@ module.exports = {
                     },
                     start: {
                         [Sequelize.Op.between]: [startOfMonth, endOfMonth]
-                    }
+                    },
+                    state: true
                 }
             });
             const clonedEventos = JSON.parse(JSON.stringify(eventos));
@@ -142,30 +144,44 @@ module.exports = {
             return error
         }
     },
-    updateEvento: async (id, changes) => {
+    updateDatosEvento: async (id, changes) => {
         try {
-            const event = await Evento.findByPk(id);
+            const event = await Evento.findByPk(changes.datosEvento.EventoId);
+            const datosEvento = await Dato_Evento.findByPk(id);
             if (!event) {
-                return "User not found!";
+                return "Event not found!";
             }
             const updatedEvent = await Evento.update(
                 {
-                    title: changes.title ? changes.title : event.title,
-                    color: changes.color ? changes.color : event.color,
-                    state: changes.state ? changes.state : event.state,
-                    tipo: changes.tipo ? changes.tipo : event.tipo,
-                    start_Time: changes.start_Time ? changes.start_Time : event.start_Time,
-                    end_Time: changes.end_Time ? changes.end_Time : event.end_Time,
-                    start: changes.start ? dayjs(changes.start) : event.start,
-                    end: changes.end ? dayjs(changes.end) : event.end,
-                    allDay: changes.allDay ? changes.allDay : event.allDay,
+                    title: changes.Evento.title ? changes.Evento.title : event.title,
+                    color: changes.Evento.color ? changes.Evento.color : event.color,
+                    state: changes.Evento.state ? changes.Evento.state : event.state,
+                    tipo: changes.Evento.tipo ? changes.Evento.tipo : event.tipo,
+                    start_Time: changes.Evento.start_Time ? changes.Evento.start_Time : event.start_Time,
+                    end_Time: changes.Evento.end_Time ? changes.Evento.end_Time : event.end_Time,
+                    start: changes.Evento.start ? dayjs(changes.Evento.start) : event.start,
+                    end: changes.Evento.end ? dayjs(changes.Evento.end) : event.end,
+                    allDay: changes.Evento.allDay ? changes.Evento.allDay : event.allDay,
                 },
                 {
                     where: {
-                        id: id,
+                        id: changes.datosEvento.EventoId,
                     },
                 }
             );
+
+            const updatedDatosEvento = await Dato_Evento.update(
+                {
+                    descripcion: changes.datosEvento.descripcion ? changes.datosEvento.descripcion : datosEvento.descripcion,
+                    multimedia: changes.datosEvento.multimedia ? changes.datosEvento.multimedia : datosEvento.multimedia,
+                    categoria: changes.datosEvento.categoria ? changes.datosEvento.categoria : datosEvento.categoria,
+                },
+                {
+                    where: {
+                        id_Evento: id,
+                    },
+                }
+            )
             if (updatedEvent[0] == 1) {
                 return event;
             }

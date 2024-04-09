@@ -60,6 +60,7 @@ import TestimonioNav from "./components/dashboard/Testimonios/Nav";
 import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable";
 import ProgramAddForm from "./components/dashboard/Programas/ProgramAdd";
 import {Becas} from "./components/Becas/becas";
+import EventUpdate from "./components/dashboard/calendario/eventUpdate";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -192,6 +193,10 @@ function App() {
                 <Route
                   path="/dashboard/Calendario/addEvent"
                   element={<ContarinerNewEvent />}
+                />
+                <Route
+                  path="/dashboard/Calendario/updateEvent"
+                  element={<EventUpdate />}
                 />
               </Route>
               <Route path="/dashboard/publinav" element={<PublicationNav />}>

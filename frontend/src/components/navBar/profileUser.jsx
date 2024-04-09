@@ -29,7 +29,7 @@ export const Profile = ({ setOpenProfile, userId }) => {
       <div
         className="flex justify-center pt-1 px-1 pb-20 text-center sm:block sm:p-0"
       >
-        <div className="fixed inset-0 transition-opacity" ariaHidden="true">
+        <div className="fixed inset-0 transition-opacity" ariaHidden="true"  onClick={() => setOpenProfile(false)}>
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <div
