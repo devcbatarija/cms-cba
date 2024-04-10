@@ -56,7 +56,7 @@ export default function ModalUpdateEvent({
         });
     };
     const getById = async () => {
-        const path=tipoModal=='Evento'?'event':'eventpredefinido'
+        const path = tipoModal == 'Evento' ? 'event' : 'eventpredefinido'
         const event = axios.get(`${path}/getById/${id}`)
             .then(response => {
                 const event = response.data.results;
@@ -64,8 +64,8 @@ export default function ModalUpdateEvent({
                     ...data,
                     id: event.id,
                     title: event.title,
-                    start: event.start?event.start:'',
-                    end: event.end?event.end:'',
+                    start: event.start ? event.start : '',
+                    end: event.end ? event.end : '',
                     color: event.color,
                     tipo: event.tipo,
                     start_Time: event.start_Time ? event.start_Time : '',
@@ -83,16 +83,10 @@ export default function ModalUpdateEvent({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const token = Cookies.get('token');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
             setSpinner(true);
             // Determinar la ruta en base al valor de tipoModal
             const path = tipoModal == "Evento" ? "event/update/" : "eventpredefinido/update/"
-            const res = axios.put(path + id, data, config).then(res => {
+            const res = axios.put(path + id, data).then(res => {
                 setTimeout(() => {
                     toast.success(res.data.successMessage)
                     setData({
@@ -288,11 +282,11 @@ export default function ModalUpdateEvent({
                                         Color
                                     </InputLabel>
                                     <div style={{ display: 'flex' }} className=''>
-                                        {data.id!=''?
-                                        <SelectColorList
-                                        data={data}
-                                        setData={setData}
-                                    />:null}
+                                        {data.id != '' ?
+                                            <SelectColorList
+                                                data={data}
+                                                setData={setData}
+                                            /> : null}
                                     </div>
                                 </Grid>
                             </div>
