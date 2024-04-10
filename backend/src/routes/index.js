@@ -33,6 +33,5 @@ router.use('/programPrices', programPrices)
 router.use('/beca', becaRoutes)
 router.use('/QR', QR_Routes)
 
-
 module.exports=router;
 
