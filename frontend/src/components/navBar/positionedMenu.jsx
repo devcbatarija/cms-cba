@@ -9,6 +9,7 @@ import Cookie from "js-cookie";
 import toast from "react-hot-toast";
 import { SuccessAlert } from "../toastAlerts/success";
 import { Profile } from "./profileUser";
+import axios from 'axios'
 
 const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -17,7 +18,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   const navigate = useNavigate();
   const rolUSer = useSelector((state) => state.login.user);
   const authlogin = useSelector((state) => state.login);
-  const [openProfile,setOpenProfile]=useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -26,27 +27,32 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
     setAnchorEl(null);
   };
   const handleLogout = async () => {
-    handleClose();
-    navigate("/");
-    Cookie.remove("token");
-    dispatch(logoutSession(false));
-    toast.custom((t) => (
-      <SuccessAlert t={t} w={"w-4/12"} message="Cierre de sesión exitoso" />
-    ));
+    try {
+      handleClose();
+      navigate("/");
+      const response = await axios.get('/users/logout')
+      console.log(response);
+      dispatch(logoutSession(false));
+      toast.custom((t) => (
+        <SuccessAlert t={t} w={"w-4/12"} message="Cierre de sesión exitoso" />
+      ));
+    } catch (error) {
+      console.log(error);
+    }
   };
   const aleatorios = async () => {
     const colors = ["#d59bf6", "#ffc93c", "#42b883", "#cca8e9"];
     const matrandom = Math.floor(Math.random() * 4);
     const localColor = await localStorage.getItem("color");
-    if (localColor==null) {
+    if (localColor == null) {
       localStorage.setItem("color", colors[matrandom]);
     }
     const localColorR = await localStorage.getItem("color");
     return localColorR;
   };
-  useEffect(()=>{
+  useEffect(() => {
     aleatorios();
-  },[])
+  }, [])
   return (
     <div>
       {authlogin && !authlogin.user._profileImage ? (
