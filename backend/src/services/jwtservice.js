@@ -32,39 +32,38 @@ module.exports = {
   },
   validToken: async (req, res) => {
     try {
-      const token = req.headers.authorization.split("Bearer ")[1]; 
-      console.log(token);
-      // if(!token){
-      //   return res.status(200).json({ user: usResult });
-      // }
-      jwt.verify(token, keymaster, async (error, decoded) => {
-        const currentTime = Math.floor(Date.now() / 1000);
-        const usLogin = await Usuario.findByPk(decoded._userId);
-        if (!usLogin) {
-          return res
-            .status(404)
-            .json({ messageError: "El usuario no existe." });
-        }
-        const usResult = {
-          _userId: usLogin.id_Usuario,
-          _profileImage: usLogin.image,
-          correo: usLogin.correo,
-          nombres: usLogin.nombres,
-          apellidos: usLogin.apellidos,
-          rol: usLogin.rol,
-          token,
-        };
-        console.log(usResult);
-        return res.status(200).json({ user: usResult });
-      });
+      if (req.cookies.token) {
+        const token = req.cookies.token
+        // if(!token){
+        //   return res.status(200).json({ user: usResult });
+        // }
+        jwt.verify(token, keymaster, async (error, decoded) => {
+          const currentTime = Math.floor(Date.now() / 1000);
+          const usLogin = await Usuario.findByPk(decoded._userId);
+          if (!usLogin) {
+            return res
+              .status(404)
+              .json({ messageError: "El usuario no existe." });
+          }
+          const usResult = {
+            _userId: usLogin.id_Usuario,
+            _profileImage: usLogin.image,
+            correo: usLogin.correo,
+            nombres: usLogin.nombres,
+            apellidos: usLogin.apellidos,
+            rol: usLogin.rol,
+            token,
+          };
+          return res.status(200).json({ user: usResult });
+        });
+      }
     } catch (error) {
       return res.status(400).json({ messageError: error.message });
     }
   },
   validTokenMobile: async (req, res) => {
-    try { 
+    try {
       const { token } = req.body;
-      console.log(token);
       // if(!token){
       //   return res.status(200).json({ user: usResult });
       // }
@@ -85,7 +84,6 @@ module.exports = {
           rol: usLogin.rol,
           token,
         };
-        console.log(usResult);
         return res.status(200).json({ user: usResult });
       });
     } catch (error) {
@@ -93,12 +91,11 @@ module.exports = {
     }
   },
   isAdmin: async (req, res, next) => {
-    console.log(req.headers.authorization);
     try {
-      if (!req.headers.authorization) {
+      if (!req.cookies.token) {
         return res.status(401).json({ messageError: "Usuario no autorizado" });
       }
-      const token = req.headers.authorization.split("Bearer ")[1];
+      const token = req.cookies.token
       jwt.verify(token, keymaster, async (error, decoded) => {
         const usLogin = await Usuario.findByPk(decoded._userId);
         if (usLogin) {

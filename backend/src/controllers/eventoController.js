@@ -18,15 +18,27 @@ module.exports = {
           evento.end = dayjs(evento.end).add(1, 'day').format('YYYY-MM-DD');
         }
       });
-      let users = ['2000-10-03 20:00:00', '1998-10-03 20:00:00', '2002-10-03 20:00:00', '2000-10-03 20:00:00',]
-      let array = [];
-      users.forEach(date => {
-        if (array == []) {
-          users = users.filter(user => user == date);
-          array.push({ edad: date, count: 1 });
+      return clonedEventos;
+    } catch (error) {
+      return error;
+    }
+  },
+  getActiveEvents: async () => {
+    try {
+      const eventos = await Evento.findAll({
+        where: {
+          state: true,
+        }
+      });
+      const clonedEventos = JSON.parse(JSON.stringify(eventos));
+      clonedEventos.forEach(evento => {
+        if (evento.allDay == false) {
+          evento.start = (dayjs(evento.start).format('YYYY-MM-DD') + "T" + evento.start_Time);
+          evento.end = (dayjs(evento.end).format('YYYY-MM-DD') + "T" + evento.end_Time);
         }
         else {
-
+          evento.start = dayjs(evento.start).format('YYYY-MM-DD');
+          evento.end = dayjs(evento.end).add(1, 'day').format('YYYY-MM-DD');
         }
       });
       return clonedEventos;

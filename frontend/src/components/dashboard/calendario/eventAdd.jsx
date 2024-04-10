@@ -278,6 +278,14 @@ function EventAdd({
             Publicar
           </Button>
         </Grid>
+        <button className="hover:w-[125px] hover:duration-300 w-10 h-10 flex justify-center items-center relative duration-300 shadow-xl " style={{ background: 'linear-gradient(144deg,#af40ff,#5b42f3 50%,#00ddeb)' }}>
+          <div className="w-full text-white h-full text-4xl duration-300 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          </div>
+          <div class="text absolute right-0 w-0 opacity-100 text-white text-[1.4em] font-semibold duration-300">Create</div>
+        </button>
       </Container>
     </>
   );
