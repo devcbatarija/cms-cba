@@ -34,8 +34,9 @@ const Login = () => {
       });
       console.log(watch())
       const response = await axios.post("users/login", watch(), {
-        withCredentials: true,
-        contentType: "application/json"
+        headers: {
+          "Content-Type": "application/json"
+        }
       });
       console.log(response)
       navigate("/");
@@ -52,7 +53,7 @@ const Login = () => {
       }, 5000);
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const {
     register,
     handleSubmit,

@@ -9,6 +9,7 @@ import axios from 'axios';
 
 // axios.defaults.baseURL="https://www.cba.org.bo/appi/";
 axios.defaults.baseURL="http://localhost:3001/appi/";
+axios.defaults.withCredentials=true;
 // axios.defaults.baseURL = "https://www.oliviodev.com/appi/";
 
  

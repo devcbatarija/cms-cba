@@ -132,8 +132,13 @@ const CalendarioClient = () => {
         })
     };
 
-    const events = useSelector((state) => state.events.events);
+    const [events, setEvents] = useState([])
     const [eventsByMonth, setEventsByMonth] = useState([])
+    useEffect(() => {
+        axios.get(`event/getActiveEvents`).then(res => {
+            setEvents(res.data.results)
+        })
+    }, [])
 
     const EventContent = (e) => {
         // console.log(e.event)

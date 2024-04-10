@@ -45,16 +45,10 @@ export default function ModalAddEvent({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const token = Cookies.get('token');
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            };
             setSpinner(true);
             // Determinar la ruta en base al valor de tipoModal
             const path = tipoModal == "Evento" ? "event/create" : "eventpredefinido/create"
-            const res = axios.post(path, data, config).then(res => {
+            const res = axios.post(path, data).then(res => {
                 setTimeout(() => {
                     toast.success(res.data.successMessage)
                     setData({

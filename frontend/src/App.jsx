@@ -72,18 +72,11 @@ function App() {
   const navigate = useNavigate();
   // Función para validar el token
   const validToken = async () => {
-    console.log("VALIDAMOS SESION");
-    const token = Cookie.get("token");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
     const data = {
       validation: "Validation",
     };
     try {
-      const response = await axios.post("users/valid/token", data, config);
+      const response = await axios.post("users/valid/token", data);
       if (response.data.user) {
         dispatch(authValid(response.data.user));
       }
@@ -116,10 +109,7 @@ function App() {
     dispatch(getEventsPredefinidos());
     dispatch(getAllProgram());
     dispatch(getAllProgramPrices());
-
-    if (Cookie.get("token")) {
-      validToken();
-    }
+    validToken();
   }, []);
 
   // Verificar si estamos en la ruta /dashboard
