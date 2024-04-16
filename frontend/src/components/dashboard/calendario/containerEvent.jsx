@@ -11,6 +11,25 @@ import { getEvents } from "../../../redux-toolkit/actions/eventActions";
 const ContarinerNewEvent = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const [secondPartForm, setSecondPartForm] = useState(false)
+  const [Consigna, setConsigna] = useState({
+    descripcion_consigna: '',
+    cantidad_Referidos: 1,
+    top: '0',
+    nota_Asignada: 0,
+    estado: true,
+  })
+  const handleChangeConsigna = (e) => {
+    const property = e.target.name;
+    const value = e.target.value;
+    setConsigna({
+      ...Consigna,
+      [property]: value,
+    })
+  }
+  const toggleSecondPartForm = () => {
+    setSecondPartForm(!secondPartForm)
+  }
   const [Evento, setEvento] = useState({
     id: "",
     title: "",
@@ -35,7 +54,7 @@ const ContarinerNewEvent = () => {
   const handleSubmitEvent = async (urls) => {
     try {
       const enviar = Evento
-      const response = await axios.post("datosevento/create", {
+      let dataToSend = {
         evento: {
           title: enviar.title,
           start: enviar.start,
@@ -53,7 +72,18 @@ const ContarinerNewEvent = () => {
           multimedia: urls,
           categoria: datosEvento.categoria
         }
-      });
+      };
+
+      if (secondPartForm) {
+        dataToSend.consigna = {
+          descripcion: Consigna.descripcion_consigna,
+          cantidad_Referidos: Consigna.cantidad_Referidos,
+          top: Consigna.top,
+          nota_Asignada: Consigna.nota_Asignada,
+          estado: Consigna.estado,
+        };
+      }
+      const response = await axios.post("datosevento/create", dataToSend);
       if (response.data) {
         toast.success("Registro exitoso.");
         setDatosEvento({
@@ -81,14 +111,18 @@ const ContarinerNewEvent = () => {
     }
   }, [])
   return (
-    <div className="grid shadow border bg-zinc-100 lg:py-5 ">
-      <div className="w-full flex justify-center">
+    <div className="grid shadow border bg-white lg:py-5 ">
+      <div className="w-full flex flex-col items-center">
         <EventAdd
           datosEvento={datosEvento}
           setDatosEvento={setDatosEvento}
           handleSubmitEvent={handleSubmitEvent}
           data={location.state?.data ? location.state.data : Evento}
           setData={setEvento}
+          Consigna={Consigna}
+          handleChangeConsigna={handleChangeConsigna}
+          secondPartForm={secondPartForm}
+          toggleSecondPartForm={toggleSecondPartForm}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 // Importa la biblioteca Day.js
 const dayjs = require('dayjs');
-const { Evento, Dato_Evento } = require("../db")
+const { Evento, Dato_Evento, Consigna_Evento } = require("../db")
 
 module.exports = {
 
@@ -59,6 +59,9 @@ module.exports = {
         const datosEvento = await Dato_Evento.findOne({
           where: {
             EventoId: id
+          },
+          include: {
+            model: Consigna_Evento
           }
         })
         return { General: clonedEvento, datosEvento }

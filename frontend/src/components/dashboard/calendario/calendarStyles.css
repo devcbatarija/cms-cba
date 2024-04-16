@@ -1,3 +1,17 @@
+.btn-Consigna:hover .text-plus{
+  width: 30%;
+  transition-duration: .3s;
+  transition-delay: 0s;
+}
+.btn-Consigna:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  transition-delay: .2s;
+  padding-right: 15px;
+  position: relative;
+}
+
 .notification {
   display: flex;
   isolation: isolate;
