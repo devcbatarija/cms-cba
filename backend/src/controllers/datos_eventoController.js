@@ -1,6 +1,6 @@
 // Importa la biblioteca Day.js
 const dayjs = require('dayjs');
-const { Dato_Evento, Evento, QR } = require("../db")
+const { Dato_Evento, Evento, QR, Consigna_Evento } = require("../db")
 const Sequelize = require('sequelize');
 const { ClientError } = require('../utils/errors');
 
@@ -138,7 +138,19 @@ module.exports = {
                 categoria: e.datos_Evento.categoria,
                 EventoId: newEvento.id,
             }
-            const newDatosEvento = Dato_Evento.create(datosEvento);
+            const newDatosEvento = await Dato_Evento.create(datosEvento);
+            if (e.consigna) {
+                const consigna = {
+                    descripcion: e.consigna.descripcion,
+                    cantidad_Referidos: e.consigna.cantidad_Referidos,
+                    top: e.consigna.top,
+                    nota_Asignada: e.consigna.nota_Asignada,
+                    estado: e.consigna.estado,
+                    id_Evento: newDatosEvento.id_Evento
+                };
+                const newConsigna = Consigna_Evento.create(consigna)
+
+            }
             return newDatosEvento;
         } catch (error) {
             return error
