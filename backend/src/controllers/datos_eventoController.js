@@ -148,6 +148,7 @@ module.exports = {
                     estado: e.consigna.estado,
                     id_Evento: newDatosEvento.id_Evento
                 };
+                newDatosEvento.update({referible:true})
                 const newConsigna = Consigna_Evento.create(consigna)
 
             }
