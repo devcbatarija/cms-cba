@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { Usuario } = require("../db");
+const axios = require('axios')
 
 const keymaster = "token_jwt_login";
 
@@ -7,11 +8,14 @@ module.exports = {
   signIn: async (user) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const payload = {
+        let payload = {
           _userId: user.id_Usuario,
           nombre: user.nombres,
           ci: user.ci,
         };
+        if (user.from) {
+          payload.from = user.from
+        }
         const tokengen = await jwt.sign(payload, keymaster);
         resolve(tokengen);
       } catch (error) {
@@ -33,27 +37,42 @@ module.exports = {
   validToken: async (req, res) => {
     try {
       if (req.cookies.token) {
+        let usResult
         const token = req.cookies.token
-        // if(!token){
-        //   return res.status(200).json({ user: usResult });
-        // }
         jwt.verify(token, keymaster, async (error, decoded) => {
           const currentTime = Math.floor(Date.now() / 1000);
-          const usLogin = await Usuario.findByPk(decoded._userId);
-          if (!usLogin) {
-            return res
-              .status(404)
-              .json({ messageError: "El usuario no existe." });
+          if (decoded.from) {
+            await axios.post('http://localhost:8000/api/auth/userExists', { id: decoded._userId }).then(res => {
+              if (res.data.exists) {
+                usResult = {
+                  _userId: res.data.userData.id,
+                  _profileImage: res.data.userData.avatar,
+                  correo: res.data.userData.username,
+                  nombres: res.data.userData.fullName,
+                  apellidos: '',
+                  rol: res.data.userData.role,
+                  token,
+                };
+              }
+            })
           }
-          const usResult = {
-            _userId: usLogin.id_Usuario,
-            _profileImage: usLogin.image,
-            correo: usLogin.correo,
-            nombres: usLogin.nombres,
-            apellidos: usLogin.apellidos,
-            rol: usLogin.rol,
-            token,
-          };
+          else {
+            const usLogin = await Usuario.findByPk(decoded._userId);
+            if (!usLogin) {
+              return res
+                .status(404)
+                .json({ messageError: "El usuario no existe." });
+            }
+            usResult = {
+              _userId: usLogin.id_Usuario,
+              _profileImage: usLogin.image,
+              correo: usLogin.correo,
+              nombres: usLogin.nombres,
+              apellidos: usLogin.apellidos,
+              rol: usLogin.rol,
+              token,
+            };
+          }
           return res.status(200).json({ user: usResult });
         });
       }

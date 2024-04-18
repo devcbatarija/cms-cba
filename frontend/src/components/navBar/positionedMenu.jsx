@@ -58,7 +58,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
       {authlogin && !authlogin.user._profileImage ? (
         <div
           className="border p-2 rounded-[50%] 
-          w-[50px] h-[50px] text-white font-bold uppercase"
+          w-[50px] h-[50px] text-white font-bold uppercase flex justify-center items-center"
           style={{
             background: localStorage.getItem("color"),
           }}

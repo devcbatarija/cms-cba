@@ -35,7 +35,7 @@ const ContarinerNewEvent = () => {
     title: "",
     start: "",
     end: "",
-    color: "",
+    color: "#003785",
     tipo: "General",
     start_Time: "",
     end_Time: "",

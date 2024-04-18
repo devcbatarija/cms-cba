@@ -13,7 +13,8 @@ const {
   updateImage,
   getUserDetails,
   getUsersFromGraficsCookie,
-  qrReader
+  qrReader,
+  authLoginCbaPlus
 } = require("../handlers/usuarioHandler");
 
 const { validToken, isAdmin, validTokenMobile } = require("../services/jwtservice");
@@ -30,6 +31,7 @@ router.post("/valid/email", catchedAsync(emailVerify)); //Verificar email existe
 router.delete('/delete/:id', deleteById); //Borrar usuario por id
 router.put('/update/:id', updateById); //Actualizar usuairio por id
 router.post('/login', catchedAsync(authLogin)) //Iniciar sesion
+router.post('/loginCbaPlus', catchedAsync(authLoginCbaPlus)) //Iniciar sesion con CBA PLUS
 router.post('/valid/token', validToken); //Validar valides de token e iniciar sesion
 router.post("/valid/token/mobile", validTokenMobile); //Validar valides de token e iniciar sesion
 
@@ -46,13 +48,13 @@ router.post("/form/register", formRegister); //registrar formulario
 router.get("/range/ages", catchedAsync(getUsersFromGraficsCookie));
 
 router.post("/qr/reader/", catchedAsync(qrReader));
-router.get('/logout', catchedAsync((req, res) => {
+router.get('/logout', (req, res) => {
   res.clearCookie('token', {
     // domain: 'http://localhost:5173', // Ajusta según sea necesario
     // path: '/', // Ajusta según sea necesario
     httpOnly: true, // Ajusta según sea necesario
   });
   response(res, 200, { success: 'logout successfully' })
-}))
+})
 
 module.exports = router;
