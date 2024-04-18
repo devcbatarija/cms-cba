@@ -107,13 +107,17 @@ const CalendarioClient = () => {
     }
 
     const handleEventClick = async (e) => {
-        const result = await axios.get(`event/getById/${e.event.id}`).then(res => {
+        await handleChangeEvent(e.event.id)
+        toggleOpenModalQr()
+    };
+
+    const handleChangeEvent = async (id) => {
+        const result = await axios.get(`event/getById/${id}`).then(res => {
             setEvent(res.data.results)
         }).catch(err => {
             console.log(err)
         })
-        toggleOpenModalQr()
-    };
+    }
 
     const handleDateClick = (e) => {
         const currentMonth = dayjs(e.date).format('MMMM')
@@ -170,6 +174,7 @@ const CalendarioClient = () => {
                 <ModalQR
                     toggleOpenModalQr={toggleOpenModalQr}
                     event={event}
+                    handleChangeEvent={handleChangeEvent}
                 />
             }
             <div className={"grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 min-h-full lg:gap-10 p-5 sm:p-10"}>
