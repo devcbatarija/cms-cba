@@ -4,6 +4,7 @@ const { sentTokenVerify } = require("../services/nodemailerservice");
 const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
 const { uploadImage } = require("./uploadController");
+const axios = require('axios')
 
 function formatDate(dateString) {
   const parts = dateString.split("/");
@@ -104,8 +105,32 @@ module.exports = {
       nombres: userExist.nombres,
       apellidos: userExist.apellidos,
       rol: userExist.rol,
-      token:tokengen
-    }; 
+      token: tokengen
+    };
+    return { usLogin: usLogin, token: tokengen };
+  },
+
+  authLoginCbaPlus: async (user) => {
+    let login
+    await axios.post('http://localhost:8000/api/auth/login', user).then(res => {
+      login = res.data
+    })
+
+    const tokengen = await signIn({
+      id_Usuario: login.userData.id,
+      nombres: login.userData.fullname,
+      ci: login.userData.id,
+      from:'CBA PLUS'
+    });
+    const usLogin = {
+      _userId: login.userData.id,
+      _profileImage: login.userData.avatar,
+      correo: login.userData.username,
+      nombres: login.userData.fullName,
+      apellidos: '',
+      rol: 'Client',
+      token: tokengen
+    };
     return { usLogin: usLogin, token: tokengen };
   },
 
@@ -154,7 +179,7 @@ module.exports = {
 
       update.dataValues.estado = estado;
       return update;
-    } catch (error) {}
+    } catch (error) { }
   },
   deleteSelect: async (userIds) => {
     try {
@@ -229,8 +254,8 @@ module.exports = {
       return error;
     }
   },
-  qrReader:async(data)=>{
-    try { 
+  qrReader: async (data) => {
+    try {
       return true;
     } catch (error) {
       console.log(error);
@@ -245,7 +270,7 @@ const calculateAge = (dateString) => {
   const ageInMilliseconds = currentDate - userDate;
   const ageInYears = ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25);
 
-  return Math.floor({ageInYears:ageInYears,count:1});
+  return Math.floor({ ageInYears: ageInYears, count: 1 });
 }
 // const comprobar = (data,usersFormat) => {
 //   const test = usersFormat.find((user) => user.ageInYears==);
