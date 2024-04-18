@@ -1,6 +1,7 @@
 // Importa la biblioteca Day.js
 const dayjs = require('dayjs');
 const { Evento, Dato_Evento, Consigna_Evento } = require("../db")
+const { Op } = require('sequelize');
 
 module.exports = {
 
@@ -55,6 +56,10 @@ module.exports = {
       const clonedEvento = JSON.parse(JSON.stringify(event));
       clonedEvento.start = dayjs(clonedEvento.start).format("YYYY-MM-DD");
       clonedEvento.end = dayjs(clonedEvento.end).format("YYYY-MM-DD");
+
+      // Fecha del evento actual
+      const currentEventDate = dayjs(clonedEvento.start);
+
       if (event.tipo == 'General') {
         const datosEvento = await Dato_Evento.findOne({
           where: {
@@ -64,7 +69,59 @@ module.exports = {
             model: Consigna_Evento
           }
         })
-        return { General: clonedEvento, datosEvento }
+
+        // Buscar el evento anterior (prev)
+        const prevEvent = await Evento.findOne({
+          include: {
+            model: Dato_Evento,
+            where: {
+              categoria: datosEvento.categoria
+            },
+            required: true
+          },
+          where: {
+            start: {
+              [Op.lt]: currentEventDate.toISOString() // Fechas anteriores
+            },
+            tipo: 'General'
+          },
+
+          order: [['start', 'DESC']], // Ordenar por fecha descendente
+          limit: 1
+        });
+
+        // Buscar el evento siguiente (next)
+        const nextEvent = await Evento.findOne({
+          include: {
+            model: Dato_Evento,
+            where: {
+              categoria: datosEvento.categoria
+            },
+            required: true
+          },
+          where: {
+            start: {
+              [Op.gt]: currentEventDate.toISOString() // Fechas futuras
+            },
+            tipo: 'General'
+          },
+          order: [['start', 'ASC']], // Ordenar por fecha ascendente
+          limit: 1
+        });
+
+        const next = nextEvent != null ? {
+          id: nextEvent.id,
+          title: nextEvent.title,
+          descripcion: nextEvent.Dato_Eventos[0].descripcion,
+          image: nextEvent.Dato_Eventos[0].multimedia[0]
+        } : null
+        const prev = prevEvent != null ? {
+          id: prevEvent.id,
+          title: prevEvent.title,
+          descripcion: prevEvent.Dato_Eventos[0].descripcion,
+          image: prevEvent.Dato_Eventos[0].multimedia[0]
+        } : null
+        return { General: clonedEvento, datosEvento, prev, next };
       }
       return clonedEvento
     } catch (error) {

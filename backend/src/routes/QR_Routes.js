@@ -4,7 +4,7 @@ const { generarQR, verificarQR } = require("../handlers/QRHandler");
 const router= express();
 
 
-router.post("/generarQR",catchedAsync(generarQR));
-router.post("/verificarQR",catchedAsync(verificarQR));
+router.post("/generarQR",generarQR);
+router.post("/verificarQR",verificarQR);
 
 module.exports=router;
