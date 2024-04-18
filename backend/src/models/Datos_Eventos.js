@@ -20,6 +20,11 @@ module.exports=(sequelize)=>{
         categoria:{
             type:DataTypes.STRING,
             allowNull:false
+        },
+        referible:{
+            type:DataTypes.BOOLEAN,
+            allowNull:true,
+            defaultValue:false
         }
     })
 }
