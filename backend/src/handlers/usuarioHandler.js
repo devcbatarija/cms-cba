@@ -13,6 +13,7 @@ const {
   getUserDetails,
   getUsersFromGraficsCookie,
   qrReader,
+  authLoginCbaPlus,
 } = require("../controllers/usuarioController");
 const { ClientError } = require("../utils/errors");
 const response = require("../utils/response");
@@ -57,6 +58,16 @@ module.exports = {
   authLogin: async (req, res) => {
     const result = await authLogin(req.body);
     console.log(result);
+    res.cookie("token", result.token, {
+      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
+      httpOnly: true,
+    });
+    console.log(result.usLogin);
+    res.status(200).json(result.usLogin);
+  },
+
+  authLoginCbaPlus: async (req, res) => {
+    const result = await authLoginCbaPlus(req.body);
     res.cookie("token", result.token, {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
       httpOnly: true,
@@ -142,21 +153,21 @@ module.exports = {
       res.status(500).json({ messageError: error.message });
     }
   },
-  getUsersFromGraficsCookie: async (req,res)=> {
+  getUsersFromGraficsCookie: async (req, res) => {
     try {
       const results = await getUsersFromGraficsCookie();
-      response(res,200,results)
+      response(res, 200, results)
     } catch (error) {
-      throw new ClientError('Error no se pudo obtener la información',401)
+      throw new ClientError('Error no se pudo obtener la información', 401)
     }
   },
-  qrReader:async(req,res)=>{
+  qrReader: async (req, res) => {
     const data = req.body;
     try {
       const result = await qrReader(data);
-      response(res,200,result)
+      response(res, 200, result)
     } catch (error) {
-      throw new ClientError('Error no se pudo obtener la información',401)
+      throw new ClientError('Error no se pudo obtener la información', 401)
     }
   }
 };
