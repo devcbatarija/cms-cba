@@ -4,6 +4,8 @@ import DropdownTypeQR from "../dashboard/calendario/buttonSelectType";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import dayjs from 'dayjs';
+import './calendarClientStyles.css'
+import { useNavigate } from "react-router-dom";
 
 const qrCode = new QRCodeStyling({
     width: 200,
@@ -43,10 +45,13 @@ const qrCode = new QRCodeStyling({
 const ModalQR = ({
     toggleOpenModalQr,
     event,
+    handleChangeEvent,
 }) => {
+    const navigate = useNavigate()
     const [informationQr, setInformationQR] = useState(null)
     const [consigna, setConsigna] = useState(null)
     const userLogin = useSelector((state) => state.login.user)
+    const isLogged = useSelector((state) => state.login.auth)
     const [qrGenerated, setQrGenerated] = useState(false);
     const qrCodeRef = useRef(null);
     const extensiones = [
@@ -58,37 +63,31 @@ const ModalQR = ({
     const [typeImageQR, setTypeImageQR] = useState(extensiones[1].type)
 
     const generarQR = () => {
-        if (!qrGenerated) {
-            const datos = {
-                id_Evento: event.datosEvento.id_Evento,
-                id_Estudiante: userLogin._userId,
-                cantidad_uso: 0,
-                fecha_Expiracion: event.General.end,
+        if (isLogged == true) {
+            if (!qrGenerated) {
+                const datos = {
+                    id_Evento: event.datosEvento.id_Evento,
+                    id_Estudiante: userLogin._userId.toString(),
+                    cantidad_uso: 0,
+                    fecha_Expiracion: event.General.end,
+                }
+                const response = axios.post('QR/generarQR', datos).then(res => {
+                    qrCode.update({
+                        data: res.data.data.result.id_QR,
+                    })
+                    qrCode.append(qrCodeRef.current)
+                    setQrGenerated(true)
+                }).catch(err => {
+                    console.log(err)
+                });
             }
-            const response = axios.post('QR/generarQR', datos).then(res => {
-                qrCode.update({
-                    data: res.data.data.result.id_QR,
-                })
-                qrCode.append(qrCodeRef.current)
-                setQrGenerated(true)
-            }).catch(err => {
-                console.log(err)
-            });
+            else {
+                console.log('ya fue generado')
+            }
         }
         else {
-            console.log('ya fue generado')
+            navigate('/login')
         }
-
-        // const dataQR = {
-        //     IdEvento: event.General.id,
-        //     IdUsuario: '123456sc'
-        // }
-        // const jsonEvent = JSON.stringify(dataQR);
-        // qrCode.update({
-        //     data: jsonEvent,
-        // })
-        // qrCode.append(qrCodeRef.current)
-        // setQrGenerated(!qrGenerated)
     }
     const onDownloadClick = () => {
         const qrDownload = new QRCodeStyling({
@@ -132,7 +131,7 @@ const ModalQR = ({
         }
         const datos = {
             id_Evento: event.datosEvento.id_Evento,
-            id_Estudiante: userLogin._userId,
+            id_Estudiante: userLogin._userId.toString(),
         }
         const response = axios.post('QR/verificarQR', datos).then(res => {
             if (res.data.data.result != null) {
@@ -147,7 +146,19 @@ const ModalQR = ({
             }
         })
         console.log(event)
+        console.log('islogged', isLogged)
+        console.log(userLogin)
     }, [])
+
+    useEffect(() => {
+        if (event.datosEvento.Consigna_Eventos.length > 0) {
+            setConsigna(event.datosEvento.Consigna_Eventos[0])
+        }
+        else {
+            setConsigna(null)
+        }
+    }, [event])
+
     const [backModal, setBackModal] = useState(false)
     const toggleBackModal = () => {
         setBackModal(!backModal)
@@ -159,12 +170,19 @@ const ModalQR = ({
             <div className="absolute w-full h-screen flex justify-center items-center">
                 <div className="h-[600px] w-[1000px] rounded-xl bg-white">
 
-                    <div className="relative h-full w-full rounded-xl overflow-hidden" style={{ background: `linear-gradient(-45deg, #000000, #434343` }}>  {/*contenedor del modal*/}
+                    <div className="relative h-full w-full rounded-xl overflow-hidden" >  {/*contenedor del modal style={{ background: `linear-gradient(-45deg, #000000, #434343` }}*/}
+
+                        <div className="h-10 w-10 bg-orange-100 absolute right-[37%] top-[10%] rounded-full"></div>
+                        <div className="h-5 w-5 bg-green-100 absolute right-[10%] top-[5%] rotate-[25deg]"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
 
                         <div className={`flex flex-col px-20 relative h-full`} style={{ color: event.General.color }}>
                             <button
                                 onClick={toggleOpenModalQr}
-                                className="p-1.5 right-0 rounded-full text-white absolute m-3 z-10"
+                                className="p-1.5 right-0 rounded-full text-zinc-500 absolute m-3 z-10"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -183,8 +201,8 @@ const ModalQR = ({
                             </button>
                             <div className="flex flex-row h-full items-center py-5">
                                 <div className="w-2/3 pr-10 flex flex-col">
-                                    <h2 className={`mb-10  text-5xl w-[70%] font-bold`} >{event.General.title}</h2>
-                                    <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-50">{event.datosEvento.descripcion}</span>
+                                    <h2 className={`mb-10  text-5xl w-[70%] font-extrabold`} >{event.General.title}</h2>
+                                    <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-500">{event.datosEvento.descripcion}</span>
                                     <div className="flex flex-row justify-between pr-10">
                                         <div className="flex flex-row gap-5 items-center">
                                             <span>
@@ -194,7 +212,7 @@ const ModalQR = ({
 
                                             </span>
                                             <span className="text-xl font-bold ">{dayjs(event.General.start).format('DD')}</span>
-                                            <span className="text-xl font-bold border-x-2 px-5 capitalize">{dayjs(event.General.start).format('MMMM')}</span>
+                                            <span className="text-xl font-bold border-x-2 px-5 capitalize border-zinc-400">{dayjs(event.General.start).format('MMMM')}</span>
                                             <span className="text-xl font-bold ">{dayjs(event.General.start).format('YYYY')}</span>
                                         </div>
                                         <div className="flex flex-row items-center gap-x-2">
@@ -211,11 +229,14 @@ const ModalQR = ({
                                             }</span>
                                         </div>
                                     </div>
-                                    <div className="mt-5">
-                                        <button className="bg-cbaBlue text-white rounded-md px-14 py-2 hover:bg-cyan-700"
-                                            onClick={toggleBackModal}
-                                        >Referir</button>
-                                    </div>
+                                    {
+                                        consigna != null &&
+                                        <div className="mt-5">
+                                            <button className="bg-cbaBlue text-white rounded-md w-[220px] py-2"
+                                                onClick={toggleBackModal}
+                                            >Referir</button>
+                                        </div>
+                                    }
                                 </div>
                                 <div className="w-1/3 h-1/1  flex items-center justify-center">
                                     <img className="h-96 w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
@@ -227,13 +248,14 @@ const ModalQR = ({
                         {
                             consigna != null &&
                             <div className={`bg-white absolute top-0 left-0 w-full h-full flex flex-col items-center justify-between text-zinc-500 rounded-[5px] transform ${backModal ? 'translate-y-[2%]' : 'translate-y-[98%]'} transition-all duration-500 ease-in-out`}>
-                                <div className="py-5 flex flex-row w-full px-20"
+                                <div className="pt-5 flex flex-row w-full px-20 grow items-center"
                                     style={{
                                         // background: `linear-gradient(135deg, white , ${colorRgb} )`
                                     }}
                                 >
                                     <div className="w-2/3 flex flex-col items-start justify-center">
-                                        <span className="mb-10  text-5xl w-[70%] font-bold">Consigna</span>
+                                        {/* <span className="mb-3  text-5xl w-[70%] font-bold">{event.datosEvento.categoria}</span> */}
+                                        <span className="mb-10  text-5xl w-[70%] font-bold">Objetivo</span>
                                         <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-400">{consigna.descripcion}</span>
                                         <div className="flex flex-row items-center ">
                                             <span className="text-xl font-bold text-zinc-400">Referidos:</span>
@@ -243,68 +265,123 @@ const ModalQR = ({
                                             {
                                                 informationQr != null &&
                                                 <>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
                                                     </svg>
 
-                                                    <div className="mx-5 bg-red-100 border-2 h-10 w-10 flex items-center justify-center border-red-400 rounded-xl text-red-400">
+                                                    <div className={`mx-5 border-2 h-10 w-10 flex items-center justify-center rounded-xl ${informationQr.cantidad_uso >= consigna.cantidad_Referidos ? 'text-green-400 bg-green-100 border-green-400' : 'text-red-400 bg-red-100 border-red-400'}`}>
                                                         <span>{informationQr.cantidad_uso}</span>
                                                     </div>
-                                                    <span className="whitespace-pre-wrap text-sm font-semibold text-red-400">Te faltan {consigna.cantidad_Referidos - informationQr.cantidad_uso} referidos!</span>
+                                                    <span className={`whitespace-pre-wrap text-sm font-semibold ${informationQr.cantidad_uso >= consigna.cantidad_Referidos ? 'text-green-400' : 'text-red-400'}`}>
+                                                        {
+                                                            informationQr.cantidad_uso < consigna.cantidad_Referidos ? `¡Aun te faltan ${consigna.cantidad_Referidos - informationQr.cantidad_uso} referidos!` :
+                                                                informationQr.cantidad_uso == consigna.cantidad_Referidos ? "¡Listo! ¡Gracias por tu compromiso!" : '¡Increíble! Tu dedicación hace la diferencia'
+                                                        }
+                                                    </span>
                                                 </>
                                             }
                                         </div>
                                         <button onClick={toggleBackModal}>volver</button>
                                     </div>
-                                    <div className="w-1/3 flex items-center flex-col justify-center ">
-                                        <div className="bg-white p-10 rounded-lg shadow-xl" ref={qrCodeRef} onClick={generarQR}></div>
-                                        <div className="my-5 flex flex-row bg-cbaBlue divide-x justify-center items-center text-white rounded-md w-[220px] cursor-pointer">
-                                            <span className="px-5 w-full text-center" onClick={onDownloadClick}>Descargar</span>
-                                            <div>
-                                                <DropdownTypeQR
-                                                    handleFunction={handleChageType}
-                                                    datos={extensiones}
-                                                    initialSelected={extensiones[1]}
-                                                    disabled={false}
-                                                />
-                                            </div>
+                                    <div className="w-1/3 flex items-center flex-col justify-center items-center h-full">
+                                        {
+                                            qrGenerated &&
+                                            <span className="text-xs text-center text-zinc-400">Descarga y comparte este QR y asegúrate de escanearlo en la institución el día del evento para registrar tus referidos.</span>
+                                        }
+                                        <div className="bg-white p-8 rounded-lg shadow-xl" ref={qrCodeRef}>
+                                            {
+                                                !qrGenerated &&
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="w-[200px] h-[200px]">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                                                </svg>
+
+                                            }
                                         </div>
+                                        {
+                                            qrGenerated ?
+                                                <div className="mt-5 flex flex-row bg-cbaBlue divide-x justify-center items-center text-white rounded-md w-[220px] cursor-pointer">
+                                                    <span className="px-5 w-full text-center" onClick={onDownloadClick}>Descargar</span>
+                                                    <div>
+                                                        <DropdownTypeQR
+                                                            handleFunction={handleChageType}
+                                                            datos={extensiones}
+                                                            initialSelected={extensiones[1]}
+                                                            disabled={false}
+                                                        />
+                                                    </div>
+                                                </div> :
+                                                <button onClick={generarQR} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
+                                        }
                                     </div>
                                 </div>
                                 <div className="w-full px-20 pt-5 pb-8 flex flex-row gap-x-5">
                                     <div className="w-3/6">
-                                        <div className="flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50">
-                                            <div className="w-1/5 flex items-center  p-2">
-                                                <img className="rounded-md h-full w-full" src={event.datosEvento.multimedia[0]} alt="" />
-                                            </div>
-                                            <div className="w-4/5 flex flex-col overflow-hidden p-5">
-                                                <span className="font-bold text-lg">{event.General.title}</span>
-                                                <span className="truncate text-zinc-400 text-sm">{event.datosEvento.descripcion}</span>
-                                                <div className="flex flex-row gap-x-5">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
-                                                    </svg>
-                                                    <span>Anterior</span>
+                                        {
+                                            event.prev != null &&
+                                            <div onClick={() => handleChangeEvent(event.prev.id)} className="prev-event transition duration-700 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
+                                                <div className="w-1/5 flex items-center p-2 h-full">
+                                                    <img className="rounded-md h-full w-full" src={event.prev.image} alt="" />
+                                                </div>
+                                                <div className="w-4/5 flex flex-col overflow-hidden p-3">
+                                                    <span className="font-bold text-sm">{event.prev.title}</span>
+                                                    <span className="truncate text-zinc-400 text-xs">{event.prev.descripcion}</span>
+                                                    <div className="flex flex-row gap-x-5">
+                                                        <button class="flex flex-row items-center mt-2 reverse-btn">
+                                                            <svg
+                                                                id="arrow-horizontal"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="30"
+                                                                height="10"
+                                                                viewBox="0 0 46 16"
+                                                            >
+                                                                <path
+                                                                    id="Path_10"
+                                                                    data-name="Path 10"
+                                                                    d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                                                                    transform="translate(30)"
+                                                                ></path>
+                                                            </svg>
+                                                            <span class="hover-underline-animation-prev text-xs"> Anterior </span>
+                                                        </button>
+
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     </div>
                                     <div className="w-3/6">
-                                        <div className="flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50">
-                                            <div className="w-4/5 flex flex-col overflow-hidden p-5">
-                                                <span className="font-bold text-lg">{event.General.title}</span>
-                                                <span className="truncate text-zinc-400 text-sm">{event.datosEvento.descripcion}</span>
-                                                <div className="flex flex-row gap-x-5">
-                                                    <span>Siguiente</span>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                                    </svg>
+                                        {
+                                            event.next != null &&
+                                            <div onClick={() => handleChangeEvent(event.next.id)} className="next-event transition duration-500 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
+                                                <div className="w-4/5 flex flex-col overflow-hidden p-3">
+                                                    <span className="font-bold text-sm ">{event.next.title}</span>
+                                                    <span className="truncate text-zinc-400 text-xs">{event.next.descripcion}</span>
+                                                    <div className="flex flex-row gap-x-5">
+                                                        <button class="cta flex flex-row items-center mt-2">
+                                                            <span class="hover-underline-animation text-xs"> Siguiente </span>
+                                                            <svg
+                                                                id="arrow-horizontal"
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="30"
+                                                                height="10"
+                                                                viewBox="0 0 46 16"
+                                                            >
+                                                                <path
+                                                                    id="Path_10"
+                                                                    data-name="Path 10"
+                                                                    d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                                                                    transform="translate(30)"
+                                                                ></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div className="w-1/5 flex items-center justify-end p-2 h-full">
+                                                    <img className="rounded-md h-full w-full" src={event.next.image} alt="" />
                                                 </div>
                                             </div>
-                                            <div className="w-1/5 flex items-center justify-end p-2">
-                                                <img className="rounded-md h-full w-full" src={event.datosEvento.multimedia[0]} alt="" />
-                                            </div>
-                                        </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
