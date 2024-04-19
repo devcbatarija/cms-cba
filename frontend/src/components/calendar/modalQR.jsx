@@ -129,25 +129,25 @@ const ModalQR = ({
         if (event.datosEvento.Consigna_Eventos.length > 0) {
             setConsigna(event.datosEvento.Consigna_Eventos[0])
         }
-        const datos = {
-            id_Evento: event.datosEvento.id_Evento,
-            id_Estudiante: userLogin._userId.toString(),
-        }
-        const response = axios.post('QR/verificarQR', datos).then(res => {
-            if (res.data.data.result != null) {
-                setInformationQR(res.data.data.result)
-                qrCode.update({
-                    data: res.data.data.result.id_QR,
-                })
-                if (!qrGenerated) {
-                    qrCode.append(qrCodeRef.current)
-                    setQrGenerated(true)
-                }
+        if (isLogged == true) {
+            const datos = {
+                id_Evento: event.datosEvento.id_Evento,
+                id_Estudiante: userLogin._userId.toString(),
             }
-        })
+            const response = axios.post('QR/existsQR', datos).then(res => {
+                if (res.data.data.result != null) {
+                    setInformationQR(res.data.data.result)
+                    qrCode.update({
+                        data: res.data.data.result.id_QR,
+                    })
+                    if (!qrGenerated) {
+                        qrCode.append(qrCodeRef.current)
+                        setQrGenerated(true)
+                    }
+                }
+            })
+        }
         console.log(event)
-        console.log('islogged', isLogged)
-        console.log(userLogin)
     }, [])
 
     useEffect(() => {
