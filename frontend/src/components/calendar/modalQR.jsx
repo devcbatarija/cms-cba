@@ -134,7 +134,7 @@ const ModalQR = ({
                 id_Evento: event.datosEvento.id_Evento,
                 id_Estudiante: userLogin._userId.toString(),
             }
-            const response = axios.post('QR/verificarQR', datos).then(res => {
+            const response = axios.post('QR/existsQR', datos).then(res => {
                 if (res.data.data.result != null) {
                     setInformationQR(res.data.data.result)
                     qrCode.update({
