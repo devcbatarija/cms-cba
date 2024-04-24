@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ErrorAlert } from "../toastAlerts/errorAlerts";
 
-export const Profile = ({ setOpenProfile, userId }) => {
+export const Profile = ({ setOpenProfile, userId, openProfile }) => {
   const [user, setUser] = useState(null);
   function calculateAge(dateString) {
     const userDate = new Date(dateString);
@@ -16,16 +16,30 @@ export const Profile = ({ setOpenProfile, userId }) => {
     return Math.floor(ageInYears);
   }
   useEffect(() => {
-      const update = async () => {
-        const response = await axios.get(`users/details/${userId}`);
-        if (response.data) {
-          setUser(response.data.data);
-        }
-      };
-      userId ? update() : null;
+    const update = async () => {
+      const response = await axios.get(`users/details/${userId}`);
+      if (response.data) {
+        setUser(response.data.data);
+      }
+    };
+    userId ? update() : null;
   }, []);
   return (
-    <div className="fixed z-1 inset-0 overflow-y-hidden">
+    <>
+      <div className="fixed z-1 inset-0 overflow-y-hidden ">
+        <div className="fixed inset-0 transition-opacity" ariaHidden="true" onClick={() => setOpenProfile(false)}>
+          <div className="absolute inset-0 bg-cbaBlue/30 backdrop-blur-sm"></div>
+        </div>
+        <div className="h-screen flex justify-center items-center">
+          <div className="h-96 w-96 bg-white transform rounded-xl">
+
+          </div>
+        </div>
+      </div>
+
+
+
+      {/* <div className="fixed z-1 inset-0 overflow-y-hidden">
       <div
         className="flex justify-center pt-1 px-1 pb-20 text-center sm:block sm:p-0"
       >
@@ -114,6 +128,7 @@ export const Profile = ({ setOpenProfile, userId }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
+    </>
   );
 };

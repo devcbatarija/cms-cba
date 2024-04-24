@@ -126,6 +126,7 @@ function EventUpdate({ }) {
       setEvento(location.state.data.General)
       setDatosEvento(location.state.data.datosEvento)
       setUrls(location.state.data.datosEvento.multimedia)
+      console.log(location.state?.data)
       location.state = null
     }
     else {

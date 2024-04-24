@@ -111,7 +111,7 @@ const ContarinerNewEvent = () => {
     }
   }, [])
   return (
-    <div className="grid shadow border bg-white lg:py-5 ">
+    <div className="grid bg-zinc-100">
       <div className="w-full flex flex-col items-center">
         <EventAdd
           datosEvento={datosEvento}

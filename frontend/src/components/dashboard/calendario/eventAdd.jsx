@@ -117,31 +117,44 @@ function EventAdd({
 
   return (
     <>
-      <Container className="rounded-lg border rounded-lg p-10 bg-white w-full lg:w-3/4">
+      <div className=" rounded-lg p-10 bg-zinc-100 w-full lg:w-3/4">
         <div className="flex flex-col items-center justify-center">
-          <Title>Crear Evento</Title>
+          <h1 className="text-zinc-700 font-semibold text-xl">Crear Evento</h1>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col rounded-lg ">
-          <FormGroup style={{ width: "100%" }}>
-            <Label>Título:</Label>
-            <Input
-              type="text"
-              name="title"
-              value={data.title}
-              onChange={handleChangeData}
-              required
-            />
-          </FormGroup>
-          <FormGroup style={{ width: "100%" }}>
-            <Label>Descripción:</Label>
-            <TextArea
-              name="descripcion"
-              value={datosEvento.descripcion}
-              onChange={handleChange}
-              style={{ height: textAreaHeight }}
-              required
-            ></TextArea>
-          </FormGroup>
+          <div className="w-3/5">
+            <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+              Título:
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                name="title"
+                id="title"
+                value={data.title}
+                onChange={handleChangeData}
+                required={true}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div className="col-span-full">
+            <label htmlFor="descripcion" className="block text-sm font-medium leading-6 text-gray-900">
+              Descripcion
+            </label>
+            <div className="mt-2">
+              <textarea
+                id="descripcion"
+                name="descripcion"
+                rows={3}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                value={datosEvento.descripcion}
+                onChange={handleChange}
+                required={true}
+              />
+            </div>
+          </div>
 
           <div className="flex flex-col lg:flex-row lg:items-center">
             <Grid sx={{ marginY: 1 }} variant="outlined">
@@ -276,28 +289,39 @@ function EventAdd({
             setPublicacion={setDatosEvento}
           ></Uploader>
         </FormGroup>
-        <div className=" flex justify-end">
-          <button className="rounded-md btn-Consigna hover:w-[180px] hover:duration-300 w-10 h-10 flex justify-center items-center relative duration-300 shadow-xl bg-cbaBlue overflow-hidden "
-            onClick={toggleSecondPartForm}
-          >  {/*style={{ background: 'linear-gradient(144deg,#af40ff,#5b42f3 50%,#00ddeb)' }}*/}
-            <div className="text-plus w-full text-white h-full duration-300 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
+
+        <div className="relative w-full">
+          <div className="absolute inset-0 flex items-center" aria-hidden="true">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center ">
+            <div className="bg-white px-3">
+              <button className="rounded-full btn-Consigna hover:w-[180px] hover:duration-300 w-10 h-10 flex justify-center items-center relative duration-300 shadow-xl bg-cbaBlue overflow-hidden "
+                onClick={toggleSecondPartForm}
+              >  {/*style={{ background: 'linear-gradient(144deg,#af40ff,#5b42f3 50%,#00ddeb)' }}*/}
+                <div className="text-plus w-full text-white h-full duration-300 flex items-center justify-center">
+                  {
+                    secondPartForm ?
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                      :
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                  }
+                </div>
+                <div class=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">{secondPartForm ? 'Quitar consigna' : 'Añadir consigna'}</div>
+              </button>
             </div>
-            <div class=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">Añadir consigna</div>
-          </button>
+          </div>
         </div>
-
-
-
-
 
         <form>
           {
             secondPartForm &&
             <div className="space-y-12 pt-5">
-              <div className="border-y border-gray-900/10 pb-12 pt-5">
+              <div className="border-b border-gray-900/10 pb-12 pt-5">
                 <h2 className="text-base font-semibold leading-7 text-gray-900">Consigna</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600">
                   En esta sección, debes introducir información sobre los criterios que el estudiante debe cumplir para ser elegible a la recompensa.
@@ -356,7 +380,7 @@ function EventAdd({
             </button>
           </div>
         </form>
-      </Container>
+      </div>
     </>
   );
 }

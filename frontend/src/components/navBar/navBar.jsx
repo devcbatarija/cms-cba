@@ -22,11 +22,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
 import PositionedMenu from "./positionedMenu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import cbaImage from "../../assets/cba.png";
+import cbaImageHorizontal from "../../assets/logoCbaHorizontal.png";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import icono from "../../assets/cba.png";
+import icono from "../../assets/cba_bar.png";
 // ...
 
 const NavBar = () => {
@@ -139,6 +139,7 @@ const NavBar = () => {
               }}
             >
               <ListItemText
+                onClick={text.subRutas ? null : handleDrawerToggle}
                 primary={text.key}
                 sx={{
                   "&:hover": {
@@ -281,9 +282,9 @@ const NavBar = () => {
                 keepMounted: true,
               }}
             >
-              <div className="flex flex-row drawner-css">
-                <Typography><strong>Centro Boliviano Americano</strong></Typography>
-                <span onClick={handleDrawerToggle}>
+              <div className="flex flex-row drawner-css items-center">
+                <img src={cbaImageHorizontal} alt="" className="h-12"/>
+                <span onClick={handleDrawerToggle} className="p-3 rounded-full hover:bg-zinc-200 active:ring-2 ring-zinc-400">
                   <svg
                     width="14"
                     height="14"
@@ -352,7 +353,7 @@ const NavBar = () => {
                 }}
                 to="/"
               >
-                <img className="w-12" src={icono}></img>
+                <img className="w-16" src={icono}></img>
               </NavLink>
               <NavLink
                 style={{
@@ -441,7 +442,7 @@ const NavBar = () => {
                     padding: "20px",
                   }}
                 >
-                 Para niños
+                  Para niños
                 </MenuItem>
                 <MenuItem
                   onClick={handleClose}
@@ -611,7 +612,7 @@ const NavBar = () => {
                 >
                   Podcast
                 </MenuItem>
-                
+
               </Menu>
 
               <NavLink
