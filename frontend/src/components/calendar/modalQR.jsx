@@ -168,7 +168,7 @@ const ModalQR = ({
         <div className="w-full h-screen fixed inset-0 overflow-x-hidden overflow-y-auto z-10">
             <div className="backdrop-blur-sm bg-cbaBlue/20  w-full h-full absolute"></div>
             <div className="absolute w-full h-screen flex justify-center items-center">
-                <div className="h-[600px] w-[1000px] rounded-xl bg-white">
+                <div className="h-[650px] md:h-[600px] w-[1000px] rounded-xl bg-white">
 
                     <div className="relative h-full w-full rounded-xl overflow-hidden" >  {/*contenedor del modal style={{ background: `linear-gradient(-45deg, #000000, #434343` }}*/}
 
@@ -179,7 +179,7 @@ const ModalQR = ({
                         <div></div>
                         <div></div>
 
-                        <div className={`flex flex-col px-20 relative h-full`} style={{ color: event.General.color }}>
+                        <div className={`flex flex-col px-8 md:px-12 lg:px-20 relative h-full`} style={{ color: event.General.color }}>
                             <button
                                 onClick={toggleOpenModalQr}
                                 className="p-1.5 right-0 rounded-full text-zinc-500 absolute m-3 z-10"
@@ -199,23 +199,23 @@ const ModalQR = ({
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
                             </button>
-                            <div className="flex flex-row h-full items-center py-5">
+                            <div className="flex flex-col sm:flex-row h-full items-center py-5">
                                 <div className="w-2/3 pr-10 flex flex-col">
-                                    <h2 className={`mb-10  text-5xl w-[70%] font-extrabold`} >{event.General.title}</h2>
+                                    <h2 className={`sm:mb-5 md:mb-10 sm:text-3xl md:text-4xl lg:text-5xl w-[70%] font-extrabold`} >{event.General.title}</h2>
                                     <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-500">{event.datosEvento.descripcion}</span>
-                                    <div className="flex flex-row justify-between pr-10">
-                                        <div className="flex flex-row gap-5 items-center">
+                                    <div className="flex flex-row sm:flex-col md:flex-row justify-between md:pr-6 lg:pr-10">
+                                        <div className="flex flex-row gap-5 items-center sm:text-lg md:text-xl">
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
                                                 </svg>
 
                                             </span>
-                                            <span className="text-xl font-bold ">{dayjs(event.General.start).format('DD')}</span>
-                                            <span className="text-xl font-bold border-x-2 px-5 capitalize border-zinc-400">{dayjs(event.General.start).format('MMMM')}</span>
-                                            <span className="text-xl font-bold ">{dayjs(event.General.start).format('YYYY')}</span>
+                                            <span className="font-bold ">{dayjs(event.General.start).format('DD')}</span>
+                                            <span className="font-bold border-x-2 px-5 capitalize border-zinc-400">{dayjs(event.General.start).format('MMMM')}</span>
+                                            <span className="font-bold ">{dayjs(event.General.start).format('YYYY')}</span>
                                         </div>
-                                        <div className="flex flex-row items-center gap-x-2">
+                                        <div className="flex flex-row items-center sm:gap-x-6 md:gap-x-2 sm:mt-2 md:mt-0">
                                             <span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -238,8 +238,8 @@ const ModalQR = ({
                                         </div>
                                     }
                                 </div>
-                                <div className="w-1/3 h-1/1  flex items-center justify-center">
-                                    <img className="h-96 w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
+                                <div className="w-full bg-red-100 sm:w-1/3 sm:h-1/1  flex items-center justify-center order-first sm:order-none">
+                                    <img className="h-100 w-full sm:h-80 md:h-96 sm:w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
                                 </div>
                             </div>
 
@@ -248,14 +248,14 @@ const ModalQR = ({
                         {
                             consigna != null &&
                             <div className={`bg-white absolute top-0 left-0 w-full h-full flex flex-col items-center justify-between text-zinc-500 rounded-[5px] transform ${backModal ? 'translate-y-[2%]' : 'translate-y-[98%]'} transition-all duration-500 ease-in-out`}>
-                                <div className="pt-5 flex flex-row w-full px-20 grow items-center"
+                                <div className="pt-5 flex flex-row w-full sm:px-8 md:px-10 lg:px-20 grow items-center"
                                     style={{
                                         // background: `linear-gradient(135deg, white , ${colorRgb} )`
                                     }}
                                 >
-                                    <div className="w-2/3 flex flex-col items-start justify-center">
+                                    <div className="w-2/3 flex flex-col items-start justify-center sm:mr-10 lg:mr-0">
                                         {/* <span className="mb-3  text-5xl w-[70%] font-bold">{event.datosEvento.categoria}</span> */}
-                                        <span className="mb-10  text-5xl w-[70%] font-bold">Objetivo</span>
+                                        <span className="sm:mb-5 md:mb-10 sm:text-3xl md:text-4xl lg:text-5xl w-[70%] font-bold">Consigna</span>
                                         <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-400">{consigna.descripcion}</span>
                                         <div className="flex flex-row items-center ">
                                             <span className="text-xl font-bold text-zinc-400">Referidos:</span>
@@ -286,9 +286,9 @@ const ModalQR = ({
                                     <div className="w-1/3 flex items-center flex-col justify-center items-center h-full">
                                         {
                                             qrGenerated &&
-                                            <span className="text-xs text-center text-zinc-400">Descarga y comparte este QR y asegúrate de escanearlo en la institución el día del evento para registrar tus referidos.</span>
+                                            <span className="sm:text-[10px] md:text-xs text-center text-zinc-400">Descarga y comparte este QR y asegúrate de escanearlo en la institución el día del evento para registrar tus referidos.</span>
                                         }
-                                        <div className="bg-white p-8 rounded-lg shadow-xl" ref={qrCodeRef}>
+                                        <div className="bg-white sm:p-5 md:p-8 rounded-lg shadow-xl" ref={qrCodeRef}>
                                             {
                                                 !qrGenerated &&
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="w-[200px] h-[200px]">
@@ -315,7 +315,7 @@ const ModalQR = ({
                                         }
                                     </div>
                                 </div>
-                                <div className="w-full px-20 pt-5 pb-8 flex flex-row gap-x-5">
+                                <div className="w-full sm:px-3 md:px-10 lg:px-20 pt-5 pb-8 flex flex-row gap-x-5">
                                     <div className="w-3/6">
                                         {
                                             event.prev != null &&
