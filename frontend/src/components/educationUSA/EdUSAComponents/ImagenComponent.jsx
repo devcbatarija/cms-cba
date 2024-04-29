@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ImagenFondo = ({ imageUrl, title }) => {
+const ImagenFondo = ({ imageUrl, titulo }) => {
   const [imagenCargada, setImagenCargada] = useState(false);
 
   useEffect(() => {
@@ -32,26 +32,23 @@ const ImagenFondo = ({ imageUrl, title }) => {
   };
 
   const tituloEstilo = {
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '2rem',
+    fontFamily: 'arial, sans-serif',
+    fontSize: '3rem',
     fontWeight: 'bold',
     color: 'white',
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+    zIndex: 1,
   };
 
   return (
     <div className="ImagenPrincipal" style={imagenEstilo}>
+      <h1 style={tituloEstilo}>{titulo}</h1>
       {!imagenCargada && (
         <div className="loading-indicator">
           LOADING...
-        </div>
-      )}
-      {imagenCargada && title && (
-        <div className='uppercase w-full mb-2 text-1xl font-extrabold text-gray-900 dark:text-white text-center' style={tituloEstilo}>
-          ENGLISH FOR {title}
         </div>
       )}
     </div>
