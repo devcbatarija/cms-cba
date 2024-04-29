@@ -61,6 +61,7 @@ import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable
 import ProgramAddForm from "./components/dashboard/Programas/ProgramAdd";
 import {Becas} from "./components/Becas/becas";
 import EventUpdate from "./components/dashboard/calendario/eventUpdate";
+import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -160,7 +161,7 @@ function App() {
             <Route path="/programs/teens" element={<ProgramTeens />} />
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
-            <Route path="/americanSpaces" element={<GalleryContainer />} />
+            <Route path="/americanSpaces" element={<AmericanSpaces />} />
 
             {/* Protected */}
             <Route
