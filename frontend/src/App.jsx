@@ -59,8 +59,10 @@ import AmbienteAddComponent from "./components/dashboard/Gallery360/AmbienteAdd"
 import TestimonioNav from "./components/dashboard/Testimonios/Nav";
 import TestimonioTable from "./components/dashboard/Testimonios/TestimoniosTable";
 import ProgramAddForm from "./components/dashboard/Programas/ProgramAdd";
-import {Becas} from "./components/Becas/becas";
+import { Becas } from "./components/Becas/becas";
 import EventUpdate from "./components/dashboard/calendario/eventUpdate";
+import EventsCalendarTable from "./components/dashboard/calendario/eventsCalendarTable";
+import Reportes from "./components/dashboard/calendario/reports";
 import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
 
 function App() {
@@ -178,7 +180,7 @@ function App() {
             >
               <Route path="/dashboard/Calendario" element={<EventNav />}>
                 <Route
-                  path="/dashboard/Calendario/calendario"
+                  path="/dashboard/Calendario/"
                   element={<Calendario />}
                 />
                 <Route
@@ -188,6 +190,14 @@ function App() {
                 <Route
                   path="/dashboard/Calendario/updateEvent"
                   element={<EventUpdate />}
+                />
+                <Route
+                  path="/dashboard/Calendario/eventsTable"
+                  element={<EventsCalendarTable />}
+                />
+                <Route
+                  path="/dashboard/Calendario/Reports/:eventId"
+                  element={<Reportes />}
                 />
               </Route>
               <Route path="/dashboard/publinav" element={<PublicationNav />}>

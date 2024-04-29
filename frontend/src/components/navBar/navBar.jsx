@@ -93,7 +93,7 @@ const NavBar = () => {
       <List>
         {[
           { key: "inicio", ruta: "/" },
-          { key: "calendario", ruta: "/calendar" },
+          { key: "Cronograma", ruta: "/calendar" },
           {
             key: "programas",
             ruta: "/",
@@ -129,7 +129,7 @@ const NavBar = () => {
                 alignItems: "center",
               }}
               component={Link}
-              to={text.ruta}
+              to={text.subRutas ? undefined : text.ruta}
               onClickCapture={() => {
                 if (text.key === "programas") {
                   handleProgramasClick();
@@ -179,12 +179,15 @@ const NavBar = () => {
             {text.key === "programas" && (
               <Collapse in={openProgramas} timeout="auto" unmountOnExit>
                 {text.subRutas && (
-                  <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Collapse in={openProgramas} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {text.subRutas.map((subRuta, subIndex) => (
+                      {text.subRutas.map((subRuta, Index) => (
                         <ListItem
-                          onClickCapture={handleDrawerToggle}
-                          key={subIndex}
+                          onClickCapture={() => {
+                            handleProgramasClick()
+                            handleDrawerToggle()
+                          }}
+                          key={Index}
                           sx={{
                             "&:hover": {
                               backgroundColor: "#e5ebff",
@@ -209,12 +212,15 @@ const NavBar = () => {
             {text.key === "multimedia" && (
               <Collapse in={openMultimedia} timeout="auto" unmountOnExit>
                 {text.subRutas && (
-                  <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Collapse in={openMultimedia} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {text.subRutas.map((subRuta, subIndex) => (
+                      {text.subRutas.map((subRuta, Index) => (
                         <ListItem
-                          onClickCapture={handleDrawerToggle}
-                          key={subIndex}
+                          onClickCapture={() => {
+                            handleMultimediaClick()
+                            handleDrawerToggle()
+                          }}
+                          key={Index}
                           sx={{
                             "&:hover": {
                               backgroundColor: "#e5ebff",
@@ -252,6 +258,7 @@ const NavBar = () => {
         boxShadow: "none",
         top: 0,
         zIndex: 2,
+        // padding:'10px'
       }}
     >
       <Toolbar
@@ -260,6 +267,8 @@ const NavBar = () => {
           display: "flex",
           justifyContent: "space-between",
           height: "100%",
+          // boxShadow:'5px 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+          // borderRadius:'8px'
         }}
       >
         {isMobile ? (
@@ -338,7 +347,7 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <Typography
+            <div
               variant="h6"
               className="flex gap-20 sm:gap-8 md:gap-4 lg:gap-7 xl:gap-14 2xl:gap-15"
             >
@@ -382,8 +391,9 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/calendar"
               >
-                <Link to="/calendar">Cronograma</Link>
+                Cronograma
               </NavLink>
               {/* inicio */}
               <NavLink
@@ -490,9 +500,10 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/educationUSA"
               >
-                <Link to="/educationUSA">Estudia en EEUU</Link>
-              </NavLink>
+                Estudia en EEUU
+              </NavLink >
               <NavLink
                 name="multimedia"
                 style={{
@@ -562,9 +573,10 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/americanSpaces"
               >
-                <Link to="/americanSpaces">Espacios Americanos</Link>
-              </NavLink>
+                Espacios Americanos
+              </NavLink >
               <NavLink
                 style={{
                   display: "flex",
@@ -577,51 +589,54 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/about"
               >
-                <Link to="/about">Acerca de nosotros</Link>
+                Acerca de nosotros
               </NavLink>
-            </Typography>
-            {authlogin.auth ? (
-              <Tooltip>
-                <IconButton
-                  onClick={() => {
-                    setAuth(!auth);
-                  }}
-                  sx={{ p: 0 }}
+            </div >
+            {
+              authlogin.auth ? (
+                <Tooltip>
+                  <IconButton
+                    onClick={() => {
+                      setAuth(!auth);
+                    }}
+                    sx={{ p: 0 }}
+                  >
+                    <PositionedMenu
+                      altImg={authlogin.user.correo}
+                      srcImg={authlogin.user._profileImage}
+                      nombres={authlogin.user.nombres}
+                      apellidos={authlogin.user.apellidos}
+                    ></PositionedMenu>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Link
+                  to="/login"
+                  style={{ color: "inherit", textDecoration: "none" }}
                 >
-                  <PositionedMenu
-                    altImg={authlogin.user.correo}
-                    srcImg={authlogin.user._profileImage}
-                    nombres={authlogin.user.nombres}
-                    apellidos={authlogin.user.apellidos}
-                  ></PositionedMenu>
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Link
-                to="/login"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <Button
-                  onClick={() => {
-                    setAuth(!auth);
-                  }}
-                  style={{
-                    color: "white",
-                    textDecoration: "none",
-                    display: "grid",
-                    alignContent: "center",
-                    background: "#002E5F",
-                  }}
-                >
-                  INICIAR SESION
-                </Button>
-              </Link>
-            )}
+                  <Button
+                    onClick={() => {
+                      setAuth(!auth);
+                    }}
+                    style={{
+                      color: "white",
+                      textDecoration: "none",
+                      display: "grid",
+                      alignContent: "center",
+                      background: "#002E5F",
+                    }}
+                  >
+                    INICIAR SESION
+                  </Button>
+                </Link>
+              )
+            }
           </>
         )}
-      </Toolbar>
-    </AppBar>
+      </Toolbar >
+    </AppBar >
   );
 };
 

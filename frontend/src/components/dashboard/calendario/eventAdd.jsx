@@ -92,10 +92,9 @@ function EventAdd({
   }
   useEffect(() => {
     if (data.tipo != 'General') {
-      navigate('/dashboard/Calendario/calendario', { state: { prevPath: '/dashboard/Calendario/addEvent', data: data } })
+      navigate('/dashboard/Calendario/', { state: { prevPath: '/dashboard/Calendario/addEvent', data: data } })
     }
   }, [data])
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -311,7 +310,7 @@ function EventAdd({
                       </svg>
                   }
                 </div>
-                <div class=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">{secondPartForm ? 'Quitar consigna' : 'Añadir consigna'}</div>
+                <div className=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">{secondPartForm ? 'Quitar consigna' : 'Añadir consigna'}</div>
               </button>
             </div>
           </div>
