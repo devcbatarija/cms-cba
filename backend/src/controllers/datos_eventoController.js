@@ -2,7 +2,6 @@
 const dayjs = require('dayjs');
 const { Dato_Evento, Evento, QR, Consigna_Evento } = require("../db")
 const Sequelize = require('sequelize');
-const { ClientError } = require('../utils/errors');
 
 module.exports = {
 
@@ -12,8 +11,8 @@ module.exports = {
             const datosEvento = await Dato_Evento.findAll({
                 include: [{
                     model: Evento
-
-                }]
+                }],
+                order: [[Sequelize.col('Evento.start'), 'DESC']]
             });
 
             const eventos = await Evento.findAll({
@@ -21,7 +20,10 @@ module.exports = {
                     id: {
                         [Sequelize.Op.notIn]: datosEvento.map(dato => dato.EventoId)
                     }
-                }
+                },
+                order: [
+                    ['start', 'DESC']
+                ]
             });
             const clonedEventos = JSON.parse(JSON.stringify(eventos));
             clonedEventos.forEach(evento => {
@@ -148,7 +150,7 @@ module.exports = {
                     estado: e.consigna.estado,
                     id_Evento: newDatosEvento.id_Evento
                 };
-                newDatosEvento.update({referible:true})
+                newDatosEvento.update({ referible: true })
                 const newConsigna = Consigna_Evento.create(consigna)
 
             }

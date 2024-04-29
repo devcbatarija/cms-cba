@@ -135,7 +135,7 @@ const Calendario = () => {
         const result = await axios.get(`event/getById/${e.event.id}`).then(response => {
             const res = response.data.results
             if (res.General) {
-                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: res } })
+                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/', data: res } })
             }
             else {
                 setTipoModal("Evento");
@@ -255,7 +255,7 @@ const Calendario = () => {
     }
     useEffect(() => {
         if (data.tipo == 'General') {
-            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: data } })
+            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/', data: data } })
         }
     }, [data])
     return (
