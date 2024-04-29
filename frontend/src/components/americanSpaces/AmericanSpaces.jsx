@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Masonry from 'react-masonry-css';
 import './AmericanSpaces.css';
+import ImagenFondo from '../educationUSA/EdUSAComponents/ImagenComponent';
 
 
 const images = [
@@ -72,36 +73,41 @@ const AmericanSpaces = () => {
     });
 
     return (
-        <div>
-            {Object.keys(imagesByCategory).map(category => (
-                <div key={category} className="mb-4 text-center">
-                    <h2 className={`text-3xl uppercase font-bold mb-2 ${getCategoryColorClass(category)}`}>{category}</h2>
-                    <Masonry
-                        breakpointCols={breakpointColumnsObj}
-                        className="masonry-grid"
-                        columnClassName="masonry-grid-column"
-                    >
-                        {imagesByCategory[category].map((image) => (
-                            <div
-                                key={image.id}
-                                className="relative cursor-pointer rounded-lg overflow-hidden"
-                                onClick={() => handleImageClick(image.id)}
-                            >
-                                <img src={image.src} alt={image.name} className="w-full h-auto" />
-                                {selectedImage === image.id && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-4">
-                                        <div>
-                                            <h2 className="text-xl font-bold mb-2">{image.name}</h2>
-                                            <p>{image.description}</p>
+        <>
+            <ImagenFondo imageUrl={"https://i.ibb.co/xJ3QJKh/download-image-1714055930176.png"} />
+            <div>
+                {Object.keys(imagesByCategory).map(category => (
+                    <div key={category} className="mb-4 text-center">
+                        <h2 className={`text-3xl uppercase font-bold mb-2 ${getCategoryColorClass(category)}`}>{category}</h2>
+                        <Masonry
+                            breakpointCols={breakpointColumnsObj}
+                            className="masonry-grid"
+                            columnClassName="masonry-grid-column"
+                        >
+                            {imagesByCategory[category].map((image) => (
+                                <div
+                                    key={image.id}
+                                    className="relative cursor-pointer rounded-lg overflow-hidden"
+                                    onClick={() => handleImageClick(image.id)}
+                                >
+                                    <img src={image.src} alt={image.name} className="w-full h-auto" />
+                                    {selectedImage === image.id && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-4">
+                                            <div>
+                                                <h2 className="text-xl font-bold mb-2">{image.name}</h2>
+                                                <p>{image.description}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </Masonry>
-                </div>
-            ))}
-        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Masonry>
+                    </div>
+                ))}
+            </div>
+
+        </>
+
     );
 };
 

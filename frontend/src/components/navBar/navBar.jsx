@@ -112,7 +112,7 @@ const NavBar = () => {
               { key: "Podcast", ruta: "/podcast" }
             ],
           },
-          { key: "Espacios USA", ruta: "/americanSpaces" },
+          { key: "Espacios Americanos", ruta: "/americanSpaces" },
           { key: "Acerca de nosotros", ruta: "/about" },
         ].map((text, index) => (
           <div
@@ -283,7 +283,7 @@ const NavBar = () => {
               }}
             >
               <div className="flex flex-row drawner-css items-center">
-                <img src={cbaImageHorizontal} alt="" className="h-12"/>
+                <img src={cbaImageHorizontal} alt="" className="h-12" />
                 <span onClick={handleDrawerToggle} className="p-3 rounded-full hover:bg-zinc-200 active:ring-2 ring-zinc-400">
                   <svg
                     width="14"
@@ -331,7 +331,7 @@ const NavBar = () => {
                   }}
                   color="inherit"
                 >
-                  Iniciar sesion
+                  Iniciar Sesion
                 </Button>
               </Link>
             )}
@@ -383,7 +383,7 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
-                <Link to="/calendar">Calendario</Link>
+                <Link to="/calendar">Cronograma</Link>
               </NavLink>
               {/* inicio */}
               <NavLink
@@ -478,71 +478,6 @@ const NavBar = () => {
                   Becas CBA
                 </MenuItem>
               </Menu>
-              {/* final */}
-              {/* inicio */}
-              {/* <NavLink
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "inherit",
-                  textDecoration: "none",
-                  fontSize: ".875rem",
-                  alignContent: "center",
-                  paddingTop: "4px",
-                  gap: 10,
-                }}
-                name="publicaciones"
-                onClick={handleClick}
-              >
-                Publicaciones
-                <svg
-                  style={{ zIndex: "-1" }}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </NavLink>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl.publicaciones}
-                keepMounted
-                open={Boolean(anchorEl.publicaciones)}
-                onClose={handleClose}
-                name="Publicaciones"
-                sx={{
-                  marginTop: "16px",
-                }}
-              >
-                <MenuItem
-                  component={Link}
-                  sx={{
-                    width: "200px",
-                    padding: "20px",
-                  }}
-                >
-                  Eventos
-                </MenuItem>
-                <MenuItem
-                  component={Link}
-                  sx={{
-                    width: "200px",
-                    padding: "20px",
-                  }}
-                >
-                  Cartelera
-                </MenuItem>
-              </Menu> */}
-              {/* final */}
               <NavLink
                 style={{
                   display: "flex",
@@ -556,7 +491,7 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
-                <Link to="/educationUSA">Educacion USA</Link>
+                <Link to="/educationUSA">Estudia en EEUU</Link>
               </NavLink>
               <NavLink
                 name="multimedia"
@@ -628,7 +563,7 @@ const NavBar = () => {
                   gap: 10,
                 }}
               >
-                <Link to="/americanSpaces">Espacios USA</Link>
+                <Link to="/americanSpaces">Espacios Americanos</Link>
               </NavLink>
               <NavLink
                 style={{
