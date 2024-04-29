@@ -2,6 +2,7 @@
 const dayjs = require('dayjs');
 const { Evento, Dato_Evento, Consigna_Evento } = require("../db")
 const { Op } = require('sequelize');
+const { ClientError } = require('../utils/errors');
 
 module.exports = {
 
@@ -148,11 +149,28 @@ module.exports = {
       return error
     }
   },
+  deleteEventoById: async (id) => {
+    try {
+      const deletedEvent = await Evento.destroy({
+        where: {
+          id: id
+        },
+        cascade: true,
+      })
+      if (deletedEvent === 0) {
+        throw new ClientError("No se encontró ningún evento con el ID proporcionado", 400);
+      } else {
+        return `Evento eliminado exitosamente.`
+      }
+    } catch (error) {
+      return error
+    }
+  },
   updateEvento: async (id, changes) => {
     try {
       const event = await Evento.findByPk(id);
       if (!event) {
-        return "User not found!";
+        return "Event not found!";
       }
       const updatedEvent = await Evento.update(
         {

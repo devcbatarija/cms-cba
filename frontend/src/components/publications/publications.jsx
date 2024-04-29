@@ -7,6 +7,7 @@ import { calcularTimestate } from '../../services/functions';
 import FilterPublications from '../dashboard/widgets/botonfiltarpublicaciones';
 import Pagination from '../dashboard/widgets/pagination';
 import CuadroInscripcion from '../inscripcion/incripcion';
+import NoData from '../dashboard/calendario/widgets/noData';
 export const Publications = () => {
     const dispatch = useDispatch();
     const arrayPublicaciones = useSelector((state) => state.publications.publications)
@@ -78,18 +79,26 @@ export const Publications = () => {
                             </p>
                         </div>
                     </div>
-                )) : <div>
-                    No hay datos
-                </div>}
-            <div>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={onPageChange}
-                    topRank={10}
-                />
-            </div>
-            <CuadroInscripcion/>
+                )) :
+                <div className="w-full h-96">
+                    <NoData
+                        text={'Aun no hay publicaciones'}
+                        fontSize={''}
+                    />
+                </div>
+            }
+            {
+                publicaciones.length > itemsPerPage &&
+                <div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={onPageChange}
+                        topRank={10}
+                    />
+                </div>
+            }
+            <CuadroInscripcion />
         </>
     )
 }
