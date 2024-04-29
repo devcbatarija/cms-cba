@@ -6,8 +6,7 @@ const { ClientError } = require("../utils/errors");
 const { response } = require("../utils");
 
 module.exports = {
-  generarQR: async (data) => {
-    console.log(data);
+  generarQR: async (data) => { 
     const verificar = await QR.findOne({
       where: {
         id_Evento: data.id_Evento,
