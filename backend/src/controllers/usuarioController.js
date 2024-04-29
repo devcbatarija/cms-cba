@@ -111,8 +111,9 @@ module.exports = {
   },
 
   authLoginCbaPlus: async (user) => {
+    console.log(user);
     let login
-    await axios.post('http://localhost:8000/api/auth/login', user).then(res => {
+    await axios.post('http://172.16.3.15:8000/api/auth/login', user).then(res => {
       login = res.data
     })
 

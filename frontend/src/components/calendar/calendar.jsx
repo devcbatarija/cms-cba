@@ -151,18 +151,7 @@ const CalendarioClient = () => {
                 <div class="notification items-center ">
                     <div class="notiglow bg-red-100 h-[20px] w-[5px] rounded-full"></div>
                     <div class="notititle">{e.event.title}</div>
-                    {/* <div class="notibody">Contribute to Open Source UI Elements</div> */}
                 </div>
-
-                {/* <div className="w-full bg-white flex flex-row text-cbaBlue items-center justify-center bg-zinc-100">
-                    <div className="w-1/5 p-1 h-full">
-                        <span>{e.event.allDay ? 'true' : 'false'}</span>
-                    </div>
-                    <span className="h-5 w-1 bg-red-500"></span>
-                    <div className="w-4/5 p-1 overflow-hidden">
-                        <h1 className=" font-semibold"></h1>
-                    </div>
-                </div> */}
             </>
         )
     }

@@ -40,6 +40,7 @@ module.exports={
     addDatosEvento:async(req, res)=>{
         try {
             const response = await addDatosEvento(req.body);
+            console.log(response);
             res.status(202).json({
                 results:response,
                 successMessage:"Se registro el evento correctamente"

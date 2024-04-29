@@ -63,6 +63,7 @@ import { Becas } from "./components/Becas/becas";
 import EventUpdate from "./components/dashboard/calendario/eventUpdate";
 import EventsCalendarTable from "./components/dashboard/calendario/eventsCalendarTable";
 import Reportes from "./components/dashboard/calendario/reports";
+import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -162,7 +163,7 @@ function App() {
             <Route path="/programs/teens" element={<ProgramTeens />} />
             <Route path="/educationUSA" element={<EducationUSA />} />
             <Route path="/podcast" element={<Podcast />} />
-            <Route path="/americanSpaces" element={<GalleryContainer />} />
+            <Route path="/americanSpaces" element={<AmericanSpaces />} />
 
             {/* Protected */}
             <Route
