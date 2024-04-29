@@ -17,7 +17,7 @@ const {
   authLoginCbaPlus
 } = require("../handlers/usuarioHandler");
 
-const { validToken, isAdmin, validTokenMobile } = require("../services/jwtservice");
+const { validToken, isAdmin, validTokenMobile, validTokenPlus } = require("../services/jwtservice");
 const catchedAsync = require("../utils/catchedAsync");
 const { formRegister } = require("../handlers/formHandler");
 const { response } = require("../utils");
@@ -34,6 +34,8 @@ router.post('/login', catchedAsync(authLogin)) //Iniciar sesion
 router.post('/loginCbaPlus', catchedAsync(authLoginCbaPlus)) //Iniciar sesion con CBA PLUS
 router.post('/valid/token', validToken); //Validar valides de token e iniciar sesion
 router.post("/valid/token/mobile", validTokenMobile); //Validar valides de token e iniciar sesion
+
+router.post('/valid/token/plus', validTokenPlus); //Validar tokenAdmin cbaplus
 
 router.get('/valid/token/email', emailVerifyToken)
 

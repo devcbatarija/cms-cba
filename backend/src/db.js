@@ -51,7 +51,8 @@ const {
   Beca,
   PreRegistro,
   QR,
-  Consigna_Evento
+  Consigna_Evento,
+  Fecha_Lectura
 } = sequelize.models;
 Dato_Evento.hasMany(QR, { foreignKey: 'id_Evento' });
 QR.belongsTo(Dato_Evento, { foreignKey: 'id_Evento' });
@@ -95,6 +96,8 @@ ProgramPrices.belongsTo(Programa);
 Usuario.hasMany(Beca);
 Beca.belongsTo(Usuario);
 
+QR.hasMany(Fecha_Lectura);
+Fecha_Lectura.belongsTo(QR);
 
 module.exports = {// para poder importar los modelos así: const { Product, User } = require('./db.js');
   ...sequelize.models,
