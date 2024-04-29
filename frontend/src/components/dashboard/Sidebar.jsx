@@ -16,6 +16,7 @@ import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import CollectionsRoundedIcon from '@mui/icons-material/CollectionsRounded';
 import { Dialog, Transition } from "@headlessui/react";
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
 import cbaLogo from '../../assets/logo_cba_white.png'
 
 function classNames(...classes) {
@@ -133,13 +134,18 @@ export default function Sidebar({
             subItems={[
               {
                 label: "Calendario",
-                to: "/dashboard/Calendario/calendario",
+                to: "/dashboard/Calendario/",
                 icon: <CalendarTodayRoundedIcon></CalendarTodayRoundedIcon>,
               },
               {
                 label: "Crear Evento",
                 to: "/dashboard/Calendario/addEvent",
                 icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+              },
+              {
+                label: "Tabla de eventos",
+                to: "/dashboard/Calendario/eventsTable",
+                icon: <StorageRoundedIcon />,
               },
             ]}
           />
@@ -338,13 +344,18 @@ export default function Sidebar({
                   subItems={[
                     {
                       label: "Calendario",
-                      to: "/dashboard/Calendario/calendario",
+                      to: "/dashboard/Calendario/",
                       icon: <CalendarTodayRoundedIcon></CalendarTodayRoundedIcon>,
                     },
                     {
                       label: "Crear Evento",
                       to: "/dashboard/Calendario/addEvent",
                       icon: <AddBoxRoundedIcon></AddBoxRoundedIcon>,
+                    },
+                    {
+                      label: "Tabla de eventos",
+                      to: "/dashboard/Calendario/eventsTable",
+                      icon: <StorageRoundedIcon />,
                     },
                   ]}
                 />

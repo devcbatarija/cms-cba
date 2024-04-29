@@ -129,7 +129,7 @@ const NavBar = () => {
                 alignItems: "center",
               }}
               component={Link}
-              to={text.ruta}
+              to={text.subRutas ? undefined : text.ruta}
               onClickCapture={() => {
                 if (text.key === "programas") {
                   handleProgramasClick();
@@ -179,12 +179,15 @@ const NavBar = () => {
             {text.key === "programas" && (
               <Collapse in={openProgramas} timeout="auto" unmountOnExit>
                 {text.subRutas && (
-                  <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Collapse in={openProgramas} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {text.subRutas.map((subRuta, subIndex) => (
+                      {text.subRutas.map((subRuta, Index) => (
                         <ListItem
-                          onClickCapture={handleDrawerToggle}
-                          key={subIndex}
+                          onClickCapture={() => {
+                            handleProgramasClick()
+                            handleDrawerToggle()
+                          }}
+                          key={Index}
                           sx={{
                             "&:hover": {
                               backgroundColor: "#e5ebff",
@@ -209,12 +212,15 @@ const NavBar = () => {
             {text.key === "multimedia" && (
               <Collapse in={openMultimedia} timeout="auto" unmountOnExit>
                 {text.subRutas && (
-                  <Collapse in={open} timeout="auto" unmountOnExit>
+                  <Collapse in={openMultimedia} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
-                      {text.subRutas.map((subRuta, subIndex) => (
+                      {text.subRutas.map((subRuta, Index) => (
                         <ListItem
-                          onClickCapture={handleDrawerToggle}
-                          key={subIndex}
+                          onClickCapture={() => {
+                            handleMultimediaClick()
+                            handleDrawerToggle()
+                          }}
+                          key={Index}
                           sx={{
                             "&:hover": {
                               backgroundColor: "#e5ebff",
@@ -252,6 +258,7 @@ const NavBar = () => {
         boxShadow: "none",
         top: 0,
         zIndex: 2,
+        // padding:'10px'
       }}
     >
       <Toolbar
@@ -260,6 +267,8 @@ const NavBar = () => {
           display: "flex",
           justifyContent: "space-between",
           height: "100%",
+          // boxShadow:'5px 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+          // borderRadius:'8px'
         }}
       >
         {isMobile ? (
@@ -283,7 +292,7 @@ const NavBar = () => {
               }}
             >
               <div className="flex flex-row drawner-css items-center">
-                <img src={cbaImageHorizontal} alt="" className="h-12"/>
+                <img src={cbaImageHorizontal} alt="" className="h-12" />
                 <span onClick={handleDrawerToggle} className="p-3 rounded-full hover:bg-zinc-200 active:ring-2 ring-zinc-400">
                   <svg
                     width="14"
@@ -338,7 +347,7 @@ const NavBar = () => {
           </>
         ) : (
           <>
-            <Typography
+            <div
               variant="h6"
               className="flex gap-20 sm:gap-8 md:gap-4 lg:gap-7 xl:gap-14 2xl:gap-15"
             >
@@ -382,8 +391,9 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/calendar"
               >
-                <Link to="/calendar">Calendario</Link>
+                Calendario
               </NavLink>
               {/* inicio */}
               <NavLink
@@ -555,8 +565,9 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/educationUSA"
               >
-                <Link to="/educationUSA">Educacion USA</Link>
+                Educacion USA
               </NavLink>
               <NavLink
                 name="multimedia"
@@ -627,8 +638,9 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/americanSpaces"
               >
-                <Link to="/americanSpaces">Espacios USA</Link>
+                Espacios Americanos
               </NavLink>
               <NavLink
                 style={{
@@ -642,10 +654,11 @@ const NavBar = () => {
                   paddingTop: "4px",
                   gap: 10,
                 }}
+                to="/about"
               >
-                <Link to="/about">Acerca de nosotros</Link>
+                Acerca de nosotros
               </NavLink>
-            </Typography>
+            </div>
             {authlogin.auth ? (
               <Tooltip>
                 <IconButton

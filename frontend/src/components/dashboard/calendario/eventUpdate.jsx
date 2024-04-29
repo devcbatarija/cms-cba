@@ -115,14 +115,14 @@ function EventUpdate({ }) {
           multimedia: [],
           categoria: "Cine",
         });
-        navigate('/dashboard/Calendario/calendario')
+        navigate('/dashboard/Calendario/')
         dispatch(getEvents())
       }
     } catch (error) {
     }
   };
   useEffect(() => {
-    if (location.state?.prevPath === '/dashboard/Calendario/calendario' && location.state?.data) {
+    if (location.state?.prevPath === '/dashboard/Calendario/' && location.state?.data) {
       setEvento(location.state.data.General)
       setDatosEvento(location.state.data.datosEvento)
       setUrls(location.state.data.datosEvento.multimedia)

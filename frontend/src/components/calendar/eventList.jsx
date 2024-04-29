@@ -6,6 +6,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { createRef, useEffect, useRef, useState } from 'react';
 import '../dashboard/calendario/calendarStyles.css';
 import calendarIcon from '../../assets/calendar.png'
+import NoData from '../dashboard/calendario/widgets/noData';
 dayjs.extend(localizedFormat);
 dayjs.locale('es');
 
@@ -30,7 +31,12 @@ export default function EventList({
           <div className="divide-y divide-gray-300">
             {eventsByMonth.length > 0 ? eventsByMonth.map((event) => (
               <Event key={event.Evento ? event.id_Evento : event.id} event={event} />
-            )) : <div></div>}
+            )) : <div className="w-full h-96 px-5 py-8">
+              <NoData
+                text={'Aun no hay eventos para este mes'}
+                fontSize={'text-sm'}
+              />
+            </div>}
           </div>
 
         </div>
@@ -101,7 +107,7 @@ function Event({ event }) {
       ref={divRef}
       onClick={() => setIsExpanded(!isExpanded)}
       className={`relative transition-all duration-700 px-4 py-6 grid grid-cols-4 gap-4 sm:px-0  ${isExpanded ? 'h-auto bg-blue-100' : 'h-32 text-ellipsis overflow-hidden'}`}>
-      <div className="grid justify-items-center">{event.Evento ? <img className='h-20 w-20' src={event.multimedia[0]} alt="" /> : <img className=' h-20 w-20' src={calendarIcon}/>}</div>
+      <div className="grid justify-items-center">{event.Evento ? <img className='h-20 w-20' src={event.multimedia[0]} alt="" /> : <img className=' h-20 w-20' src={calendarIcon} />}</div>
       <div className='mt-1 text-sm leading-6 text-gray-700 col-span-3 sm:mt-0'>
         <span className='flex items-center text-xs text-azulClaro font-medium'><AccessTimeIcon sx={{ width: '15px' }} /> {formatDate(event)}</span>
         <h1 className=" uppercase font-medium text-cbaBlue">{event.Evento ? event.Evento.title : event.title}</h1>
