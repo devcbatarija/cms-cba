@@ -19,13 +19,22 @@ module.exports = {
     }
     return verificar;
   },
-  verificarQR: async ({id_QR}) => {
+  verificarQR: async ({ id_QR }) => {
 
     const qr = await QR.findByPk(id_QR)
     if (qr == null) {
       throw new ClientError("QR no encontrado");
-    } 
-    qr.update({ cantidad_uso:qr.cantidad_uso+1})
+    }
+    qr.update({ cantidad_uso: qr.cantidad_uso + 1 })
     return qr;
+  },
+  existsQR: async (data) => {
+    const verificar = await QR.findOne({
+      where: {
+        id_Evento: data.id_Evento,
+        id_Estudiante: data.id_Estudiante
+      }
+    })
+    return verificar;
   },
 };

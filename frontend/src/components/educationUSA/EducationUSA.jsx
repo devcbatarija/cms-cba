@@ -7,6 +7,7 @@ import ImagenFondo from "./EdUSAComponents/ImagenComponent";
 import AcercadeNosotros from "./EdUSAComponents/AcercadeComponent";
 import InformacionEducacion from "./EdUSAComponents/ImformationComponent";
 import Rectangulo from "./EdUSAComponents/RectanguloComponent";
+import MapComponent from "./Maps";
 
 
 
@@ -28,7 +29,7 @@ function EducationUSA() {
 
     const imageUrl = "https://th.bing.com/th/id/R.169a44cef96cc4d44c78663afb2a43fd?rik=67VHGtHLvgIFjA&riu=http%3a%2f%2fmidliferoadtrip.tv%2fwp-content%2fuploads%2f2010%2f08%2fpassport-stamps-1.png&ehk=ikz67Xo5MSMjz1IGA2Q1KLU%2ffBOabK%2flvsfZOm5BRpA%3d&risl=&pid=ImgRaw&r=0";
     const imageqr = "https://i.ibb.co/B3HL9vF/R.jpg";
-    const imageBanner = "https://i.ibb.co/p0j0nCn/education-USa.png";
+    const imageBanner = "https://ilbolive.unipd.it/sites/default/files/styles/style_1120x630/public/2019-09/n_usauniversity.jpg?itok=IPoTN-uu";
     const acercadenos = `En Bolivia estamos ubicados en 5 centros, ubicados en las ciudades de La Paz, Cochabamba, Tarija y Sucre.
     Nos comprometemos a proporcionar informacion precisa y actualizada sobre las oportunidades academicas
     y de financiamiento de unstituciones acreditadas en los Estados Unidos.`;
@@ -44,7 +45,7 @@ function EducationUSA() {
     };
     return (
         <>
-            <ImagenFondo imageUrl={imageBanner} />
+            <ImagenFondo imageUrl={imageBanner} titulo="EDUCATION USA" />
             <div className="px-2 sm:px4 pt-5 pb-1">
                 <div className="flex flex-wrap ">
                     <div className="w-full lg:w-2/6 text-blue-900 text-justify bg-white rounded-lg">
@@ -59,7 +60,7 @@ function EducationUSA() {
                                 <Rectangulo color="rgb(0, 22, 60)" /> {/* azul marino */}
                             </div>
                             <div className="w-5/6 pl-5">
-                                <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">EDUCATION<span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400">USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
+                                <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">EDUCATION USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
                                 <ul className="list-disc pl-2">
                                     <li><strong style={{ color: 'rgb(128, 160, 0)' }}>Te informamos</strong> sobre las distintas ofertas academicas de nivel superior en los Estados Unidos.</li>
                                     <li><strong style={{ color: 'rgb(179, 80, 0)' }}>Orientamos tu investigacion</strong> sobre programas de estudio y universidades que se ajusten a tus necesidades y metas academicas.</li>
@@ -70,9 +71,12 @@ function EducationUSA() {
                         </div>
                     </div>
                     <div className="w-full lg:w-2/6 text-blue-900 text-justify bg-white rounded-lg p-5">
-                        <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">COMO ESTUDIAR EN LOS ESTADOS UNIDOS?</h1>
+                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">COMO ESTUDIAR EN LOS ESTADOS UNIDOS?
+                            </span>
+                        </h1>
                         <p>Estudiar en Estados Unidos a nivel Universitario requiere mucha investigacion y planificacion.
-                            En EducationUSA te brindaremos <strong>informacion</strong> relevante sobre universidades y <strong>oportunidades de apoyo financiero</strong>
+                            En EducationUSA te brindaremos <strong>informacion </strong>relevante sobre universidades y <strong>oportunidades de apoyo financiero </strong>
                             disponibles para estudiantes internacionales.
                         </p>
                         <br />
@@ -82,7 +86,10 @@ function EducationUSA() {
                     </div>
                     <div className="w-full lg:w-2/6 text-blue-900  bg-white rounded-lg p-5">
                         <div>
-                            <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">| NUESTROS SERVICIOS</h1>
+                            <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">| NUESTROS SERVICIOS
+                                </span>
+                            </h1>
                         </div>
                         <div className="text-justify">
                             <div>
@@ -109,11 +116,12 @@ function EducationUSA() {
                 </div>
             </div>
             <div className="px-2 sm:px4 pt-1 pb-2   ">
-
                 <div className="flex flex-wrap ">
                     <div className="w-full lg:w-2/5 text-blue-900 text-justify bg-white rounded-lg p-5">
-                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">QUIERES ESTUDIAR EN LOS <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-400 from-sky-400">ESTADOS UNIDOS? </span></h1>
-
+                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">QUIERES ESTUDIAR EN LOS ESTADOS UNIDOS?
+                            </span>
+                        </h1>
                         {
                             pasos.map((p, index) => {
                                 if (index + 1 > 0) {
@@ -132,27 +140,20 @@ function EducationUSA() {
                                 return null;
                             })
                         }
-
                     </div>
-                    <div className="w-full lg:w-2/5 text-blue-900">
-
-                        <AcercadeNosotros texto={acercadenos} imageUrl={imageUrl} />
-
+                    <div className="w-full lg:w-3/5 flex flex-col md:flex-row lg:flex-col pl-7 pr-1 pt-10 pb-10">
+                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">VISITA NUESTRAS OFICINAS EN TARIJA
+                            </span>
+                        </h1>
+                        <MapComponent />
                     </div>
-                    <div className="w-full lg:w-1/5 flex flex-col md:flex-row lg:flex-col">
-                        <div className="imagen pt-6 pb-3 pr-3 pl-3">
-                            <img src={imageqr} alt="QR" />
-                        </div>
-                        <div className="info">
-                            <InformacionEducacion {...informacionData} />
-                        </div>
-                    </div>
-
+                </div>
+                <div className="w-full lg:w-1/5 flex flex-col md:flex-row lg:flex-col">
                 </div>
             </div>
             <CuadroInscripcion />
             <div className="flex-row" >
-                {/* <ServicioComponent {...servicioProps} /> */}
             </div>
         </>
     );

@@ -54,10 +54,18 @@ const {
   Consigna_Evento,
   Fecha_Lectura
 } = sequelize.models;
-Dato_Evento.hasMany(QR, { foreignKey: 'id_Evento' });
+Dato_Evento.hasMany(QR, {
+  foreignKey: 'id_Evento',
+  onDelete: 'CASCADE',
+  hooks: true
+});
 QR.belongsTo(Dato_Evento, { foreignKey: 'id_Evento' });
 
-Dato_Evento.hasMany(Consigna_Evento, { foreignKey: 'id_Evento' });
+Dato_Evento.hasMany(Consigna_Evento, {
+  foreignKey: 'id_Evento',
+  onDelete: 'CASCADE',
+  hooks: true
+});
 Consigna_Evento.belongsTo(Dato_Evento, { foreignKey: 'id_Evento' });
 
 Usuario.hasMany(Publicacion);
@@ -66,7 +74,10 @@ Publicacion.belongsTo(Usuario);
 Usuario.hasMany(Evento);
 Evento.belongsTo(Usuario);
 
-Evento.hasMany(Dato_Evento);
+Evento.hasMany(Dato_Evento, {
+  onDelete: 'CASCADE',
+  hooks: true
+});
 Dato_Evento.belongsTo(Evento);
 
 Usuario.hasMany(Evento_Predefinido);
