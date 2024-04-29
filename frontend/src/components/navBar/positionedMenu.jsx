@@ -44,13 +44,12 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
     try {
       navigate("/");
       const response = await axios.get('/users/logout')
-      console.log(response);
       dispatch(logoutSession(false));
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Cierre de sesión exitoso" />
       ));
     } catch (error) {
-      console.log(error);
+      
     }
   };
   const aleatorios = async () => {

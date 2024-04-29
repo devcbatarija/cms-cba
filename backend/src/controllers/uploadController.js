@@ -5,6 +5,7 @@ const { API_KEY_IMGBB, BASE_URL } = process.env;
 const FormData = require("form-data");
 
 const uploadImage = async ({ filePath, type }) => {
+  console.log(filePath,type);
   //RECIBIMOS BASE64
   try {
     let data = [];

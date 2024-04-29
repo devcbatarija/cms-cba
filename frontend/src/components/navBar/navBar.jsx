@@ -93,7 +93,7 @@ const NavBar = () => {
       <List>
         {[
           { key: "inicio", ruta: "/" },
-          { key: "calendario", ruta: "/calendar" },
+          { key: "Cronograma", ruta: "/calendar" },
           {
             key: "programas",
             ruta: "/",
@@ -112,7 +112,7 @@ const NavBar = () => {
               { key: "Podcast", ruta: "/podcast" }
             ],
           },
-          { key: "Espacios USA", ruta: "/americanSpaces" },
+          { key: "Espacios Americanos", ruta: "/americanSpaces" },
           { key: "Acerca de nosotros", ruta: "/about" },
         ].map((text, index) => (
           <div
@@ -340,7 +340,7 @@ const NavBar = () => {
                   }}
                   color="inherit"
                 >
-                  Iniciar sesion
+                  Iniciar Sesion
                 </Button>
               </Link>
             )}
@@ -393,7 +393,7 @@ const NavBar = () => {
                 }}
                 to="/calendar"
               >
-                Calendario
+                Cronograma
               </NavLink>
               {/* inicio */}
               <NavLink
@@ -488,71 +488,6 @@ const NavBar = () => {
                   Becas CBA
                 </MenuItem>
               </Menu>
-              {/* final */}
-              {/* inicio */}
-              {/* <NavLink
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: "inherit",
-                  textDecoration: "none",
-                  fontSize: ".875rem",
-                  alignContent: "center",
-                  paddingTop: "4px",
-                  gap: 10,
-                }}
-                name="publicaciones"
-                onClick={handleClick}
-              >
-                Publicaciones
-                <svg
-                  style={{ zIndex: "-1" }}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M0.646447 0.646447C0.841709 0.451184 1.15829 0.451184 1.35355 0.646447L5 4.29289L8.64645 0.646447C8.84171 0.451184 9.15829 0.451184 9.35355 0.646447C9.54882 0.841709 9.54882 1.15829 9.35355 1.35355L5 5.70711L0.646447 1.35355C0.451184 1.15829 0.451184 0.841709 0.646447 0.646447Z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </NavLink>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl.publicaciones}
-                keepMounted
-                open={Boolean(anchorEl.publicaciones)}
-                onClose={handleClose}
-                name="Publicaciones"
-                sx={{
-                  marginTop: "16px",
-                }}
-              >
-                <MenuItem
-                  component={Link}
-                  sx={{
-                    width: "200px",
-                    padding: "20px",
-                  }}
-                >
-                  Eventos
-                </MenuItem>
-                <MenuItem
-                  component={Link}
-                  sx={{
-                    width: "200px",
-                    padding: "20px",
-                  }}
-                >
-                  Cartelera
-                </MenuItem>
-              </Menu> */}
-              {/* final */}
               <NavLink
                 style={{
                   display: "flex",
@@ -567,8 +502,8 @@ const NavBar = () => {
                 }}
                 to="/educationUSA"
               >
-                Educacion USA
-              </NavLink>
+                Estudia en EEUU
+              </NavLink >
               <NavLink
                 name="multimedia"
                 style={{
@@ -641,7 +576,7 @@ const NavBar = () => {
                 to="/americanSpaces"
               >
                 Espacios Americanos
-              </NavLink>
+              </NavLink >
               <NavLink
                 style={{
                   display: "flex",
@@ -658,48 +593,50 @@ const NavBar = () => {
               >
                 Acerca de nosotros
               </NavLink>
-            </div>
-            {authlogin.auth ? (
-              <Tooltip>
-                <IconButton
-                  onClick={() => {
-                    setAuth(!auth);
-                  }}
-                  sx={{ p: 0 }}
+            </div >
+            {
+              authlogin.auth ? (
+                <Tooltip>
+                  <IconButton
+                    onClick={() => {
+                      setAuth(!auth);
+                    }}
+                    sx={{ p: 0 }}
+                  >
+                    <PositionedMenu
+                      altImg={authlogin.user.correo}
+                      srcImg={authlogin.user._profileImage}
+                      nombres={authlogin.user.nombres}
+                      apellidos={authlogin.user.apellidos}
+                    ></PositionedMenu>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Link
+                  to="/login"
+                  style={{ color: "inherit", textDecoration: "none" }}
                 >
-                  <PositionedMenu
-                    altImg={authlogin.user.correo}
-                    srcImg={authlogin.user._profileImage}
-                    nombres={authlogin.user.nombres}
-                    apellidos={authlogin.user.apellidos}
-                  ></PositionedMenu>
-                </IconButton>
-              </Tooltip>
-            ) : (
-              <Link
-                to="/login"
-                style={{ color: "inherit", textDecoration: "none" }}
-              >
-                <Button
-                  onClick={() => {
-                    setAuth(!auth);
-                  }}
-                  style={{
-                    color: "white",
-                    textDecoration: "none",
-                    display: "grid",
-                    alignContent: "center",
-                    background: "#002E5F",
-                  }}
-                >
-                  INICIAR SESION
-                </Button>
-              </Link>
-            )}
+                  <Button
+                    onClick={() => {
+                      setAuth(!auth);
+                    }}
+                    style={{
+                      color: "white",
+                      textDecoration: "none",
+                      display: "grid",
+                      alignContent: "center",
+                      background: "#002E5F",
+                    }}
+                  >
+                    INICIAR SESION
+                  </Button>
+                </Link>
+              )
+            }
           </>
         )}
-      </Toolbar>
-    </AppBar>
+      </Toolbar >
+    </AppBar >
   );
 };
 

@@ -118,7 +118,7 @@ module.exports = {
             return error;
         }
     },
-    addDatosEvento: async (e) => {
+    addDatosEvento: async (e) => { 
         console.log(e);
         try {
             const evento = {
