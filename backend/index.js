@@ -16,7 +16,7 @@ server.use((err, req, res, next) => {
     resError(res, statusCode, message);
 });
 
-conn.sync({ force: false }).then(() => {
+conn.sync({ force: true }).then(() => {
     server.listen(PORT, () => {
         console.log('SERVER IS RUNNING')
     })
