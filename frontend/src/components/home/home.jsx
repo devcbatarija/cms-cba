@@ -7,7 +7,7 @@ import CuadroInscripcion from "../inscripcion/incripcion";
 import { calcularTimestate } from "../../services/functions";
 import { StatisticsBanner } from "../statisticsBanner/statisticsBanner";
 import { Link } from "react-router-dom";
-import primera from "../../assets/1.jpeg";
+import primera from "../../assets/5.webp";
 import segunda from "../../assets/2.jpeg";
 import tercera from "../../assets/3.jpeg";
 import cuarta from "../../assets/4.jpeg";
@@ -15,7 +15,7 @@ import { TestimonioPreview } from "../testimonios/testimonioPreview";
 import ImagenesEstilizadas from "../dashboard/widgets/imagenPublicacion";
 import { getDatosEvents } from "../../redux-toolkit/actions/eventActions";
 
-const dataImage = [primera, segunda, tercera, cuarta];
+const dataImage = [primera, segunda, cuarta];
 
 const Home = () => {
   const [dataCalc, setDataCalc] = useState([]);
@@ -51,7 +51,7 @@ const Home = () => {
     }
   }, [multimediadata, events]); // Agrega multimediadata como dependencia
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
   const converFecha = (fech) => {
     const newFecha = new Date(fech);
     return newFecha.toLocaleString("es-ES", {
@@ -78,7 +78,6 @@ const Home = () => {
       <div className="w-full h-auto">
         <CarouselHome multimedia={dataImage}></CarouselHome>
       </div>
-      <ComponentComunication></ComponentComunication>
       <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
         <div className="flex flex-col md:w-8/12 w-full gap-4 p-4 bg-white shadow-md">
           <h2 className="mt-1 text-lg font-semibold text-cbaBlue md:text-2xl dark:sm:text-white">
@@ -257,6 +256,7 @@ const Home = () => {
           )}
         </div>
       </div>
+      <ComponentComunication></ComponentComunication>
       <StatisticsBanner></StatisticsBanner>
       <div className="flex flex-col w-full items-center">
         {!testimonios.length > 0 ? <div>Aún no hay testimonios.</div> : null}
