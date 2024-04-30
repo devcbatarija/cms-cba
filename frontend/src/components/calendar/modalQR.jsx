@@ -62,12 +62,14 @@ const ModalQR = ({
     ]
     const [typeImageQR, setTypeImageQR] = useState(extensiones[1].type)
 
-    const generarQR = () => {
+    const generarQR = (id) => {
         if (isLogged == true) {
             if (!qrGenerated) {
                 const datos = {
                     id_Evento: event.datosEvento.id_Evento,
                     id_Estudiante: userLogin._userId.toString(),
+                    nombre_estudiante: `${userLogin.nombres} ${userLogin.apellidos}`,
+                    paralelo: 'Por-Hacer-Aun',
                     cantidad_uso: 0,
                     fecha_Expiracion: event.General.end,
                 }
@@ -77,6 +79,9 @@ const ModalQR = ({
                     })
                     qrCode.append(qrCodeRef.current)
                     setQrGenerated(true)
+                    setTimeout(() => {
+                        verifyQR()
+                    }, 1000);
                 }).catch(err => {
                     console.log(err)
                 });
@@ -124,8 +129,7 @@ const ModalQR = ({
         return `rgb(${r},${g},${b},0.3)`;
     };
     const colorRgb = hexToRgb(event.General.color);
-
-    useEffect(() => {
+    const verifyQR = () => {
         if (event.datosEvento.Consigna_Eventos.length > 0) {
             setConsigna(event.datosEvento.Consigna_Eventos[0])
         }
@@ -148,6 +152,9 @@ const ModalQR = ({
             })
         }
         console.log(event)
+    }
+    useEffect(() => {
+        verifyQR()
     }, [])
 
     useEffect(() => {
@@ -311,7 +318,7 @@ const ModalQR = ({
                                                         />
                                                     </div>
                                                 </div> :
-                                                <button onClick={generarQR} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
+                                                <button onClick={() => generarQR(event.General.id)} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
                                         }
                                     </div>
                                 </div>
