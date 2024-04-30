@@ -8,8 +8,11 @@ import { ErrorAlert } from "../../toastAlerts/errorAlerts";
 import NoData from "./widgets/noData";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../widgets/pagination";
+import { getEvents } from "../../../redux-toolkit/actions/eventActions";
+import { useDispatch } from "react-redux";
 
 const EventsCalendarTable = () => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [Events, setEvents] = useState(null)
     const [selectedEvents, setSelectedEvents] = useState([])
@@ -23,9 +26,9 @@ const EventsCalendarTable = () => {
 
     const handleDeleteEventById = (idEvent) => {
         axios.delete(`event/deleteEventoById/${idEvent}`).then(res => {
-            console.log(res)
             setTimeout(() => {
                 getAllEvents()
+                dispatch(getEvents())
                 toast.custom((t) => (
                     <SuccessAlert t={t} w={"w-4/12"} message={res.data.data.successMessage} />
                 ));
@@ -62,7 +65,12 @@ const EventsCalendarTable = () => {
     }
     const getAllEvents = async () => {
         await axios.get('datosevento').then(res => {
-            setEvents(res.data.results)
+            if (res.data.results.datosEvento.length > 0) {
+                setEvents(res.data.results)
+            }
+            else {
+                setEvents(null)
+            }
             setTotalPages(Math.ceil(res.data.results.datosEvento.length / itemsPerPage))
             console.log(res.data.results)
         })

@@ -145,19 +145,13 @@ const Calendario = () => {
         })
     }
     const handleEventDrop = async (e) => {
-        const token = Cookies.get('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
         const eventDrop = e.event;
         const event = {
             id: eventDrop.id,
             start: eventDrop.start,
             end: eventDrop.allDay == false ? eventDrop.endStr : dayjs(eventDrop.endStr).subtract(1, 'day').format('YYYY-MM-DD')
         }
-        axios.put(`event/update/${event.id}`, event, config).then(res => {
+        axios.put(`event/update/${event.id}`, event).then(res => {
             setTimeout(() => {
                 limpiarDatos();
                 toast.success(res.data.successMessage)
@@ -188,12 +182,6 @@ const Calendario = () => {
         }
     }, [])
     const handleExternalEventDrop = async (e) => {
-        const token = Cookies.get('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
         const eventDrop = JSON.parse(e.draggedEl.dataset.event);
         const newE = {
             title: eventDrop.title,
@@ -207,7 +195,7 @@ const Calendario = () => {
             UsuarioIdUsuario: userLogin._userId
 
         }
-        axios.post("event/create", newE, config).then(res => {
+        axios.post("event/create", newE).then(res => {
             setTimeout(() => {
                 toast.success(res.data.successMessage)
                 dispatch(getEvents())

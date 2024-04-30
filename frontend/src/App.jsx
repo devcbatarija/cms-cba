@@ -64,6 +64,7 @@ import EventUpdate from "./components/dashboard/calendario/eventUpdate";
 import EventsCalendarTable from "./components/dashboard/calendario/eventsCalendarTable";
 import Reportes from "./components/dashboard/calendario/reports";
 import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
+import ReportsByStudents from "./components/dashboard/calendario/reportsByStudents";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -198,6 +199,10 @@ function App() {
                 <Route
                   path="/dashboard/Calendario/Reports/:eventId"
                   element={<Reportes />}
+                />
+                <Route
+                  path="/dashboard/Calendario/ReportsByStudents"
+                  element={<ReportsByStudents />}
                 />
               </Route>
               <Route path="/dashboard/publinav" element={<PublicationNav />}>

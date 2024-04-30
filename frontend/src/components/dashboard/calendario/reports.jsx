@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const Reportes = () => {
+    const navigate = useNavigate()
+
     const cursos = [
         {
             id: 1,
@@ -64,15 +68,21 @@ const Reportes = () => {
 
     return (
         <>
-            <div className="w-full h-96">
+            <div className="w-full min-h-screen bg-zinc-100">
                 <div className="px-20 py-8">
-                    <div className="flex flex-row flex-wrap justify-center items-center gap-5 bg-red-100">
+                    <div className="flex flex-row flex-wrap justify-center items-center gap-5">
                         {
-                            cursos.map((c, index) => (
-                                <div key={index}
-                                    className="h-80 w-[23.5%] rounded-xl bg-green-200"
+                            cursos.map((c) => (
+                                <div key={c.id}
+                                    className="h-80 w-[23.5%] rounded-3xl bg-white shadow-lg p-2"
                                 >
-
+                                    <div className="h-[25%] flex items-center justify-center flex flex-col gap-y-2">
+                                        <span className="text-center font-bold text-zinc-500">{c.nombre}</span>
+                                        <span className="text-center font-semibold text-zinc-400 text-xs">{c.instructor}</span>
+                                    </div>
+                                    <div className="h-[75%] flex items-center justify-center">
+                                        <span className="text-5xl font-extrabold text-green-200">{c.estudiantesInscritos}</span>
+                                    </div>
                                 </div>
                             ))
                         }
