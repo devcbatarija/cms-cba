@@ -111,7 +111,6 @@ module.exports = {
   },
 
   authLoginCbaPlus: async (user) => {
-    console.log(user);
     let login
     await axios.post('http://172.16.3.15:8000/api/auth/login', user).then(res => {
       login = res.data
@@ -119,9 +118,9 @@ module.exports = {
 
     const tokengen = await signIn({
       id_Usuario: login.userData.id,
-      nombres: login.userData.fullname,
-      ci: login.userData.id,
-      from:'CBA PLUS'
+      nombres: login.userData.fullName,
+      from: 'CBA PLUS',
+      accessToken: login.accessToken
     });
     const usLogin = {
       _userId: login.userData.id,
