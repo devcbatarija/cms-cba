@@ -30,8 +30,8 @@ module.exports = {
     },
     //reportes QR
     reportParallelsQr: async (req, res) => {
-        const response = await reportEventQrParallels();
-        response(res, 200, response);
+        const { gestion, mes } = req.body;
+        const result = await reportEventQrParallels(res,gestion, mes);
     },
     reportStudentsQr:async(req,res)=>{
         const response = await reportStudentsQr();
