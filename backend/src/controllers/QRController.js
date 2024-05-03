@@ -52,24 +52,21 @@ module.exports = {
       }
       const groupedAndSummed = await filteredQRs.reduce((acc, qr) => {
         const key = `${qr.paralelo}-${qr.gestion}-${qr.mes_literal}`;
-        
+
         if (!acc[key]) {
           acc[key] = {
             paralelo: qr.paralelo,
             cantidad_uso: 0,
-            profesor:qr.profesor
+            profesor: qr.profesor,
           };
         }
         acc[key].cantidad_uso += qr.cantidad_uso;
         return acc;
       }, {});
-
-      // Convertir el resultado a un array para enviarlo como respuesta
       const result = Object.values(groupedAndSummed);
 
       response(res, 200, result);
     } catch (error) {
-      console.error(error);
       response(res, 500, { error: "Error interno del servidor" });
     }
   },
