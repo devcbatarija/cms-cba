@@ -9,12 +9,10 @@ module.exports = {
             });
             return data;
         } catch (error) {
-            console.log(error)
             throw new Error("Error al obtener los programas");
         }
     },
     addPrograma: async (p) => {
-        console.log(p)
         try {
             const nuevoPrograma = await Programa.create({
                 nombre: p.nombre,
@@ -23,7 +21,6 @@ module.exports = {
                 multimedia: p.multimedia,
                 UsuarioIdUsuario: p.UsuarioIdUsuario,
             });
-            console.log(nuevoPrograma)
             return nuevoPrograma;
         } catch (error) {
             throw new Error("Error al agregar el programa");
