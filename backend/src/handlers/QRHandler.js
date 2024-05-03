@@ -1,15 +1,14 @@
-const { generarQR, verificarQR, existsQR } = require("../controllers/QRController");
+const { generarQR, verificarQR, existsQR, reportEventQrParallels, reportStudentsQr } = require("../controllers/QRController");
 const { response } = require("../utils");
 
 
-module.exports = {
-
+module.exports = { 
     generarQR: async (req, res) => {
         try {
             const result = await generarQR(req.body);
             response(res, 200, { successMessage: "Se registro correctamente", result });
-        } catch (error) {
-            console.log(error);
+        } catch (error) { 
+            console.log(error)
             res.status(400).json({ error: error.message });
         }
     },
@@ -28,5 +27,13 @@ module.exports = {
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
+    },
+    //reportes QR
+    reportParallelsQr: async (req, res) => {
+        const response = await reportEventQrParallels();
+        response(res, 200, response);
+    },
+    reportStudentsQr:async(req,res)=>{
+        const response = await reportStudentsQr();
     }
 }

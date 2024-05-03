@@ -27,7 +27,6 @@ module.exports = {
       const result = await Podcast.create(obj); 
       return result;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   },

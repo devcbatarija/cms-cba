@@ -96,7 +96,6 @@ module.exports = {
         }
     },
     deleteBeca: async (id) => {
-        console.log(id)
         try {
             const beca = await Beca.findByPk(id);
             Beca.delete(beca);
@@ -114,7 +113,6 @@ module.exports = {
         }
     },
     deleteBecaSelect: async (pubIds) => {
-        console.log(pubIds)
         try {
             for (let id of pubIds) {
                 const publi = await Beca.findByPk(id);

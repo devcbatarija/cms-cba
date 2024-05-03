@@ -96,7 +96,6 @@ module.exports = {
         }
     },
     deletePublication: async (id) => {
-        console.log(id)
         try {
             const publication = await Publicacion.findByPk(id);
             Publicacion.delete(publication);
@@ -114,7 +113,6 @@ module.exports = {
         }
     },
     deletePublicationSelect: async (pubIds) => {
-        console.log(pubIds)
         try {
             for (let id of pubIds) {
                 const publi = await Publicacion.findByPk(id);

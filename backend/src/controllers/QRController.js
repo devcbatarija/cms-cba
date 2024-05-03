@@ -37,4 +37,11 @@ module.exports = {
     })
     return verificar;
   },
+   // Función para reportes QR
+   reportEventQrParallels: async (data) => {
+    const eventos = find()
+  },
+  reportStudentsQr:async ()=> {
+    
+  }
 };

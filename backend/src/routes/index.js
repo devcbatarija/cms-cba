@@ -31,7 +31,7 @@ router.use('/gallery', galleryRoutes)
 router.use('/environment', ambienteRoutes)
 router.use('/programPrices', programPrices)
 router.use('/beca', becaRoutes)
-router.use('/QR', QR_Routes)
+router.use('/QR', QR_Routes);
 
 module.exports=router;
 
