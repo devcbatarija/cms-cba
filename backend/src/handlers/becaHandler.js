@@ -69,7 +69,6 @@ module.exports = {
         }
     },
     deleteBecaSelect: async (req, res) => {
-        // console.log(req.body)
         try {
             const result = await deleteBecaSelect(req.body.ids);
             res.status(200).json({ results: result })

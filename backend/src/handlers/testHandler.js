@@ -20,7 +20,6 @@ module.exports={
     },
     testDelete:async(req,res)=>{
         try {
-            console.log(req.query.page)
             const response=await testDelete(req.query.page)
             res.status(200).json({message:response})
         } catch (error) {
