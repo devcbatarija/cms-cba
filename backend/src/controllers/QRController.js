@@ -36,39 +36,45 @@ module.exports = {
     });
     return verificar;
   },
-  reportEventQrParallels: async (res, gestion, mes) => {
-    try {
-      const filteredQRs = await QR.findAll({
-        where: {
-          gestion: gestion,
-          mes_literal: mes,
-        },
-      });
+  //reportes QR
+  reportEventQrParallels: async (res, idEv) => { //http://localhost:3001/appi/QR/report/parallels/5fee4503-805a-4ef0-8a45-8535278425a1   =PARAMS [idEv]
+    const qrData = await findAllDataEvent(idEv);
+    const parallels = [];
 
-      if (filteredQRs.length === 0) {
-        throw new Error(
-          "No hay registros de QR para la gestión y mes especificados"
-        );
-      }
-      const groupedAndSummed = await filteredQRs.reduce((acc, qr) => {
-        const key = `${qr.paralelo}-${qr.gestion}-${qr.mes_literal}`;
-
-        if (!acc[key]) {
-          acc[key] = {
-            paralelo: qr.paralelo,
-            cantidad_uso: 0,
-            profesor: qr.profesor,
-          };
+    qrData.forEach(qr => {
+        const existingParallel = parallels.find(p => p.nombre_paralelo === qr.paralelo);
+        if (existingParallel) {
+            existingParallel.cantidad_uso += qr.cantidad_uso;
+        } else {
+            parallels.push({
+                nombre_paralelo: qr.paralelo,
+                cantidad_uso: qr.cantidad_uso,
+                profesor: qr.profesor,
+                mes:qr.mes_literal
+            });
         }
-        acc[key].cantidad_uso += qr.cantidad_uso;
-        return acc;
-      }, {});
-      const result = Object.values(groupedAndSummed);
-
-      response(res, 200, result);
-    } catch (error) {
-      response(res, 500, { error: "Error interno del servidor" });
-    }
+    });
+    const orderDesc = parallels.sort((a, b) => b.cantidad_uso - a.cantidad_uso);
+    response(res, 200, orderDesc);
   },
-  reportStudentsQr: async () => {},
+  reportStudentsQr: async (res,idEv,pr) => { //http://localhost:3001/appi/QR/report/students/3b3a65ec-6a4e-4590-a440-23ca0dea5300/A    =PARAMS [idEv,paralelo]
+    const qrData = await findAllDataEvent(idEv);
+    const students = qrData.filter(qr => qr.paralelo === pr);
+    if (!students.length) throw new ClientError("No hay datos de QRs con este paralelo");
+    const orderDesc = students.sort((a, b) => b.cantidad_uso - a.cantidad_uso);
+    response(res, 200, orderDesc)
+  },
+};
+const findAllDataEvent = async (idEv) => {
+  const datos_evento = await Dato_Evento.findByPk(idEv, {
+    include: [{
+      model: QR,
+    }],
+  }).catch((error) => {
+    throw new ClientError("Error al buscar el evento, verifique el id del evento");
+  });
+  
+  if (!datos_evento) throw new ClientError("Datos evento no encontrado");
+  else if(datos_evento.QRs.length == 0) throw new ClientError("No hay QRs para mostrar");
+  return datos_evento.QRs;
 };

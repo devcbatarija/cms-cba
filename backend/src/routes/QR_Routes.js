@@ -8,7 +8,7 @@ router.post("/generarQR", generarQR);
 router.post("/verificarQR", verificarQR);
 router.post("/existsQR", existsQR);
 //rutas reportes de qr
-router.get("/report/parallels", catchedAsync(reportParallelsQr));
-router.get("/report/students", catchedAsync(reportStudentsQr));
+router.get("/report/parallels/:idEv", catchedAsync(reportParallelsQr));
+router.get("/report/students/:idEv/:paralelo", catchedAsync(reportStudentsQr));
 
 module.exports = router;
