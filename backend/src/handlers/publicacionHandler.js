@@ -69,7 +69,6 @@ module.exports = {
         }
     },
     deletePublicationSelect: async (req, res) => {
-        // console.log(req.body)
         try {
             const result = await deletePublicationSelect(req.body.ids);
             res.status(200).json({ results: result })

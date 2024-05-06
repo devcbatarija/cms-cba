@@ -119,7 +119,6 @@ module.exports = {
         }
     },
     addDatosEvento: async (e) => { 
-        console.log(e);
         try {
             const evento = {
                 title: e.evento.title,

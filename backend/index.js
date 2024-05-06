@@ -11,8 +11,8 @@ server.get("/", (req, res) => {
 })
 //model to update
 server.use((err, req, res, next) => {
-    const { statusCode, message } = err;
-    console.log('Muestrame el error ',statusCode,message); 
+    const { statusCode, message } = err; //Arreglar el metodo de funcion superior para que deje de mandar status 500
+    // console.log('Muestrame el error ',statusCode,message); 
     resError(res, statusCode, message);
 });
 
