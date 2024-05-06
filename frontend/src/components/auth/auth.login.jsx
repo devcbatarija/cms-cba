@@ -25,20 +25,27 @@ const Login = () => {
 
   const handleOnSubmit = async () => {
     try {
-      console.log(watch())
+      // console.log(watch())
       const response = await axios.post("users/login", watch(), {
         headers: {
           "Content-Type": "application/json"
         }
-      });
-      console.log(response)
+      }).then(res => {
+        dispatch(signin(res.data));
+        localStorage.setItem("user", JSON.stringify({
+          correo: res.data.correo,
+          _profileImage: res.data._profileImage,
+          nombres: res.data.nombres,
+          apellidos: res.data.apellidos
+        }))
+      })
+      // console.log(response)
       navigate("/");
       reset();
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
       ));
-      console.log(response.data)
-      dispatch(signin(response.data));
+      // console.log(response.data)
     } catch (error) {
       setErrorBack(error.response.data);
       setTimeout(() => {

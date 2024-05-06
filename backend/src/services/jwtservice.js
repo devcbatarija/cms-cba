@@ -58,7 +58,9 @@ module.exports = {
                   nombres: res.data.userData.fullName,
                   apellidos: "",
                   rol: 'Client',
-                  token,
+                  from: 'CBA PLUS',
+                  accessTokenCbaPlus: res.data.accessToken,
+                  token
                 };
               });
           } else {
@@ -80,6 +82,9 @@ module.exports = {
           }
           return res.status(200).json({ user: usResult });
         });
+      }
+      else {
+        return res.status(200).json({ message: 'Dont login' });
       }
     } catch (error) {
       return res.status(400).json({ messageError: error.message });

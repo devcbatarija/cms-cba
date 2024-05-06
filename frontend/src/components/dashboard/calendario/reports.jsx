@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import back from '../../../assets/backgroundSVG/radiant-gradient.svg';
 
 const Reportes = () => {
     const navigate = useNavigate()
@@ -6,9 +7,9 @@ const Reportes = () => {
     const cursos = [
         {
             id: 1,
-            nombre: "Curso de JavaScript Avanzado",
+            nombre: "TEENS-1.2.4-TE-A-CR-02-2022",
             descripcion: "Aprende JavaScript desde cero hasta crear aplicaciones web complejas.",
-            instructor: "Juan Pérez",
+            instructor: "Cortez Severich Diego",
             duracion: "6 meses",
             fechaInicio: "2024-05-01",
             fechaFin: "2024-10-31",
@@ -74,14 +75,29 @@ const Reportes = () => {
                         {
                             cursos.map((c) => (
                                 <div key={c.id}
-                                    className="h-80 w-[23.5%] rounded-3xl bg-white shadow-lg p-2"
+                                    className="h-60 w-60 rounded-3xl bg-white shadow-lg  relative overflow-hidden p-2"
+
                                 >
-                                    <div className="h-[25%] flex items-center justify-center flex flex-col gap-y-2">
+
+                                    {/* <div className="h-[25%] flex items-center justify-center flex flex-col gap-y-2 z-10">
                                         <span className="text-center font-bold text-zinc-500">{c.nombre}</span>
                                         <span className="text-center font-semibold text-zinc-400 text-xs">{c.instructor}</span>
                                     </div>
                                     <div className="h-[75%] flex items-center justify-center">
                                         <span className="text-5xl font-extrabold text-green-200">{c.estudiantesInscritos}</span>
+                                    </div> */}
+                                    <div
+                                        className="h-full w-full absolute top-0 left-0 z-0 py-4 px-4"
+                                        style={{ backgroundImage: `url(${back})`}}
+                                    >
+                                        <div className="h-[70%] flex flex-col items-center justify-center">
+                                            <span className="font-semibold text-zinc-200 text-sm">Referidos</span>
+                                            <span className="text-5xl font-extrabold text-green-200">{c.estudiantesInscritos}</span>
+                                        </div>
+                                        <div className="h-[30%] flex justify-center flex flex-col gap-y-2 z-10">
+                                            <span className="font-semibold text-zinc-200 text-xs">{c.instructor}</span>
+                                            <span className="font-bold text-zinc-50 ">{c.nombre}</span>
+                                        </div>
                                     </div>
                                 </div>
                             ))
