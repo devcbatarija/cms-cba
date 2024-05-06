@@ -16,7 +16,6 @@ function formatDate(dateString) {
 module.exports = {
   getAllUsuarios: async () => {
     const response = await Usuario.findAll();
-    console.log(response);
     return response;
   },
   postUsuario: async (user) => {
@@ -152,7 +151,6 @@ module.exports = {
   emailVerify: async (body) => {
     const user = await Usuario.findOne({ where: { correo: body.correo } });
     if (!user) {
-      console.log(user);
       return "Email valido";
     }
     throw new ClientError("El usuario ya existe.");
@@ -233,7 +231,6 @@ module.exports = {
           }
         }
       }
-      console.log(usersFormatDate);
       const usuariosActivos = users.filter((user) => user.estado === true);
       const usuariosInactivos = users.filter((user) => user.estado === false);
 
@@ -261,7 +258,6 @@ module.exports = {
     try {
       return true;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }

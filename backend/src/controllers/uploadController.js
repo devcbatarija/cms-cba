@@ -5,7 +5,6 @@ const { API_KEY_IMGBB, BASE_URL } = process.env;
 const FormData = require("form-data");
 
 const uploadImage = async ({ filePath, type }) => {
-  console.log(filePath,type);
   //RECIBIMOS BASE64
   try {
     let data = [];
@@ -35,7 +34,6 @@ const uploadImage = async ({ filePath, type }) => {
         throw new Error("La carga falló");
       }
     }
-    console.log("subida " + urlsComplet);
     return {
       message: "Las imagenes se subieron exitosamente",
       results: urlsComplet,
@@ -50,7 +48,6 @@ const getImage = async (id) => {
   return response.data;
 };
 const formatImage = (base) => {
-  console.log("format");
   return new Promise((resolve, reject) => {
     try {
       const s = base.replace(/data:image\/(png|jpg|jpeg);base64,/, "");

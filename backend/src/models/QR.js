@@ -19,16 +19,48 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    mes_literal: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    gestion: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    inicio_modulo:{
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    fin_modulo:{
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    profesor:{
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    horario:{
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    turno:{
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    modulo:{
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
     cantidad_uso: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    informacion: {
-      type: DataTypes.JSON,
-      allowNull: true,
-    },
     fecha_Expiracion: {
       type: DataTypes.DATE,
+      allowNull: true,
+    },
+    hora_expiracion:{
+      type: DataTypes.TIME,
       allowNull: true,
     },
     estado: {
