@@ -27,39 +27,40 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    inicio_modulo:{
+    inicio_modulo: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    fin_modulo:{
+    fin_modulo: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    profesor:{
+    profesor: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    horario:{
+    horario: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    turno:{
+    turno: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    modulo:{
+    modulo: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
     cantidad_uso: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0
     },
     fecha_Expiracion: {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    hora_expiracion:{
+    hora_expiracion: {
       type: DataTypes.TIME,
       allowNull: true,
     },

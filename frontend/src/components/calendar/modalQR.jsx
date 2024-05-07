@@ -69,14 +69,23 @@ const ModalQR = ({
 
     const generarQR = (id) => {
         if (isLogged == true) {
-            if (!qrGenerated) {
+            if (!qrGenerated && paralelStudent != null) {
                 const datos = {
                     id_Evento: event.datosEvento.id_Evento,
-                    id_Estudiante: userLogin._userId.toString(),
-                    nombre_estudiante: `${userLogin.nombres} ${userLogin.apellidos}`,
-                    paralelo: 'Por-Hacer-Aun',
+                    id_Estudiante: userLogin._userId.toString(), //paralelStudent.stdCode ? paralelStudent.stdCode.toString() : userLogin._userId.toString(),
+                    nombre_estudiante: paralelStudent.estudiante,
+                    paralelo: paralelStudent.paralelo,
+                    mes_literal: paralelStudent.mes,
+                    gestion: paralelStudent.gestion,
+                    inicio_modulo: paralelStudent.inicio_modulo,
+                    fin_modulo: paralelStudent.fin_modulo,
+                    profesor: paralelStudent.nombre_prof,
+                    horario: paralelStudent.horario,
+                    turno: paralelStudent.turno,
+                    modulo: paralelStudent.nombre_modulo,
                     cantidad_uso: 0,
-                    fecha_Expiracion: event.General.end,
+                    fecha_Expiracion: event.General.start,
+                    hora_expiracion: event.General.allDay ? '23:59' : event.General.end_Time
                 }
                 const response = axios.post('QR/generarQR', datos).then(res => {
                     qrCode.update({
@@ -161,7 +170,7 @@ const ModalQR = ({
     useEffect(() => {
         if (userLogin.accessTokenCbaPlus) {
             let gestion = dayjs(event.General.start).year()
-            axios.get(`http://127.0.0.1:8000/api/v1/std/datosParalelo/2022/2022-03-04`, {
+            axios.get(`http://127.0.0.1:8000/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
                 headers: {
                     'Authorization': `Bearer ${userLogin.accessTokenCbaPlus}`
                 }
