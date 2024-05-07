@@ -42,22 +42,22 @@ module.exports = {
     const parallels = [];
 
     qrData.forEach(qr => {
-        const existingParallel = parallels.find(p => p.nombre_paralelo === qr.paralelo);
-        if (existingParallel) {
-            existingParallel.cantidad_uso += qr.cantidad_uso;
-        } else {
-            parallels.push({
-                nombre_paralelo: qr.paralelo,
-                cantidad_uso: qr.cantidad_uso,
-                profesor: qr.profesor,
-                mes:qr.mes_literal
-            });
-        }
+      const existingParallel = parallels.find(p => p.nombre_paralelo === qr.paralelo);
+      if (existingParallel) {
+        existingParallel.cantidad_uso += qr.cantidad_uso;
+      } else {
+        parallels.push({
+          nombre_paralelo: qr.paralelo,
+          cantidad_uso: qr.cantidad_uso,
+          profesor: qr.profesor,
+          mes: qr.mes_literal
+        });
+      }
     });
     const orderDesc = parallels.sort((a, b) => b.cantidad_uso - a.cantidad_uso);
     response(res, 200, orderDesc);
   },
-  reportStudentsQr: async (res,idEv,pr) => { //http://localhost:3001/appi/QR/report/students/3b3a65ec-6a4e-4590-a440-23ca0dea5300/A    =PARAMS [idEv,paralelo]
+  reportStudentsQr: async (res, idEv, pr) => { //http://localhost:3001/appi/QR/report/students/3b3a65ec-6a4e-4590-a440-23ca0dea5300/A    =PARAMS [idEv,paralelo]
     const qrData = await findAllDataEvent(idEv);
     const students = qrData.filter(qr => qr.paralelo === pr);
     if (!students.length) throw new ClientError("No hay datos de QRs con este paralelo");
@@ -73,8 +73,8 @@ const findAllDataEvent = async (idEv) => {
   }).catch((error) => {
     throw new ClientError("Error al buscar el evento, verifique el id del evento");
   });
-  
+
   if (!datos_evento) throw new ClientError("Datos evento no encontrado");
-  else if(datos_evento.QRs.length == 0) throw new ClientError("No hay QRs para mostrar");
+  else if (datos_evento.QRs.length == 0) throw new ClientError("No hay QRs para mostrar");
   return datos_evento.QRs;
 };
