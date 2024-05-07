@@ -80,12 +80,29 @@ function App() {
       validation: "Validation",
     };
     try {
-      const response = await axios.post("users/valid/token", data);
-      if (response.data.user) {
-        dispatch(authValid(response.data.user));
-      }
-      setTokenValidated(true);
+      const response = await axios.post("users/valid/token", data).then(res => {
+        if (res.data.user) {
+          dispatch(authValid(res.data.user));
+          localStorage.setItem("user", JSON.stringify({
+            correo: res.data.user.correo,
+            _profileImage: res.data.user._profileImage,
+            nombres: res.data.user.nombres,
+            apellidos: res.data.user.apellidos
+          }))
+        }
+        else {
+          localStorage.removeItem('user');
+        }
+        setTokenValidated(true);
+      }).catch(err => {
+        localStorage.removeItem('user');
+        // if (err.response.data.messageError) {
+        //   setTokenValidated(true);
+        //   Cookie.remove("token");
+        // }
+      })
     } catch (error) {
+      localStorage.removeItem('user');
       if (error.response.data.messageError) {
         setTokenValidated(true);
         Cookie.remove("token");
@@ -108,6 +125,10 @@ function App() {
   };
 
   useEffect(() => {
+    const previewUser = JSON.parse(localStorage.getItem('user'))
+    if (previewUser != null) {
+      dispatch(authValid(previewUser));
+    }
     dispatch(getEvents());
     dispatch(getAllTestimonio());
     dispatch(getEventsPredefinidos());

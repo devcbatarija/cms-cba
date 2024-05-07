@@ -216,7 +216,7 @@ const EventsCalendarTable = () => {
                                                 {
                                                     event.referible ?
                                                         <button
-                                                            onClick={() => navigate(`/dashboard/Calendario/Reports/${event.Evento.id}`)}
+                                                            onClick={() => navigate(`/dashboard/Calendario/Reports/${event.id_Evento}`)}
                                                             className="active:bg-cbaBlue/60 border-2 py-1.5 px-2 rounded-lg flex flex-row items-center justify-center transition duration-700 ease-in-out hover:bg-cbaBlue hover:text-white hover:border-0 ">
                                                             <InsightsRoundedIcon />
                                                             <span className="mx-2">Reportes</span>
