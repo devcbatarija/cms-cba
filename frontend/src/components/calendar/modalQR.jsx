@@ -6,6 +6,10 @@ import { useSelector } from "react-redux";
 import dayjs from 'dayjs';
 import './calendarClientStyles.css'
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { InformationAlert } from "../toastAlerts/information";
+import bgcuadros from '../../assets/backgroundSVG/background-cuadros.svg'
+import bgshapes from '../../assets/backgroundSVG/background-shapes.svg'
 
 const qrCode = new QRCodeStyling({
     width: 200,
@@ -48,6 +52,7 @@ const ModalQR = ({
     handleChangeEvent,
 }) => {
     const navigate = useNavigate()
+    const [paralelStudent, setParalelStudent] = useState(null)
     const [informationQr, setInformationQR] = useState(null)
     const [consigna, setConsigna] = useState(null)
     const userLogin = useSelector((state) => state.login.user)
@@ -64,14 +69,23 @@ const ModalQR = ({
 
     const generarQR = (id) => {
         if (isLogged == true) {
-            if (!qrGenerated) {
+            if (!qrGenerated && paralelStudent != null) {
                 const datos = {
                     id_Evento: event.datosEvento.id_Evento,
-                    id_Estudiante: userLogin._userId.toString(),
-                    nombre_estudiante: `${userLogin.nombres} ${userLogin.apellidos}`,
-                    paralelo: 'Por-Hacer-Aun',
+                    id_Estudiante: userLogin._userId.toString(), //paralelStudent.stdCode ? paralelStudent.stdCode.toString() : userLogin._userId.toString(),
+                    nombre_estudiante: paralelStudent.estudiante,
+                    paralelo: paralelStudent.paralelo,
+                    mes_literal: paralelStudent.mes,
+                    gestion: paralelStudent.gestion,
+                    inicio_modulo: paralelStudent.inicio_modulo,
+                    fin_modulo: paralelStudent.fin_modulo,
+                    profesor: paralelStudent.nombre_prof,
+                    horario: paralelStudent.horario,
+                    turno: paralelStudent.turno,
+                    modulo: paralelStudent.nombre_modulo,
                     cantidad_uso: 0,
-                    fecha_Expiracion: event.General.end,
+                    fecha_Expiracion: event.General.start,
+                    hora_expiracion: event.General.allDay ? '23:59' : event.General.end_Time
                 }
                 const response = axios.post('QR/generarQR', datos).then(res => {
                     qrCode.update({
@@ -154,6 +168,26 @@ const ModalQR = ({
         console.log(event)
     }
     useEffect(() => {
+        if (userLogin.accessTokenCbaPlus) {
+            let gestion = dayjs(event.General.start).year()
+            axios.get(`http://127.0.0.1:8000/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
+                headers: {
+                    'Authorization': `Bearer ${userLogin.accessTokenCbaPlus}`
+                }
+            }).then(res => {
+                if (res.data.paralelo) {
+                    console.log(res.data)
+                    setParalelStudent(res.data)
+                }
+                else {
+                    setTimeout(() => {
+                        toast.custom((t) => (
+                            <InformationAlert t={t} w={"w-4/12"} message='No esta registrado en ningun curso' />
+                        ));
+                    }, 500);
+                }
+            })
+        }
         verifyQR()
     }, [])
 
@@ -168,6 +202,13 @@ const ModalQR = ({
 
     const [backModal, setBackModal] = useState(false)
     const toggleBackModal = () => {
+        if (!userLogin.accessTokenCbaPlus) {
+            setTimeout(() => {
+                toast.custom((t) => (
+                    <InformationAlert t={t} w={"w-4/12"} message='Para generar el Qr debes iniciar sesion con tu cuenta de estudiante' />
+                ));
+            }, 500);
+        }
         setBackModal(!backModal)
     }
 
@@ -175,16 +216,16 @@ const ModalQR = ({
         <div className="w-full h-screen fixed inset-0 overflow-x-hidden overflow-y-auto z-10">
             <div className="backdrop-blur-sm bg-cbaBlue/20  w-full h-full absolute"></div>
             <div className="absolute w-full h-screen flex justify-center items-center">
-                <div className="h-[650px] md:h-[600px] w-[1000px] rounded-xl bg-white">
+                <div className="h-[650px] md:h-[600px] w-[1000px] rounded-xl bg-white m-3" >
 
                     <div className="relative h-full w-full rounded-xl overflow-hidden" >  {/*contenedor del modal style={{ background: `linear-gradient(-45deg, #000000, #434343` }}*/}
 
                         <div className="h-10 w-10 bg-orange-100 absolute right-[37%] top-[10%] rounded-full"></div>
-                        <div className="h-5 w-5 bg-green-100 absolute right-[10%] top-[5%] rotate-[25deg]"></div>
+                        <div className="h-5 w-5 bg-green-100 absolute right-[15%] top-[6%] rotate-[25deg]"></div>
+                        <div className="absolute border-[20px] border-solid border-transparent border-b-red-100 top-[5%] left-[5%] rotate-[200deg]"></div>
                         <div></div>
                         <div></div>
-                        <div></div>
-                        <div></div>
+                        <div className="w-full h-full hidden sm:block absolute left-0 top-0 right-0 bottom-0" style={{ backgroundImage: `url(${bgshapes})`, backgroundSize: '100% 100%' }}></div>
 
                         <div className={`flex flex-col px-8 md:px-12 lg:px-20 relative h-full`} style={{ color: event.General.color }}>
                             <button
@@ -245,7 +286,7 @@ const ModalQR = ({
                                         </div>
                                     }
                                 </div>
-                                <div className="w-full bg-red-100 sm:w-1/3 sm:h-1/1  flex items-center justify-center order-first sm:order-none">
+                                <div className="w-full  sm:w-1/3 sm:h-1/1  flex items-center justify-center order-first sm:order-none">
                                     <img className="h-100 w-full sm:h-80 md:h-96 sm:w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
                                 </div>
                             </div>
@@ -288,7 +329,15 @@ const ModalQR = ({
                                                 </>
                                             }
                                         </div>
-                                        <button onClick={toggleBackModal}>volver</button>
+                                        <button className="mt-2 transition hover:duration-500 duration-500 ease-in-out group/Back text-white hover:w-[150px] w-10 h-10 rounded-full bg-cbaBlue overflow-hidden flex flex-col items-center justify-center relative" onClick={toggleBackModal}>
+                                            <span className="absolute translate-y-[50px] group-hover/Back:translate-y-0">Volver arriba</span>
+                                            <span className=" group-hover/Back:absolute group-hover/Back:translate-y-[50px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                                    <path fillRule="evenodd" d="M11.47 2.47a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06l-6.22-6.22V21a.75.75 0 0 1-1.5 0V4.81l-6.22 6.22a.75.75 0 1 1-1.06-1.06l7.5-7.5Z" clipRule="evenodd" />
+                                                </svg>
+
+                                            </span>
+                                        </button>
                                     </div>
                                     <div className="w-1/3 flex items-center flex-col justify-center items-center h-full">
                                         {
@@ -318,7 +367,13 @@ const ModalQR = ({
                                                         />
                                                     </div>
                                                 </div> :
-                                                <button onClick={() => generarQR(event.General.id)} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
+                                                <>
+                                                    {
+                                                        userLogin.accessTokenCbaPlus ?
+                                                            <button onClick={() => generarQR(event.General.id)} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
+                                                            : null
+                                                    }
+                                                </>
                                         }
                                     </div>
                                 </div>

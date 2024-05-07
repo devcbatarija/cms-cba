@@ -104,6 +104,7 @@ module.exports = {
       nombres: userExist.nombres,
       apellidos: userExist.apellidos,
       rol: userExist.rol,
+      from: 'CBA WEBSITE',
       token: tokengen
     };
     return { usLogin: usLogin, token: tokengen };
@@ -111,7 +112,7 @@ module.exports = {
 
   authLoginCbaPlus: async (user) => {
     let login
-    await axios.post('http://172.16.3.15:8000/api/auth/login', user).then(res => {
+    await axios.post('http://127.0.0.1:8000/api/auth/login', user).then(res => {
       login = res.data
     })
 
@@ -128,7 +129,9 @@ module.exports = {
       nombres: login.userData.fullName,
       apellidos: '',
       rol: 'Client',
-      token: tokengen
+      from: 'CBA PLUS',
+      token: tokengen,
+      accessTokenCbaPlus: login.accessToken
     };
     return { usLogin: usLogin, token: tokengen };
   },
