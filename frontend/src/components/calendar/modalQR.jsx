@@ -389,7 +389,7 @@ const ModalQR = ({
                                                     <span className="font-bold text-sm">{event.prev.title}</span>
                                                     <span className="truncate text-zinc-400 text-xs">{event.prev.descripcion}</span>
                                                     <div className="flex flex-row gap-x-5">
-                                                        <button class="flex flex-row items-center mt-2 reverse-btn">
+                                                        <button className="flex flex-row items-center mt-2 reverse-btn">
                                                             <svg
                                                                 id="arrow-horizontal"
                                                                 xmlns="http://www.w3.org/2000/svg"
@@ -404,7 +404,7 @@ const ModalQR = ({
                                                                     transform="translate(30)"
                                                                 ></path>
                                                             </svg>
-                                                            <span class="hover-underline-animation-prev text-xs"> Anterior </span>
+                                                            <span className="hover-underline-animation-prev text-xs"> Anterior </span>
                                                         </button>
 
                                                     </div>

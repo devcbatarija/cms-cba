@@ -20,9 +20,31 @@ const EventsCalendarTable = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 10;
     const [totalPages, setTotalPages] = useState(0)
-    const onPageChange = (newPage) => {
-        setCurrentPage(newPage);
+    const [searchTerm, setSearchTerm] = useState(""); // Nuevo estado para el término de búsqueda
+    const [filteredEvents, setFilteredEvents] = useState([])
+
+    // Función para manejar el cambio en el input de búsqueda
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
     };
+
+    // Función para filtrar los eventos basándose en el término de búsqueda
+    const filterEvents = () => {
+        if (searchTerm.trim() !== "") {
+            const filter = Events.datosEvento.filter(event =>
+                event.Evento.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredEvents(filter);
+        } else {
+            // Si el input está vacío, cargar todos los eventos
+            setFilteredEvents(Events?.datosEvento);
+        }
+    };
+
+    // Llamada a filterEvents cada vez que searchTerm cambia
+    useEffect(() => {
+        filterEvents();
+    }, [searchTerm]);
 
     const handleDeleteEventById = (idEvent) => {
         axios.delete(`event/deleteEventoById/${idEvent}`).then(res => {
@@ -67,6 +89,7 @@ const EventsCalendarTable = () => {
         await axios.get('datosevento').then(res => {
             if (res.data.results.datosEvento.length > 0) {
                 setEvents(res.data.results)
+                setFilteredEvents(res.data.results.datosEvento)
             }
             else {
                 setEvents(null)
@@ -93,13 +116,19 @@ const EventsCalendarTable = () => {
         <>
             <div className="bg-zinc-100 min-h-screen md:px-5 lg:px-2 xl:px-20 py-5">
                 <div className="flex justify-between text-white mb-5">
-                    <div className="rounded-full h-10 w-6/12 bg-white text-zinc-500 flex flex-row justify-center items-center border-[1px]">
-                        <div className="px-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
-                            </svg>
-                        </div>
-                        <input className="w-full h-full border-none rounded-r-full text-xs focus:text-sm" type="text" name="" id="" placeholder="Buscar evento" />
+                    <div className="group/search rounded-full h-10 w-6/12 bg-white text-zinc-500 flex flex-row justify-center items-center border-[1px]">
+                        {
+                            searchTerm === '' &&
+                            <div className="px-3 group-has-[:focus]/search:hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        }
+                        <input
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className={`w-full h-full border-none ${searchTerm === '' ? 'rounded-r-full' : 'rounded-full'} text-xs focus:text-sm focus:rounded-full focus:px-5`} type="text" name="" id="" placeholder="Buscar evento..." />
                     </div>
                     <div className="flex flex-row justify-center items-center gap-x-3">
                         <button disabled={selectedEvents.length == 0 ? true : false} className="font-semibold bg-cbaRed px-4 h-10 rounded-full text-sm flex flex-row justify-center items-center gap-x-2">
@@ -138,7 +167,7 @@ const EventsCalendarTable = () => {
                                     <span>Titulo</span>
                                 </div>
                                 <div className="w-[22%] h-full  p-2 flex items-center">
-                                    <span>Descripcion y fecha de inicio</span>
+                                    <span className="text-center">Descripcion y fecha de inicio</span>
                                 </div>
                                 <div className="w-[10%] flex flex-row justify-center items-center gap-x-[3px] p-2 h-full">
                                     <span>Horario</span>
@@ -159,7 +188,7 @@ const EventsCalendarTable = () => {
                             </div>
                             <div className=" flex flex-col gap-y-2">
                                 {
-                                    Events?.datosEvento.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage).map((event, index) => (
+                                    filteredEvents.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage).map((event, index) => (
                                         <div
                                             key={index}
                                             className="w-full flex flex-row h-16 bg-white rounded-lg shadow- text-zinc-500 font-semibold text-xs transition ease-in-out delay-150 duration-500 hover:scale-[1.0070] hover:shadow-lg"
@@ -216,7 +245,7 @@ const EventsCalendarTable = () => {
                                                 {
                                                     event.referible ?
                                                         <button
-                                                            onClick={() => navigate(`/dashboard/Calendario/Reports/${event.id_Evento}`)}
+                                                            onClick={() => navigate(`/dashboard/Calendario/Reports/${event.id_Evento}?event=${event.Evento.title}`)}
                                                             className="active:bg-cbaBlue/60 border-2 py-1.5 px-2 rounded-lg flex flex-row items-center justify-center transition duration-700 ease-in-out hover:bg-cbaBlue hover:text-white hover:border-0 ">
                                                             <InsightsRoundedIcon />
                                                             <span className="mx-2">Reportes</span>
@@ -243,7 +272,7 @@ const EventsCalendarTable = () => {
                                             <div className="w-[12%] h-full p-[1px] flex items-center justify-center gap-x-1.5 text-zinc-400 ">
                                                 <button
                                                     onClick={() => handleEditEvent(event.Evento.id)}
-                                                    className="text-cbaBlue/60 hover:text-cbaBlue transition ease-in-out delay-150 duration-300 p-2 rounded-full hover:bg-zinc-200">
+                                                    className="text-cbaBlue transition ease-in-out delay-150 duration-300 p-2 rounded-full hover:bg-zinc-200">
                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                         <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
                                                     </svg>
@@ -251,7 +280,7 @@ const EventsCalendarTable = () => {
                                                 <div className="h-6 w-[1px] bg-zinc-300"></div>
                                                 <button
                                                     onClick={() => handleDeleteEventById(event.Evento.id)}
-                                                    className="text-cbaRed/40 hover:text-cbaRed/70 transition ease-in-out delay-150 duration-300 p-2 rounded-full hover:bg-zinc-200">
+                                                    className="text-cbaRed transition ease-in-out delay-150 duration-300 p-2 rounded-full hover:bg-zinc-200">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                                     </svg>
