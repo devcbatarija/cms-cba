@@ -16,6 +16,9 @@ import axios from "axios";
 import EventList from './eventList';
 import CuadroInscripcion from "../inscripcion/incripcion";
 import ModalQR from "./modalQR";
+import toast from "react-hot-toast";
+import { ErrorAlert } from "../toastAlerts/errorAlerts";
+import ModalEventDestils from "./modalEventDestails";
 dayjs.extend(localizedFormat);
 dayjs.locale('es');
 
@@ -28,6 +31,7 @@ const views = [
 const CalendarioClient = () => {
     const [event, setEvent] = useState({})
     const [openModalQR, setOpenModalQR] = useState(false)
+    const [openModalEventDetails, setOpenModalEventDetails] = useState(false)
     const toggleOpenModalQr = () => {
         setOpenModalQR(!openModalQR)
         if (!openModalQR) {
@@ -36,7 +40,14 @@ const CalendarioClient = () => {
             document.body.style.overflow = 'auto';
         }
     }
-
+    const toggleOpenModalEventDetails = () => {
+        setOpenModalEventDetails(!openModalEventDetails)
+        if (!openModalEventDetails) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
 
     const calendarRef = useRef(null);
     const changeView = (view) => {
@@ -79,6 +90,7 @@ const CalendarioClient = () => {
     const updateTitle = (e) => {
         const viewType = e.view.type;
         let day = '';
+        // console.log(e.view)
         setTitle(e.view.title);
         let currentMonth;
         if (viewType == 'dayGridMonth') {
@@ -107,16 +119,33 @@ const CalendarioClient = () => {
     }
 
     const handleEventClick = async (e) => {
-        await handleChangeEvent(e.event.id)
-        toggleOpenModalQr()
+        const res = await handleChangeEvent(e.event.id)
+        if (res.data) {
+            if (res.isGeneral === 'General') {
+                toggleOpenModalQr()
+            }
+            else {
+                toggleOpenModalEventDetails()
+            }
+        }
     };
 
     const handleChangeEvent = async (id) => {
-        const result = await axios.get(`event/getById/${id}`).then(res => {
+        try {
+            const res = await axios.get(`event/getById/${id}`)
             setEvent(res.data.results)
-        }).catch(err => {
-            console.log(err)
-        })
+            if (res.data.results.datosEvento) {
+                return { data: true, isGeneral: 'General' }
+            }
+            else {
+                return { data: true }
+            }
+        } catch (error) {
+            toast.custom((t) => (
+                <ErrorAlert t={t} w={'w-4/12'} message={'Hubo un error al mostrar el evento'} />
+            ))
+            return { data: false }
+        }
     }
 
     const handleDateClick = (e) => {
@@ -162,6 +191,14 @@ const CalendarioClient = () => {
                 openModalQR &&
                 <ModalQR
                     toggleOpenModalQr={toggleOpenModalQr}
+                    event={event}
+                    handleChangeEvent={handleChangeEvent}
+                />
+            }
+            {
+                openModalEventDetails &&
+                <ModalEventDestils
+                    toggleOpenModalEventDetails={toggleOpenModalEventDetails}
                     event={event}
                     handleChangeEvent={handleChangeEvent}
                 />

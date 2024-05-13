@@ -4,6 +4,8 @@ const {
   existsQR,
   reportEventQrParallels,
   reportStudentsQr,
+  downloadReportParalels,
+  downloadReportStudents,
 } = require("../controllers/QRController");
 const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
@@ -40,12 +42,28 @@ module.exports = {
   //reportes QR
   reportParallelsQr: async (req, res) => {
     const { idEv } = req.params;
-    if ( idEv != undefined ) await reportEventQrParallels(res, idEv );
+    if (idEv != undefined) await reportEventQrParallels(res, idEv);
     else throw new ClientError("No se ha enviado el id del evento");
   },
   reportStudentsQr: async (req, res) => {
-    const { idEv,paralelo } = req.params;
-    if(paralelo != undefined) await reportStudentsQr(res,idEv, paralelo);
-    else throw new ClientError("No se ha enviado el paralelo"); 
+    const { idEv, paralelo } = req.params;
+    if (paralelo != undefined) await reportStudentsQr(res, idEv, paralelo);
+    else throw new ClientError("No se ha enviado el paralelo");
+  },
+  downloadReportParalels: async (req, res) => {
+    try {
+      const paralels = req.body
+      await downloadReportParalels(res, paralels);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+  downloadReportStudents: async (req, res) => {
+    try {
+      const students = req.body
+      await downloadReportStudents(res, students);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   },
 };
