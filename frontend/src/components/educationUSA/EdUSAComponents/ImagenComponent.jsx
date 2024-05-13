@@ -19,7 +19,7 @@ const ImagenFondo = ({ imageUrl, titulo }) => {
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     width: '100%',
-    height: '50vh',
+    height: '80vh', // Cambiado de '90%' a '80vh'
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
@@ -27,7 +27,7 @@ const ImagenFondo = ({ imageUrl, titulo }) => {
     color: 'white',
     textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-    borderRadius: '8px',
+    borderRadius: '4px',
     opacity: 0.9,
   };
 
