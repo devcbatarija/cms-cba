@@ -41,7 +41,121 @@ const About = () => {
 
     return (
         <>
-            <ImagenFondo imageUrl={Banner} />
+            <>
+                <div>
+
+                    <div className="">
+                        <div className="flex flex-wrap ">
+                            <div className="w-full lg:w-4/6 flex flex-col md:flex-row lg:flex-col pl-20 pr-20 pt-10 ">
+                                <div className="p-15">
+                                    <h1 class="mb-4 text-2xl font-bold  text-gray-900 dark:text-white md:text-1xl lg:text-2xl">
+                                        <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                            NUESTRA MISION
+                                        </span>
+                                    </h1>
+
+                                    <p className='text-justify'>
+                                        Somos un centro binacional que busca el desarrollo social, integral y cultural de nuestros estudiantes a través de la enseñanza del idioma inglés, para el acceso a mejores oportunidades de vida contribuyendo con excelencia a la comunidad.
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div className="w-full lg:w-2/6 flex flex-col md:flex-row lg:flex-col pt-5 pb-5">
+
+                                <img src="https://www.ldasistencia.com/documents/727685/727822/misionVisionValores.jpg/980516b4-1c28-8f25-caef-995e98fa3ebb?t=1624428275202" alt="" />
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap ">
+                            <div className="w-full lg:w-3/6 flex flex-col md:flex-row lg:flex-col pt-5 pb-5">
+                                <img src="https://www.billin.net/blog/wp-content/uploads/2020/09/Mision-y-vision-de-una-empresa-1140x760.jpg" alt="" />
+                            </div>
+                            <div className="w-full lg:w-3/6 flex flex-col md:flex-row lg:flex-col pl-20 pr-20 pt-10 ">
+                                <div>
+                                    <h1 class="mb-4 text-2xl font-bold  text-gray-900 dark:text-white md:text-2xl lg:text-2xl">
+                                        <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                            NUESTRA VISION
+                                        </span>
+                                    </h1>
+                                    <p className='text-justify'>
+                                        Ser el centro binacional líder y competitivo reconocido entre la comunidad educativa por brindar una enseñanza integral del idioma inglés con excelencia académica, fomentando la interacción cultural y calidad en el servicio.
+                                    </p>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="w-full lg:w-1/5 flex flex-col md:flex-row lg:flex-col">
+                        </div>
+                    </div>
+
+                    <div className="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
+                        <div className="flex flex-col justify-center items-center">
+                            <h1 class="text-2xl font-bold  text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
+                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                    VALORES
+                                </span>
+                            </h1>
+                        </div>
+                        <div className="relative overflow-auto">
+                            <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
+                                {
+                                    valores.map((v) => (
+                                        <div key={v.id} className="w-60 h-68 rounded-lg shadow-lg p-1">
+                                            <h1 class=" text-2xl text-center  text-gray-900 dark:text-white md:text-1xl lg:text-1xl">
+                                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                                    {v.valor}
+                                                </span>
+                                            </h1>
+                                            <p className="mt-4 text-center text-sm leading-6 dark:text-slate-700">
+                                                {v.descripcion}
+                                            </p>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                {/* <div>
+                {Object.keys(imagesByCategory).map(category => (
+                    <div key={category} className="mb-4 text-center">
+                        <h2 className={`text-3xl uppercase font-bold mb-2 ${getCategoryColorClass(category)}`}>{category}</h2>
+                        <Masonry
+                            breakpointCols={breakpointColumnsObj}
+                            className="masonry-grid"
+                            columnClassName="masonry-grid-column"
+                        >
+                            {imagesByCategory[category].map((image) => (
+                                <div
+                                    key={image.id}
+                                    className="relative cursor-pointer rounded-lg overflow-hidden"
+                                    onClick={() => handleImageClick(image.id)}
+                                >
+                                    <img src={image.src} alt={image.name} className="w-full h-auto" />
+                                    {selectedImage === image.id && (
+                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-4">
+                                            <div>
+                                                <h2 className="text-xl font-bold mb-2">{image.name}</h2>
+                                                <p>{image.description}</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </Masonry>
+                    </div>
+                ))}
+            </div> */}
+
+            </>
+
+
+
+
+
+            {/* <ImagenFondo imageUrl={Banner} />
             <div className="flex flex-col gap-6 justify-center py-8 px-5 md:px-20 lg:px-56 xl:px-96 bg-zinc-50">
                 <div className="grid grid-cols-1 gap-6 justify-center items-center rounded-lg bg-white p-5">
                     <div className="justify-center flex flex-col">
@@ -90,7 +204,7 @@ const About = () => {
                     </div>
                 </div>
             </div>
-            <CuadroInscripcion />
+            <CuadroInscripcion /> */}
         </>
     );
 }
