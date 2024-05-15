@@ -190,14 +190,14 @@ function Event({ event }) {
             >
               {
                 isExpanded ?
-                  <ArrowDropUpRoundedIcon sx={{ fontSize: 35 }} /> :
-                  <ArrowRightRoundedIcon sx={{ fontSize: 35 }} />
+                  <ArrowDropUpRoundedIcon sx={{ fontSize: 30 }} /> :
+                  <ArrowRightRoundedIcon sx={{ fontSize: 30 }} />
               }
             </button>
           </div>
           <span className={`text-zinc-500 `}>{event.Evento ? event.descripcion : generateDescription(event)}</span>
           {
-            event.Evento &&
+            event.Evento && isExpanded &&
             <div className={``}>
               <button onClick={() => handleEventClick(event.Evento ? event.Evento.id : event.id)} className={`bg-cbaBlue text-white h-8 px-8 rounded-md mt-2`}>
                 Ver mas

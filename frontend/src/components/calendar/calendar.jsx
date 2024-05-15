@@ -90,7 +90,6 @@ const CalendarioClient = () => {
     const updateTitle = (e) => {
         const viewType = e.view.type;
         let day = '';
-        // console.log(e.view)
         setTitle(e.view.title);
         let currentMonth;
         if (viewType == 'dayGridMonth') {
