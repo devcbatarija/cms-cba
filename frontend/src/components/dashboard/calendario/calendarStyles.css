@@ -71,7 +71,7 @@
 }
 
 :root {
-  --fc-today-bg-color:rgb(219, 234, 254) ;
+  --fc-today-bg-color:#dbeafe ;
   /* Establece el color de fondo del día actual */
   /* --fc-border-color: none; */
 }
@@ -88,7 +88,7 @@
 
 
 .fc-highlight {
-  background-color: rgb(219, 234, 254) !important;
+  background-color: #dbeafe !important;
 }
 
 

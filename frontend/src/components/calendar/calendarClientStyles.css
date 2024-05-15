@@ -1,5 +1,5 @@
   .cta span {
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       padding-right: 15px;
       text-transform: uppercase;
   }
@@ -39,7 +39,7 @@
 
 
   .reverse-btn span {
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       padding-left: 19px;
       text-transform: uppercase;
   }
