@@ -24,8 +24,8 @@ export const handleUpload = (files) => {
     }
   });
 };
-export const handleUpdateImage = async(props) => {
-  const response=await axios.put('users/put/image',props);
+export const handleUpdateImage = async (props) => {
+  const response = await axios.put('users/put/image', props);
   console.log(response)
 };
 const convertFileToBase64 = (file) => {
@@ -91,3 +91,7 @@ export const tokenGet = async () => {
   };
   return config;
 };
+
+export const altBaseUrl_Axios = {
+  apiplus: 'https://www.cba.org.bo/appi/apiplus'
+}

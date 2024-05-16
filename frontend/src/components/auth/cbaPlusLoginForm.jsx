@@ -21,7 +21,6 @@ const PlusLoginForm = ({
 
     const handleOnSubmit = async () => {
         try {
-            // console.log(watch())
             const response = await axios.post("users/loginCbaPlus", watch()).then(res => {
                 dispatch(signin(res.data));
                 localStorage.setItem("user", JSON.stringify({
@@ -30,7 +29,6 @@ const PlusLoginForm = ({
                     nombres: res.data.nombres,
                     apellidos: res.data.apellidos
                 }))
-                console.log(res)
             });
             navigate("/");
             reset();
