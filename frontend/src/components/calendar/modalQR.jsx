@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { InformationAlert } from "../toastAlerts/information";
 import bgcuadros from '../../assets/backgroundSVG/background-cuadros.svg'
 import bgshapes from '../../assets/backgroundSVG/background-shapes.svg'
+import { altBaseUrl_Axios } from "../../services/functions";
 
 const qrCode = new QRCodeStyling({
     width: 200,
@@ -172,7 +173,7 @@ const ModalQR = ({
     useEffect(() => {
         if (userLogin.accessTokenCbaPlus) {
             let gestion = dayjs(event.General.start).year()
-            axios.get(`http://127.0.0.1:8000/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
+            axios.get(`${altBaseUrl_Axios.apiplus}/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
                 headers: {
                     'Authorization': `Bearer ${userLogin.accessTokenCbaPlus}`
                 }
