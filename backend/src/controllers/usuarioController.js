@@ -4,7 +4,10 @@ const { sentTokenVerify } = require("../services/nodemailerservice");
 const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
 const { uploadImage } = require("./uploadController");
-const axios = require('axios')
+const axios = require('axios');
+const {
+  CBAPLUS_BASE_URL
+} = process.env
 
 function formatDate(dateString) {
   const parts = dateString.split("/");
@@ -112,7 +115,7 @@ module.exports = {
 
   authLoginCbaPlus: async (user) => {
     let login
-    await axios.post('http://127.0.0.1:8000/api/auth/login', user).then(res => {
+    await axios.post(`${CBAPLUS_BASE_URL}/api/auth/login`, user).then(res => {
       login = res.data
     })
 
