@@ -1,7 +1,10 @@
 const jwt = require("jsonwebtoken");
 const { Usuario } = require("../db");
 const axios = require("axios");
-const { JWT_KEY_MASTER } = process.env
+const {
+  JWT_KEY_MASTER,
+  CBAPLUS_BASE_URL
+} = process.env
 
 module.exports = {
   signIn: async (user) => {
@@ -41,9 +44,8 @@ module.exports = {
         const token = req.cookies.token;
         jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
           const currentTime = Math.floor(Date.now() / 1000);
-          if (decoded.from) {
-            await axios
-              .post("http://localhost:8000/api/auth/validate", {
+          if (decoded.from) { 
+            await axios.post(`${CBAPLUS_BASE_URL}/api/auth/validate`, {
                 id: decoded._userId,
               }, {
                 headers: {
