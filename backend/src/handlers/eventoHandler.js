@@ -1,4 +1,4 @@
-const { addEvento, getAllEvento, updateEvento, getEventById, getActiveEvents, deleteEventoById } = require("../controllers/eventoController");
+const { addEvento, getAllEvento, updateEvento, getEventById, getActiveEvents, deleteEventoById, deleteSelectedEvents } = require("../controllers/eventoController");
 const { response } = require("../utils");
 
 
@@ -40,7 +40,23 @@ module.exports = {
             const result = await deleteEventoById(id);
             response(res, 200, { successMessage: "Evento eliminado exitosamente", result });
         } catch (error) {
-            res.status(404).json({ error: error.message });
+            res.status(500).json({ error: error.message });
+        }
+    },
+    deleteSelectedEvents: async (req, res) => {
+        try {
+            const ids = req.body;
+            const result = await deleteSelectedEvents(ids);
+            response(res, 200, {
+                success: true,
+                message: `Se eliminaron ${result} eventos.`,
+            });
+        } catch (error) {
+            res.status(500).json({
+                error: error.message,
+                success: false,
+                message: 'Hubo un error al eliminar los eventos.'
+            });
         }
     },
     addEvento: async (req, res) => {

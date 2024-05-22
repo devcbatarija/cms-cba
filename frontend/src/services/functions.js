@@ -93,5 +93,6 @@ export const tokenGet = async () => {
 };
 
 export const altBaseUrl_Axios = {
+  // apiplus: 'http://127.0.0.1:8000'
   apiplus: 'https://www.cba.org.bo/appi/apiplus'
 }
