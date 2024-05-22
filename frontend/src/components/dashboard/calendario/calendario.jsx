@@ -15,7 +15,6 @@ import multimonth from "@fullcalendar/multimonth";
 import { Button } from "@mui/material";
 import "./calendarStyles.css"
 import ModalAddEvent from "./modalAddEvent";
-import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import dayjs from "dayjs";
 import BasicPopover from "./widgets/popover";
