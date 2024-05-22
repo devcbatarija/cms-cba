@@ -183,6 +183,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
         <Profile
           setOpenProfile={setOpenProfile}
           userId={authlogin.user._userId}
+          userLogin={authlogin.user}
           openProfile={openProfile}
         ></Profile>
       ) : null}

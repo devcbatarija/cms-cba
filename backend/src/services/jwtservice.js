@@ -44,14 +44,14 @@ module.exports = {
         const token = req.cookies.token;
         jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
           const currentTime = Math.floor(Date.now() / 1000);
-          if (decoded.from) { 
+          if (decoded.from) {
             await axios.post(`${CBAPLUS_BASE_URL}/api/auth/validate`, {
-                id: decoded._userId,
-              }, {
-                headers: {
-                  'Authorization': `Bearer ${decoded.accessToken}`
-                }
-              })
+              id: decoded._userId,
+            }, {
+              headers: {
+                'Authorization': `Bearer ${decoded.accessToken}`
+              }
+            })
               .then((res) => {
                 usResult = {
                   _userId: res.data.userData.id,
