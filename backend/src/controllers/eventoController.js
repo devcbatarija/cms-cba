@@ -166,6 +166,21 @@ module.exports = {
       return error
     }
   },
+  deleteSelectedEvents: async (ids) => {
+    try {
+      const deletedCount = await Evento.destroy({
+        where: {
+          id: {
+            [Op.in]: ids // Utiliza Op.in para buscar múltiples IDs
+          }
+        }
+      });
+
+      return deletedCount
+    } catch (error) {
+      return error
+    }
+  },
   updateEvento: async (id, changes) => {
     try {
       const event = await Evento.findByPk(id);
@@ -198,5 +213,5 @@ module.exports = {
       return error;
     }
   },
- 
+
 }
