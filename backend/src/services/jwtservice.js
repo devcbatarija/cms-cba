@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const { Usuario } = require("../db");
-const axios = require("axios"); 
-
-const keymaster = "token_jwt_login";
+const axios = require("axios");
+const {
+  JWT_KEY_MASTER,
+  CBAPLUS_BASE_URL
+} = process.env
 
 module.exports = {
   signIn: async (user) => {
@@ -11,12 +13,13 @@ module.exports = {
         let payload = {
           _userId: user.id_Usuario,
           nombre: user.nombres,
-          ci: user.ci,
+          from: user.from,
+          accessToken: user.accessToken
         };
         if (user.from) {
           payload.from = user.from;
         }
-        const tokengen = await jwt.sign(payload, keymaster);
+        const tokengen = await jwt.sign(payload, JWT_KEY_MASTER);
         resolve(tokengen);
       } catch (error) {
         reject(error);
@@ -34,30 +37,33 @@ module.exports = {
       res.status(400).json({ messageError: error.message });
     }
   },
-  validToken: async (req, res) => {
+  validToken: async (req, res) => {        //para validar el inicio de sesion
     try {
       if (req.cookies.token) {
         let usResult;
         const token = req.cookies.token;
-        jwt.verify(token, keymaster, async (error, decoded) => {
+        jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
           const currentTime = Math.floor(Date.now() / 1000);
           if (decoded.from) {
-            await axios
-              .post("http://localhost:8000/api/auth/userExists", {
-                id: decoded._userId,
-              })
+            await axios.post(`${CBAPLUS_BASE_URL}/api/auth/validate`, {
+              id: decoded._userId,
+            }, {
+              headers: {
+                'Authorization': `Bearer ${decoded.accessToken}`
+              }
+            })
               .then((res) => {
-                if (res.data.exists) {
-                  usResult = {
-                    _userId: res.data.userData.id,
-                    _profileImage: res.data.userData.avatar,
-                    correo: res.data.userData.username,
-                    nombres: res.data.userData.fullName,
-                    apellidos: "",
-                    rol: res.data.userData.role,
-                    token,
-                  };
-                }
+                usResult = {
+                  _userId: res.data.userData.id,
+                  _profileImage: res.data.userData.avatar,
+                  correo: res.data.userData.username,
+                  nombres: res.data.userData.fullName,
+                  apellidos: "",
+                  rol: 'Client',
+                  from: 'CBA PLUS',
+                  accessTokenCbaPlus: res.data.accessToken,
+                  token
+                };
               });
           } else {
             const usLogin = await Usuario.findByPk(decoded._userId);
@@ -79,6 +85,9 @@ module.exports = {
           return res.status(200).json({ user: usResult });
         });
       }
+      else {
+        return res.status(200).json({ message: 'Dont login' });
+      }
     } catch (error) {
       return res.status(400).json({ messageError: error.message });
     }
@@ -89,7 +98,7 @@ module.exports = {
       // if(!token){
       //   return res.status(200).json({ user: usResult });
       // }
-      jwt.verify(token, keymaster, async (error, decoded) => {
+      jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
         const currentTime = Math.floor(Date.now() / 1000);
         const usLogin = await Usuario.findByPk(decoded._userId);
         if (!usLogin) {
@@ -118,7 +127,7 @@ module.exports = {
         return res.status(401).json({ messageError: "Usuario no autorizado" });
       }
       const token = req.cookies.token;
-      jwt.verify(token, keymaster, async (error, decoded) => {
+      jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
         const usLogin = await Usuario.findByPk(decoded._userId);
         if (usLogin) {
           if (usLogin.rol == "Admin") {
@@ -141,13 +150,13 @@ module.exports = {
         res.status(401).json({ error: "Token no proporcionado" });
       }
       const tokenBearer = token.split(" ")[1];
-      jwt.verify(tokenBearer, keymaster, async (error, decoded) => {
+      jwt.verify(tokenBearer, JWT_KEY_MASTER, async (error, decoded) => {
         const usLogin = await Usuario.findByPk(decoded._userId);
         if (usLogin) {
           if (usLogin.rol == "Admin") {
             res.status(200).json({ MessageChannel: "User successfully valid" });
             return
-          }  
+          }
           res.status(401).json({ MessageChannel: "Usuario no autorizado" });
           return
         }

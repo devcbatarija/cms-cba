@@ -15,7 +15,6 @@ import multimonth from "@fullcalendar/multimonth";
 import { Button } from "@mui/material";
 import "./calendarStyles.css"
 import ModalAddEvent from "./modalAddEvent";
-import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 import dayjs from "dayjs";
 import BasicPopover from "./widgets/popover";
@@ -135,7 +134,7 @@ const Calendario = () => {
         const result = await axios.get(`event/getById/${e.event.id}`).then(response => {
             const res = response.data.results
             if (res.General) {
-                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: res } })
+                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/', data: res } })
             }
             else {
                 setTipoModal("Evento");
@@ -145,19 +144,13 @@ const Calendario = () => {
         })
     }
     const handleEventDrop = async (e) => {
-        const token = Cookies.get('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
         const eventDrop = e.event;
         const event = {
             id: eventDrop.id,
             start: eventDrop.start,
             end: eventDrop.allDay == false ? eventDrop.endStr : dayjs(eventDrop.endStr).subtract(1, 'day').format('YYYY-MM-DD')
         }
-        axios.put(`event/update/${event.id}`, event, config).then(res => {
+        axios.put(`event/update/${event.id}`, event).then(res => {
             setTimeout(() => {
                 limpiarDatos();
                 toast.success(res.data.successMessage)
@@ -188,12 +181,6 @@ const Calendario = () => {
         }
     }, [])
     const handleExternalEventDrop = async (e) => {
-        const token = Cookies.get('token');
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
         const eventDrop = JSON.parse(e.draggedEl.dataset.event);
         const newE = {
             title: eventDrop.title,
@@ -207,7 +194,7 @@ const Calendario = () => {
             UsuarioIdUsuario: userLogin._userId
 
         }
-        axios.post("event/create", newE, config).then(res => {
+        axios.post("event/create", newE).then(res => {
             setTimeout(() => {
                 toast.success(res.data.successMessage)
                 dispatch(getEvents())
@@ -255,7 +242,7 @@ const Calendario = () => {
     }
     useEffect(() => {
         if (data.tipo == 'General') {
-            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/calendario', data: data } })
+            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/', data: data } })
         }
     }, [data])
     return (

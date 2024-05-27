@@ -10,7 +10,6 @@ module.exports = {
         }
     },
     addGallery: async (g) => {
-        console.log(g)
         try {
             const galleria = {
                 image: g.imagen,

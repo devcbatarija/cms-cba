@@ -1,3 +1,7 @@
+require('dotenv').config();
+const {
+  BASE_URL_EMAIL_SEND
+} = process.env;
 const nodemailer = require("nodemailer");
 const { Resend } = require("resend");
 module.exports = {
@@ -19,7 +23,7 @@ module.exports = {
           html: `
           <p>Hola,</p>
           <p>Gracias por registrarte. Por favor, verifica tu correo electrónico haciendo clic en el siguiente enlace:</p>
-          <p><a href="https://cba.org.bo/appi/users/valid/token/email?token=${token}" target="_blank">Verificar correo electrónico</a></p>
+          <p><a href="${BASE_URL_EMAIL_SEND}/email?token=${token}" target="_blank">Verificar correo electrónico</a></p>
           <p>Si no te has registrado, por favor, ignora este correo.</p>
           <p>Saludos,</p>
           <p>El equipo CBA </p>`

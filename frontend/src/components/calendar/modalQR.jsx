@@ -6,6 +6,11 @@ import { useSelector } from "react-redux";
 import dayjs from 'dayjs';
 import './calendarClientStyles.css'
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { InformationAlert } from "../toastAlerts/information";
+import bgcuadros from '../../assets/backgroundSVG/background-cuadros.svg'
+import bgshapes from '../../assets/backgroundSVG/background-shapes.svg'
+import { altBaseUrl_Axios } from "../../services/functions";
 
 const qrCode = new QRCodeStyling({
     width: 200,
@@ -48,6 +53,7 @@ const ModalQR = ({
     handleChangeEvent,
 }) => {
     const navigate = useNavigate()
+    const [paralelStudent, setParalelStudent] = useState(null)
     const [informationQr, setInformationQR] = useState(null)
     const [consigna, setConsigna] = useState(null)
     const userLogin = useSelector((state) => state.login.user)
@@ -62,14 +68,25 @@ const ModalQR = ({
     ]
     const [typeImageQR, setTypeImageQR] = useState(extensiones[1].type)
 
-    const generarQR = () => {
+    const generarQR = (id) => {
         if (isLogged == true) {
-            if (!qrGenerated) {
+            if (!qrGenerated && paralelStudent != null) {
                 const datos = {
                     id_Evento: event.datosEvento.id_Evento,
-                    id_Estudiante: userLogin._userId.toString(),
+                    id_Estudiante: userLogin._userId.toString(), //paralelStudent.stdCode ? paralelStudent.stdCode.toString() : userLogin._userId.toString(),
+                    nombre_estudiante: paralelStudent.estudiante,
+                    paralelo: paralelStudent.paralelo,
+                    mes_literal: paralelStudent.mes,
+                    gestion: paralelStudent.gestion,
+                    inicio_modulo: paralelStudent.inicio_modulo,
+                    fin_modulo: paralelStudent.fin_modulo,
+                    profesor: paralelStudent.nombre_prof,
+                    horario: paralelStudent.horario,
+                    turno: paralelStudent.turno,
+                    modulo: paralelStudent.nombre_modulo,
                     cantidad_uso: 0,
-                    fecha_Expiracion: event.General.end,
+                    fecha_Expiracion: event.General.start,
+                    hora_expiracion: event.General.allDay ? '23:59' : event.General.end_Time
                 }
                 const response = axios.post('QR/generarQR', datos).then(res => {
                     qrCode.update({
@@ -77,12 +94,17 @@ const ModalQR = ({
                     })
                     qrCode.append(qrCodeRef.current)
                     setQrGenerated(true)
+                    setTimeout(() => {
+                        verifyQR()
+                    }, 1000);
                 }).catch(err => {
                     console.log(err)
                 });
             }
             else {
-                console.log('ya fue generado')
+                toast.custom((t) => (
+                    <InformationAlert t={t} w={"w-4/12"} message='Para generar un QR debe estar registrado en un curso' />
+                ))
             }
         }
         else {
@@ -124,9 +146,8 @@ const ModalQR = ({
         return `rgb(${r},${g},${b},0.3)`;
     };
     const colorRgb = hexToRgb(event.General.color);
-
-    useEffect(() => {
-        if (event.datosEvento.Consigna_Eventos.length > 0) {
+    const verifyQR = () => {
+        if (event.datosEvento.referible) {
             setConsigna(event.datosEvento.Consigna_Eventos[0])
         }
         if (isLogged == true) {
@@ -148,10 +169,26 @@ const ModalQR = ({
             })
         }
         console.log(event)
+    }
+    useEffect(() => {
+        if (userLogin.accessTokenCbaPlus) {
+            let gestion = dayjs(event.General.start).year()
+            axios.get(`${altBaseUrl_Axios.apiplus}/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
+                headers: {
+                    'Authorization': `Bearer ${userLogin.accessTokenCbaPlus}`
+                }
+            }).then(res => {
+                if (res.data.paralelo) {
+                    console.log(res.data)
+                    setParalelStudent(res.data)
+                }
+            })
+        }
+        verifyQR()
     }, [])
 
     useEffect(() => {
-        if (event.datosEvento.Consigna_Eventos.length > 0) {
+        if (event.datosEvento.referible) {
             setConsigna(event.datosEvento.Consigna_Eventos[0])
         }
         else {
@@ -160,29 +197,124 @@ const ModalQR = ({
     }, [event])
 
     const [backModal, setBackModal] = useState(false)
+    const [notification, setNotification] = useState(false)
     const toggleBackModal = () => {
+        if (!userLogin.accessTokenCbaPlus && !notification) {
+            setNotification(true)
+            setTimeout(() => {
+                toast.custom((t) => (
+                    <InformationAlert t={t} w={"w-4/12"} message='Para generar el Qr debes iniciar sesion con tu cuenta de estudiante' />
+                ));
+            }, 500);
+        }
+        else if (paralelStudent == null && !notification) {
+            setNotification(true)
+            setTimeout(() => {
+                toast.custom((t) => (
+                    <InformationAlert t={t} w={"w-4/12"} message='No esta registrado en ningun curso' />
+                ));
+            }, 500);
+        }
         setBackModal(!backModal)
     }
-
     return (
-        <div className="w-full h-screen fixed inset-0 overflow-x-hidden overflow-y-auto z-10">
-            <div className="backdrop-blur-sm bg-cbaBlue/20  w-full h-full absolute"></div>
-            <div className="absolute w-full h-screen flex justify-center items-center">
-                <div className="h-[650px] md:h-[600px] w-[1000px] rounded-xl bg-white">
+        <div className="flex justify-center items-center fixed inset-0 overflow-x-hidden z-10 backdrop-blur-sm bg-cbaBlue/20 p-3 ">
+            <div className="relative h-full md:h-[600px] w-full sm:w-[1000px] rounded-xl bg-white shadow-xl" >
 
-                    <div className="relative h-full w-full rounded-xl overflow-hidden" >  {/*contenedor del modal style={{ background: `linear-gradient(-45deg, #000000, #434343` }}*/}
+                <div className="relative h-full w-full rounded-xl md:overflow-hidden mb-10" >  {/*contenedor del modal style={{ background: `linear-gradient(-45deg, #000000, #434343` }}*/}
 
-                        <div className="h-10 w-10 bg-orange-100 absolute right-[37%] top-[10%] rounded-full"></div>
-                        <div className="h-5 w-5 bg-green-100 absolute right-[10%] top-[5%] rotate-[25deg]"></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                    <div className="h-10 w-10 bg-orange-100 absolute right-[37%] top-[10%] rounded-full"></div>
+                    <div className="h-5 w-5 bg-green-100 absolute right-[15%] top-[6%] rotate-[25deg]"></div>
+                    <div className="absolute border-[20px] border-solid border-transparent border-b-red-100 top-[5%] left-[5%] rotate-[200deg]"></div>
+                    <div className="text-sky-100 absolute right-[5%] top-[15%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
+                        <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                    </svg>
+                    </div>
+                    <div className="absolute text-teal-100 rotate-[120deg] bottom-[10%] right-[20%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z" clipRule="evenodd" />
+                    </svg>
+                    </div>
+                    <div className="text-rose-100 absolute top-[17%] right-[20%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                    </svg>
+                    </div>
+                    {/* primera vista del modal */}
+                    <div className={`flex-col px-8 md:px-12 lg:px-20 relative  h-auto md:h-full bg-white rounded-xl md:bg-transparent ${backModal ? 'hidden md:flex' : 'flex'}`} style={{ color: event.General.color }}>
+                        <button
+                            onClick={toggleOpenModalQr}
+                            className={`p-[3px] right-0 rounded-full text-zinc-500 absolute m-[2px] md:m-3 z-10 hover:bg-zinc-200 hover:shadow-xl `}
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                viewBox="0 0 24 24"
+                                fill="gray"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            >
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                        <div className="flex flex-col md:flex-row h-full items-center py-5">
+                            <div className="w-full md:w-[60%] md:pr-10 flex flex-col">
+                                <h2 className={`md:mb-5 md:mb-10 text-3xl md:text-4xl lg:text-5xl w-[70%] font-extrabold mt-2 sm:mt-0`} >{event.General.title}</h2>
+                                <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-500">{event.datosEvento.descripcion}</span>
+                                <div className="flex flex-col md:flex-row justify-between md:pr-6 lg:pr-10">
+                                    <div className="flex flex-row gap-5 items-center sm:text-lg md:text-xl">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                                            </svg>
 
-                        <div className={`flex flex-col px-8 md:px-12 lg:px-20 relative h-full`} style={{ color: event.General.color }}>
+                                        </span>
+                                        <span className="font-bold ">{dayjs(event.General.start).format('DD')}</span>
+                                        <span className="font-bold border-x-2 px-5 capitalize border-zinc-400">{dayjs(event.General.start).format('MMMM')}</span>
+                                        <span className="font-bold ">{dayjs(event.General.start).format('YYYY')}</span>
+                                    </div>
+                                    <div className="flex flex-row items-center gap-x-4 md:gap-x-2 mt-2 md:mt-0">
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        </span>
+                                        <span className="text-md font-semibold">{
+                                            event.General.allDay ?
+                                                <>Todo el dia</>
+                                                :
+                                                event.General.start_Time
+                                        }</span>
+                                    </div>
+                                </div>
+                                {
+                                    consigna != null &&
+                                    <div className="mt-5">
+                                        <button className="bg-cbaBlue text-white rounded-lg w-[220px] py-2 font-semibold"
+                                            onClick={toggleBackModal}
+                                        >Referir</button>
+                                    </div>
+                                }
+                            </div>
+                            <div className="w-full  md:w-[40%]  flex items-center justify-center order-first md:order-none">
+                                <img className="h-auto w-full rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
+                                {/* <img className="h-100 w-full sm:h-80 md:h-96 sm:w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" /> */}
+                            </div>
+                        </div>
+
+                    </div>
+                    {/* parte de atras del modal */}
+                    {
+                        consigna != null &&
+                        <div className={`bg-white absolute top-0 left-0 w-full h-auto md:h-full flex-col items-center justify-between text-zinc-500 rounded-[5px] transform ${backModal ? 'translate-y-[2%] flex' : 'translate-y-[98%] hidden md:flex'} transition-all duration-500 ease-in-out`}
+                            style={{ background: 'linear-gradient(340deg, #E8EFF6 0%, white 100%)' }}
+                        // style={{ background: 'linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%)' }} 
+                        >
                             <button
                                 onClick={toggleOpenModalQr}
-                                className="p-1.5 right-0 rounded-full text-zinc-500 absolute m-3 z-10"
+                                className={`p-[3px] right-1 rounded-full text-zinc-500 absolute top-[-13px] z-10 md:hidden hover:bg-zinc-200 hover:shadow-xl`}
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -199,67 +331,37 @@ const ModalQR = ({
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
                             </button>
-                            <div className="flex flex-col sm:flex-row h-full items-center py-5">
-                                <div className="w-2/3 pr-10 flex flex-col">
-                                    <h2 className={`sm:mb-5 md:mb-10 sm:text-3xl md:text-4xl lg:text-5xl w-[70%] font-extrabold`} >{event.General.title}</h2>
-                                    <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-500">{event.datosEvento.descripcion}</span>
-                                    <div className="flex flex-row sm:flex-col md:flex-row justify-between md:pr-6 lg:pr-10">
-                                        <div className="flex flex-row gap-5 items-center sm:text-lg md:text-xl">
-                                            <span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
-                                                </svg>
-
-                                            </span>
-                                            <span className="font-bold ">{dayjs(event.General.start).format('DD')}</span>
-                                            <span className="font-bold border-x-2 px-5 capitalize border-zinc-400">{dayjs(event.General.start).format('MMMM')}</span>
-                                            <span className="font-bold ">{dayjs(event.General.start).format('YYYY')}</span>
+                            <div className="px-8 pt-5 flex flex-col md:flex-row w-full sm:px-8 md:px-10 lg:px-20 grow items-center"
+                                style={{
+                                    // background: `linear-gradient(135deg, white , ${colorRgb} )`
+                                }}
+                            >
+                                <div className="w-full md:w-2/3 flex flex-col items-start justify-center sm:pr-10 lg:mr-0">
+                                    <button className="mb-2 rounded-lg btn-Consigna hover:w-[140px] hover:duration-300 w-10 h-10 flex justify-center items-center relative duration-300 shadow-xl bg-cbaBlue overflow-hidden "
+                                        onClick={toggleBackModal}
+                                    >  {/*style={{ background: 'linear-gradient(144deg,#af40ff,#5b42f3 50%,#00ddeb)' }}*/}
+                                        <div className="text-plus w-full text-white h-full duration-300 flex items-center justify-center ">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                                            </svg>
                                         </div>
-                                        <div className="flex flex-row items-center sm:gap-x-6 md:gap-x-2 sm:mt-2 md:mt-0">
-                                            <span>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                            </span>
-                                            <span className="text-md font-semibold">{
-                                                event.General.allDay ?
-                                                    <>Todo el dia</>
-                                                    :
-                                                    event.General.start_Time
-                                            }</span>
+                                        <div className=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">Volver</div>
+                                    </button>
+                                    {/* <span className="mb-px  text-lg font-mono w-[70%] font-bold text-zinc-400">{event.datosEvento.categoria}</span> */}
+                                    <span className="md:mb-5 md:mb-10 text-3xl md:text-4xl lg:text-5xl w-[70%] font-bold">Consigna</span>
+                                    <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-400">{consigna.descripcion}</span>
+                                    <div className="flex flex-col sm:flex-row md:items-center w-full">
+                                        <div className="flex flex-row items-center">
+                                            <span className="md:text-xl font-bold text-zinc-400">Referidos:</span>
+                                            {
+                                                informationQr == null &&
+                                                <div className="mx-5 bg-green-100 border-2 h-10 w-10 flex items-center justify-center border-green-400 rounded-xl text-green-400">
+                                                    <span>{consigna.cantidad_Referidos}</span>
+                                                </div>
+                                            }
                                         </div>
-                                    </div>
-                                    {
-                                        consigna != null &&
-                                        <div className="mt-5">
-                                            <button className="bg-cbaBlue text-white rounded-md w-[220px] py-2"
-                                                onClick={toggleBackModal}
-                                            >Referir</button>
-                                        </div>
-                                    }
-                                </div>
-                                <div className="w-full bg-red-100 sm:w-1/3 sm:h-1/1  flex items-center justify-center order-first sm:order-none">
-                                    <img className="h-100 w-full sm:h-80 md:h-96 sm:w-80 rounded-xl relative" src={event.datosEvento.multimedia[0]} alt="" />
-                                </div>
-                            </div>
-
-                        </div>
-                        {/* parte de atras del modal */}
-                        {
-                            consigna != null &&
-                            <div className={`bg-white absolute top-0 left-0 w-full h-full flex flex-col items-center justify-between text-zinc-500 rounded-[5px] transform ${backModal ? 'translate-y-[2%]' : 'translate-y-[98%]'} transition-all duration-500 ease-in-out`}>
-                                <div className="pt-5 flex flex-row w-full sm:px-8 md:px-10 lg:px-20 grow items-center"
-                                    style={{
-                                        // background: `linear-gradient(135deg, white , ${colorRgb} )`
-                                    }}
-                                >
-                                    <div className="w-2/3 flex flex-col items-start justify-center sm:mr-10 lg:mr-0">
-                                        {/* <span className="mb-3  text-5xl w-[70%] font-bold">{event.datosEvento.categoria}</span> */}
-                                        <span className="sm:mb-5 md:mb-10 sm:text-3xl md:text-4xl lg:text-5xl w-[70%] font-bold">Consigna</span>
-                                        <span className="whitespace-pre-wrap text-sm mb-5 text-zinc-400">{consigna.descripcion}</span>
-                                        <div className="flex flex-row items-center ">
-                                            <span className="text-xl font-bold text-zinc-400">Referidos:</span>
-                                            <div className="mx-5 bg-green-100 border-2 h-10 w-10 flex items-center justify-center border-green-400 rounded-xl text-green-400">
+                                        <div className={`flex-row items-center ${informationQr == null ? 'hidden' : 'flex'}`}>
+                                            <div className="mr-5 sm:mx-5 bg-green-100 border-2 h-10 w-10 flex items-center justify-center border-green-400 rounded-xl text-green-400">
                                                 <span>{consigna.cantidad_Referidos}</span>
                                             </div>
                                             {
@@ -272,7 +374,7 @@ const ModalQR = ({
                                                     <div className={`mx-5 border-2 h-10 w-10 flex items-center justify-center rounded-xl ${informationQr.cantidad_uso >= consigna.cantidad_Referidos ? 'text-green-400 bg-green-100 border-green-400' : 'text-red-400 bg-red-100 border-red-400'}`}>
                                                         <span>{informationQr.cantidad_uso}</span>
                                                     </div>
-                                                    <span className={`whitespace-pre-wrap text-sm font-semibold ${informationQr.cantidad_uso >= consigna.cantidad_Referidos ? 'text-green-400' : 'text-red-400'}`}>
+                                                    <span className={`whitespace-pre-wrap text-xs md:text-sm font-semibold ${informationQr.cantidad_uso >= consigna.cantidad_Referidos ? 'text-green-400' : 'text-red-400'}`}>
                                                         {
                                                             informationQr.cantidad_uso < consigna.cantidad_Referidos ? `¡Aun te faltan ${consigna.cantidad_Referidos - informationQr.cantidad_uso} referidos!` :
                                                                 informationQr.cantidad_uso == consigna.cantidad_Referidos ? "¡Listo! ¡Gracias por tu compromiso!" : '¡Increíble! Tu dedicación hace la diferencia'
@@ -281,112 +383,117 @@ const ModalQR = ({
                                                 </>
                                             }
                                         </div>
-                                        <button onClick={toggleBackModal}>volver</button>
-                                    </div>
-                                    <div className="w-1/3 flex items-center flex-col justify-center items-center h-full">
-                                        {
-                                            qrGenerated &&
-                                            <span className="sm:text-[10px] md:text-xs text-center text-zinc-400">Descarga y comparte este QR y asegúrate de escanearlo en la institución el día del evento para registrar tus referidos.</span>
-                                        }
-                                        <div className="bg-white sm:p-5 md:p-8 rounded-lg shadow-xl" ref={qrCodeRef}>
-                                            {
-                                                !qrGenerated &&
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="w-[200px] h-[200px]">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
-                                                </svg>
-
-                                            }
-                                        </div>
-                                        {
-                                            qrGenerated ?
-                                                <div className="mt-5 flex flex-row bg-cbaBlue divide-x justify-center items-center text-white rounded-md w-[220px] cursor-pointer">
-                                                    <span className="px-5 w-full text-center" onClick={onDownloadClick}>Descargar</span>
-                                                    <div>
-                                                        <DropdownTypeQR
-                                                            handleFunction={handleChageType}
-                                                            datos={extensiones}
-                                                            initialSelected={extensiones[1]}
-                                                            disabled={false}
-                                                        />
-                                                    </div>
-                                                </div> :
-                                                <button onClick={generarQR} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
-                                        }
                                     </div>
                                 </div>
-                                <div className="w-full sm:px-3 md:px-10 lg:px-20 pt-5 pb-8 flex flex-row gap-x-5">
-                                    <div className="w-3/6">
+                                <div className="w-full py-5 md:py-0 md:w-1/3 md:pr-2 lg:pr-0 flex items-center flex-col justify-center items-center h-auto sm:h-full">
+                                    {
+                                        qrGenerated &&
+                                        <span className="text-xs mb-2 text-center text-zinc-400">Descarga y comparte este QR y asegúrate de escanearlo en la institución el día del evento para registrar tus referidos.</span>
+                                    }
+                                    <div className="bg-white p-5 md:p-3 md:p-8 rounded-lg shadow-xl" ref={qrCodeRef}>
                                         {
-                                            event.prev != null &&
-                                            <div onClick={() => handleChangeEvent(event.prev.id)} className="prev-event transition duration-700 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
-                                                <div className="w-1/5 flex items-center p-2 h-full">
-                                                    <img className="rounded-md h-full w-full" src={event.prev.image} alt="" />
-                                                </div>
-                                                <div className="w-4/5 flex flex-col overflow-hidden p-3">
-                                                    <span className="font-bold text-sm">{event.prev.title}</span>
-                                                    <span className="truncate text-zinc-400 text-xs">{event.prev.descripcion}</span>
-                                                    <div className="flex flex-row gap-x-5">
-                                                        <button class="flex flex-row items-center mt-2 reverse-btn">
-                                                            <svg
-                                                                id="arrow-horizontal"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="30"
-                                                                height="10"
-                                                                viewBox="0 0 46 16"
-                                                            >
-                                                                <path
-                                                                    id="Path_10"
-                                                                    data-name="Path 10"
-                                                                    d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
-                                                                    transform="translate(30)"
-                                                                ></path>
-                                                            </svg>
-                                                            <span class="hover-underline-animation-prev text-xs"> Anterior </span>
-                                                        </button>
+                                            !qrGenerated &&
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.2" stroke="currentColor" className="w-[200px] h-[200px]">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                                            </svg>
 
-                                                    </div>
-                                                </div>
-                                            </div>
                                         }
                                     </div>
-                                    <div className="w-3/6">
-                                        {
-                                            event.next != null &&
-                                            <div onClick={() => handleChangeEvent(event.next.id)} className="next-event transition duration-500 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
-                                                <div className="w-4/5 flex flex-col overflow-hidden p-3">
-                                                    <span className="font-bold text-sm ">{event.next.title}</span>
-                                                    <span className="truncate text-zinc-400 text-xs">{event.next.descripcion}</span>
-                                                    <div className="flex flex-row gap-x-5">
-                                                        <button class="cta flex flex-row items-center mt-2">
-                                                            <span class="hover-underline-animation text-xs"> Siguiente </span>
-                                                            <svg
-                                                                id="arrow-horizontal"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                width="30"
-                                                                height="10"
-                                                                viewBox="0 0 46 16"
-                                                            >
-                                                                <path
-                                                                    id="Path_10"
-                                                                    data-name="Path 10"
-                                                                    d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
-                                                                    transform="translate(30)"
-                                                                ></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
+                                    {
+                                        qrGenerated ?
+                                            <div className="mt-5 flex flex-row bg-cbaBlue divide-x justify-center items-center text-white rounded-md w-[220px] cursor-pointer">
+                                                <span className="px-5 w-full text-center" onClick={onDownloadClick}>Descargar</span>
+                                                <div>
+                                                    <DropdownTypeQR
+                                                        handleFunction={handleChageType}
+                                                        datos={extensiones}
+                                                        initialSelected={extensiones[1]}
+                                                        disabled={false}
+                                                    />
                                                 </div>
-                                                <div className="w-1/5 flex items-center justify-end p-2 h-full">
-                                                    <img className="rounded-md h-full w-full" src={event.next.image} alt="" />
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                            </div> :
+                                            <>
+                                                {
+                                                    userLogin.accessTokenCbaPlus ?
+                                                        <button onClick={() => generarQR(event.General.id)} className="my-5 bg-cbaBlue  text-white rounded-md w-[220px] py-2">Generar Qr</button>
+                                                        : null
+                                                }
+                                            </>
+                                    }
                                 </div>
                             </div>
-                        }
-                    </div>
+                            <div className="w-full px-2 sm:px-3 md:px-10 lg:px-20 pt-3 md:pt-5 pb-3 md:pb-8 flex flex-row gap-x-2 md:gap-x-5">
+                                <div className="w-3/6">
+                                    {
+                                        event.prev != null &&
+                                        <div onClick={() => handleChangeEvent(event.prev.id)} className="prev-event transition duration-700 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
+                                            <div className="hidden w-1/5 sm:flex items-center p-2 h-full">
+                                                <img className="rounded-md h-full w-full" src={event.prev.image} alt="" />
+                                            </div>
+                                            <div className="w-full sm:w-4/5 flex flex-col overflow-hidden p-3">
+                                                <span className="font-bold text-sm truncate sm:text-wrap">{event.prev.title}</span>
+                                                <span className="truncate text-zinc-400 text-xs">{event.prev.descripcion}</span>
+                                                <div className="flex flex-row gap-x-5">
+                                                    <button className="flex flex-row items-center mt-2 reverse-btn">
+                                                        <svg
+                                                            id="arrow-horizontal"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="30"
+                                                            height="10"
+                                                            viewBox="0 0 46 16"
+                                                        >
+                                                            <path
+                                                                id="Path_10"
+                                                                data-name="Path 10"
+                                                                d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                                                                transform="translate(30)"
+                                                            ></path>
+                                                        </svg>
+                                                        <span className="hover-underline-animation-prev text-xs"> Anterior </span>
+                                                    </button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div className="w-3/6">
+                                    {
+                                        event.next != null &&
+                                        <div onClick={() => handleChangeEvent(event.next.id)} className="next-event transition duration-500 ease-in-out hover:scale-[1.07] flex flex-row w-full h-[110px] rounded-lg shadow-lg bg-zinc-50 items-center">
+                                            <div className="w-full sm:w-4/5 flex flex-col overflow-hidden p-3">
+                                                <span className="font-bold text-sm truncate sm:text-wrap">{event.next.title}</span>
+                                                <span className="truncate text-zinc-400 text-xs">{event.next.descripcion}</span>
+                                                <div className="flex flex-row gap-x-5">
+                                                    <button className="cta flex flex-row items-center mt-2">
+                                                        <span className="hover-underline-animation text-xs"> Siguiente </span>
+                                                        <svg
+                                                            id="arrow-horizontal"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            width="30"
+                                                            height="10"
+                                                            viewBox="0 0 46 16"
+                                                        >
+                                                            <path
+                                                                id="Path_10"
+                                                                data-name="Path 10"
+                                                                d="M8,0,6.545,1.455l5.506,5.506H-30V9.039H12.052L6.545,14.545,8,16l8-8Z"
+                                                                transform="translate(30)"
+                                                            ></path>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="hidden w-1/5 sm:flex items-center justify-end p-2 h-full">
+                                                <img className="rounded-md h-full w-full" src={event.next.image} alt="" />
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
