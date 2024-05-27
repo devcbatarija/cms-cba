@@ -54,7 +54,6 @@ module.exports = {
         }
     },
     deleteProgramSelect: async (req, res) => {
-        // console.log(req.body)
         try {
             const result = await deleteProgramSelect(req.body.ids);
             res.status(200).json({ results: result })

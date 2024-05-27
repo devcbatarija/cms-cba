@@ -4,7 +4,10 @@ const { sentTokenVerify } = require("../services/nodemailerservice");
 const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
 const { uploadImage } = require("./uploadController");
-const axios = require('axios')
+const axios = require('axios');
+const {
+  CBAPLUS_BASE_URL
+} = process.env
 
 function formatDate(dateString) {
   const parts = dateString.split("/");
@@ -16,7 +19,6 @@ function formatDate(dateString) {
 module.exports = {
   getAllUsuarios: async () => {
     const response = await Usuario.findAll();
-    console.log(response);
     return response;
   },
   postUsuario: async (user) => {
@@ -105,23 +107,23 @@ module.exports = {
       nombres: userExist.nombres,
       apellidos: userExist.apellidos,
       rol: userExist.rol,
+      from: 'CBA WEBSITE',
       token: tokengen
     };
     return { usLogin: usLogin, token: tokengen };
   },
 
   authLoginCbaPlus: async (user) => {
-    console.log(user);
     let login
-    await axios.post('http://172.16.3.15:8000/api/auth/login', user).then(res => {
+    await axios.post(`${CBAPLUS_BASE_URL}/api/auth/login`, user).then(res => {
       login = res.data
     })
 
     const tokengen = await signIn({
       id_Usuario: login.userData.id,
-      nombres: login.userData.fullname,
-      ci: login.userData.id,
-      from:'CBA PLUS'
+      nombres: login.userData.fullName,
+      from: 'CBA PLUS',
+      accessToken: login.accessToken
     });
     const usLogin = {
       _userId: login.userData.id,
@@ -130,7 +132,9 @@ module.exports = {
       nombres: login.userData.fullName,
       apellidos: '',
       rol: 'Client',
-      token: tokengen
+      from: 'CBA PLUS',
+      token: tokengen,
+      accessTokenCbaPlus: login.accessToken
     };
     return { usLogin: usLogin, token: tokengen };
   },
@@ -150,7 +154,6 @@ module.exports = {
   emailVerify: async (body) => {
     const user = await Usuario.findOne({ where: { correo: body.correo } });
     if (!user) {
-      console.log(user);
       return "Email valido";
     }
     throw new ClientError("El usuario ya existe.");
@@ -231,7 +234,6 @@ module.exports = {
           }
         }
       }
-      console.log(usersFormatDate);
       const usuariosActivos = users.filter((user) => user.estado === true);
       const usuariosInactivos = users.filter((user) => user.estado === false);
 
@@ -259,7 +261,6 @@ module.exports = {
     try {
       return true;
     } catch (error) {
-      console.log(error);
       return error;
     }
   }

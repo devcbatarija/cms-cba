@@ -32,7 +32,6 @@ module.exports = {
       throw new ClienteError("No hay datos para cargar", 400);
     }
     const result = await postUsuario(req.body);
-    console.log("result ", result);
     response(res, 200, result);
   },
   deleteById: async (req, res) => {
@@ -57,12 +56,10 @@ module.exports = {
 
   authLogin: async (req, res) => {
     const result = await authLogin(req.body);
-    console.log(result);
     res.cookie("token", result.token, {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
       httpOnly: true,
     });
-    console.log(result.usLogin);
     res.status(200).json(result.usLogin);
   },
 
@@ -72,7 +69,6 @@ module.exports = {
       expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 año
       httpOnly: true,
     });
-    console.log(result.usLogin);
     res.status(200).json(result.usLogin);
   },
 
