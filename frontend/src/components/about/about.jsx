@@ -1,6 +1,4 @@
-import ImagenFondo from "../educationUSA/EdUSAComponents/ImagenComponent";
-import ServicioComponent from "../educationUSA/EdUSAComponents/ServicioComponent";
-import CuadroInscripcion from "../inscripcion/incripcion";
+import React from 'react';
 
 const valores = [
     {
@@ -17,194 +15,72 @@ const valores = [
         id: 3,
         valor: "Compromiso",
         descripcion: "Estamos comprometidos en brindar un trabajo que satisfaga los necesidades y deseos de nuestros clientes por encima de sus expectativas ofreciendo servicios integrales académicos y culturales de calidad."
-    },
-    {
-        id: 4,
-        valor: "Respeto",
-        descripcion: "El trabajo en equipo de las actividades y tareas que realizamos están sobre la base de la confianza, compromiso, sinceridad, eficacia y respeto por los demás."
-    },
-    {
-        id: 5,
-        valor: "Innovación",
-        descripcion: "Estamos siempre atentos a las innovaciones tecnológicas para aprovechar las oportunidades en la implementación de métodos modernos y creativos en relación a la enseñanza."
-    },
-    {
-        id: 6,
-        valor: "Solidaridad",
-        descripcion: "Estamos comprometidos a brindar nuestro apoyo y desarrollo a la comunidad a través de nuestro programa de American Leaders y el servicio social que realizamos."
     }
 ];
 
-
-const Banner = "https://formaciontecnicabolivia.org/sites/default/files/institutos/cbatarija.jpg"
 const About = () => {
-
     return (
         <>
-            <>
-                <div>
-
-                    <div className="">
-                        <div className="flex flex-wrap ">
-                            <div className="w-full lg:w-4/6 flex flex-col md:flex-row lg:flex-col pl-20 pr-20 pt-10 ">
-                                <div className="p-15">
-                                    <h1 class="mb-4 text-2xl font-bold  text-gray-900 dark:text-white md:text-1xl lg:text-2xl">
-                                        <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
-                                            NUESTRA MISION
-                                        </span>
-                                    </h1>
-
-                                    <p className='text-justify'>
-                                        Somos un centro binacional que busca el desarrollo social, integral y cultural de nuestros estudiantes a través de la enseñanza del idioma inglés, para el acceso a mejores oportunidades de vida contribuyendo con excelencia a la comunidad.
-                                    </p>
-                                </div>
-
-                            </div>
-                            <div className="w-full lg:w-2/6 flex flex-col md:flex-row lg:flex-col pt-5 pb-5">
-
-                                <img src="https://www.ldasistencia.com/documents/727685/727822/misionVisionValores.jpg/980516b4-1c28-8f25-caef-995e98fa3ebb?t=1624428275202" alt="" />
+            <div>
+                <div className="">
+                    <div className="flex flex-wrap">
+                        <div className="w-full lg:w-4/6 flex flex-col pl-20 pr-20 pt-10 order-1 lg:order-none">
+                            <div className="p-15">
+                                <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-1xl lg:text-2xl">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                        NUESTRA MISION
+                                    </span>
+                                </h1>
+                                <p className="text-justify">
+                                    Somos un centro binacional que busca el desarrollo social, integral y cultural de nuestros estudiantes a través de la enseñanza del idioma inglés, para el acceso a mejores oportunidades de vida contribuyendo con excelencia a la comunidad.
+                                </p>
                             </div>
                         </div>
-                        <div className="flex flex-wrap ">
-                            <div className="w-full lg:w-3/6 flex flex-col md:flex-row lg:flex-col pt-5 pb-5">
-                                <img src="https://www.billin.net/blog/wp-content/uploads/2020/09/Mision-y-vision-de-una-empresa-1140x760.jpg" alt="" />
-                            </div>
-                            <div className="w-full lg:w-3/6 flex flex-col md:flex-row lg:flex-col pl-20 pr-20 pt-10 ">
-                                <div>
-                                    <h1 class="mb-4 text-2xl font-bold  text-gray-900 dark:text-white md:text-2xl lg:text-2xl">
-                                        <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
-                                            NUESTRA VISION
-                                        </span>
-                                    </h1>
-                                    <p className='text-justify'>
-                                        Ser el centro binacional líder y competitivo reconocido entre la comunidad educativa por brindar una enseñanza integral del idioma inglés con excelencia académica, fomentando la interacción cultural y calidad en el servicio.
-                                    </p>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="w-full lg:w-1/5 flex flex-col md:flex-row lg:flex-col">
+                        <div className="w-full lg:w-2/6 flex flex-col pt-5 pb-5 order-2 lg:order-none">
+                            <img className="w-full h-64 object-cover" src="https://i.ibb.co/GcsM9mz/mision-Vision-Valores.jpg" alt="Nuestra Misión" />
                         </div>
                     </div>
+                    <div className="flex flex-wrap">
+                        <div className="w-full lg:w-3/6 flex flex-col pt-5 pb-5 order-4 lg:order-none">
+                            <img className="w-full h-64 object-cover" src="https://i.ibb.co/qrRgtcf/Vision.jpg" alt="Nuestra Visión" />
+                        </div>
+                        <div className="w-full lg:w-3/6 flex flex-col pl-20 pr-20 pt-10 order-3 lg:order-none">
+                            <div>
+                                <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white md:text-2xl lg:text-2xl">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                        NUESTRA VISION
+                                    </span>
+                                </h1>
+                                <p className="text-justify">
+                                    Ser el centro binacional líder y competitivo reconocido entre la comunidad educativa por brindar una enseñanza integral del idioma inglés con excelencia académica, fomentando la interacción cultural y calidad en el servicio.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div className="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
-                        <div className="flex flex-col justify-center items-center">
-                            <h1 class="text-2xl font-bold  text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
-                                    VALORES
-                                </span>
+                <section className="bg-white dark:bg-gray-800 mt-12">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center">
+                            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-3xl">
+                                Nuestros Valores
                             </h1>
-                        </div>
-                        <div className="relative overflow-auto">
-                            <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
-                                {
-                                    valores.map((v) => (
-                                        <div key={v.id} className="w-60 h-68 rounded-lg shadow-lg p-1">
-                                            <h1 class=" text-2xl text-center  text-gray-900 dark:text-white md:text-1xl lg:text-1xl">
-                                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
-                                                    {v.valor}
-                                                </span>
-                                            </h1>
-                                            <p className="mt-4 text-center text-sm leading-6 dark:text-slate-700">
-                                                {v.descripcion}
-                                            </p>
-                                        </div>
-                                    ))
-                                }
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                                {valores.map((valor) => (
+                                    <div key={valor.id} className="rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:-translate-y-1 hover:shadow-lg">
+                                        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white text-center py-4">
+                                            {valor.valor}
+                                        </h2>
+                                        <p className="text-gray-600 dark:text-gray-300 text-center px-6 py-4">
+                                            {valor.descripcion}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-                {/* <div>
-                {Object.keys(imagesByCategory).map(category => (
-                    <div key={category} className="mb-4 text-center">
-                        <h2 className={`text-3xl uppercase font-bold mb-2 ${getCategoryColorClass(category)}`}>{category}</h2>
-                        <Masonry
-                            breakpointCols={breakpointColumnsObj}
-                            className="masonry-grid"
-                            columnClassName="masonry-grid-column"
-                        >
-                            {imagesByCategory[category].map((image) => (
-                                <div
-                                    key={image.id}
-                                    className="relative cursor-pointer rounded-lg overflow-hidden"
-                                    onClick={() => handleImageClick(image.id)}
-                                >
-                                    <img src={image.src} alt={image.name} className="w-full h-auto" />
-                                    {selectedImage === image.id && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-4">
-                                            <div>
-                                                <h2 className="text-xl font-bold mb-2">{image.name}</h2>
-                                                <p>{image.description}</p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </Masonry>
-                    </div>
-                ))}
-            </div> */}
-
-            </>
-
-
-
-
-
-            {/* <ImagenFondo imageUrl={Banner} />
-            <div className="flex flex-col gap-6 justify-center py-8 px-5 md:px-20 lg:px-56 xl:px-96 bg-zinc-50">
-                <div className="grid grid-cols-1 gap-6 justify-center items-center rounded-lg bg-white p-5">
-                    <div className="justify-center flex flex-col">
-                        <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-4xl dark:sm:text-white">Misión</h1>
-                        <p className="mt-4 text-center text-sm leading-6 dark:text-slate-400">
-                            “Somos un centro binacional que busca el desarrollo social, integral y cultural de nuestros estudiantes a través de la enseñanza del idioma inglés, para el acceso a mejores oportunidades de vida contribuyendo con excelencia a la comunidad”
-                        </p>
-                    </div>
-                    <div className="flex justify-center">
-                        <img
-                            className="rounded-lg w-96 h-72"
-                            src="https://www.questionpro.com/blog/wp-content/uploads/2018/08/Encuestas-estudiantes.jpg" alt="" />
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 gap-6 justify-center items-center rounded-lg shadow-sm bg-white p-5">
-                    <div className="justify-center flex flex-col">
-                        <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-4xl dark:sm:text-white">Visión</h1>
-                        <p className="mt-4 text-center text-sm leading-6 dark:text-slate-400">
-                            Ser el centro binacional líder y competitivo reconocido entre la comunidad educativa por brindar una enseñanza integral del idioma inglés con excelencia académica, fomentando la interacción cultural y calidad en el servicio.
-                        </p>
-                    </div>
-                    <div className="flex justify-center">
-                        <img
-                            className="rounded-lg w-96 h-72"
-                            src="https://www.questionpro.com/blog/wp-content/uploads/2018/08/Encuestas-estudiantes.jpg" alt="" />
-                    </div>
-                </div>
+                </section>
             </div>
-            <div className="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
-                <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-4xl dark:sm:text-white">Valores</h1>
-                    <div className="w-60 h-px bg-zinc-300 mt-2"></div>
-                </div>
-                <div className="relative overflow-auto">
-                    <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
-                        {
-                            valores.map((v) => (
-                                <div key={v.id} className="w-60 h-72 rounded-lg shadow-lg p-5">
-                                    <h1 className="text-center text-lg font-semibold text-cbaBlue md:text-xl dark:sm:text-white">{v.valor}</h1>
-                                    <p className="mt-4 text-center text-sm leading-6 dark:text-slate-400">
-                                        {v.descripcion}
-                                    </p>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
-            <CuadroInscripcion /> */}
         </>
     );
 }

@@ -96,10 +96,10 @@ function App() {
         setTokenValidated(true);
       }).catch(err => {
         localStorage.removeItem('user');
-        // if (err.response.data.messageError) {
-        //   setTokenValidated(true);
-        //   Cookie.remove("token");
-        // }
+        if (err.response.data.messageError) {
+          setTokenValidated(true);
+          Cookie.remove("token");
+        }
       })
     } catch (error) {
       localStorage.removeItem('user');
