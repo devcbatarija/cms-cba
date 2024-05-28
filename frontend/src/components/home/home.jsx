@@ -7,10 +7,10 @@ import CuadroInscripcion from "../inscripcion/incripcion";
 import { calcularTimestate } from "../../services/functions";
 import { StatisticsBanner } from "../statisticsBanner/statisticsBanner";
 import { Link } from "react-router-dom";
-import primera from "../../assets/5.webp";
-import segunda from "../../assets/2.jpeg";
+import primera from "../../assets/6.jpg";
+import segunda from "../../assets/8.jpg";
 import tercera from "../../assets/3.jpeg";
-import cuarta from "../../assets/4.jpeg";
+import cuarta from "../../assets/9.jpg";
 import { TestimonioPreview } from "../testimonios/testimonioPreview";
 import ImagenesEstilizadas from "../dashboard/widgets/imagenPublicacion";
 import { getDatosEvents } from "../../redux-toolkit/actions/eventActions";
@@ -76,8 +76,7 @@ const Home = () => {
   return (
     <div className="flex flex-col h-auto gap-6 bg-zinc-50">
       <div className="w-full h-auto">
-        <img src="https://i.ibb.co/mFWwd8t/portada2.jpg" alt="" />
-        {/* <CarouselHome multimedia={dataImage}></CarouselHome> */}
+        <CarouselHome multimedia={dataImage}></CarouselHome>
       </div>
       <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
         <div className="flex flex-col md:w-8/12 w-full gap-4 p-4 bg-white shadow-md">
