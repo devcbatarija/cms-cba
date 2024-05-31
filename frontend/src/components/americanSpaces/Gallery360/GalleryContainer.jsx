@@ -43,12 +43,12 @@ export default function GalleryContainer() {
                             ambienteAvailable ? (
                                 <Gallery360 image={imageSelected} />
                             ) : (
-                                <div class="flex justify-center items-center h-52">
+                                <div className="flex justify-center items-center h-52">
                                     <strong>Actualmente no hay imágenes del ambiente</strong>
                                 </div>
                             )
                         ) : (
-                            <div class="flex justify-center items-center h-52">
+                            <div className="flex justify-center items-center h-52">
                                 <strong className=''>Por favor, selecciona un ambiente</strong>
                             </div>
                         )}
@@ -62,7 +62,7 @@ export default function GalleryContainer() {
                 </div>
             </div>
         ) : (
-            <div class="flex justify-center items-center h-52">
+            <div className="flex justify-center items-center h-52">
                 <strong>No existen ambientes</strong>
             </div>
         )

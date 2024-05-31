@@ -52,7 +52,9 @@ const {
   PreRegistro,
   QR,
   Consigna_Evento,
-  Fecha_Lectura
+  Fecha_Lectura,
+  StudentTokenFirebase,
+  Notification
 } = sequelize.models;
 Dato_Evento.hasMany(QR, {
   foreignKey: 'id_Evento',
