@@ -26,5 +26,5 @@ const io = initSocketIo(serverHttp);
 conn.sync({ force:false }).then(() => {
     serverHttp.listen(PORT, async () => {
         console.log(`SERVER IS RUNNING on port ${PORT}`);
-    });
-});
+    }); 
+
