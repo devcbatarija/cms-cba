@@ -107,7 +107,7 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
         {/* Dropdown menu */}
         {isOpen && (
           <div
-            className="absolute right-0 z-20 w-60 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800"
+            className="absolute right-0 z-50 w-60 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800"
           >
             <div className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
 

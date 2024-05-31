@@ -29,7 +29,7 @@ module.exports = {
   },
   postUser: async (req, res) => {
     if (!req.body) {
-      throw new ClienteError("No hay datos para cargar", 400);
+      throw new ClientError("No hay datos para cargar", 400);
     }
     const result = await postUsuario(req.body);
     response(res, 200, result);

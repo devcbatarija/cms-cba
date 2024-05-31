@@ -201,13 +201,13 @@ const Login = () => {
 
                 <p className="flex flex-row items-center justify-center gap-1 mt-10 text-center text-sm text-gray-500">
                   Aún no posee una cuenta?{" "}
-                  <p
+                  <span
                     onClick={() => navigate("/register")}
                     className="font-semibold leading-6 text-indigo-600 
               hover:text-indigo-500 cursor-pointer"
                   >
                     Registrar
-                  </p>
+                  </span>
                 </p>
               </div>
             </form>
