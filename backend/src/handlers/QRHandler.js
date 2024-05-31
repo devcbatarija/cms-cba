@@ -6,6 +6,7 @@ const {
   reportStudentsQr,
   downloadReportParalels,
   downloadReportStudents,
+  readQrCode,
 } = require("../controllers/QRController");
 const { response } = require("../utils");
 const { ClientError } = require("../utils/errors");
@@ -24,7 +25,7 @@ module.exports = {
     }
   },
   verificarQR: async (req, res) => {
-    try {
+    try { 
       const result = await verificarQR(req.body);
       response(res, 200, { successMessage: "Success", result });
     } catch (error) {
@@ -63,6 +64,15 @@ module.exports = {
       const students = req.body
       await downloadReportStudents(res, students);
     } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  },
+  readQrCode: async (req, res,next) => {
+    try {
+      const result = await readQrCode(req.body);
+      response(res, 200, { successMessage: "Success", result:result.result});
+    } catch (error) {
+      console.log(error);
       res.status(400).json({ error: error.message });
     }
   },
