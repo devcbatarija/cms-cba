@@ -8,8 +8,6 @@ import './calendarClientStyles.css'
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { InformationAlert } from "../toastAlerts/information";
-import bgcuadros from '../../assets/backgroundSVG/background-cuadros.svg'
-import bgshapes from '../../assets/backgroundSVG/background-shapes.svg'
 import { altBaseUrl_Axios } from "../../services/functions";
 
 const qrCode = new QRCodeStyling({

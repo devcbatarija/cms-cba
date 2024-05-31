@@ -148,7 +148,7 @@ const InformationalEventsTable = () => {
                 setFilteredEvents(res.data.results.Eventos)
             }
             else {
-                setEvents(null)
+                setEvents([])
             }
             setTotalPages(Math.ceil(res.data.results.Eventos.length / itemsPerPage))
             // console.log(res.data.results)

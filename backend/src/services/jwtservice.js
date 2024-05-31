@@ -44,49 +44,60 @@ module.exports = {
         const token = req.cookies.token;
         jwt.verify(token, JWT_KEY_MASTER, async (error, decoded) => {
           const currentTime = Math.floor(Date.now() / 1000);
-          if (decoded.from) {
-            await axios.post(`${CBAPLUS_BASE_URL}/api/auth/validate`, {
-              id: decoded._userId,
-            }, {
-              headers: {
-                'Authorization': `Bearer ${decoded.accessToken}`
+          if (decoded) {
+            if (decoded.from) {
+              await axios.post(`${CBAPLUS_BASE_URL}/api/auth/validate`, {
+                id: decoded._userId,
+              }, {
+                headers: {
+                  'Authorization': `Bearer ${decoded.accessToken}`
+                }
+              })
+                .then((res) => {
+                  usResult = {
+                    _userId: res.data.userData.id,
+                    _profileImage: res.data.userData.avatar,
+                    correo: res.data.userData.username,
+                    nombres: res.data.userData.fullName,
+                    apellidos: "",
+                    rol: 'Client',
+                    from: 'CBA PLUS',
+                    accessTokenCbaPlus: res.data.accessToken,
+                    token
+                  };
+                });
+            } else {
+              const usLogin = await Usuario.findByPk(decoded._userId);
+              if (!usLogin) {
+                return res
+                  .status(404)
+                  .json({ messageError: "El usuario no existe." });
               }
-            })
-              .then((res) => {
-                usResult = {
-                  _userId: res.data.userData.id,
-                  _profileImage: res.data.userData.avatar,
-                  correo: res.data.userData.username,
-                  nombres: res.data.userData.fullName,
-                  apellidos: "",
-                  rol: 'Client',
-                  from: 'CBA PLUS',
-                  accessTokenCbaPlus: res.data.accessToken,
-                  token
-                };
-              });
-          } else {
-            const usLogin = await Usuario.findByPk(decoded._userId);
-            if (!usLogin) {
-              return res
-                .status(404)
-                .json({ messageError: "El usuario no existe." });
+              usResult = {
+                _userId: usLogin.id_Usuario,
+                _profileImage: usLogin.image,
+                correo: usLogin.correo,
+                nombres: usLogin.nombres,
+                apellidos: usLogin.apellidos,
+                rol: usLogin.rol,
+                token,
+              };
             }
-            usResult = {
-              _userId: usLogin.id_Usuario,
-              _profileImage: usLogin.image,
-              correo: usLogin.correo,
-              nombres: usLogin.nombres,
-              apellidos: usLogin.apellidos,
-              rol: usLogin.rol,
-              token,
-            };
+            return res.status(200).json({ user: usResult });
           }
-          return res.status(200).json({ user: usResult });
+          else {
+            res.clearCookie('token', {
+              httpOnly: true,
+            })
+            res.status(500).json({
+              success: false,
+              message: 'The session has been closed.'
+            })
+          }
         });
       }
       else {
-        return res.status(200).json({ message: 'Dont login' });
+        return res.status(200).json({ message: 'You must log in' });
       }
     } catch (error) {
       return res.status(400).json({ messageError: error.message });

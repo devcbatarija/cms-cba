@@ -14,7 +14,7 @@ import TablePagination from "../widgets/tablePagination";
 const EventsTable = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [Events, setEvents] = useState(null)
+    const [Events, setEvents] = useState([])
     const [selectedEvents, setSelectedEvents] = useState([])
     // variables para paginacion
     const [currentPage, setCurrentPage] = useState(0);
@@ -114,7 +114,7 @@ const EventsTable = () => {
                 setFilteredEvents(res.data.results.datosEvento)
             }
             else {
-                setEvents(null)
+                setEvents([])
             }
             setTotalPages(Math.ceil(res.data.results.datosEvento.length / itemsPerPage))
             // console.log(res.data.results)
@@ -135,7 +135,7 @@ const EventsTable = () => {
         setCurrentPage(newPage);
     };
     useEffect(() => {
-        if (Events?.datosEvento.length > 0 && itemsPerPage > 0) {
+        if (Events.datosEvento && Events.datosEvento.length > 0 && itemsPerPage > 0) {
             setTotalPages(Math.ceil(Events.datosEvento.length / itemsPerPage))
         }
     }, [itemsPerPage])
@@ -175,7 +175,7 @@ const EventsTable = () => {
                 </div>
             </div>
             {
-                Events != null ?
+                Events.datosEvento ?
                     <>
                         <div className="w-full text-sm flex flex-row text-zinc-500 font-bold py-2 h-16 mb-2 rounded-tl-2xl rounded-tr-2xl bg-blue-50 shadow">
                             <div className="group/Check w-[5%] flex justify-center items-center h-full p-2">

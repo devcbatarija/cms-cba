@@ -27,11 +27,11 @@ server.use(
 );
 
 // Middleware para manejar solicitudes OPTIONS
-server.options("*", cors());
+//server.options("*", cors());
 
 // Aplicar encabezados CORS manualmente
 server.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+//  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",
