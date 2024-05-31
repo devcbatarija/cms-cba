@@ -88,33 +88,33 @@ const About = () => {
                         </div>
                     </div>
 
-                    <div className="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
-                        <div className="flex flex-col justify-center items-center">
-                            <h1 class="text-2xl font-bold  text-gray-900 dark:text-white md:text-3xl lg:text-2xl">
-                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                    <div class="px-5 md:px-20 lg:px-32 xl:px-60 relative grid grid-cols-1 gap-6 rounded-lg shadow-sm bg-white p-5 bg-zinc-50">
+                        <div class="flex flex-col justify-center items-center">
+                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white md:text-2xl lg:text-2xl">
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
                                     VALORES
                                 </span>
                             </h1>
                         </div>
-                        <div className="relative overflow-auto">
-                            <div className="flex flex-nowrap gap-4 w-max py-5 px-2">
-                                {
-                                    valores.map((v) => (
-                                        <div key={v.id} className="w-60 h-68 rounded-lg shadow-lg p-1">
-                                            <h1 class=" text-2xl text-center  text-gray-900 dark:text-white md:text-1xl lg:text-1xl">
-                                                <span class="text-transparent  bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
-                                                    {v.valor}
-                                                </span>
-                                            </h1>
-                                            <p className="mt-4 text-center text-sm leading-6 dark:text-slate-700">
-                                                {v.descripcion}
-                                            </p>
-                                        </div>
-                                    ))
-                                }
+                        <div class="relative overflow-auto">
+                            <div class="flex flex-nowrap gap-4 w-full py-5 px-2">  {
+                                valores.map((v) => (
+                                    <div key={v.id} class="w-60 h-68 rounded-lg shadow-lg p-1">
+                                        <h1 class="text-2xl text-center text-gray-900 dark:text-white md:text-1xl lg:text-1xl">
+                                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-blue-700 from-sky-800">
+                                                {v.valor}
+                                            </span>
+                                        </h1>
+                                        <p class="mt-4 text-center text-sm leading-6 dark:text-slate-700">
+                                            {v.descripcion}
+                                        </p>
+                                    </div>
+                                ))
+                            }
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 

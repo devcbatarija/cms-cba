@@ -59,7 +59,7 @@ module.exports = {
       const songs = response.data.tracks;
       return songs;
     } catch (error) {
-      console.log(error)
+      
       throw new Error("Error al obtener las canciones del artista");
     }
   },
