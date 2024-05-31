@@ -63,6 +63,25 @@ function EventUpdate({ }) {
   const [textAreaHeight, setTextAreaHeight] = useState("100px"); // Estado para controlar la altura del TextArea
   const location = useLocation();
   const dispatch = useDispatch();
+  const [secondPartForm, setSecondPartForm] = useState(false)
+  const toggleSecondPartForm = () => {
+    setSecondPartForm(!secondPartForm)
+  }
+  const [Consigna, setConsigna] = useState({
+    descripcion: '',
+    cantidad_Referidos: 1,
+    top: '0',
+    nota_Asignada: 0,
+    estado: true,
+  })
+  const handleChangeConsigna = (e) => {
+    const property = e.target.name;
+    const value = e.target.value;
+    setConsigna({
+      ...Consigna,
+      [property]: value,
+    })
+  }
   const [Evento, setEvento] = useState({
     id: "",
     title: "",
@@ -87,7 +106,7 @@ function EventUpdate({ }) {
   const handleSubmitEvent = async (urls) => {
     try {
       const enviar = Evento
-      const response = await axios.put(`datosevento/update/${datosEvento.id_Evento}`, {
+      let dataToSend = {
         Evento: {
           title: enviar.title,
           start: enviar.start,
@@ -101,12 +120,16 @@ function EventUpdate({ }) {
           UsuarioIdUsuario: enviar.UsuarioIdUsuario
         },
         datosEvento: {
-          EventoId:datosEvento.EventoId,
+          EventoId: datosEvento.EventoId,
           descripcion: datosEvento.descripcion,
           multimedia: urls,
-          categoria: datosEvento.categoria
-        }
-      });
+          categoria: datosEvento.categoria,
+          referible: secondPartForm ? true : false,
+        },
+        consigna: Consigna,
+        existeConsigna: Consigna.id_Consigna ? true : false
+      }
+      const response = await axios.put(`datosevento/update/${datosEvento.id_Evento}`, dataToSend);
       if (response.data) {
         toast.success("Registro exitoso.");
         setDatosEvento({
@@ -126,7 +149,10 @@ function EventUpdate({ }) {
       setEvento(location.state.data.General)
       setDatosEvento(location.state.data.datosEvento)
       setUrls(location.state.data.datosEvento.multimedia)
-      console.log(location.state?.data)
+      if (location.state.data && location.state.data.datosEvento.Consigna_Eventos.length > 0) {
+        setSecondPartForm(true)
+        setConsigna(location.state.data.datosEvento.Consigna_Eventos[0])
+      }
       location.state = null
     }
     else {
@@ -136,11 +162,6 @@ function EventUpdate({ }) {
       }) : null
     }
   }, [])
-
-
-
-
-
 
   const handleChange = (e) => {
     const property = e.target.name;
@@ -188,33 +209,46 @@ function EventUpdate({ }) {
   }, [datosEvento.descripcion]);
 
   return (
-    <div className="grid shadow border bg-zinc-100 lg:py-5 ">
+    <div className="grid border bg-zinc-50 lg:py-5 ">
       <div className="w-full flex justify-center">
-        <Container className="rounded-lg border rounded-lg p-10 bg-white w-full lg:w-3/4">
+        <div className=" p-10 bg-zinc-50 w-full lg:w-3/4">
           <div className="flex flex-col items-center justify-center">
-            <Title>Modificar Evento</Title>
+            <h1 className="text-zinc-700 font-semibold text-xl">Modificar Evento</h1>
           </div>
           <form onSubmit={handleSubmit} className="flex flex-col rounded-lg ">
-            <FormGroup style={{ width: "100%" }}>
-              <Label>Título:</Label>
-              <Input
-                type="text"
-                name="title"
-                value={Evento.title}
-                onChange={handleChangeEvento}
-                required
-              />
-            </FormGroup>
-            <FormGroup style={{ width: "100%" }}>
-              <Label>Descripción:</Label>
-              <TextArea
-                name="descripcion"
-                value={datosEvento.descripcion}
-                onChange={handleChange}
-                style={{ height: textAreaHeight }}
-                required
-              ></TextArea>
-            </FormGroup>
+            <div className="w-3/5">
+              <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
+                Título:
+              </label>
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  value={Evento.title}
+                  onChange={handleChangeEvento}
+                  required={true}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
+            <div className="col-span-full">
+              <label htmlFor="descripcion" className="block text-sm font-medium leading-6 text-gray-900">
+                Descripcion
+              </label>
+              <div className="mt-2">
+                <textarea
+                  id="descripcion"
+                  name="descripcion"
+                  rows={3}
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  value={datosEvento.descripcion}
+                  onChange={handleChange}
+                  required={true}
+                />
+              </div>
+            </div>
 
             <div className="flex flex-col lg:flex-row lg:items-center">
               <Grid sx={{ marginY: 1 }} variant="outlined">
@@ -350,16 +384,97 @@ function EventUpdate({ }) {
               setPublicacion={setDatosEvento}
             ></Uploader>
           </FormGroup>
-          <Grid sx={{ m: 1, width: "100%" }}>
-            <Button
-              variant="contained"
-              sx={{ width: "100%", borderRadius: "0px" }}
-              onClick={handleSubmit}
-            >
-              Modificar
-            </Button>
-          </Grid>
-        </Container>
+
+          <div className="relative w-full">
+            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center ">
+              <div className="bg-zinc-50 px-3">
+                <button className="rounded-full btn-Consigna hover:w-[180px] hover:duration-300 w-10 h-10 flex justify-center items-center relative duration-300 shadow-xl bg-cbaBlue overflow-hidden "
+                  onClick={toggleSecondPartForm}
+                >  {/*style={{ background: 'linear-gradient(144deg,#af40ff,#5b42f3 50%,#00ddeb)' }}*/}
+                  <div className="text-plus w-full text-white h-full duration-300 flex items-center justify-center">
+                    {
+                      secondPartForm ?
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                        :
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-4 h-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                    }
+                  </div>
+                  <div className=" text absolute right-0 opacity-0 text-white text-[15px] font-semibold">{secondPartForm ? 'Quitar consigna' : 'Añadir consigna'}</div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <form>
+            {
+              secondPartForm &&
+              <div className="space-y-12 pt-5">
+                <div className="border-b border-gray-900/10 pb-12 pt-5">
+                  <h2 className="text-base font-semibold leading-7 text-gray-900">Consigna</h2>
+                  <p className="mt-1 text-sm leading-6 text-gray-600">
+                    En esta sección, debes introducir información sobre los criterios que el estudiante debe cumplir para ser elegible a la recompensa.
+                  </p>
+
+                  <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="col-span-full">
+                      <label htmlFor="descripcion_consigna" className="block text-sm font-medium leading-6 text-gray-900">
+                        Descripcion
+                      </label>
+                      <div className="mt-2">
+                        <textarea
+                          id="descripcion_consigna"
+                          name="descripcion"
+                          rows={3}
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                          value={Consigna.descripcion}
+                          onChange={handleChangeConsigna}
+                        />
+                      </div>
+                      <p className="mt-3 text-sm leading-6 text-gray-600">Escribe una consigna clara y detallada para que los estudiantes comprendan lo que se espera de ellos.</p>
+                    </div>
+
+
+                    <div className="sm:col-span-2 sm:col-start-1">
+                      <label htmlFor="cantidad_Referidos" className="block text-sm font-medium leading-6 text-gray-900">
+                        Cantidad de referidos
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="number"
+                          name="cantidad_Referidos"
+                          id="cantidad_Referidos"
+                          value={Consigna.cantidad_Referidos}
+                          onChange={handleChangeConsigna}
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            }
+
+            <div className="mt-6 flex items-center justify-end gap-x-6">
+              <button onClick={() => navigate('/dashboard/Calendario/')} type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                type="button"
+                className="rounded-md bg-cbaBlue px-4 w-[180px] py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Modificar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
