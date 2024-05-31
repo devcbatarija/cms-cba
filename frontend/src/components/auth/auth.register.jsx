@@ -449,7 +449,7 @@ const Register = () => {
                   {!emailValid ? (
                     <span className="absolute flex items-center justify-center w-8 h-8 bg-red-300 rounded-full -left-4 ring-4 ring-white dark:ring-gray-900 dark:bg-green-900">
                       <svg
-                        class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                        className="w-4 h-4 text-gray-500 dark:text-gray-400"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"
@@ -470,9 +470,9 @@ const Register = () => {
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M1 5.917 5.724 10.5 15 1.5"
                         />
                       </svg>
@@ -502,9 +502,9 @@ const Register = () => {
                       >
                         <path
                           stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
                           d="M1 5.917 5.724 10.5 15 1.5"
                         />
                       </svg>

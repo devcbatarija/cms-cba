@@ -21,7 +21,6 @@ const PlusLoginForm = ({
 
     const handleOnSubmit = async () => {
         try {
-            // console.log(watch())
             const response = await axios.post("users/loginCbaPlus", watch()).then(res => {
                 dispatch(signin(res.data));
                 localStorage.setItem("user", JSON.stringify({
@@ -30,7 +29,6 @@ const PlusLoginForm = ({
                     nombres: res.data.nombres,
                     apellidos: res.data.apellidos
                 }))
-                console.log(res)
             });
             navigate("/");
             reset();
@@ -158,16 +156,6 @@ const PlusLoginForm = ({
                     >
                         Iniciar sesión
                     </button>
-
-                    <p className="flex flex-row items-center justify-center gap-1 mt-0 text-center text-sm text-gray-500">
-                        Aún no posee una cuenta?{" "}
-                        <p
-                            onClick={() => navigate("/register")}
-                            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"
-                        >
-                            Registrar
-                        </p>
-                    </p>
                 </div>
             </form>
         </div>

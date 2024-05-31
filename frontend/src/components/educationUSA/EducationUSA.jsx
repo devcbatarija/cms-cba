@@ -60,7 +60,7 @@ function EducationUSA() {
                                 <Rectangulo color="rgb(0, 22, 60)" /> {/* azul marino */}
                             </div>
                             <div className="w-5/6 pl-5">
-                                <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl"><span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">EDUCATION USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
+                                <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl"><span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">EDUCATION USA</span></h1>                                <p>Es tu fuente oficial de informacion sobre informacion superior en EEUU</p>
                                 <ul className="list-disc pl-2">
                                     <li><strong style={{ color: 'rgb(128, 160, 0)' }}>Te informamos</strong> sobre las distintas ofertas academicas de nivel superior en los Estados Unidos.</li>
                                     <li><strong style={{ color: 'rgb(179, 80, 0)' }}>Orientamos tu investigacion</strong> sobre programas de estudio y universidades que se ajusten a tus necesidades y metas academicas.</li>
@@ -71,8 +71,8 @@ function EducationUSA() {
                         </div>
                     </div>
                     <div className="w-full lg:w-2/6 text-blue-900 text-justify bg-white rounded-lg p-5">
-                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">COMO ESTUDIAR EN LOS ESTADOS UNIDOS?
+                        <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">COMO ESTUDIAR EN LOS ESTADOS UNIDOS?
                             </span>
                         </h1>
                         <p>Estudiar en Estados Unidos a nivel Universitario requiere mucha investigacion y planificacion.
@@ -86,8 +86,8 @@ function EducationUSA() {
                     </div>
                     <div className="w-full lg:w-2/6 text-blue-900  bg-white rounded-lg p-5">
                         <div>
-                            <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">| NUESTROS SERVICIOS
+                            <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">| NUESTROS SERVICIOS
                                 </span>
                             </h1>
                         </div>
@@ -118,8 +118,8 @@ function EducationUSA() {
             <div className="px-2 sm:px4 pt-1 pb-2   ">
                 <div className="flex flex-wrap ">
                     <div className="w-full lg:w-2/5 text-blue-900 text-justify bg-white rounded-lg p-5">
-                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">QUIERES ESTUDIAR EN LOS ESTADOS UNIDOS?
+                        <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">QUIERES ESTUDIAR EN LOS ESTADOS UNIDOS?
                             </span>
                         </h1>
                         {
@@ -142,8 +142,8 @@ function EducationUSA() {
                         }
                     </div>
                     <div className="w-full lg:w-3/5 flex flex-col md:flex-row lg:flex-col pl-7 pr-1 pt-10 pb-10">
-                        <h1 class="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">VISITA NUESTRAS OFICINAS EN TARIJA
+                        <h1 className="mb-4 text-2xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-2xl">
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r to-emerald-800 from-sky-800">VISITA NUESTRAS OFICINAS EN TARIJA
                             </span>
                         </h1>
                         <MapComponent />

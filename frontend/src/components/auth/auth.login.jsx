@@ -192,7 +192,7 @@ const Login = () => {
 
                 <button
                   onClick={toggleLoginCbaPlus}
-                  className="w-[50%] rounded-lg h-10 text-[#366BC0] font-bold border-2 flex flex-row items-center justify-center gap-x-5 text-lg"
+                  className="w-full rounded-lg h-10 text-[#366BC0] font-bold border-2 flex flex-row items-center justify-center gap-x-5 text-lg"
                   style={{ minHeight: "40px" }}
                 >
                   <img src={logo} alt="" className="h-5" />
@@ -201,13 +201,13 @@ const Login = () => {
 
                 <p className="flex flex-row items-center justify-center gap-1 mt-10 text-center text-sm text-gray-500">
                   Aún no posee una cuenta?{" "}
-                  <p
+                  <span
                     onClick={() => navigate("/register")}
                     className="font-semibold leading-6 text-indigo-600 
               hover:text-indigo-500 cursor-pointer"
                   >
                     Registrar
-                  </p>
+                  </span>
                 </p>
               </div>
             </form>

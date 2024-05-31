@@ -8,8 +8,7 @@ import './calendarClientStyles.css'
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { InformationAlert } from "../toastAlerts/information";
-import bgcuadros from '../../assets/backgroundSVG/background-cuadros.svg'
-import bgshapes from '../../assets/backgroundSVG/background-shapes.svg'
+import { altBaseUrl_Axios } from "../../services/functions";
 
 const qrCode = new QRCodeStyling({
     width: 200,
@@ -172,7 +171,7 @@ const ModalQR = ({
     useEffect(() => {
         if (userLogin.accessTokenCbaPlus) {
             let gestion = dayjs(event.General.start).year()
-            axios.get(`http://127.0.0.1:8000/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
+            axios.get(`${altBaseUrl_Axios.apiplus}/api/v1/std/datosParalelo/${gestion}/${event.General.start}`, {
                 headers: {
                     'Authorization': `Bearer ${userLogin.accessTokenCbaPlus}`
                 }
@@ -225,9 +224,18 @@ const ModalQR = ({
                     <div className="h-10 w-10 bg-orange-100 absolute right-[37%] top-[10%] rounded-full"></div>
                     <div className="h-5 w-5 bg-green-100 absolute right-[15%] top-[6%] rotate-[25deg]"></div>
                     <div className="absolute border-[20px] border-solid border-transparent border-b-red-100 top-[5%] left-[5%] rotate-[200deg]"></div>
-                    <div></div>
-                    <div></div>
-                    <div className="w-full h-full hidden md:block absolute left-0 top-0 right-0 bottom-0" ></div>
+                    <div className="text-sky-100 absolute right-[5%] top-[15%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10">
+                        <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                    </svg>
+                    </div>
+                    <div className="absolute text-teal-100 rotate-[120deg] bottom-[10%] right-[20%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm2.023 6.828a.75.75 0 1 0-1.06-1.06 3.75 3.75 0 0 1-5.304 0 .75.75 0 0 0-1.06 1.06 5.25 5.25 0 0 0 7.424 0Z" clipRule="evenodd" />
+                    </svg>
+                    </div>
+                    <div className="text-rose-100 absolute top-[17%] right-[20%]"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                        <path d="m11.645 20.91-.007-.003-.022-.012a15.247 15.247 0 0 1-.383-.218 25.18 25.18 0 0 1-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0 1 12 5.052 5.5 5.5 0 0 1 16.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 0 1-4.244 3.17 15.247 15.247 0 0 1-.383.219l-.022.012-.007.004-.003.001a.752.752 0 0 1-.704 0l-.003-.001Z" />
+                    </svg>
+                    </div>
                     {/* primera vista del modal */}
                     <div className={`flex-col px-8 md:px-12 lg:px-20 relative  h-auto md:h-full bg-white rounded-xl md:bg-transparent ${backModal ? 'hidden md:flex' : 'flex'}`} style={{ color: event.General.color }}>
                         <button

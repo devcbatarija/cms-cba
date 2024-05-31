@@ -15,7 +15,7 @@ import Register from "./components/auth/auth.register";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import axios from "axios";
-import { authValid } from "./redux-toolkit/actions/auth.Actions";
+import { authValid, logoutSession } from "./redux-toolkit/actions/auth.Actions";
 import Dashboard from "./components/dashboard/dashboard";
 import NotFound from "./components/Error/NotFound";
 import ProgramTable from "./components/dashboard/Programas/ProgramTables";
@@ -91,22 +91,19 @@ function App() {
           }))
         }
         else {
+          dispatch(logoutSession(false))
           localStorage.removeItem('user');
         }
         setTokenValidated(true);
       }).catch(err => {
+        setTokenValidated(true);
+        dispatch(logoutSession(false))
         localStorage.removeItem('user');
-        // if (err.response.data.messageError) {
-        //   setTokenValidated(true);
-        //   Cookie.remove("token");
-        // }
       })
     } catch (error) {
       localStorage.removeItem('user');
-      if (error.response.data.messageError) {
-        setTokenValidated(true);
-        Cookie.remove("token");
-      }
+      dispatch(logoutSession(false))
+      setTokenValidated(true);
     }
   };
   const ValidateRedir = ({ auth, validate, redirecTo, children }) => {

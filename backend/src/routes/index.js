@@ -14,7 +14,7 @@ const ambienteRoutes=require('./ambiente_Routes');
 const programPrices=require('./programPriceRoute')
 const becaRoutes=require('./becaRoutes')
 const QR_Routes=require('./QR_Routes')
-
+const notificationFCMRoutes=require('./PushNotificationsFCM.js')
 const router=Router();
 
 router.use('/test',testRouter); //"http:localhost:3001/api/test"
@@ -23,15 +23,16 @@ router.use('/publication',publicacionRoutes);
 router.use('/event',eventoRoutes);
 router.use('/eventpredefinido',EPredefinido);
 router.use('/program', programaRoutes); // http
-router.use("/files",uploadRoutes)
-router.use('/podcast',podcastRoutes)
-router.use('/testimonios',testimonioRoutes)
-router.use('/datosevento',datos_EventoRoutes)
-router.use('/gallery', galleryRoutes)
-router.use('/environment', ambienteRoutes)
-router.use('/programPrices', programPrices)
-router.use('/beca', becaRoutes)
+router.use("/files",uploadRoutes);
+router.use('/podcast',podcastRoutes);
+router.use('/testimonios',testimonioRoutes);
+router.use('/datosevento',datos_EventoRoutes);
+router.use('/gallery', galleryRoutes);
+router.use('/environment', ambienteRoutes);
+router.use('/programPrices', programPrices);
+router.use('/beca', becaRoutes);
 router.use('/QR', QR_Routes);
 
+router.use('/notification',notificationFCMRoutes);
 module.exports=router;
 

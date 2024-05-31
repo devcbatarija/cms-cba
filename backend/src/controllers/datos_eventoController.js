@@ -118,7 +118,7 @@ module.exports = {
             return error;
         }
     },
-    addDatosEvento: async (e) => { 
+    addDatosEvento: async (e) => {
         try {
             const evento = {
                 title: e.evento.title,
@@ -196,6 +196,59 @@ module.exports = {
                     },
                 }
             )
+
+            if (changes.existeConsigna && changes.datosEvento.referible == false) {
+                await Consigna_Evento.destroy({
+                    where: {
+                        id_Consigna: changes.consigna.id_Consigna
+                    }
+                })
+                await Dato_Evento.update(
+                    {
+                        referible: false
+                    },
+                    {
+                        where: {
+                            id_Evento: id,
+                        },
+                    }
+                )
+            }
+            else if (changes.existeConsigna && changes.datosEvento.referible == true) {
+                await Consigna_Evento.update({
+                    descripcion: changes.consigna.descripcion,
+                    cantidad_Referidos: changes.consigna.cantidad_Referidos,
+                    top: changes.consigna.top,
+                    nota_Asignada: changes.consigna.nota_Asignada,
+                    estado: changes.consigna.estado,
+                },
+                    {
+                        where: {
+                            id_Consigna: changes.consigna.id_Consigna,
+                        }
+                    }
+                )
+            }
+            else if (!changes.existeConsigna) {
+                await Consigna_Evento.create({
+                    descripcion: changes.consigna.descripcion,
+                    cantidad_Referidos: changes.consigna.cantidad_Referidos,
+                    top: changes.consigna.top,
+                    nota_Asignada: changes.consigna.nota_Asignada,
+                    estado: changes.consigna.estado,
+                    id_Evento: id
+                })
+                await Dato_Evento.update(
+                    {
+                        referible: true
+                    },
+                    {
+                        where: {
+                            id_Evento: id,
+                        },
+                    }
+                )
+            }
             if (updatedEvent[0] == 1) {
                 return event;
             }
