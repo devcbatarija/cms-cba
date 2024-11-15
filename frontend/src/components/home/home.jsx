@@ -76,7 +76,7 @@ const Home = () => {
   return (
     <div className="flex flex-col h-auto gap-6 bg-zinc-50">
       <div className="w-full h-auto">
-        <img src="https://i.ibb.co/mFWwd8t/portada2.jpg" alt="" />
+        
         <CarouselHome multimedia={dataImage}></CarouselHome>
       </div>
       <div className="flex flex-col md:flex-row min-h-full  sm:px-12 bg-zinc-50 gap-2 gap-2 ">
