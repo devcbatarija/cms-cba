@@ -1,90 +1,156 @@
-import * as React from 'react';
-import { useRef } from 'react';
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import StopIcon from '@mui/icons-material/Stop';
-import { useState } from 'react';
-import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
-import toast from "react-hot-toast";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import MusicNoteIcon from "@mui/icons-material/MusicNote";
 
-const Reproductor = ({song, name,imgSong,authors}) => {
-    const [play,setPlay]=useState(false);
-    const audioRef = useRef();
-    const handleAddSong = async (songAdd) => {
-      try {
-        const response=await axios.post('podcast/song',{
-          song:{
-            name: songMedatada.name,
-            preview_url: songMedatada.preview_url,
-            images:songMedatada.album.images,
-            id_song: songMedatada.id,
-            state: true,
-            CredencialIdCredencial: id_Credencial
-          }
-        });
-        if(response.statusText=="OK"){
-          toast.success("Agregado con exito.");
-        }
-      } catch (error) {
-        toast.error(error.response.data.error);
-      }
+const NAVY = "#002E5F";
+const RED = "#D50032";
+
+const formatTime = (seconds) => {
+  if (!seconds || Number.isNaN(seconds)) return "0:00";
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
+};
+
+const Reproductor = ({ song, name, imgSong, authors }) => {
+  const [playing, setPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef();
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onTimeUpdate = () => setProgress(audio.currentTime);
+    const onLoadedMetadata = () => setDuration(audio.duration);
+    const onEnded = () => {
+      setPlaying(false);
+      setProgress(0);
+    };
+
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) {
+      audio.pause();
+      setPlaying(false);
+    } else {
+      audio.play();
+      setPlaying(true);
     }
-    const handlePlayPause = (value) => {
-        if(value){
-            setPlay(!value)
-            setPlay(value)
-            audioRef.current.play()
-        }else
-        {
-            setPlay(value)
-            audioRef.current.pause()
-        }
-    }
-    return (
-        <Card sx={{ display: 'flex',width: '100%',boxShadow:"5px 1px 6px 1px", border:"1px solid rgba(45,45,45,0.2)"}}>
-          <audio ref={audioRef} src={song} type="audio/mpeg" />
-          <Box sx={{ display: 'flex', flexDirection: 'column',width: '100%'}}>
-            <CardContent sx={{ flex: '1 0 auto' }}>
-              <Typography component="div" variant="h5">
-                {name}
-              </Typography>
-              <Typography className='text-gray-500' component="div" variant="p">
-                {authors}
-              </Typography>
-            </CardContent>
-            {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}> 
-              <IconButton
-              >
-              <AddIcon sx={{color:"gray",border:"1px solid gray",borderRadius:"50%"}} ></AddIcon>
-              </IconButton>
-              {
-                !play?
-                <IconButton aria-label="play/pause" onClick={()=>handlePlayPause(true)}>
-                <PlayArrowIcon sx={{ height: 38, width: 38 }} />
-              </IconButton>:
-              <IconButton aria-label="stop" onClick={() =>handlePlayPause(false)}>
-              <StopIcon sx={{ height: 38, width: 38 }} />
-            </IconButton>
-              } 
-            </Box> */}
-          </Box>
-          {/* <CardMedia
-            component="img"
-            sx={{ width: 148,height:148 }}
-            image={imgSong}
-            alt="Live from space album cover"
-          /> */}
-        </Card>
-    );
-}
+  };
+
+  const handleSeek = (e) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    const value = Number(e.target.value);
+    audio.currentTime = value;
+    setProgress(value);
+  };
+
+  const percent = duration ? (progress / duration) * 100 : 0;
+
+  return (
+    <div
+      className="flex items-center gap-3 p-3 rounded-xl bg-white"
+      style={{
+        border: "1px solid #DEDEDE",
+        boxShadow: "0 1px 4px rgba(0,46,95,0.06)",
+      }}
+    >
+      <audio ref={audioRef} src={song} preload="metadata" />
+
+      {/* Carátula */}
+      <div
+        className="flex-shrink-0 rounded-lg overflow-hidden flex items-center justify-center"
+        style={{
+          width: 56,
+          height: 56,
+          background: "#eef2f8",
+        }}
+      >
+        {imgSong ? (
+          <img
+            src={imgSong}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <MusicNoteIcon style={{ color: NAVY }} />
+        )}
+      </div>
+
+      {/* Info + barra */}
+      <div className="flex-1 min-w-0">
+        <p
+          className="truncate font-semibold text-sm"
+          style={{ color: NAVY }}
+          title={name}
+        >
+          {name}
+        </p>
+        <p className="truncate text-xs text-gray-500" title={authors}>
+          {authors}
+        </p>
+
+        <div className="flex items-center gap-2 mt-1.5">
+          <span className="text-[11px] text-gray-400 w-9 text-right">
+            {formatTime(progress)}
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            value={progress}
+            onChange={handleSeek}
+            className="flex-1 cursor-pointer"
+            style={{
+              accentColor: RED,
+              height: 4,
+            }}
+          />
+          <span className="text-[11px] text-gray-400 w-9">
+            {formatTime(duration)}
+          </span>
+        </div>
+      </div>
+
+      {/* Play / Pause */}
+      <IconButton
+        onClick={togglePlay}
+        aria-label={playing ? "pausar" : "reproducir"}
+        style={{
+          backgroundColor: playing ? RED : NAVY,
+          color: "#fff",
+          width: 42,
+          height: 42,
+        }}
+      >
+        {playing ? (
+          <PauseIcon style={{ fontSize: 22 }} />
+        ) : (
+          <PlayArrowIcon style={{ fontSize: 22 }} />
+        )}
+      </IconButton>
+    </div>
+  );
+};
 
 export default Reproductor;

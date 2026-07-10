@@ -39,3 +39,37 @@
 .fc-event{
   cursor: pointer;
 }
+
+
+.rich-text a {
+  color: #1a2744;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.rich-text a:hover {
+  color: #e02040;
+}
+
+.rich-text p {
+  margin: 0 0 8px 0;
+}
+
+.rich-text ul,
+.rich-text ol {
+  padding-left: 20px;
+  margin: 0 0 8px 0;
+}
+
+.rich-text h1,
+.rich-text h2 {
+  margin: 0 0 8px 0;
+  color: #1a2744;
+}
+
+.rich-text blockquote {
+  border-left: 3px solid #e02040;
+  margin: 0 0 8px 0;
+  padding-left: 12px;
+  color: #6b7280;
+}

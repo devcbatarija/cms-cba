@@ -66,7 +66,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href="https://api.whatsapp.com/send/?phone=59176192765&text&type=phone_number&app_absent=0"
+                  href="https://api.whatsapp.com/send/?phone=59164576363&text&type=phone_number&app_absent=0"
                   rel="noreferrer"
                   target="_blank"
                   className="text-gray-300 transition hover:text-gray-300/75"
@@ -184,7 +184,7 @@ const Footer = () => {
                     className="text-gray-300 transition hover:text-gray-300/75"
                     href=""
                   >
-                    <span>Soporte: sistemascba@cba.org.bo</span>
+                    <span>Soporte: r.leon@cba.org.bo</span>
                   </a>
                 </li>
               </ul>
@@ -223,7 +223,7 @@ const Footer = () => {
                 <li>
                   <a
                     className="flex items-center justify-center gap-1.5 ltr:sm:justify-start rtl:sm:justify-end "
-                    href="https://wa.me/59176192765?text=Hola%2C%20¿cómo%20puedo%20ayudarte%20hoy%3F"
+                    href="https://wa.me/59164576363?text=Hola%2C%20¿cómo%20puedo%20ayudarte%20hoy%3F"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -242,7 +242,7 @@ const Footer = () => {
                     <div
                       className="-mt-0.5 flex-1 not-italic text-gray-300 dark:text-gray-300 hover:text-gray-300/75"
                     >
-                      76192765
+                      64576363
                     </div>
                   </a>
                 </li>

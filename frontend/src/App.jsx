@@ -65,6 +65,7 @@ import EventsCalendarTable from "./components/dashboard/calendario/eventsCalenda
 import Reportes from "./components/dashboard/calendario/reports";
 import AmericanSpaces from "./components/americanSpaces/AmericanSpaces";
 import ReportsByStudents from "./components/dashboard/calendario/reportsByStudents";
+import ChatbotWidget from "./components/chatbot/ChatbotWidget";
 
 function App() {
   const auth = useSelector((state) => state.login.auth);
@@ -138,6 +139,23 @@ function App() {
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
   const isLoginRoute = location.pathname === "/login";
   const isRegisterRoute = location.pathname === "/register";
+
+  // Registrar UNA sola visita por sesión de navegador (no por cada página)
+  useEffect(() => {
+    if (isDashboardRoute) return;
+
+    const yaRegistrada = sessionStorage.getItem("visitaRegistrada");
+    if (yaRegistrada) return;
+
+    axios.post("analytics/visita", { ruta: location.pathname }).catch(() => {});
+    sessionStorage.setItem("visitaRegistrada", "true");
+  }, [location.pathname, isDashboardRoute]);
+
+  // El chatbot solo debe verse en el sitio público y cuando NO hay un admin logueado
+  // (si un admin navega por el sitio público fuera del dashboard, también se oculta).
+  const esAdminLogueado = auth && rol === "Admin";
+  const mostrarChatbot =
+    !isDashboardRoute && !isLoginRoute && !isRegisterRoute && !esAdminLogueado;
 
   return (
     <>
@@ -304,6 +322,7 @@ function App() {
         </div>
         {!isDashboardRoute && !isLoginRoute && !isRegisterRoute && <Footer />}
       </div>
+      {mostrarChatbot && <ChatbotWidget />}
       <Toaster
         position="top-right"
         reverseOrder={false}

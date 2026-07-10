@@ -1,4 +1,98 @@
-.btn-Consigna:hover .text-plus{
+/* ── Oculta toolbar nativo (se usa toolbar propio en JSX) ── */
+.cba-cal .fc-toolbar { display: none !important; }
+
+/* ── Cabecera de días ── */
+.cba-cal .fc-col-header-cell {
+  background: #f3f4f6;
+  border-color: #e5e7eb !important;
+  padding: 10px 0;
+}
+.cba-cal .fc-col-header-cell-cushion {
+  color: #6b7280 !important;
+  font-size: .7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .1em;
+  text-decoration: none !important;
+  text-transform: uppercase;
+}
+
+/* ── Números de día ── */
+.cba-cal .fc-daygrid-day-number {
+  color: #111827;
+  font-size: .82rem;
+  font-weight: 600;
+  padding: 6px 8px;
+  text-decoration: none !important;
+}
+
+/* ── Hoy: borde navy, fondo transparente ── */
+.cba-cal .fc-day-today {
+  background: transparent !important;
+  outline: 2px solid #002E5F !important;
+  outline-offset: -2px;
+}
+.cba-cal .fc-day-today .fc-daygrid-day-number {
+  color: #002E5F !important;
+  font-weight: 700;
+}
+
+/* ── Fin de semana: fondo rosado ── */
+.cba-cal .fc-day-sat,
+.cba-cal .fc-day-sun {
+  background: #fce8ec !important;
+}
+
+/* ── Días fuera del mes: rayas diagonales ── */
+.cba-cal .fc-day-other {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    #f3f4f6 4px,
+    #f3f4f6 8px
+  ) !important;
+}
+.cba-cal .fc-day-other .fc-daygrid-day-number {
+  color: #9ca3af !important;
+}
+.cba-cal .fc-day-other.fc-day-sat,
+.cba-cal .fc-day-other.fc-day-sun {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    #fce8ec 4px,
+    #fce8ec 8px
+  ) !important;
+}
+
+/* ── Eventos ── */
+.cba-cal .fc-event {
+  border-radius: 4px !important;
+  border: none !important;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.cba-cal .fc-daygrid-event-dot { display: none; }
+
+/* ── Highlight ── */
+.cba-cal .fc-highlight {
+  background: rgba(0,46,95,.08) !important;
+}
+
+/* ── Bordes ── */
+.cba-cal .fc-scrollgrid { border-color: #e5e7eb !important; }
+.cba-cal td, .cba-cal th { border-color: #e5e7eb !important; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cba-cal .fc-view { font-size: 10px !important; }
+}
+
+/* ── Estilos preexistentes conservados ── */
+.btn-Consigna:hover .text-plus {
   width: 30%;
   transition-duration: .3s;
   transition-delay: 0s;
@@ -11,89 +105,15 @@
   padding-right: 15px;
   position: relative;
 }
-
-.notification {
-  display: flex;
-  isolation: isolate;
-  position: relative;
-  
-  overflow: hidden;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff);
-  --color: #32a6ff
-}
-
-
-.notification:hover:after {
-  transform: translateX(0.15rem)
-}
-
-.notititle {
-  color: var(--color);
-  padding: 1px 1px 1px 1.25rem;
-  font-weight: 500;
-  transition: transform 300ms ease;
-  z-index: 5;
-}
-
-.notification:hover .notititle {
-  transform: translateX(0.15rem)
-}
-
-
-
-
-
-
-
-.expandedEvent{
+.expandedEvent {
   height: auto !important;
   transition: height 8s ease !important;
 }
-
 .eventPred {
   border-radius: 10px;
-  overflow: auto; 
+  overflow: auto;
 }
-
-.fc-event {
-  /* border-radius: 10px; */
-  margin-bottom: 1px;
-}
-
 .calendar {
   border-radius: 10px;
   text-transform: capitalize;
-}
-
-.fc-daygrid-day.fc-day-today {
-  /* border-radius: 50px; */
-}
-
-:root {
-  --fc-today-bg-color:#dbeafe ;
-  /* Establece el color de fondo del día actual */
-  /* --fc-border-color: none; */
-}
-.fc-day {
-  /* border-radius: 10%; */
-}
-/* .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
-    color: white; 
-    background-color: rgb(137, 194, 227);
-    border-radius: 50%;
-    height: 100%;
-    padding-left: 19.38px;
-  } */
-
-
-.fc-highlight {
-  background-color: #dbeafe !important;
-}
-
-
-@media (max-width: 640px) {
-  .fc-view {
-    font-size: 10px !important;
-  }
 }

@@ -5,7 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 
-const router = require("./routes/index.js"); // Importamos rutas  
+const router = require("./routes/index.js"); // Importamos rutas
 
 const server = express(); // Inicializamos la aplicación de Express
 server.disable("x-powered-by"); // Eliminar el encabezado X-Powered-By

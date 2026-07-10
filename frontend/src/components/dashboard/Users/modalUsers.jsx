@@ -3,17 +3,11 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { styled, Box } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Avatar,
-  Button,
-  FormControl,
-  Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
@@ -22,19 +16,66 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { useDispatch, useSelector } from "react-redux";
+import PersonIcon from "@mui/icons-material/Person";
+import CloseIcon from "@mui/icons-material/Close";
+import { useDispatch } from "react-redux";
 import { getallusers } from "../../../redux-toolkit/actions/userActions";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { SuccessAlert } from "../../toastAlerts/success";
-import { handleUpdateImage, handleUpload } from "../../../services/functions";
 
-export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
+// ─── CBA Brand Colors ──────────────────────────────────────────────
+const CBA = {
+  red: "#D50032",
+  redHover: "#B8002A",
+  navy: "#002E5F",
+  navyHover: "#001E3F",
+  grey: "#DEDEDE",
+  white: "#FFFFFF",
+  labelGrey: "#5A6474",
+  borderGrey: "#C8CDD5",
+  bgGrey: "#F5F6F8",
+};
+
+// ─── Field wrapper ─────────────────────────────────────────────────
+const FieldGroup = ({ label, children }) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+    <span
+      style={{
+        fontSize: "0.70rem",
+        fontWeight: 700,
+        letterSpacing: "0.08em",
+        textTransform: "uppercase",
+        color: CBA.labelGrey,
+      }}
+    >
+      {label}
+    </span>
+    {children}
+  </div>
+);
+
+// ─── Shared sx for all inputs ──────────────────────────────────────
+const inputSx = {
+  borderRadius: "8px",
+  backgroundColor: CBA.white,
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "8px",
+    "& fieldset": { borderColor: CBA.borderGrey },
+    "&:hover fieldset": { borderColor: CBA.navy },
+    "&.Mui-focused fieldset": { borderColor: CBA.navy, borderWidth: 2 },
+  },
+  "& .MuiSelect-select": { borderRadius: "8px" },
+};
+
+// ─── Main Component ────────────────────────────────────────────────
+export default function ModalEditUsuario({ id, open, handleClose }) {
   const [spinner, setSpinner] = useState(false);
   const [skelet, setSkelet] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // ✅ Estado plano, sin anidación en .data
   const [form, setForm] = useState({
-    image: "",
     correo: "",
     nombres: "",
     apellidos: "",
@@ -43,313 +84,275 @@ export default function ModalUnstyled({ id, open, handleOpen, handleClose }) {
     rol: "",
     estado: "",
   });
-  console.log(id)
-  const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const [buttonSave,setButtonSave]=useState(false);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
-  const handleChange = (e) => {
-    const property = e.target.name;
-    const value = e.target.value;
-    setForm({
-      ...form,
-      [property]: value,
-    });
-  };
+  const dispatch = useDispatch();
 
   const getById = async () => {
-    const response = await axios.get(`users/get/by/${id}`);
-    setForm(response.data);
-    setSkelet(false);
-    console.log(form.data)
+    try {
+      const response = await axios.get(`users/get/by/${id}`);
+      // ✅ Normalizar respuesta: soporta tanto { data: {...} } como el objeto directo
+      const user = response.data?.data ?? response.data;
+      setForm({
+        correo: user.correo ?? "",
+        nombres: user.nombres ?? "",
+        apellidos: user.apellidos ?? "",
+        celular: user.celular ?? "",
+        password: user.password ?? "",
+        rol: user.rol ?? "",
+        estado: user.estado ?? "",
+      });
+    } catch (error) {
+      toast.error("No se pudo cargar el usuario");
+    } finally {
+      setSkelet(false);
+    }
   };
-  
+
+  useEffect(() => {
+    getById();
+  }, [id]);
+
+  // ✅ handleChange genérico funciona para TextField, Select y OutlinedInput
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.put(`users/update/${id}`, form);
+      await axios.put(`users/update/${id}`, form);
       setTimeout(() => {
         toast.custom((t) => (
-          <SuccessAlert t={t} w={"w-4/12"} message="Edicion exitosa" />
+          <SuccessAlert t={t} w={"w-4/12"} message="Edición exitosa" />
         ));
         dispatch(getallusers());
         setSpinner(false);
         handleClose();
       }, 1500);
     } catch (error) {
-      toast.error(`Ocurrió un error ${error.data}`);
+      toast.error(`Ocurrió un error: ${error?.response?.data?.message ?? error.message}`);
+      setSpinner(false);
     }
   };
-  const convertBase = async (e) => {
-    e.preventDefault();
-    console.log(e);
-    const files = Array.from(e.target.files); // Obtén los archivos desde el input de tipo file
-    let format = [];
-    for (let [index, file] of files.entries()) {
-      format.push({ name: file.name, type: file.type });
-    }
-    const promises = await handleUpload(files);
-
-    const base64DataArray = await Promise.all(promises);
-    setButtonSave(true)
-    setForm({
-      ...form,
-      image: base64DataArray[0],
-    });
-  };
-  const handleUpdateImg = () => {
-    handleUpdateImage({image:form.image,id});
-  };
-  useEffect(() => { 
-      getById(); 
-  }, []);
 
   return (
-    <div>
-      <StyledModal
-        ariaLabelledby="unstyled-modal-title"
-        ariaDescribedby="unstyled-modal-description"
-        open={open}
-        onClose={handleClose}
-        slots={{ backdrop: StyledBackdrop }}
-      >
-        <Box sx={style}>
+    <StyledModal
+      open={open}
+      onClose={handleClose}
+      slots={{ backdrop: StyledBackdrop }}
+    >
+      <ModalBox>
+        {/* ── Header ── */}
+        <ModalHeader>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <AvatarWrapper>
+              <PersonIcon sx={{ color: CBA.white, fontSize: 22 }} />
+            </AvatarWrapper>
+            <div>
+              <p style={{ margin: 0, fontWeight: 700, fontSize: "1rem", color: CBA.white }}>
+                Editar usuario
+              </p>
+              <p style={{ margin: 0, fontSize: "0.78rem", color: "rgba(255,255,255,0.65)" }}>
+                Modifica los datos del usuario
+              </p>
+            </div>
+          </div>
+          <IconButton
+            onClick={handleClose}
+            size="small"
+            sx={{ color: "rgba(255,255,255,0.7)", "&:hover": { color: CBA.white } }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </ModalHeader>
+
+        {/* ── Body ── */}
+        <ModalBody>
           {!skelet ? (
-            <>
-              <Grid sx={{ m: 1, width: "100px" }}>
-                <label htmlFor="file-upload" className="cursor-pointer">
-                  <Avatar
-                    sx={{ width: "100px", height: "100px" }}
-                    src={form.data.image}
-                    alt="perfil-image"
+            <form onSubmit={handleSubmit}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+
+                {/* Fila 1: Nombres | Apellidos */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+                  <FieldGroup label="Nombres">
+                    <TextField
+                      fullWidth size="small" name="nombres" type="text"
+                      value={form.nombres}
+                      onChange={handleChange}
+                      placeholder="Ingrese su nombre"
+                      sx={inputSx}
+                    />
+                  </FieldGroup>
+                  <FieldGroup label="Apellidos">
+                    <TextField
+                      fullWidth size="small" name="apellidos" type="text"
+                      value={form.apellidos}
+                      onChange={handleChange}
+                      placeholder="Ingrese su apellido"
+                      sx={inputSx}
+                    />
+                  </FieldGroup>
+                </div>
+
+                {/* Fila 2: Correo */}
+                <FieldGroup label="Correo electrónico">
+                  <TextField
+                    fullWidth size="small" name="correo" type="email"
+                    value={form.correo}
+                    onChange={handleChange}
+                    placeholder="correo@ejemplo.com"
+                    sx={inputSx}
                   />
-                </label>
-                <input
-                  style={{ width: "10%" }}
-                  className="hidden"
-                  type="file"
-                  id="file-upload"
-                  name="image"
-                  onChange={convertBase}
-                />
-                {buttonSave && form.data.image[0] != "h" ? (
+                </FieldGroup>
+
+                {/* Fila 3: Celular | Contraseña */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+                  <FieldGroup label="Celular">
+                    <TextField
+                      fullWidth size="small" name="celular" type="text"
+                      value={form.celular}
+                      onChange={handleChange}
+                      placeholder="Ej: 70123456"
+                      sx={inputSx}
+                    />
+                  </FieldGroup>
+                  <FieldGroup label="Contraseña">
+                    <OutlinedInput
+                      fullWidth size="small" name="password"
+                      type={showPassword ? "text" : "password"}
+                      value={form.password}
+                      onChange={handleChange}
+                      placeholder="Mínimo 8 caracteres"
+                      sx={inputSx}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => setShowPassword((s) => !s)}
+                            edge="end" size="small"
+                            sx={{ color: CBA.labelGrey }}
+                          >
+                            {showPassword ? <VisibilityOff fontSize="small" /> : <Visibility fontSize="small" />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FieldGroup>
+                </div>
+
+                {/* Fila 4: Rol | Estado */}
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+                  <FieldGroup label="Rol">
+                    {/* ✅ value={form.rol} — lee del estado plano, no de form.data */}
+                    <Select
+                      fullWidth size="small" name="rol"
+                      value={form.rol}
+                      onChange={handleChange}
+                      sx={inputSx}
+                    >
+                      <MenuItem value="Admin">Admin</MenuItem>
+                      <MenuItem value="Client">Client</MenuItem>
+                    </Select>
+                  </FieldGroup>
+                  <FieldGroup label="Estado">
+                    {/* ✅ value como string para evitar mismatch con MenuItem */}
+                    <Select
+                      fullWidth size="small" name="estado"
+                      value={String(form.estado)}
+                      onChange={(e) =>
+                        setForm((prev) => ({
+                          ...prev,
+                          estado: e.target.value === "true",
+                        }))
+                      }
+                      sx={inputSx}
+                    >
+                      <MenuItem value="true">Activo</MenuItem>
+                      <MenuItem value="false">Baja</MenuItem>
+                    </Select>
+                  </FieldGroup>
+                </div>
+
+              </div>
+
+              {/* ── Botones ── */}
+              <Divider />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  style={{
+                    padding: "10px 0",
+                    borderRadius: 8,
+                    border: `1.5px solid ${CBA.borderGrey}`,
+                    background: CBA.white,
+                    color: "#374151",
+                    fontWeight: 600,
+                    fontSize: "0.875rem",
+                    cursor: "pointer",
+                    transition: "border-color 0.2s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.borderColor = CBA.navy)}
+                  onMouseLeave={(e) => (e.currentTarget.style.borderColor = CBA.borderGrey)}
+                >
+                  Cancelar
+                </button>
+
+                {!spinner ? (
                   <button
-                    onClick={handleUpdateImg}
-                    className={`w-full border h-10 text-white bg-[#33C368] hover:bg-[#33C398]`}
-                    style={{ minHeight: "40px" }}
+                    type="submit"
+                    style={{
+                      padding: "10px 0",
+                      borderRadius: 8,
+                      border: "none",
+                      background: CBA.red,
+                      color: CBA.white,
+                      fontWeight: 700,
+                      fontSize: "0.875rem",
+                      cursor: "pointer",
+                      transition: "background 0.2s",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = CBA.redHover)}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = CBA.red)}
                   >
-                    Editar
+                    Guardar cambios
                   </button>
-                ) : null}
-              </Grid>
-              <form
-                onSubmit={handleSubmit}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2,1fr)",
-                  gap: "10px",
-                }}
-              >
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-celular">
-                    Correo
-                  </InputLabel>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    onChange={handleChange}
-                    value={form.data.correo}
-                    id="outlined-basic-correo"
-                    name="correo"
-                    type="text"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-celular">
-                    Nombres
-                  </InputLabel>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    onChange={handleChange}
-                    value={form.data.nombres}
-                    id="outlined-basic-nombres"
-                    name="nombres"
-                    type="text"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-celular">
-                    Apellidos
-                  </InputLabel>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    onChange={handleChange}
-                    value={form.data.apellidos}
-                    id="outlined-basic-apellidos"
-                    name="apellidos"
-                    type="text"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-celular">
-                    Celular
-                  </InputLabel>
-                  <TextField
-                    sx={{ width: "100%" }}
-                    onChange={handleChange}
-                    value={form.data.celular}
-                    id="outlined-basic-celular"
-                    name="celular"
-                    type="text"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    sx={{ width: "100%" }}
-                    id="outlined-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    onChange={handleChange}
-                    value={form.data.password}
-                    name="password"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Password"
-                  />
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
-                    Rol
-                  </InputLabel>
-                  <Select
-                    sx={{ width: "100%" }}
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    value={form.data.rol}
-                    label="rol"
-                    onChange={handleChange}
-                    name="rol"
+                ) : (
+                  <LoadingButton
+                    loading
+                    variant="contained"
+                    sx={{
+                      borderRadius: "8px",
+                      backgroundColor: CBA.red,
+                      "&.MuiLoadingButton-loading": { backgroundColor: CBA.red, opacity: 0.7 },
+                    }}
                   >
-                    {/* <MenuItem value={form.data.rol}>{form.data.rol}</MenuItem> */}
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="Client">Client</MenuItem>
-                  </Select>
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-estado">
-                    Estado
-                  </InputLabel>
-                  <Select
-                    sx={{ width: "100%" }}
-                    labelId="demo-select-small-label"
-                    id="demo-select-small"
-                    value={form.data.estado}
-                    label="estado"
-                    onChange={handleChange}
-                    name="estado"
-                  >
-                    <MenuItem value={true}>Activo</MenuItem>
-                    <MenuItem value={false}>Baja</MenuItem>
-                  </Select>
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  {!spinner ? (
-                    <Button
-                      sx={{ width: "100%", borderRadius: "0px" }}
-                      type="submit"
-                      variant="contained"
-                    >
-                      Guardar Todo
-                    </Button>
-                  ) : (
-                    <LoadingButton
-                      size="small"
-                      endIcon={<SendIcon />}
-                      loading={true}
-                      loadingPosition="end"
-                      variant="contained"
-                      sx={{ width: "100%", height: "35px" }}
-                    >
-                      <span>Actualizando</span>
-                    </LoadingButton>
-                  )}
-                </Grid>
-                <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                  <Button
-                    variant="outlined"
-                    sx={{ width: "100%", borderRadius: "0px" }}
-                    onClick={handleClose}
-                  >
-                    CANCELAR
-                  </Button>
-                </Grid>
-              </form>
-            </>
-          ) : (
-            <form
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2,1fr)",
-                gap: "10px",
-              }}
-            >
-              <Grid variant="outlined">
-                <Skeleton variant="circular" width={40} height={40} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="text" width="100%" height={90} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="rectangular" width="100%" height={36} />
-              </Grid>
-              <Grid variant="outlined">
-                <Skeleton variant="rectangular" width="100%" height={36} />
-              </Grid>
+                    Guardando
+                  </LoadingButton>
+                )}
+              </div>
             </form>
+          ) : (
+            /* ── Skeleton ── */
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 20px" }}>
+              {[...Array(6)].map((_, i) => (
+                <div key={i}>
+                  <Skeleton variant="text" width="40%" height={16} sx={{ mb: 0.5 }} />
+                  <Skeleton variant="rounded" width="100%" height={40} />
+                </div>
+              ))}
+              <Skeleton variant="rounded" width="100%" height={40} />
+              <Skeleton variant="rounded" width="100%" height={40} />
+            </div>
           )}
-        </Box>
-      </StyledModal>
-    </div>
+        </ModalBody>
+      </ModalBox>
+    </StyledModal>
   );
 }
+
+// ─── Styled Components ─────────────────────────────────────────────
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, className, ...other } = props;
@@ -361,29 +364,9 @@ const Backdrop = React.forwardRef((props, ref) => {
     />
   );
 });
-
 Backdrop.propTypes = {
   className: PropTypes.string.isRequired,
   open: PropTypes.bool,
-};
-
-const blue = {
-  200: "#99CCF3",
-  400: "#3399FF",
-  500: "#007FFF",
-};
-
-const grey = {
-  50: "#f6f8fa",
-  100: "#eaeef2",
-  200: "#d0d7de",
-  300: "#afb8c1",
-  400: "#8c959f",
-  500: "#6e7781",
-  600: "#57606a",
-  700: "#424a53",
-  800: "#32383f",
-  900: "#24292f",
 };
 
 const StyledModal = styled(Modal)`
@@ -399,44 +382,49 @@ const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
   position: fixed;
   inset: 0;
-  background-color: rgb(0 0 0 / 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
   -webkit-tap-highlight-color: transparent;
 `;
 
-const style = (theme) => ({
-  display: "flex",
-  flexDirection: "column",
-  width: 700,
-  // borderRadius: "12px",
-  padding: "16px 32px 24px 32px",
-  backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",
-  boxShadow: `0px 2px 24px ${
-    theme.palette.mode === "dark" ? "#000" : "#383838"
-  }`,
-});
-
-const TriggerButton = styled("button")(
-  ({ theme }) => `
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
+const ModalBox = styled(Box)`
+  width: 640px;
+  max-width: 95vw;
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 12px;
-  padding: 6px 12px;
-  line-height: 1.5;
-  background: transparent;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
-  color: ${theme.palette.mode === "dark" ? grey[100] : grey[900]};
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+`;
 
-  &:hover {
-    background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
-    border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
-  }
+const ModalHeader = styled("div")`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background: ${CBA.navy};
+  border-radius: 12px 12px 0 0;
+`;
 
-  &:focus-visible {
-    border-color: ${blue[400]};
-    outline: 3px solid ${theme.palette.mode === "dark" ? blue[500] : blue[200]};
-  }
-  `
-);
+const AvatarWrapper = styled("div")`
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalBody = styled("div")`
+  padding: 24px;
+  background: ${CBA.bgGrey};
+`;
+
+const Divider = styled("div")`
+  height: 1px;
+  background: ${CBA.grey};
+  margin: 20px 0;
+`;

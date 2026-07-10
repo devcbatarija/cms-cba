@@ -1,302 +1,362 @@
+// modalAddEvent.jsx  –  Rediseño CBA  |  estilo imagen referencia
+// Header navy  |  labels mayúscula  |  botones con iconos
+// Toda la lógica original se conserva intacta
+
 import * as React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { styled, Box } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
-    Button,
     Fade,
-    Grid,
-    InputLabel,
     MenuItem,
     Select,
     TextField,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
 import toast, { Toaster } from "react-hot-toast";
 import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
-import Cookies from "js-cookie";
 import Checkboxes from "./widgets/checkbox";
-import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
+import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import SelectColorList from "./widgets/selectColor";
+import SaveIcon from "@mui/icons-material/Save";
+import CloseIcon from "@mui/icons-material/Close";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 
-export default function ModalAddEvent({
-    setData,
-    data,
-    open,
-    handleClose,
-    tipoModal
-}) {
+/* ─── Paleta CBA ─── */
+const CBA = {
+    red:   "#D50032",
+    navy:  "#002E5F",
+    gray:  "#DEDEDE",
+    white: "#FFFFFF",
+};
+
+/* ─── Estilos de campo reutilizables ─── */
+const inputSx = {
+    "& .MuiOutlinedInput-root": {
+        borderRadius: "8px",
+        "& fieldset": { borderColor: "#e5e7eb" },
+        "&:hover fieldset": { borderColor: CBA.navy },
+        "&.Mui-focused fieldset": { borderColor: CBA.navy, borderWidth: 2 },
+    },
+};
+
+const selectSx = {
+    borderRadius: "8px",
+    "& .MuiOutlinedInput-notchedOutline": { borderColor: "#e5e7eb" },
+    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: CBA.navy },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: CBA.navy, borderWidth: 2 },
+};
+
+/* ─── Label ─── */
+const Label = ({ children }) => (
+    <p style={{
+        fontSize: ".68rem",
+        fontWeight: 700,
+        letterSpacing: ".1em",
+        textTransform: "uppercase",
+        color: "#6b7280",
+        margin: "0 0 6px",
+    }}>
+        {children}
+    </p>
+);
+
+export default function ModalAddEvent({ setData, data, open, handleClose, tipoModal }) {
     const [spinner, setSpinner] = useState(false);
     const dispatch = useDispatch();
+
     const handleChange = (e) => {
-        const property = e.target.name;
-        const value = e.target.value;
-        setData({
-            ...data,
-            [property]: value,
-        });
+        setData({ ...data, [e.target.name]: e.target.value });
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             setSpinner(true);
-            // Determinar la ruta en base al valor de tipoModal
-            const path = tipoModal == "Evento" ? "event/create" : "eventpredefinido/create"
-            const res = axios.post(path, data).then(res => {
-                setTimeout(() => {
-                    toast.success(res.data.successMessage)
-                    setData({
-                        ...data,
-                        id: "",
-                        title: "",
-                        start: "",
-                        end: "",
-                        color: "",
-                        tipo: "",
-                        start_Time: "",
-                        end_Time: "",
-                        state: true,
-                        allDay: true
-                    })
-                    // Si tipoModal es igual a "Evento", ejecuta getEvents(). De lo contrario, ejecuta getEventsPredefinidos().
-                    tipoModal == "Evento" ? dispatch(getEvents()) : dispatch(getEventsPredefinidos())
-                    handleClose();
-                    setSpinner(false);
-                }, 1500);
-            }).catch(error => {
-                setTimeout(() => {
-                    if (error.response.status == 401) {
-                        toast.error(error.response.data.messageError)
-                    }
-                    else {
-                        toast.error(error.message)
-                    }
-                    setSpinner(false);
-                }, 1500);
-
-            })
+            const path = tipoModal === "Evento" ? "event/create" : "eventpredefinido/create";
+            axios.post(path, data)
+                .then(res => {
+                    setTimeout(() => {
+                        toast.success(res.data.successMessage);
+                        setData({
+                            ...data, id: "", title: "", start: "", end: "",
+                            color: "", tipo: "", start_Time: "", end_Time: "",
+                            state: true, allDay: true,
+                        });
+                        tipoModal === "Evento" ? dispatch(getEvents()) : dispatch(getEventsPredefinidos());
+                        handleClose();
+                        setSpinner(false);
+                    }, 1500);
+                })
+                .catch(error => {
+                    setTimeout(() => {
+                        if (error.response?.status === 401) toast.error(error.response.data.messageError);
+                        else toast.error(error.message);
+                        setSpinner(false);
+                    }, 1500);
+                });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
-    useEffect(() => {
-        setTimeout(() => { }, 600);
-    }, []);
+
+    useEffect(() => { setTimeout(() => {}, 600); }, []);
+
+    const modalTitle = tipoModal === "Evento" ? "Crear Evento" : "Crear Evento Predefinido";
 
     return (
         <div>
+            <Toaster position="top-right" />
             <StyledModal
-                aria-labelledby="unstyled-modal-title"
-                aria-describedby="unstyled-modal-description"
+                aria-labelledby="modal-crear-evento"
                 open={open}
                 onClose={handleClose}
                 slots={{ backdrop: StyledBackdrop }}
             >
-                <Box sx={style}>
-                    <form
-                        onSubmit={handleSubmit}
-                    >
-                        <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                            <InputLabel htmlFor="outlined-adornment-title">
-                                Titulo
-                            </InputLabel>
-                            <TextField
-                                sx={{ width: "100%" }}
-                                onChange={handleChange}
-                                value={data.title}
-                                id="outlined-basic-title"
-                                name="title"
-                                type="text"
-                                variant="outlined"
-                            />
-                        </Grid>
-                        <div className="flex flex-row">
-                            {tipoModal === "Evento" ?
-                                <Grid sx={{ m: 1 }} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-start">
-                                        Fecha de Inicio
-                                    </InputLabel>
-                                    <TextField
-                                        sx={!data.allDay ? { width: "58%", marginRight: "2%" } : { width: "100%" }}
-                                        onChange={handleChange}
-                                        value={data.start}
-                                        id="outlined-basic-start"
-                                        name="start"
-                                        type="date"
-                                        size="small"
-                                        variant="outlined" />
-                                    {data.allDay === false ?
-                                        <Fade in={!data.allDay}>
-                                            <TextField
-                                                sx={{ width: "40%" }}
-                                                onChange={handleChange}
-                                                value={data.start_Time}
-                                                id="outlined-basic-start_Time"
-                                                name="start_Time"
-                                                type="time"
-                                                size="small"
-                                                variant="outlined" />
-                                        </Fade>
-                                        : null}
-                                </Grid>
-                                : null}
-                            {tipoModal === "EventoPredifinido" && data.allDay === false ?
-                                <Grid sx={{ m: 1 }} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-start_Time">
-                                        Hora de Inicio
-                                    </InputLabel>
-                                    <TextField
-                                        sx={{ width: "100%" }}
-                                        onChange={handleChange}
-                                        value={data.start_Time}
-                                        id="outlined-basic-start_Time"
-                                        name="start_Time"
-                                        type="time"
-                                        size="small"
-                                        variant="outlined" />
-                                </Grid>
-                                : null}
-                            {tipoModal === "Evento" || data.allDay === false ?
-                                <div className="grid content-center">
-                                    <ArrowRightAltRoundedIcon />
-                                </div>
-                                : null}
-                            {tipoModal === "EventoPredifinido" && data.allDay === false ?
-                                <Grid sx={{ m: 1 }} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-end_Time">
-                                        Hora de finalizacion
-                                    </InputLabel>
-                                    <TextField
-                                        sx={{ width: "100%" }}
-                                        onChange={handleChange}
-                                        value={data.end_Time}
-                                        id="outlined-basic-end_Time"
-                                        name="end_Time"
-                                        type="time"
-                                        size="small"
-                                        variant="outlined" />
-                                </Grid>
-                                : null}
-                            {tipoModal === "Evento" ?
-                                <Grid sx={{ m: 1 }} variant="outlined">
-                                    <InputLabel htmlFor="outlined-adornment-end">
-                                        Fecha de finalizacion
-                                    </InputLabel>
-                                    {data.allDay === false ?
-                                        <TextField
-                                            sx={{ width: "40%", marginRight: "2%" }}
-                                            onChange={handleChange}
-                                            value={data.end_Time}
-                                            id="outlined-basic-end_Time"
-                                            name="end_Time"
-                                            type="time"
-                                            size="small"
-                                            variant="outlined" />
-                                        : null}
-                                    <TextField
-                                        sx={!data.allDay ? { width: "58%" } : { width: "100%" }}
-                                        onChange={handleChange}
-                                        value={data.end}
-                                        id="outlined-basic-end"
-                                        name="end"
-                                        type="date"
-                                        size="small"
-                                        variant="outlined" />
-                                </Grid>
-                                : null}
-                            <div className="grid content-center">
-                                <Checkboxes
-                                    data={data}
-                                    setData={setData}
+                <Box sx={modalBox}>
+                    {/* ── Header navy ── */}
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        background: CBA.navy,
+                        borderRadius: "12px 12px 0 0",
+                        padding: "16px 24px",
+                    }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <EventNoteIcon sx={{ color: "#fff", fontSize: 20 }} />
+                            <span style={{ color: "#fff", fontWeight: 700, fontSize: "1rem" }}>
+                                {modalTitle}
+                            </span>
+                        </div>
+                        <button
+                            onClick={handleClose}
+                            style={{
+                                background: "transparent", border: "none",
+                                cursor: "pointer", color: "#fff", display: "flex",
+                                alignItems: "center", padding: 4, borderRadius: 6,
+                                transition: "background .15s",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,.15)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                        >
+                            <CloseIcon sx={{ fontSize: 20 }} />
+                        </button>
+                    </div>
+
+                    {/* ── Cuerpo ── */}
+                    <form onSubmit={handleSubmit}>
+                        <div style={{ padding: "24px 24px 20px" }}>
+
+                            {/* Título */}
+                            <div style={{ marginBottom: 20 }}>
+                                <Label>Título</Label>
+                                <TextField
+                                    fullWidth
+                                    onChange={handleChange}
+                                    value={data.title}
+                                    name="title"
+                                    type="text"
+                                    placeholder="Nombre del evento"
+                                    variant="outlined"
+                                    size="small"
+                                    sx={inputSx}
                                 />
                             </div>
-                        </div>
-                        <div style={{
-                            display: "grid",
-                            gridTemplateColumns: "repeat(2,1fr)",
-                            gap: "10px",
-                        }}>
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-tipo">Tipo de evento</InputLabel>
-                                <Select
-                                    sx={{ width: "100%" }}
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={data.tipo}
-                                    onChange={handleChange}
-                                    name="tipo"
-                                >
-                                    <MenuItem value="Administrativo">Administrativo</MenuItem>
-                                    <MenuItem value="Academico">Academico</MenuItem>
-                                    {tipoModal === "Evento" ?
-                                        <MenuItem value="General">General</MenuItem> : null
-                                    }
-                                </Select>
-                            </Grid>
-                            <Grid sx={{ m: 1, width: "40%" }} variant="outlined">
-                                <InputLabel htmlFor="outlined-adornment-color" >
-                                    Color
-                                </InputLabel>
-                                <div style={{ display: 'flex' }} className=''>
-                                    <SelectColorList
-                                        data={data}
-                                        setData={setData}
-                                    />
+
+                            {/* Fechas */}
+                            <div style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+                                {/* Fecha inicio */}
+                                {tipoModal === "Evento" && (
+                                    <div style={{ flex: 1, minWidth: 140 }}>
+                                        <Label>Fecha de inicio</Label>
+                                        <div style={{ display: "flex", gap: 6 }}>
+                                            <TextField
+                                                onChange={handleChange}
+                                                value={data.start}
+                                                name="start"
+                                                type="date"
+                                                size="small"
+                                                variant="outlined"
+                                                sx={{ ...inputSx, flex: 1 }}
+                                            />
+                                            {data.allDay === false && (
+                                                <Fade in={!data.allDay}>
+                                                    <TextField
+                                                        onChange={handleChange}
+                                                        value={data.start_Time}
+                                                        name="start_Time"
+                                                        type="time"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        sx={{ ...inputSx, width: 110 }}
+                                                    />
+                                                </Fade>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Hora inicio (predefinido) */}
+                                {tipoModal !== "Evento" && data.allDay === false && (
+                                    <div style={{ flex: 1, minWidth: 120 }}>
+                                        <Label>Hora de inicio</Label>
+                                        <TextField
+                                            fullWidth onChange={handleChange}
+                                            value={data.start_Time} name="start_Time"
+                                            type="time" size="small" variant="outlined" sx={inputSx}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Flecha */}
+                                {(tipoModal === "Evento" || data.allDay === false) && (
+                                    <div style={{ paddingBottom: 6, color: "#9ca3af" }}>
+                                        <ArrowRightAltRoundedIcon />
+                                    </div>
+                                )}
+
+                                {/* Hora fin (predefinido) */}
+                                {tipoModal !== "Evento" && data.allDay === false && (
+                                    <div style={{ flex: 1, minWidth: 120 }}>
+                                        <Label>Hora de fin</Label>
+                                        <TextField
+                                            fullWidth onChange={handleChange}
+                                            value={data.end_Time} name="end_Time"
+                                            type="time" size="small" variant="outlined" sx={inputSx}
+                                        />
+                                    </div>
+                                )}
+
+                                {/* Fecha fin */}
+                                {tipoModal === "Evento" && (
+                                    <div style={{ flex: 1, minWidth: 140 }}>
+                                        <Label>Fecha de finalización</Label>
+                                        <div style={{ display: "flex", gap: 6 }}>
+                                            {data.allDay === false && (
+                                                <TextField
+                                                    onChange={handleChange}
+                                                    value={data.end_Time} name="end_Time"
+                                                    type="time" size="small" variant="outlined"
+                                                    sx={{ ...inputSx, width: 110 }}
+                                                />
+                                            )}
+                                            <TextField
+                                                onChange={handleChange}
+                                                value={data.end} name="end"
+                                                type="date" size="small" variant="outlined"
+                                                sx={{ ...inputSx, flex: 1 }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Checkbox todo el día */}
+                                <div style={{ paddingBottom: 4 }}>
+                                    <Checkboxes data={data} setData={setData} />
                                 </div>
-                            </Grid>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                {!spinner ? (
-                                    <Button
-                                        sx={{ width: "100%", borderRadius: "0px" }}
-                                        type="submit"
-                                        variant="contained"
+                            </div>
+
+                            {/* Tipo + Color */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
+                                <div>
+                                    <Label>Tipo de evento</Label>
+                                    <Select
+                                        fullWidth
+                                        value={data.tipo}
+                                        onChange={handleChange}
+                                        name="tipo"
+                                        size="small"
+                                        sx={selectSx}
                                     >
+                                        <MenuItem value="Administrativo">Administrativo</MenuItem>
+                                        <MenuItem value="Academico">Académico</MenuItem>
+                                        {tipoModal === "Evento" && (
+                                            <MenuItem value="General">General</MenuItem>
+                                        )}
+                                    </Select>
+                                </div>
+                                <div>
+                                    <Label>Color</Label>
+                                    <SelectColorList data={data} setData={setData} />
+                                </div>
+                            </div>
+
+                            {/* Separador */}
+                            <div style={{ height: 1, background: "#f3f4f6", marginBottom: 20 }} />
+
+                            {/* Botones */}
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                                {/* Registrar */}
+                                {!spinner ? (
+                                    <button
+                                        type="submit"
+                                        style={{
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                            gap: 8, padding: "10px 0",
+                                            background: CBA.red, color: "#fff",
+                                            border: "none", borderRadius: 8,
+                                            fontWeight: 700, fontSize: ".82rem",
+                                            cursor: "pointer", letterSpacing: ".05em",
+                                            boxShadow: "0 2px 8px rgba(213,0,50,.3)",
+                                            transition: "opacity .15s",
+                                        }}
+                                        onMouseEnter={(e) => (e.currentTarget.style.opacity = ".88")}
+                                        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                                    >
+                                        <SaveIcon sx={{ fontSize: 18 }} />
                                         REGISTRAR
-                                    </Button>
+                                    </button>
                                 ) : (
                                     <LoadingButton
-                                        size="small"
-                                        endIcon={<SendIcon />}
-                                        loading={true}
-                                        loadingPosition="end"
-                                        variant="contained"
-                                        sx={{ width: "100%", height: "35px" }}
+                                        loading size="small" variant="contained"
+                                        loadingPosition="end" endIcon={<SaveIcon />}
+                                        sx={{
+                                            background: CBA.red, borderRadius: "8px",
+                                            height: 42, fontWeight: 700, fontSize: ".82rem",
+                                            "&.MuiLoadingButton-root.Mui-disabled": { background: "#f3a0b0" },
+                                        }}
                                     >
-                                        <span>Registrando</span>
+                                        Registrando
                                     </LoadingButton>
                                 )}
-                            </Grid>
-                            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-                                <Button
-                                    variant="outlined"
-                                    sx={{ width: "100%", borderRadius: "0px" }}
+
+                                {/* Cancelar */}
+                                <button
+                                    type="button"
                                     onClick={() => {
-                                        handleClose()
+                                        handleClose();
                                         setData({
-                                            ...data,
-                                            id: "",
-                                            title: "",
-                                            start: "",
-                                            end: "",
-                                            color: "",
-                                            tipo: "",
-                                            start_Time: "",
-                                            end_Time: "",
-                                            allDay: true
-                                        })
+                                            ...data, id: "", title: "", start: "", end: "",
+                                            color: "", tipo: "", start_Time: "", end_Time: "", allDay: true,
+                                        });
+                                    }}
+                                    style={{
+                                        display: "flex", alignItems: "center", justifyContent: "center",
+                                        gap: 8, padding: "10px 0",
+                                        background: "transparent", color: "#374151",
+                                        border: "1.5px solid #e5e7eb", borderRadius: 8,
+                                        fontWeight: 700, fontSize: ".82rem",
+                                        cursor: "pointer", letterSpacing: ".05em",
+                                        transition: "border-color .15s, color .15s",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.borderColor = CBA.navy;
+                                        e.currentTarget.style.color = CBA.navy;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.borderColor = "#e5e7eb";
+                                        e.currentTarget.style.color = "#374151";
                                     }}
                                 >
+                                    <CloseIcon sx={{ fontSize: 18 }} />
                                     CANCELAR
-                                </Button>
-                            </Grid>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </Box>
@@ -305,40 +365,12 @@ export default function ModalAddEvent({
     );
 }
 
+/* ─── Backdrop ─── */
 const Backdrop = React.forwardRef((props, ref) => {
     const { open, className, ...other } = props;
-    return (
-        <div
-            className={clsx({ "MuiBackdrop-open": open }, className)}
-            ref={ref}
-            {...other}
-        />
-    );
+    return <div className={clsx({ "MuiBackdrop-open": open }, className)} ref={ref} {...other} />;
 });
-
-Backdrop.propTypes = {
-    className: PropTypes.string.isRequired,
-    open: PropTypes.bool,
-};
-
-const blue = {
-    200: "#99CCF3",
-    400: "#3399FF",
-    500: "#007FFF",
-};
-
-const grey = {
-    50: "#f6f8fa",
-    100: "#eaeef2",
-    200: "#d0d7de",
-    300: "#afb8c1",
-    400: "#8c959f",
-    500: "#6e7781",
-    600: "#57606a",
-    700: "#424a53",
-    800: "#32383f",
-    900: "#24292f",
-};
+Backdrop.propTypes = { className: PropTypes.string.isRequired, open: PropTypes.bool };
 
 const StyledModal = styled(Modal)`
   position: fixed;
@@ -357,13 +389,10 @@ const StyledBackdrop = styled(Backdrop)`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const style = (theme) => ({
-    display: "flex",
-    flexDirection: "column",
-    width: 780,
-    padding: "16px 32px 24px 32px",
-    backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",
-    boxShadow: `0px 2px 24px ${theme.palette.mode === "dark" ? "#000" : "#383838"
-        }`,
-});
-
+const modalBox = {
+    width: 700,
+    borderRadius: "12px",
+    background: "#ffffff",
+    boxShadow: "0 8px 40px rgba(0,0,0,.18)",
+    overflow: "hidden",
+};

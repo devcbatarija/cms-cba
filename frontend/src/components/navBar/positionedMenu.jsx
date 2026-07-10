@@ -3,18 +3,36 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutSession } from "../../redux-toolkit/actions/auth.Actions";
-import Cookie from "js-cookie";
 import toast from "react-hot-toast";
 import { SuccessAlert } from "../toastAlerts/success";
 import { Profile } from "./profileUser";
-import axios from 'axios'
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import LaptopChromebookRoundedIcon from '@mui/icons-material/LaptopChromebookRounded';
-import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
-import PowerSettingsNewRoundedIcon from '@mui/icons-material/PowerSettingsNewRounded';
+import axios from "axios";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import LaptopChromebookRoundedIcon from "@mui/icons-material/LaptopChromebookRounded";
+import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
+import PowerSettingsNewRoundedIcon from "@mui/icons-material/PowerSettingsNewRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+
+const CBA_NAVY = "#002E5F";
+const CBA_ROJO = "#D50032";
+
+/* ---------- Ítem de menú reutilizable, mismo patrón en toda la app ---------- */
+const MenuAction = ({ icon, label, onClick, acento = CBA_NAVY }) => (
+  <div
+    onClick={onClick}
+    className="mx-2 my-0.5 rounded-lg flex items-center gap-3 py-2.5 px-3 text-sm font-medium text-gray-600 cursor-pointer transition-colors duration-200"
+    style={{ "--hover-bg": `${acento}0D` }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = `${acento}0D`)}
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}
+  >
+    <span style={{ color: acento }} className="flex items-center">
+      {icon}
+    </span>
+    <span>{label}</span>
+  </div>
+);
 
 const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
-
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -29,10 +47,9 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
     }
   };
   useEffect(() => {
-
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
   const dispatch = useDispatch(false);
@@ -40,19 +57,19 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   const rolUSer = useSelector((state) => state.login.user);
   const authlogin = useSelector((state) => state.login);
   const [openProfile, setOpenProfile] = useState(false);
+
   const handleLogout = async () => {
     try {
       navigate("/");
-      localStorage.removeItem('user');
-      const response = await axios.get('/users/logout')
+      localStorage.removeItem("user");
+      const response = await axios.get("/users/logout");
       dispatch(logoutSession(false));
       toast.custom((t) => (
         <SuccessAlert t={t} w={"w-4/12"} message="Cierre de sesión exitoso" />
       ));
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
+
   const aleatorios = async () => {
     const colors = ["#d59bf6", "#ffc93c", "#42b883", "#cca8e9"];
     const matrandom = Math.floor(Math.random() * 4);
@@ -65,27 +82,25 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
   };
   useEffect(() => {
     aleatorios();
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (openProfile) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = "auto";
     }
   }, [openProfile]);
 
   return (
     <>
-      <div className="relative inline-block" ref={divRef} >
-        {/* Dropdown toggle button */}
-
+      <div className="relative inline-block" ref={divRef}>
         {authlogin && !authlogin.user._profileImage ? (
           <div
-            className="border p-2 rounded-[50%] 
-          w-[50px] h-[50px] text-white font-bold uppercase flex justify-center items-center"
+            className="w-[46px] h-[46px] rounded-full text-white font-bold uppercase flex justify-center items-center cursor-pointer"
             style={{
               background: localStorage.getItem("color"),
+              border: `2px solid ${CBA_NAVY}`,
             }}
             onClick={toggleDropdown}
           >
@@ -95,87 +110,97 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
         ) : (
           <Avatar
             id="demo-positioned-button"
-            aria-controls={isOpen ? "demo-positioned-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={isOpen ? "true" : undefined}
             onClick={toggleDropdown}
             alt={authlogin.user.correo}
             src={authlogin.user._profileImage}
-            style={styles}
+            className="cursor-pointer"
+            sx={{ border: `2px solid ${CBA_NAVY}`, ...styles }}
           />
         )}
-        {/* Dropdown menu */}
-        {isOpen && (
-          <div
-            className="absolute right-0 z-50 w-60 py-2 mt-2 overflow-hidden origin-top-right bg-white rounded-md shadow-xl dark:bg-gray-800"
-          >
-            <div className="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
 
+        {isOpen && (
+          <div className="absolute right-0 z-50 w-64 py-2 mt-3 overflow-hidden origin-top-right bg-white rounded-2xl shadow-xl border border-gray-100">
+            {/* Barra de acento superior, mismo patrón del sitio */}
+            <div
+              className="h-1 w-full -mt-2 mb-2"
+              style={{
+                background: `linear-gradient(90deg, ${CBA_NAVY} 0%, ${CBA_ROJO} 100%)`,
+              }}
+            />
+
+            <div className="flex items-center gap-3 px-4 pb-3">
               {authlogin && !authlogin.user._profileImage ? (
                 <div
-                  className="border p-2 rounded-full
-                  w-9 h-9 text-white font-bold uppercase flex justify-center items-center mx-1 flex-shrink-0"
-                  style={{
-                    background: localStorage.getItem("color"),
-                  }}
+                  className="w-10 h-10 rounded-full text-white font-bold uppercase flex justify-center items-center shrink-0"
+                  style={{ background: localStorage.getItem("color") }}
                 >
                   {authlogin.user.nombres[0]}
                   {authlogin.user.apellidos[0]}
                 </div>
               ) : (
-                <img className="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9" src={authlogin.user._profileImage} alt={authlogin.user.correo} />
+                <img
+                  className="shrink-0 object-cover rounded-full w-10 h-10"
+                  src={authlogin.user._profileImage}
+                  alt={authlogin.user.correo}
+                />
               )}
-
-              <div className="mx-1">
-                <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200 text-start">{authlogin.user.nombres} {authlogin.user.apellidos}</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 break-all">{authlogin.user.correo}</p>
+              <div className="min-w-0">
+                <h1
+                  className="text-sm font-bold truncate"
+                  style={{ color: CBA_NAVY }}
+                >
+                  {authlogin.user.nombres} {authlogin.user.apellidos}
+                </h1>
+                <p className="text-xs text-gray-500 truncate">
+                  {authlogin.user.correo}
+                </p>
               </div>
             </div>
-            <hr className="border-gray-200 dark:border-gray-700" />
 
-            <div onClick={() => {
-              setOpenProfile(true)
-              toggleDropdown()
-            }} className="m-1.5 rounded-md flex items-center py-2 px-4 text-sm text-gray-600  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z" clipRule="evenodd" />
-              </svg>
-              <span className="mx-1 ml-5">
-                Ver perfil
-              </span>
+            <hr className="border-gray-100" />
+
+            <div className="pt-1">
+              <MenuAction
+                icon={<PersonRoundedIcon fontSize="small" />}
+                label="Ver perfil"
+                onClick={() => {
+                  setOpenProfile(true);
+                  toggleDropdown();
+                }}
+              />
+
+              {rolUSer.rol && rolUSer.rol == "Admin" ? (
+                <>
+                  <MenuAction
+                    icon={<DashboardRoundedIcon fontSize="small" />}
+                    label="Dashboard"
+                    acento={CBA_ROJO}
+                    onClick={() => navigate("/dashboard")}
+                  />
+                  <MenuAction
+                    icon={<LaptopChromebookRoundedIcon fontSize="small" />}
+                    label="Sitio web"
+                    onClick={() => navigate("/")}
+                  />
+                </>
+              ) : null}
             </div>
 
-            {/* Opciones para el administrador */}
-            {rolUSer.rol && rolUSer.rol == "Admin" ? (
-              <>
-                <div onClick={() => navigate("/dashboard")} className="m-1.5 rounded-md flex items-center py-2 px-4 text-sm text-gray-600  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                  <DashboardRoundedIcon />
-                  <span className="mx-1 ml-5">
-                    Dashboard
-                  </span>
-                </div>
-                <div onClick={() => navigate("/")} className="m-1.5 rounded-md flex items-center py-2 px-4 text-sm text-gray-600  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-                  <LaptopChromebookRoundedIcon />
-                  <span className="mx-1 ml-5">
-                    Sitio web
-                  </span>
-                </div>
-              </>
-            ) : null}
-            <hr className="border-gray-200 dark:border-gray-700" />
+            <hr className="border-gray-100 my-1" />
 
-            <div className="m-1.5 rounded-md flex items-center py-2 px-4 text-sm text-gray-600  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-              <HelpOutlineRoundedIcon />
-              <span className="mx-1 ml-5">
-                Ayuda
-              </span>
-            </div>
-            <div onClick={handleLogout} className="m-1.5 rounded-md flex items-center py-2 px-4 text-sm text-gray-600  transition-colors duration-300 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
-              <PowerSettingsNewRoundedIcon />
-              <span className="mx-1 ml-5">
-                Cerrar sesion
-              </span>
-            </div>
+            <MenuAction
+              icon={<HelpOutlineRoundedIcon fontSize="small" />}
+              label="Ayuda"
+              onClick={() => {}}
+            />
+            <MenuAction
+              icon={<PowerSettingsNewRoundedIcon fontSize="small" />}
+              label="Cerrar sesión"
+              acento={CBA_ROJO}
+              onClick={handleLogout}
+            />
           </div>
         )}
       </div>
@@ -190,4 +215,4 @@ const PositionedMenu = ({ altImg, srcImg, styles, nombres, apellidos }) => {
     </>
   );
 };
-export default PositionedMenu;  
+export default PositionedMenu;

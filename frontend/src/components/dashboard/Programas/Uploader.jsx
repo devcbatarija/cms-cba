@@ -39,10 +39,7 @@ const Uploader = ({
   const [image, setImage] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
 
-  const convertBase = async (e) => {
-    e.preventDefault();
-
-    const files = Array.from(e.dataTransfer.files);
+  const procesarArchivos = async (files) => {
     let format = [];
     for (let [index, file] of files.entries()) {
       format.push({ name: file.name, type: file.type });
@@ -51,13 +48,27 @@ const Uploader = ({
     const promises = await handleUpload(files);
 
     const base64DataArray = await Promise.all(promises);
-    
+
     setUrls(base64DataArray);
     setIsDragging(false);
     setPublicacion({
       ...publicacion,
-      multimedia:base64DataArray
+      multimedia: base64DataArray
     })
+  };
+
+  const convertBase = async (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    await procesarArchivos(files);
+  };
+
+  const handleFileSelect = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    await procesarArchivos(files);
+    // limpiamos el value para poder volver a seleccionar el mismo archivo si se borra y se vuelve a subir
+    e.target.value = "";
   };
 
   const handleDragEnter = (event) => {
@@ -92,7 +103,7 @@ const Uploader = ({
           onDragLeave={handleDragLeave}
           onDrop={convertBase}
         >
-          <label className="flex flex-col items-center justify-center w-full h-22">
+          <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-22">
             <div className="flex items-center justify-center pt-5 pb-6 gap-2 ">
               {image.length>0 ? (
                 image.map((img, index) => {
@@ -158,7 +169,14 @@ const Uploader = ({
                 </>
               )}
             </div>
-            <input id="dropzone-file" type="file" className="hidden" />
+            <input
+              id="dropzone-file"
+              type="file"
+              accept="image/png, image/jpeg"
+              multiple
+              className="hidden"
+              onChange={handleFileSelect}
+            />
           </label>
         </div>
       </InputContainer>

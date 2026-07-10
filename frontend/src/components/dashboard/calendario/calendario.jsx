@@ -1,335 +1,371 @@
-import Typography from '@mui/material/Typography';
-import daygrid from "@fullcalendar/daygrid";
-import interaction, { Draggable } from "@fullcalendar/interaction";
+import { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
-import timegrid from "@fullcalendar/timegrid";
-import { useRef, useState } from "react";
-import NavigateBeforeRoundedIcon from '@mui/icons-material/NavigateBeforeRounded';
-import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import multiMonthPlugin from "@fullcalendar/multimonth";
+import interactionPlugin from "@fullcalendar/interaction";
+import esLocale from "@fullcalendar/core/locales/es";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import axios from "axios";
-import { getEvents } from "../../../redux-toolkit/actions/eventActions";
-import BasicStack from "./widgets/stack";
-import multimonth from "@fullcalendar/multimonth";
-import { Button } from "@mui/material";
-import "./calendarStyles.css"
+import { useNavigate } from "react-router-dom";
+import { getEvents, getEventsPredefinidos } from "../../../redux-toolkit/actions/eventActions";
 import ModalAddEvent from "./modalAddEvent";
-import { toast } from "react-hot-toast";
-import dayjs from "dayjs";
-import BasicPopover from "./widgets/popover";
-import ModalUpdateEvent from './modalUpdateEvent';
-import Dropdown from './dropdownButton';
-import { useLocation, useNavigate } from 'react-router-dom';
+import ModalUpdateEvent from "./modalUpdateEvent";
 
-const views = [
-    { id: 1, view: 'dayGridMonth', txt: 'Mes' },
-    { id: 2, view: 'timeGridWeek', txt: 'Semana' },
-    { id: 3, view: 'multiMonthYear', txt: 'Año' }
-]
+/* ─────────── CSS OVERRIDE ─────────── */
+const calendarCSS = `
+  .cba-cal .fc-toolbar { display: none !important; }
 
-const Calendario = () => {
+  /* ── Cabecera días (gris suave) ── */
+  .cba-cal .fc-col-header-cell {
+    background: #f3f4f6;
+    border-color: #e5e7eb !important;
+    padding: 10px 0;
+  }
+  .cba-cal .fc-col-header-cell-cushion {
+    color: #6b7280 !important;
+    font-size: .68rem !important;
+    font-weight: 700 !important;
+    letter-spacing: .1em;
+    text-decoration: none !important;
+    text-transform: uppercase;
+  }
 
-    // declaracion de variables 
-    const location = useLocation();
-    const navigate = useNavigate();
-    const calendarRef = useRef(null);
-    const dispatch = useDispatch();
-    const [title, setTitle] = useState('');
-    const [tipoModal, setTipoModal] = useState('Evento');
-    const [myDraggable, setMyDraggable] = useState(null);
-    const events = useSelector((state) => state.events.events);
-    const eventsPredefinidos = useSelector((state) => state.events.eventsPredefinidos);
-    const [containerEl, setContainerEl] = useState(null);
-    const userLogin = useSelector((state) => state.login.user)
-    const [open, setOpen] = useState(false);
-    const [openModalUpdate, setOpenModalUpdate] = useState(false);
-    const [idEvent, setIdEvent] = useState(null);
-    const [data, setData] = useState({
-        id: "",
-        title: "",
-        start: "",
-        end: "",
-        color: "",
-        tipo: "",
-        start_Time: "",
-        end_Time: "",
-        state: true,
-        allDay: true,
-        UsuarioIdUsuario: userLogin._userId
-    })
+  /* ── Números de día ── */
+  .cba-cal .fc-daygrid-day-number {
+    color: #111827;
+    font-size: .82rem;
+    font-weight: 600;
+    padding: 6px 8px;
+    text-decoration: none !important;
+  }
 
+  /* ── Hoy: borde navy, fondo limpio ── */
+  .cba-cal .fc-day-today {
+    background: transparent !important;
+    outline: 2.5px solid #002E5F !important;
+    outline-offset: -2px;
+  }
+  .cba-cal .fc-day-today .fc-daygrid-day-number {
+    color: #002E5F !important;
+    font-weight: 700;
+  }
 
-    const changeView = (view) => {
-        let calendarApi = calendarRef.current.getApi();
-        calendarApi.changeView(view.view);
-    };
-    const next = () => {
-        let calendarApi = calendarRef.current.getApi();
-        calendarApi.next();
-    };
+  /* ── Fin de semana: rojo bajito ── */
+  .cba-cal .fc-day-sat,
+  .cba-cal .fc-day-sun {
+    background: #fce8ec !important;
+  }
 
-    const prev = () => {
-        let calendarApi = calendarRef.current.getApi();
-        calendarApi.prev();
-    };
-    const goToToday = () => {
-        let calendarApi = calendarRef.current.getApi();
-        calendarApi.today();
-    };
+  /* ── Días fuera del mes ── */
+  .cba-cal .fc-day-other {
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 4px, #f3f4f6 4px, #f3f4f6 8px
+    ) !important;
+  }
+  .cba-cal .fc-day-other .fc-daygrid-day-number { color: #9ca3af !important; }
+  .cba-cal .fc-day-other.fc-day-sat,
+  .cba-cal .fc-day-other.fc-day-sun {
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 4px, #fce8ec 4px, #fce8ec 8px
+    ) !important;
+  }
 
-    const updateTitle = (e) => {
-        setTitle(e.view.title);
-    }
+  /* ── Eventos ── */
+  .cba-cal .fc-event {
+    border-radius: 4px !important;
+    border: none !important;
+    font-size: .72rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+  .cba-cal .fc-daygrid-event-dot { display: none; }
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => {
-        setOpen(false);
-        limpiarDatos()
-    }
+  /* ── Highlight ── */
+  .cba-cal .fc-highlight { background: rgba(0,46,95,.08) !important; }
 
-    const handleOpenModalUpdate = () => setOpenModalUpdate(true);
-    const handleCloseModalUpdate = () => setOpenModalUpdate(false);
+  /* ── Bordes grilla ── */
+  .cba-cal .fc-scrollgrid { border-color: #e5e7eb !important; }
+  .cba-cal td, .cba-cal th { border-color: #e5e7eb !important; }
 
-    useEffect(() => {
-        setContainerEl(document.getElementById("myeventlist"));
-        if (containerEl != null && myDraggable == null) {
-            setMyDraggable(
-                new Draggable(containerEl, {
-                    itemSelector: '.fc-event'
-                })
-            )
-        }
+  /* ── Vista año multimonth ── */
+  .cba-cal .fc-multimonth-title {
+    color: #002E5F !important;
+    font-weight: 700 !important;
+    font-size: .85rem !important;
+    text-transform: capitalize;
+    padding: 8px 0 4px;
+  }
+  .cba-cal .fc-multimonth-daygrid-table .fc-day-today {
+    outline: 2px solid #002E5F !important;
+  }
 
-    }, [containerEl])
-    const handleDateSelect = (e) => {
-        setTipoModal("Evento");
-        var start, end, horaInicio, horaFin
-        if (e.allDay == false) {
-            start = separarFechaYHora(e.startStr).fecha
-            horaInicio = separarFechaYHora(e.startStr).hora
-            end = separarFechaYHora(e.endStr).fecha
-            horaFin = separarFechaYHora(e.endStr).hora
-        } else {
-            start = e.startStr;
-            end = dayjs(e.endStr).subtract(1, 'day').format('YYYY-MM-DD');
-        }
-        setData({
-            ...data,
-            id: "",
-            title: "",
-            start: start,
-            end: end,
-            color: "",
-            tipo: "Academico",
-            start_Time: horaInicio ? horaInicio : "",
-            end_Time: horaFin ? horaFin : "",
-            allDay: e.allDay,
-            UsuarioIdUsuario: userLogin._userId
-        })
-        handleOpen()
-    }
+  @media (max-width: 640px) {
+    .cba-cal .fc-view { font-size: 10px !important; }
+  }
+`;
 
-    const handleEventClick = async (e) => {
-        const result = await axios.get(`event/getById/${e.event.id}`).then(response => {
-            const res = response.data.results
-            if (res.General) {
-                navigate('/dashboard/Calendario/updateEvent', { state: { prevPath: '/dashboard/Calendario/', data: res } })
-            }
-            else {
-                setTipoModal("Evento");
-                setIdEvent(e.event.id)
-                handleOpenModalUpdate()
-            }
-        })
-    }
-    const handleEventDrop = async (e) => {
-        const eventDrop = e.event;
-        const event = {
-            id: eventDrop.id,
-            start: eventDrop.start,
-            end: eventDrop.allDay == false ? eventDrop.endStr : dayjs(eventDrop.endStr).subtract(1, 'day').format('YYYY-MM-DD')
-        }
-        axios.put(`event/update/${event.id}`, event).then(res => {
-            setTimeout(() => {
-                limpiarDatos();
-                toast.success(res.data.successMessage)
-                dispatch(getEvents())
-            }, 1500);
-        }).catch(error => {
-            if (error.response.status == 401) {
-                toast.error(error.response.data.messageError)
-            }
-            else {
-                toast.error(error.message)
-            }
-            dispatch(getEvents())
-        })
-    }
+const arrowBtn = {
+  background: "transparent", border: "none",
+  fontSize: "1.3rem", lineHeight: 1,
+  color: "#374151", cursor: "pointer", padding: "0 6px",
+};
 
-    useEffect(() => {
-        if (location.state?.prevPath === '/dashboard/Calendario/addEvent') {
-            setOpen(!open)
-            setData(location.state.data)
-            location.state = null
-        }
-        else {
-            setData({
-                ...data,
-                UsuarioIdUsuario: userLogin._userId,
-            })
-        }
-    }, [])
-    const handleExternalEventDrop = async (e) => {
-        const eventDrop = JSON.parse(e.draggedEl.dataset.event);
-        const newE = {
-            title: eventDrop.title,
-            start: e.dateStr,
-            end: e.dateStr,
-            color: eventDrop.color,
-            tipo: eventDrop.tipo,
-            start_Time: eventDrop.start_Time,
-            end_Time: eventDrop.end_Time,
-            allDay: eventDrop.allDay,
-            UsuarioIdUsuario: userLogin._userId
+export default function CalendarioView() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const calRef   = useRef(null);
 
-        }
-        axios.post("event/create", newE).then(res => {
-            setTimeout(() => {
-                toast.success(res.data.successMessage)
-                dispatch(getEvents())
-            }, 1500);
-        }).catch(error => {
-            if (error.response.status == 401) {
-                toast.error(error.response.data.messageError)
-            }
-            else {
-                toast.error(error.message)
-            }
-            dispatch(getEvents())
-        })
-    }
+  const events           = useSelector((s) => s.events.events)             ?? [];
+  const eventsPredefined = useSelector((s) => s.events.eventsPredefinidos) ?? [];
 
-    const separarFechaYHora = (fechaTexto) => {
-        const fecha = dayjs(fechaTexto);
+  const [view,       setView]       = useState("dayGridMonth");
+  const [modalAdd,   setModalAdd]   = useState(false);
+  const [modalUpd,   setModalUpd]   = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+  const [tipoModal,  setTipoModal]  = useState("Evento");
+  const [calTitle,   setCalTitle]   = useState("");
+  const [newEvData,  setNewEvData]  = useState({
+    id: "", title: "", start: "", end: "",
+    color: "#002E5F", tipo: "General",
+    start_Time: "", end_Time: "",
+    state: true, allDay: true,
+  });
 
-        if (fecha.isValid()) {
-            return {
-                fecha: fecha.format('YYYY-MM-DD'),
-                hora: fecha.format('HH:mm:ss')
-            }
-        } else {
-            return {
-                fecha: "",
-                hora: ""
-            }
-        }
-    }
-    const limpiarDatos = () => {
-        setData({
-            ...data,
-            id: "",
-            title: "",
-            start: "",
-            end: "",
-            color: "",
-            tipo: "",
-            start_Time: "",
-            end_Time: "",
-            state: true,
-            allDay: true
-        })
-    }
-    useEffect(() => {
-        if (data.tipo == 'General') {
-            navigate('/dashboard/Calendario/addEvent', { state: { prevPath: '/dashboard/Calendario/', data: data } })
-        }
-    }, [data])
-    return (
-        <>
-            {
-                <ModalAddEvent
-                    setData={setData}
-                    data={data}
-                    open={open}
-                    handleClose={handleClose}
-                    tipoModal={tipoModal}
-                />
-            }
-            {
-                openModalUpdate ? <ModalUpdateEvent
-                    id={idEvent}
-                    open={openModalUpdate}
-                    handleClose={handleCloseModalUpdate}
-                    tipoModal={tipoModal}
-                /> : null
-            }
+  useEffect(() => {
+    dispatch(getEvents());
+    dispatch(getEventsPredefinidos());
+  }, []);
 
-            <div className={"grid grid-cols-1 lg:grid-cols-5 min-h-full lg:gap-4 p-5 "}>
-                <div className="calendar col-span-4">
-                    <div className='items-center mb-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 relative text-lg sm:text-xl md:text-2xl'>
-                        <div className='order-last flex justify-center sm:flex-row md:flex-row lg:flex-row xl:flex-row sm:order-none sm:justify-start'>
-                            <Button
-                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
-                                onClick={prev}
-                            ><NavigateBeforeRoundedIcon /></Button>
+  // Mes / Semana / Año
+  const views = [
+    { key: "dayGridMonth",   label: "Mes"    },
+    { key: "timeGridWeek",   label: "Semana" },
+    { key: "multiMonthYear", label: "Año"    },
+  ];
 
-                            <h1 className='uppercase font-semibold' >{title}</h1>
-                            <Button onClick={next}
-                                sx={{ minWidth: 'fit-content', padding: '0', borderRadius: '50%' }}
-                            ><NavigateNextRoundedIcon /></Button>
-                        </div>
-                        <div className='flex justify-end  text-base'>
-                            <Button onClick={goToToday}>Hoy</Button>
-                            <Dropdown
-                                handleFunction={changeView}
-                                datos={views}
-                                initialSelected={views[0]}
-                                disabled={false}
-                            />
-                        </div>
-                    </div>
-                    <FullCalendar
-                        ref={calendarRef}
-                        headerToolbar={false}
-                        plugins={[daygrid, interaction, timegrid, multimonth]}
-                        fixedWeekCount={false}
-                        locales='es'
-                        initialView="dayGridMonth"
-                        events={events}
-                        editable={true}
-                        selectable={true}
-                        selectMirror={true}
-                        dayMaxEvents={true}
-                        weekends={true}
-                        droppable={true}
-                        eventDurationEditable={false}
-                        datesSet={updateTitle}
-                        select={handleDateSelect}
-                        eventClick={handleEventClick}
-                        eventDrop={handleEventDrop}
-                        drop={handleExternalEventDrop}
-                    />
-                </div>
-                <div className="mt-5 lg:mt-0">
-                    <div id="myeventlist" className="eventPred mb-3 bg-zinc-100 p-5 lg:h-80vh">
-                        <Typography sx={{}}>Eventos Predefinidos</Typography>
-                        <BasicStack eventsPredefinidos={eventsPredefinidos}></BasicStack>
-                    </div>
-                    <BasicPopover
-                        setData={setData}
-                        data={data}
-                        openModal={open}
-                        handleCloseModal={handleClose}
-                        tipoModal={tipoModal}
-                        setTipoModal={setTipoModal}
-                        handleOpen={handleOpen}
-                        calendarRef={calendarRef}
-                    ></BasicPopover>
-                </div>
+  const handleDateClick  = (info) => {
+    navigate("/dashboard/Calendario/addEvent", {
+      state: { prevPath: "/dashboard/Calendario/", data: { ...newEvData, start: info.dateStr, end: info.dateStr } },
+    });
+  };
+  const handleEventClick = (info) => {
+    setSelectedId(info.event.id);
+    setTipoModal("Evento");
+    setModalUpd(true);
+  };
+
+  const updateTitle = () => setCalTitle(calRef.current?.getApi().view.title ?? "");
+  const goToday     = () => { calRef.current?.getApi().today(); setTimeout(updateTitle, 50); };
+  const goPrev      = () => { calRef.current?.getApi().prev();  setTimeout(updateTitle, 50); };
+  const goNext      = () => { calRef.current?.getApi().next();  setTimeout(updateTitle, 50); };
+  const changeView  = (v) => { setView(v); calRef.current?.getApi().changeView(v); setTimeout(updateTitle, 50); };
+
+  const openCreate = (tipo) => {
+    setTipoModal(tipo);
+    setNewEvData({ id: "", title: "", start: "", end: "", color: "#002E5F",
+      tipo: tipo === "Evento" ? "General" : "Administrativo",
+      start_Time: "", end_Time: "", state: true, allDay: true });
+    setModalAdd(true);
+  };
+
+  // estilos botones toggle
+  const toggleBtn = (isActive) => ({
+    padding: "6px 18px",
+    fontSize: ".78rem",
+    fontWeight: 700,
+    cursor: "pointer",
+    border: "none",
+    background: isActive ? "#D50032" : "#002E5F",
+    color: "#fff",
+    transition: "background .2s",
+    letterSpacing: ".03em",
+  });
+
+  return (
+    <>
+      <style>{calendarCSS}</style>
+
+      <div style={{ background: "#f1f4f8", minHeight: "100vh", padding: "28px 32px" }}>
+        <h1 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#111827", marginBottom: 20 }}>
+          Calendario
+        </h1>
+
+        <div style={{ display: "flex", gap: 20, alignItems: "flex-start" }}>
+
+          {/* ── Tarjeta calendario ── */}
+          <div style={{
+            flex: 1,
+            background: "#fff",
+            borderRadius: 16,
+            boxShadow: "0 2px 20px rgba(0,0,0,.07)",
+            padding: "20px 24px 24px",
+          }}>
+            {/* Barra navegación */}
+            <div style={{
+              display: "flex", alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 16, flexWrap: "wrap", gap: 10,
+            }}>
+              {/* Hoy */}
+              <button onClick={goToday} style={{
+                background: "transparent", border: "none",
+                fontSize: ".85rem", fontWeight: 600,
+                color: "#374151", cursor: "pointer", padding: "4px 0",
+              }}>
+                Hoy
+              </button>
+
+              {/* ‹ Título › */}
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <button onClick={goPrev} style={arrowBtn}>‹</button>
+                <span style={{
+                  fontSize: "1.15rem", fontWeight: 700, color: "#111827",
+                  minWidth: 160, textAlign: "center", textTransform: "capitalize",
+                }}>
+                  {calTitle}
+                </span>
+                <button onClick={goNext} style={arrowBtn}>›</button>
+              </div>
+
+              {/* Toggle Mes / Semana / Año — navy con activo rojo */}
+              <div style={{ display: "flex", borderRadius: 8, overflow: "hidden" }}>
+                {views.map((v, i) => (
+                  <button
+                    key={v.key}
+                    onClick={() => changeView(v.key)}
+                    style={{
+                      ...toggleBtn(view === v.key),
+                      borderRight: i < views.length - 1 ? "1px solid rgba(255,255,255,.25)" : "none",
+                    }}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
             </div>
-        </>
-    );
-}
 
-export default Calendario;
+            {/* FullCalendar */}
+            <FullCalendar
+              ref={calRef}
+              plugins={[dayGridPlugin, timeGridPlugin, multiMonthPlugin, interactionPlugin]}
+              initialView={view}
+              locale={esLocale}
+              headerToolbar={false}
+              events={events}
+              dateClick={handleDateClick}
+              eventClick={handleEventClick}
+              height="auto"
+              className="cba-cal"
+              dayMaxEvents={3}
+              datesSet={updateTitle}
+            />
+          </div>
+
+          {/* ── Sidebar ── */}
+          <div style={{
+            width: 240,
+            background: "#fff",
+            borderRadius: 16,
+            boxShadow: "0 2px 20px rgba(0,0,0,.07)",
+            padding: "20px 16px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+            flexShrink: 0,
+          }}>
+            <p style={{
+              fontSize: ".7rem", fontWeight: 700, letterSpacing: ".1em",
+              textTransform: "uppercase", color: "#6b7280", margin: 0,
+            }}>
+              Eventos Predefinidos
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, minHeight: 60 }}>
+              {eventsPredefined.length === 0 ? (
+                <p style={{ fontSize: ".78rem", color: "#9ca3af", margin: 0 }}>No hay datos</p>
+              ) : (
+                eventsPredefined.map((ev) => (
+                  <div
+                    key={ev.id}
+                    onClick={() => { setSelectedId(ev.id); setTipoModal("EventoPredifinido"); setModalUpd(true); }}
+                    style={{
+                      padding: "8px 10px", borderRadius: 8,
+                      background: "#f3f4f6",
+                      borderLeft: `3px solid ${ev.color ?? "#002E5F"}`,
+                      cursor: "pointer",
+                    }}
+                  >
+                    <p style={{ fontSize: ".78rem", fontWeight: 700, color: "#111827", margin: 0 }}>{ev.title}</p>
+                    {ev.start && (
+                      <p style={{ fontSize: ".7rem", color: "#6b7280", margin: "2px 0 0" }}>
+                        {new Date(ev.start).toLocaleDateString("es-BO", { day: "numeric", month: "short" })}
+                      </p>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div style={{ height: 1, background: "#e5e7eb" }} />
+
+            {/* ── Botones crear ── */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: "auto" }}>
+
+              {/* Evento Predefinido — navy, hover rojo */}
+              <button
+                onClick={() => openCreate("EventoPredefinido")}
+                style={{
+                  width: "100%", padding: "9px 0",
+                  background: "#002E5F", color: "#fff",
+                  border: "none", borderRadius: 8,
+                  fontWeight: 700, fontSize: ".78rem",
+                  cursor: "pointer", letterSpacing: ".04em",
+                  transition: "background .2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#D50032")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#002E5F")}
+              >
+                + Evento Predefinido
+              </button>
+
+              {/* Evento — navy, hover rojo */}
+              <button
+                onClick={() => openCreate("Evento")}
+                style={{
+                  width: "100%", padding: "9px 0",
+                  background: "#002E5F", color: "#fff",
+                  border: "none", borderRadius: 8,
+                  fontWeight: 700, fontSize: ".78rem",
+                  cursor: "pointer", letterSpacing: ".04em",
+                  boxShadow: "0 2px 8px rgba(0,46,95,.25)",
+                  transition: "background .2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#D50032")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "#002E5F")}
+              >
+                + Evento
+              </button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {modalAdd && (
+        <ModalAddEvent
+          data={newEvData} setData={setNewEvData}
+          open={modalAdd} handleClose={() => setModalAdd(false)}
+          tipoModal={tipoModal}
+        />
+      )}
+      {modalUpd && (
+        <ModalUpdateEvent
+          id={selectedId} open={modalUpd}
+          handleClose={() => setModalUpd(false)}
+          tipoModal={tipoModal}
+        />
+      )}
+    </>
+  );
+}

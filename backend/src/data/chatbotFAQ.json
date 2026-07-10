@@ -1,0 +1,74 @@
+[
+  {
+    "id": "horarios",
+    "principal": true,
+    "tituloSugerencia": "Horarios de clases",
+    "keywords": ["horario", "horarios", "atencion", "atienden", "clases"],
+    "respuesta": "Tenemos turnos mañana, tarde y noche (presencial y virtual), además de clases los sábados para niveles iniciales.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Consultar horarios", "valor": "59164576363", "mensaje": "Hola, quisiera consultar los horarios de clases del CBA."}],
+    "sugerencias": ["programas_ingles", "precios"]
+  },
+  {
+    "id": "ubicacion",
+    "principal": true,
+    "tituloSugerencia": "Ubicación",
+    "keywords": ["ubicacion", "direccion", "donde estan", "donde queda"],
+    "respuesta": "Estamos en la Calle 15 de Abril N° 624 (entre Junín y O'Connor), Tarija.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Ver en mapa / Contactar", "valor": "59164576363", "mensaje": "Hola, quisiera saber cómo llegar a las oficinas del CBA."}],
+    "sugerencias": ["horarios", "precios"]
+  },
+  {
+    "id": "programas_ingles",
+    "principal": true,
+    "tituloSugerencia": "Nuestros programas",
+    "keywords": ["programas", "curso", "ingles", "niveles"],
+    "respuesta": "Ofrecemos programas adaptados por edades: niños (8-10), adolescentes (11-13) y adultos (14 en adelante).",
+    "acciones": [{"tipo": "whatsapp", "texto": "Ver niveles disponibles", "valor": "59164576363", "mensaje": "Hola, quisiera información sobre los programas de inglés del CBA."}],
+    "sugerencias": ["requisitos", "precios"]
+  },
+  {
+    "id": "precios",
+    "principal": true,
+    "tituloSugerencia": "Precios y costos",
+    "keywords": ["precio", "precios", "costo", "mensualidad", "pagos"],
+    "respuesta": "Los módulos van desde Bs 316 (virtual) y Bs 330 (presencial). El costo final depende del programa específico.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Consultar costos por programa", "valor": "59164576363", "mensaje": "Hola, quisiera consultar los precios y costos de los programas del CBA."}],
+    "sugerencias": ["requisitos", "inscripcion"]
+  },
+  {
+    "id": "requisitos",
+    "principal": true,
+    "tituloSugerencia": "Requisitos de inscripción",
+    "keywords": ["requisitos", "documentos", "necesito para inscribirme"],
+    "respuesta": "Para inscribirte, generalmente necesitas tu documento de identidad y realizar la prueba de ubicación (si ya tienes conocimientos previos).",
+    "acciones": [{"tipo": "whatsapp", "texto": "Requisitos específicos aquí", "valor": "59164576363", "mensaje": "Hola, quisiera saber los requisitos para inscribirme en el CBA."}],
+    "sugerencias": ["inscripcion", "horarios"]
+  },
+  {
+    "id": "inscripcion",
+    "principal": true,
+    "tituloSugerencia": "Proceso de inscripción",
+    "keywords": ["inscripcion", "inscribirme", "registro"],
+    "respuesta": "Las inscripciones están abiertas todo el año. Puedes iniciar en cualquier módulo programado.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Iniciar inscripción", "valor": "59164576363", "mensaje": "Hola, quisiera iniciar el proceso de inscripción en el CBA."}],
+    "sugerencias": []
+  },
+  {
+    "id": "toefl",
+    "principal": true,
+    "tituloSugerencia": "Exámenes TOEFL",
+    "keywords": ["toefl", "ibt", "certificado", "examen"],
+    "respuesta": "Brindamos orientación y preparación para exámenes internacionales como el TOEFL.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Más información TOEFL", "valor": "59164576363", "mensaje": "Hola, quisiera información sobre la preparación para el examen TOEFL."}],
+    "sugerencias": []
+  },
+  {
+    "id": "educationusa",
+    "principal": true,
+    "tituloSugerencia": "EducationUSA",
+    "keywords": ["educationusa", "estudiar eeuu", "becas"],
+    "respuesta": "EducationUSA ofrece orientación gratuita para estudiar en universidades de los Estados Unidos.",
+    "acciones": [{"tipo": "whatsapp", "texto": "Solicitar asesoramiento", "valor": "59173496225", "mensaje": "Hola, quisiera agendar una asesoría con EducationUSA."}],
+    "sugerencias": []
+  }
+]

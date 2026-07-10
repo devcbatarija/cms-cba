@@ -10,11 +10,9 @@ export const handleUpload = (files) => {
       const filesArray = Array.from(files);
 
       for (const file of filesArray) {
-        // Convertir el archivo a base64
         const base64Image = convertFileToBase64(file);
         arrayBase.push(base64Image);
 
-        // Agregar el archivo a FormData
         formData.append("files", file);
       }
 

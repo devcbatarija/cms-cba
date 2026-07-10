@@ -32,8 +32,11 @@ export default function EventList({
   return (
     <>
       <div className={''}>
-        <div className="px-4 sm:px-0 flex flex-col items-center justify-center">
-          <h1 className='uppercase leading-7 text-base sm:text-lg font-mono text-cbaBlue font-bold'>Eventos para {title.title}</h1>
+        <div className="px-5 py-4 flex flex-col items-center justify-center"
+          style={{ borderBottom: "3px solid #D50032", background: "#002E5F" }}>
+          <h1 style={{ color: "white", fontSize: "0.85rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", margin: 0 }}>
+            Eventos — {title.title}
+          </h1>
           {
             title.type == 'timeGridWeek' ?
               <div className={`items-center justify-center flex border-2 border-cbaBlue h-10 sm:h-12 rounded-lg ${title.type == 'timeGridWeek' ? 'sm:w-16 w-14' : 'w-10 sm:w-12'}`}>
@@ -178,7 +181,12 @@ function Event({ event }) {
       <div
         ref={divRef}
         onClick={() => setIsExpanded(true)}
-        className={`cursor-pointer relative transition-all duration-500 px-4 py-6 grid grid-cols-4 gap-4 sm:px-2 rounded-lg ${isExpanded ? 'h-auto bg-blue-50' : 'h-32 text-ellipsis overflow-hidden hover:bg-zinc-100'}`}>
+        className={`cursor-pointer relative transition-all duration-500 px-4 py-5 grid grid-cols-4 gap-4 sm:px-2 ${isExpanded ? 'h-auto' : 'h-32 text-ellipsis overflow-hidden'}`}
+        style={{
+          borderLeft: `3px solid ${event.Evento?.color ?? "#002E5F"}`,
+          background: isExpanded ? "#f0f4ff" : "transparent",
+          transition: "background .2s",
+        }}>
         <div className="grid justify-items-center">{event.Evento ? <img className='h-20 w-20 rounded-lg' src={event.multimedia[0]} alt="" /> : <img className='rounded-lg h-20 w-20' src={calendarIcon} />}</div>
         <div className='mt-1 text-sm leading-6 text-zinc-600 col-span-3 sm:mt-0 flex flex-col'>
           <span className='flex items-center text-xs text-azulClaro font-medium'><AccessTimeIcon sx={{ width: '15px' }} /> {formatDate(event)}</span>

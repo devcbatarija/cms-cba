@@ -1,38 +1,32 @@
 import * as React from "react";
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import { styled, Box } from "@mui/system";
-import { Modal } from "@mui/base/Modal";
 import { useState } from "react";
-import { useEffect } from "react";
 import axios from "axios";
 import {
-  Avatar,
-  Button,
-  Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
   TextField,
+  InputLabel,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useDispatch } from "react-redux";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { getallusers } from "../../../redux-toolkit/actions/userActions";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import { SuccessAlert } from "../../toastAlerts/success";
 
-export default function ModalUnstyledAdd({
-  id,
-  open,
-  handleOpen,
-  handleClose,
-}) {
+const FIELD_CLASS =
+  "w-full px-3 py-2.5 text-sm border border-[#DEDEDE] rounded-xl focus:outline-none focus:border-[#002E5F] bg-white transition-colors";
+const LABEL_CLASS = "block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wide";
+
+export default function ModalUnstyledAdd({ open, handleClose }) {
   const [spinner, setSpinner] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     correo: "",
     nombres: "",
@@ -45,322 +39,233 @@ export default function ModalUnstyledAdd({
     fecha_Nacimiento: "",
   });
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
 
   const handleChange = (e) => {
-    const property = e.target.name;
-    const value = e.target.value;
-    setForm({
-      ...form,
-      [property]: value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSpinner(true);
-      const response = await axios.post(`users`, form);
+      await axios.post("users", form);
       setTimeout(() => {
-        toast.success("Registro exitoso!");
+        toast.custom((t) => (
+          <SuccessAlert t={t} w={"w-4/12"} message="Usuario registrado exitosamente" />
+        ));
         dispatch(getallusers());
         handleClose();
       }, 1500);
     } catch (error) {
-      console.log(error);
+      toast.error("Ocurrió un error al registrar");
+      setSpinner(false);
     }
   };
-  useEffect(() => {
-    setTimeout(() => { }, 600);
-  }, []);
+
+  if (!open) return null;
 
   return (
-    <div>
-      <StyledModal
-        aria-labelledby="unstyled-modal-title"
-        aria-describedby="unstyled-modal-description"
-        open={open}
-        onClose={handleClose}
-        slots={{ backdrop: StyledBackdrop }}
-      >
-        <Box sx={style}>
-          <form
-            onSubmit={handleSubmit}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2,1fr)",
-              gap: "10px",
-            }}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ fontFamily: "'Poppins', sans-serif" }}>
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={handleClose}
+      />
+
+      {/* Modal */}
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto z-10">
+
+        {/* Header del modal */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-[#DEDEDE] bg-[#002E5F] rounded-t-2xl">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
+              <PersonRoundedIcon sx={{ fontSize: 20, color: "white" }} />
+            </div>
+            <div>
+              <h2 className="text-base font-bold text-white">Nuevo usuario</h2>
+              <p className="text-xs text-white/60">Completa los datos para registrar</p>
+            </div>
+          </div>
+          <button
+            onClick={handleClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
           >
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <Avatar alt="Remy Sharp" src={form.image} />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Correo
-              </InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.correo}
-                id="outlined-basic-correo"
-                name="correo"
-                type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Nombres
-              </InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.nombres}
-                id="outlined-basic-nombres"
+            <CloseRoundedIcon sx={{ fontSize: 18 }} />
+          </button>
+        </div>
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+
+          {/* Fila 1: Nombres + Apellidos */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={LABEL_CLASS}>Nombres</label>
+              <input
+                className={FIELD_CLASS}
                 name="nombres"
                 type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Apellidos
-              </InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
+                placeholder="Ingrese su nombre"
+                value={form.nombres}
                 onChange={handleChange}
-                value={form.apellidos}
-                id="outlined-basic-apellidos"
+                required
+              />
+            </div>
+            <div>
+              <label className={LABEL_CLASS}>Apellidos</label>
+              <input
+                className={FIELD_CLASS}
                 name="apellidos"
                 type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Apellidos
-              </InputLabel>
-              <TextField
+                placeholder="Ingrese su apellido"
+                value={form.apellidos}
                 onChange={handleChange}
-                value={form.fecha_Nacimiento}
-                id="outlined-basic-fecha_Nacimiento"
-                name="fecha_Nacimiento"
-                type="date"
-                variant="outlined"
+                required
               />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-celular">
-                Celular
-              </InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.celular}
-                id="outlined-basic-celular"
-                name="celular"
-                type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-ci">Ci</InputLabel>
-              <TextField
-                sx={{ width: "100%" }}
-                onChange={handleChange}
-                value={form.ci}
-                id="outlined-basic-ci"
+            </div>
+          </div>
+
+          {/* Fila 2: Correo */}
+          <div>
+            <label className={LABEL_CLASS}>Correo electrónico</label>
+            <input
+              className={FIELD_CLASS}
+              name="correo"
+              type="email"
+              placeholder="correo@ejemplo.com"
+              value={form.correo}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* Fila 3: CI + Celular */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={LABEL_CLASS}>Carnet de identidad</label>
+              <input
+                className={FIELD_CLASS}
                 name="ci"
                 type="text"
-                variant="outlined"
-              />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">
-                Password
-              </InputLabel>
-              <OutlinedInput
-                sx={{ width: "100%" }}
-                id="outlined-adornment-password"
-                type={showPassword ? "text" : "password"}
+                placeholder="Número de CI"
+                value={form.ci}
                 onChange={handleChange}
-                value={form.password}
+              />
+            </div>
+            <div>
+              <label className={LABEL_CLASS}>Celular</label>
+              <input
+                className={FIELD_CLASS}
+                name="celular"
+                type="text"
+                placeholder="Ej: 12345678"
+                value={form.celular}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* Fila 4: Fecha nacimiento */}
+          <div>
+            <label className={LABEL_CLASS}>Fecha de nacimiento</label>
+            <input
+              className={FIELD_CLASS}
+              name="fecha_Nacimiento"
+              type="date"
+              value={form.fecha_Nacimiento}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Fila 5: Password */}
+          <div>
+            <label className={LABEL_CLASS}>Contraseña</label>
+            <div className="relative">
+              <input
+                className={FIELD_CLASS + " pr-10"}
                 name="password"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Mínimo 8 caracteres"
+                value={form.password}
+                onChange={handleChange}
+                required
               />
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-password">Rol</InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={form.rol}
-                label="rol"
-                onChange={handleChange}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                {showPassword ? (
+                  <VisibilityOff sx={{ fontSize: 18 }} />
+                ) : (
+                  <Visibility sx={{ fontSize: 18 }} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Fila 6: Rol + Estado */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className={LABEL_CLASS}>Rol</label>
+              <select
+                className={FIELD_CLASS}
                 name="rol"
-              >
-                <MenuItem value="Admin">Admin</MenuItem>
-                <MenuItem value="Client">Client</MenuItem>
-              </Select>
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <InputLabel htmlFor="outlined-adornment-estado">
-                Estado
-              </InputLabel>
-              <Select
-                sx={{ width: "100%" }}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={form.estado}
-                label="estado"
+                value={form.rol}
                 onChange={handleChange}
+                style={{ fontFamily: "'Poppins', sans-serif" }}
+              >
+                <option value="Admin">Admin</option>
+                <option value="Client">Client</option>
+              </select>
+            </div>
+            <div>
+              <label className={LABEL_CLASS}>Estado</label>
+              <select
+                className={FIELD_CLASS}
                 name="estado"
+                value={form.estado}
+                onChange={(e) =>
+                  setForm({ ...form, estado: e.target.value === "true" })
+                }
+                style={{ fontFamily: "'Poppins', sans-serif" }}
               >
-                <MenuItem value={true}>Activo</MenuItem>
-                <MenuItem value={false}>Baja</MenuItem>
-              </Select>
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              {!spinner ? (
-                <Button
-                  sx={{ width: "100%", borderRadius: "0px" }}
-                  type="submit"
-                  variant="contained"
-                >
-                  REGISTRAR
-                </Button>
+                <option value="true">Activo</option>
+                <option value="false">Baja</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-[#DEDEDE]" />
+
+          {/* Botones */}
+          <div className="flex gap-3 pt-1">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="flex-1 py-2.5 text-sm font-semibold rounded-xl border border-[#DEDEDE] text-gray-500 hover:border-gray-400 hover:text-gray-700 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={spinner}
+              className="flex-1 py-2.5 text-sm font-bold rounded-xl bg-[#D50032] text-white hover:bg-[#b8002a] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {spinner ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Registrando...
+                </>
               ) : (
-                <LoadingButton
-                  size="small"
-                  endIcon={<SendIcon />}
-                  loading={true}
-                  loadingPosition="end"
-                  variant="contained"
-                  sx={{ width: "100%", height: "35px" }}
-                >
-                  <span>GUARDANDO</span>
-                </LoadingButton>
+                "Registrar usuario"
               )}
-            </Grid>
-            <Grid sx={{ m: 1, width: "100%" }} variant="outlined">
-              <Button
-                variant="outlined"
-                sx={{ width: "100%", borderRadius: "0px" }}
-                onClick={handleClose}
-              >
-                CANCELAR
-              </Button>
-            </Grid>
-          </form>
-        </Box>
-      </StyledModal>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
-
-const Backdrop = React.forwardRef((props, ref) => {
-  const { open, className, ...other } = props;
-  return (
-    <div
-      className={clsx({ "MuiBackdrop-open": open }, className)}
-      ref={ref}
-      {...other}
-    />
-  );
-});
-
-Backdrop.propTypes = {
-  className: PropTypes.string.isRequired,
-  open: PropTypes.bool,
-};
-
-const blue = {
-  200: "#99CCF3",
-  400: "#3399FF",
-  500: "#007FFF",
-};
-
-const grey = {
-  50: "#f6f8fa",
-  100: "#eaeef2",
-  200: "#d0d7de",
-  300: "#afb8c1",
-  400: "#8c959f",
-  500: "#6e7781",
-  600: "#57606a",
-  700: "#424a53",
-  800: "#32383f",
-  900: "#24292f",
-};
-
-const StyledModal = styled(Modal)`
-  position: fixed;
-  z-index: 1300;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledBackdrop = styled(Backdrop)`
-  z-index: -1;
-  position: fixed;
-  inset: 0;
-  background-color: rgb(0 0 0 / 0.5);
-  -webkit-tap-highlight-color: transparent;
-`;
-
-const style = (theme) => ({
-  display: "flex",
-  flexDirection: "column",
-  width: 700,
-  // borderRadius: "12px",
-  padding: "16px 32px 24px 32px",
-  backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",
-  boxShadow: `0px 2px 24px ${theme.palette.mode === "dark" ? "#000" : "#383838"
-    }`,
-});
-
-const TriggerButton = styled("button")(
-  ({ theme }) => `
-  font-family: IBM Plex Sans, sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  min-height: calc(1.5em + 22px);
-  border-radius: 12px;
-  padding: 6px 12px;
-  line-height: 1.5;
-  background: transparent;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[800] : grey[200]};
-  color: ${theme.palette.mode === "dark" ? grey[100] : grey[900]};
-
-  &:hover {
-    background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
-    border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
-  }
-
-  &:focus-visible {
-    border-color: ${blue[400]};
-    outline: 3px solid ${theme.palette.mode === "dark" ? blue[500] : blue[200]};
-  }
-  `
-);

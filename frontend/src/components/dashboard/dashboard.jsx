@@ -24,7 +24,7 @@ function DashboardPage() {
           toggleSideBarOpen={toggleSideBarOpen}
         />
         {/* este es el contenedor de navbar y outlet */}
-        <div className="lg:pl-64 flex flex-col w-0 flex-1">
+        <div className="lg:pl-72 flex flex-col w-0 flex-1">
           {/* navbar y contenedor */}
           <DashNavbar
             toggleSideBarOpen={toggleSideBarOpen}

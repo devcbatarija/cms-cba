@@ -1,6 +1,54 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./statisticsBanner.css";
 
+const CBA_ROJO = "#D50032";
+const CBA_NAVY = "#002E5F";
+
+/* ---------- Iconos SVG inline, mismo lenguaje visual que About.jsx ---------- */
+const IconoStat = ({ tipo }) => {
+  const p = {
+    viewBox: "0 0 24 24",
+    width: 30,
+    height: 30,
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.6,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  };
+  switch (tipo) {
+    case "graduados":
+      // Birrete de graduación
+      return (
+        <svg {...p}>
+          <path d="M12 3l10 5-10 5L2 8l10-5z" />
+          <path d="M6 10.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5" />
+          <path d="M22 8v6" />
+        </svg>
+      );
+    case "docentes":
+      // Personas / equipo docente
+      return (
+        <svg {...p}>
+          <circle cx="8.5" cy="8" r="2.6" />
+          <circle cx="16" cy="9" r="2.2" />
+          <path d="M3 19c0-2.8 2.5-5 5.5-5s5.5 2.2 5.5 5" />
+          <path d="M14.5 14.3c2.5.3 4.5 2.2 4.5 4.7" />
+        </svg>
+      );
+    case "convenios":
+      // Manos / acuerdo
+      return (
+        <svg {...p}>
+          <path d="M7 12.5l2.5 2.5 3-3M3.5 11.5l3-3 3 3M14.5 8.5l3 3 3-3" />
+          <path d="M7 12.5c0 3 2.5 5.5 5.5 5.5s5.5-2.5 5.5-5.5" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 export const StatisticsBanner = () => {
   const [graduados, setGraduados] = useState(0);
   const [docentes, setDocentes] = useState(0);
@@ -66,37 +114,57 @@ export const StatisticsBanner = () => {
         observer.unobserve(ref.current);
       }
     };
-  }, [counted])
+  }, [counted]);
+
+  const stats = [
+    { valor: graduados, etiqueta: "Graduados", tipo: "graduados" },
+    { valor: docentes, etiqueta: "Docentes altamente capacitados", tipo: "docentes" },
+    { valor: convenios, etiqueta: "Convenios con colegios", tipo: "convenios" },
+  ];
 
   return (
-    <div className="bg-gray-100 w-full shadow-md" ref={ref}>
+    <div className="w-full" ref={ref}>
       <main className="w-full">
-        <section className="bg-red-600 shadow-lg p-8 text-center w-full px-12">
+        <section
+          className="relative overflow-hidden shadow-lg w-full px-6 md:px-12 py-14"
+          style={{
+            background: `linear-gradient(120deg, ${CBA_NAVY} 0%, ${CBA_NAVY} 55%, ${CBA_ROJO} 160%)`,
+          }}
+        >
+          {/* Decoración: círculos suaves de fondo, sin interferir con el contenido */}
           <div
-            className="grid grid-cols-1 
-                    justify-center
-                    items-center justify-between sm:justify-between 
-                    md:grid-cols-3 md:justify-between
-                    lg:grid-cols-3 lg:justify-between"
-          >
-            <div className="">
-              <h2 className="text-3xl font-bold mb-5 text-white">
-                {graduados}+
-              </h2>
-              <p className="text-gray-200">Graduados</p>
-            </div>
-            <div className="">
-              <h2 className="text-3xl font-bold mb-5 text-white">
-                {docentes}+
-              </h2>
-              <p className="text-gray-200">Docentes altamente capacitados</p>
-            </div>
-            <div className="">
-              <h2 className="text-3xl font-bold mb-5 text-white">
-                {convenios}+
-              </h2>
-              <p className="text-gray-200">Convenios con colegios</p>
-            </div>
+            className="pointer-events-none absolute -top-16 -left-16 w-64 h-64 rounded-full opacity-20"
+            style={{ backgroundColor: CBA_ROJO, filter: "blur(60px)" }}
+          />
+          <div
+            className="pointer-events-none absolute -bottom-20 -right-10 w-72 h-72 rounded-full opacity-20"
+            style={{ backgroundColor: "#ffffff", filter: "blur(70px)" }}
+          />
+
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-4 max-w-5xl mx-auto">
+            {stats.map((s, i) => (
+              <div
+                key={s.tipo}
+                className={`group flex flex-col items-center text-center px-4 ${
+                  i !== 0 ? "md:border-l md:border-white/20" : ""
+                }`}
+              >
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mb-4 text-white
+                    bg-white/10 transition-transform duration-300 group-hover:scale-110 group-hover:bg-white/20"
+                >
+                  <IconoStat tipo={s.tipo} />
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+                  {s.valor}
+                  <span style={{ color: CBA_ROJO }}>+</span>
+                </h2>
+                <div className="w-8 h-0.5 my-3 rounded-full bg-white/40" />
+                <p className="text-gray-200 text-sm md:text-base max-w-[16rem]">
+                  {s.etiqueta}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
       </main>

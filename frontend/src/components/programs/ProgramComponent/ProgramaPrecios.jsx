@@ -1,38 +1,54 @@
 import React from 'react';
 
-const ListaPreciosCursos = (props) => {
-    const { preciosCursos } = props;
-    const columns = preciosCursos.columns;
-    const rows = preciosCursos.rows;
+const CBA_NAVY = '#002E5F';
+const CBA_ROJO = '#D50032';
 
-    return (
-        <div className="overflow-auto sm:overflow-visible">
-            <br />
-            <h2 className="text-2xl font-bold">PRECIOS DE NUESTROS CURSOS</h2>
-            <table className="shadow-lg bg-white border-collapse w-5/6 sm:w-9/10 md:w-8/10 lg:w-7/10 xl:w-6/10 2xl:w-5/10 mx-auto text-center">
-                <thead>
-                    <tr>
-                        {columns.map((column, index) => (
-                            <th key={index} className="bg-gray-200 border text-left px-8 py-4">
-                                {column}
-                            </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows.map((row, rowIndex) => (
-                        <tr key={rowIndex} className="hover:bg-gray-100">
-                            {row.map((cell, cellIndex) => (
-                                <td key={cellIndex} className="border px-8 py-4">
-                                    {cell}
-                                </td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    );
+const ListaPreciosCursos = ({ preciosCursos }) => {
+  if (!preciosCursos || !preciosCursos.columns || preciosCursos.columns.length === 0) {
+    return null;
+  }
+
+  const { columns, rows } = preciosCursos;
+
+  return (
+    <div className="w-full">
+      <h3 className="text-xl font-bold uppercase tracking-wide text-center" style={{ color: CBA_NAVY }}>
+        Precios
+      </h3>
+      <span
+        className="block w-12 h-1 rounded-full mx-auto mt-2 mb-6"
+        style={{ backgroundColor: CBA_ROJO }}
+      />
+
+      <div className="w-full overflow-x-auto rounded-xl shadow-md border border-gray-100">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr style={{ backgroundColor: CBA_NAVY }}>
+              {columns.map((col, i) => (
+                <th key={i} className="p-3 text-white text-sm font-semibold uppercase tracking-wide">
+                  {typeof col === 'string' ? col : col?.nombre}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows && rows.map((row, ri) => (
+              <tr
+                key={ri}
+                className={`${ri % 2 === 0 ? 'bg-white' : 'bg-gray-50'} hover:bg-red-50/40 transition-colors`}
+              >
+                {row.map((cell, ci) => (
+                  <td key={ci} className="p-3 text-center border-b border-gray-200 text-gray-700">
+                    {cell}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
 
 export default ListaPreciosCursos;

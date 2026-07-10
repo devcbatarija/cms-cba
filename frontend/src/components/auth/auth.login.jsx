@@ -4,247 +4,186 @@ import { useState } from "react";
 import { Alert } from "@mui/material";
 import axios from "axios";
 import { signin } from "../../redux-toolkit/actions/auth.Actions";
-import { useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import logo from "../../assets/vuexy-logo.png";
+import logoCba from "../../assets/cba_logo_horizontal.png"; 
+import cbaBuilding from "../../assets/cba_foto.png"; 
 import { SuccessAlert } from "../toastAlerts/success";
 import PlusLoginForm from "./cbaPlusLoginForm";
 
 const Login = () => {
-  const [CbaPlusLogin, setCbaPlusLogin] = useState(false)
+  const [CbaPlusLogin, setCbaPlusLogin] = useState(false);
   const [errorBack, setErrorBack] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = useSelector((state) => state.login);
 
-  const toggleLoginCbaPlus = () => {
-    setCbaPlusLogin(!CbaPlusLogin)
-  }
+  const toggleLoginCbaPlus = () => setCbaPlusLogin(!CbaPlusLogin);
 
-  const handleOnSubmit = async () => {
-    try {
-      // console.log(watch())
-      const response = await axios.post("users/login", watch(), {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(res => {
-        dispatch(signin(res.data));
-        localStorage.setItem("user", JSON.stringify({
-          correo: res.data.correo,
-          _profileImage: res.data._profileImage,
-          nombres: res.data.nombres,
-          apellidos: res.data.apellidos
-        }))
-      })
-      // console.log(response)
-      navigate("/");
-      reset();
-      toast.custom((t) => (
-        <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
-      ));
-      // console.log(response.data)
-    } catch (error) {
-      setErrorBack(error.response.data);
-      setTimeout(() => {
-        setErrorBack("");
-      }, 5000);
-    }
-  };
-  useEffect(() => { }, []);
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
     reset,
-  } = useForm(); //useFormErrors
-  const onSubmit = handleSubmit((data) => {
-    handleOnSubmit();
-  });
+  } = useForm();
+
+  const handleOnSubmit = async () => {
+    try {
+      await axios
+        .post("users/login", watch(), {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          dispatch(signin(res.data));
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              correo: res.data.correo,
+              _profileImage: res.data._profileImage,
+              nombres: res.data.nombres,
+              apellidos: res.data.apellidos,
+            })
+          );
+        });
+      navigate("/");
+      reset();
+      toast.custom((t) => (
+        <SuccessAlert t={t} w={"w-4/12"} message="Inicio de sesión exitoso" />
+      ));
+    } catch (error) {
+      setErrorBack(error.response?.data);
+      setTimeout(() => setErrorBack(""), 5000);
+    }
+  };
+
+  const onSubmit = handleSubmit(() => handleOnSubmit());
+
   return (
     <div
-      className="flex flex-col sm:flex-row min-h-full"
-      style={{ height: "100vh" }}
+      className="min-h-screen w-full flex items-center justify-center p-4"
+      style={{
+        backgroundColor: "#f4f4f7",
+        backgroundImage: "radial-gradient(circle, #d9d9e0 1px, transparent 1px)",
+        backgroundSize: "18px 18px",
+      }}
     >
-      {
-        CbaPlusLogin ?
-          <PlusLoginForm
-            toggleLoginCbaPlus={toggleLoginCbaPlus}
-          />
-          :
-          <div
-            className="flex flex-col p-8 sm:p-4 md:p-12 lg:p-20 items-center  
-        h-full md:h-auto w-full sm:w-6/12 md:w-12/12"
-          >
-            <div className="flex w-full">
-              <button
-                onClick={() => navigate("/")}
-                className="flex flex-row items-center text-[15px] hover:bg-gray-300 rounded-[50%] p-2"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  id="Outline"
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  fill="black"
-                >
-                  <path d="M.88,14.09,4.75,18a1,1,0,0,0,1.42,0h0a1,1,0,0,0,0-1.42L2.61,13H23a1,1,0,0,0,1-1h0a1,1,0,0,0-1-1H2.55L6.17,7.38A1,1,0,0,0,6.17,6h0A1,1,0,0,0,4.75,6L.88,9.85A3,3,0,0,0,.88,14.09Z" />
-                </svg>
-              </button>
-            </div>
+      <div className="flex flex-col sm:flex-row w-full max-w-3xl bg-white rounded-2xl shadow-xl overflow-hidden">
+        {CbaPlusLogin ? (
+          <PlusLoginForm toggleLoginCbaPlus={toggleLoginCbaPlus} />
+        ) : (
+          <div className="flex flex-col justify-center w-full sm:w-1/2 p-6 sm:p-8">
+            <img src={logoCba} alt="CBA" className="h-9 mb-5" />
 
-            <form
-              onSubmit={onSubmit}
-              className="formLogin flex flex-col w-full  min-h-full justify-center"
-              style={{
-                color: "rgba(45,45,45,0.8)",
-              }}
-            >
-              <div className="flex w-full items-center justify-center ">
-                <h1
-                  className="mb-4 text-xl font-extrabold leading-none tracking-tight 
-          text-gray-900 md:text-2xl lg:text-3xl"
-                >
-                  INICIAR SESION
-                </h1>
-              </div>
-              <div className="w-full">
-                {errorBack ? <Alert severity="error">{errorBack}</Alert> : null}
-                <input
-                  className="w-full px-3 py-2 outline-none border rounded-lg"
-                  type="text"
-                  id="outlined-basic-correo"
-                  name="correo"
-                  placeholder="Correo"
-                  {...register("correo", {
-                    required: {
-                      value: true,
-                      message: "Correo es requerido",
-                    },
-                    minLength: {
-                      value: 4,
-                      message: "Correo debe tener almenos 4 caracteres",
-                    },
-                    maxLength: {
-                      value: 50,
-                      message: "Correo debe tener máximo 30 caracteres",
-                    },
-                    pattern: {
-                      value:
-                        /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: "Ingrese un correo válido",
-                    },
-                  })}
-                />
-                {errors.correo ? (
-                  <Alert severity="error">{errors.correo.message}</Alert>
-                ) : null}
-              </div>
-              {/* Campo de Contraseña */}
-              <div className="w-full">
-                <input
-                  className="w-full px-3 py-2 rounded-md outline-none border rounded-lg"
-                  type="password"
-                  id="outlined-basic-password"
-                  name="password"
-                  placeholder="password"
-                  {...register("password", {
-                    required: {
-                      value: true,
-                      message: "Password es requerido",
-                    },
-                    minLength: {
-                      value: 2,
-                      message: "Password debe tener almenos 2 caracteres",
-                    },
-                    maxLength: {
-                      value: 30,
-                      message: "Password debe tener máximo 30 caracteres",
-                    },
-                  })}
-                />
-                {errors.password ? (
-                  <Alert severity="error">{errors.password.message}</Alert>
-                ) : null}
-              </div>
-              <div className="flex flex-col items-center gap-y-5">
-                <button
-                  type="submit"
-                  className="w-full rounded-lg h-10 text-white bg-[#33C398] hover:bg-[#33C378]"
-                  style={{ minHeight: "40px" }}
-                >
-                  Iniciar sesión
-                </button>
+            <h1 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-1">
+              ACCEDE A TU CUENTA
+            </h1>
+            <p className="text-sm text-gray-500 mb-6">Gestiona actividades y reportes</p>
 
-                <div className="relative w-full">
-                  <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                    <div className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center">
-                    <span className="px-2 bg-white text-sm text-gray-500">O continuar con</span>
-                  </div>
+            <form onSubmit={onSubmit} className="flex flex-col gap-3.5">
+              {errorBack ? <Alert severity="error">{errorBack}</Alert> : null}
+
+              {/* Correo */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-800 mb-1">
+                  Correo Electrónico
+                </label>
+                <div className="flex items-center gap-2 border rounded-lg px-3 py-1.5 focus-within:border-[#002E5F] transition-colors">
+                  <svg className="h-4 w-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <input
+                    className="w-full text-sm text-gray-700 bg-transparent border-none outline-none focus:outline-none focus:ring-0"
+                    style={{ boxShadow: "none" }}
+                    type="text"
+                    placeholder="correo@ejemplo.com"
+                    {...register("correo", {
+                      required: { value: true, message: "Correo es requerido" },
+                      minLength: { value: 4, message: "Correo debe tener al menos 4 caracteres" },
+                      maxLength: { value: 50, message: "Correo debe tener máximo 30 caracteres" },
+                      pattern: {
+                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                        message: "Ingrese un correo válido",
+                      },
+                    })}
+                  />
                 </div>
-
-                <button
-                  onClick={toggleLoginCbaPlus}
-                  className="w-full rounded-lg h-10 text-[#366BC0] font-bold border-2 flex flex-row items-center justify-center gap-x-5 text-lg"
-                  style={{ minHeight: "40px" }}
-                >
-                  <img src={logo} alt="" className="h-5" />
-                  <span>CBA Plus</span>
-                </button>
-
-                <p className="flex flex-row items-center justify-center gap-1 mt-10 text-center text-sm text-gray-500">
-                  Aún no posee una cuenta?{" "}
-                  <span
-                    onClick={() => navigate("/register")}
-                    className="font-semibold leading-6 text-indigo-600 
-              hover:text-indigo-500 cursor-pointer"
-                  >
-                    Registrar
-                  </span>
-                </p>
+                {errors.correo ? (
+                  <Alert severity="error" className="mt-1">{errors.correo.message}</Alert>
+                ) : null}
               </div>
+
+              {/* Contraseña */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-800 mb-1">
+                  Contraseña
+                </label>
+                <div className="flex items-center gap-2 border rounded-lg px-3 py-1.5 focus-within:border-[#002E5F] transition-colors">
+                  <svg className="h-4 w-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 10-8 0v4h8z" />
+                  </svg>
+                  <input
+                    className="w-full text-sm text-gray-700 bg-transparent border-none outline-none focus:outline-none focus:ring-0"
+                    style={{ boxShadow: "none" }}
+                    type="password"
+                    placeholder="••••••••"
+                    {...register("password", {
+                      required: { value: true, message: "Password es requerido" },
+                      minLength: { value: 2, message: "Password debe tener al menos 2 caracteres" },
+                      maxLength: { value: 30, message: "Password debe tener máximo 30 caracteres" },
+                    })}
+                  />
+                </div>
+                {errors.password ? (
+                  <Alert severity="error" className="mt-1">{errors.password.message}</Alert>
+                ) : null}
+              </div>
+
+              <button
+                type="submit"
+                className="w-full rounded-full h-10 text-sm text-white font-semibold bg-[#D50032] hover:bg-[#B8002B] transition-colors mt-1"
+              >
+                INICIAR SESIÓN
+              </button>
+
+              <div className="relative w-full mt-1">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-2 bg-white text-xs text-gray-400">O continuar con</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={toggleLoginCbaPlus}
+                className="w-full rounded-full h-10 text-sm text-[#366BC0] font-bold border-2 flex items-center justify-center gap-2"
+              >
+                <span>CBA Plus</span>
+              </button>
+
+              <p className="flex items-center justify-center gap-1 mt-4 text-center text-xs text-gray-500">
+                Aún no posees una cuenta?{" "}
+                <span
+                  onClick={() => navigate("/register")}
+                  className="font-semibold text-[#002E5F] hover:underline cursor-pointer"
+                >
+                  Registrar
+                </span>
+              </p>
             </form>
           </div>
-      }
-      <section
-        className="flex flex-col p-4 
-        sm:p-0 sm:border-l md:p-0  
-        items-center justify-center 
-        sm:block
-        w-6/12 sm:w-6/12 md:w-6/12
-        h-full hidden "
-      >
-        <div
-          className="flex flex-col h-full justify-center items-center
-           w-full items-center text-scroll border shadow-zinc-500"
-        >
-          <h1
-            className="mb-4 text-4xl font-extrabold leading-none 
-          tracking-tight text-gray-800 md:text-5xl lg:text-6xl"
-          >
-            Bienvenido de{" "}
-            <span
-              className="underline underline-offset-3 decoration-8 
-                text-cbaRed  animated-text"
-            >
-              Vuelta
-            </span>
-          </h1>
-          <div className="flex w-full items-center justify-center">
-            <p className="text-lg font-normal lg:text-xl">
-              Centro Boliviano Americano
-            </p>
-          </div>
-          <div className="w-full bg-red-500"></div>
+        )}
+
+        <div className="hidden sm:block relative w-1/2">
+          <img src={cbaBuilding} alt="Centro Boliviano Americano" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-[#002E5F]/60 mix-blend-multiply" />
         </div>
-      </section>
+      </div>
     </div>
   );
 };

@@ -20,9 +20,19 @@ module.exports = (sequelize) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        multimedia:{
-            type:DataTypes.ARRAY(DataTypes.TEXT), 
-            allowNull:false
+        multimedia: {
+            type: DataTypes.ARRAY(DataTypes.TEXT),
+            allowNull: false
+        },
+        categoria: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "Adults"
+        },
+        orden: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0
         }
     });
 

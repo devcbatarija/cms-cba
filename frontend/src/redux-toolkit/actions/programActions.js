@@ -28,3 +28,19 @@ export const selectProgram = createAsyncThunk("/selectProgram", async (programId
 export const deselectProgram = createAsyncThunk("/deselectProgram", async (programId) => {
     return programId;
 });
+export const updateProgram = createAsyncThunk("/updateProgram", async ({ id, data }) => {
+    try {
+        const response = await axios.put(`program/${id}`, data);
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+});
+export const deleteProgram = createAsyncThunk("/deleteProgram", async (id) => {
+    try {
+        const response = await axios.delete(`program/${id}`);
+        return response.data;
+    } catch (error) {
+        return error.message;
+    }
+});

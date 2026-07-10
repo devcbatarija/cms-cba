@@ -1,86 +1,73 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer, Cell,
 } from "recharts";
 
-const data = [
-  {
-    name: "Enero",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Febrero",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
+const FALLBACK_DATA = [
+  { name: "0–12", cantidad: 0 },
+  { name: "13–17", cantidad: 0 },
+  { name: "18–25", cantidad: 0 },
+  { name: "26–35", cantidad: 0 },
+  { name: "36–50", cantidad: 0 },
+  { name: "50+", cantidad: 0 },
 ];
 
-export const InitDashboardGrafics = () => {
-  const demoUrl = "https://codesandbox.io/s/bar-chart-has-no-padding-jphoc";
+// Alternando rojo y azul CBA
+const BAR_COLORS = ["#D50032", "#002E5F", "#D50032", "#002E5F", "#D50032", "#002E5F"];
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
     return (
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-          barSize={20}
-        >
-          <XAxis
-            dataKey="name"
-            scale="point"
-            padding={{ left: 10, right: 10 }}
-          />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Bar dataKey="pv" fill="#8884d8" background={{ fill: "#eee" }} />
-        </BarChart>
+      <div className="bg-white border border-[#DEDEDE] shadow-xl rounded-xl px-4 py-3 text-sm"
+        style={{ fontFamily: "'Poppins', sans-serif" }}>
+        <p className="font-semibold text-[#002E5F] mb-1">{label}</p>
+        <p className="font-bold text-lg leading-none" style={{ color: payload[0].fill }}>
+          {payload[0].value}
+          <span className="text-gray-400 font-normal text-xs ml-1">usuarios</span>
+        </p>
+      </div>
     );
-}
+  }
+  return null;
+};
+
+export const InitDashboardGrafics = ({ data }) => {
+  const raw = data && data.length > 0 ? data : FALLBACK_DATA;
+  const normalized = raw.map((item) => ({
+    name: item.name ?? item.rango ?? item.label ?? item.edad ?? "—",
+    cantidad: item.cantidad ?? item.count ?? item.total ?? item.pv ?? 0,
+  }));
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart
+        data={normalized}
+        margin={{ top: 5, right: 10, left: -10, bottom: 5 }}
+        barSize={36}
+        barCategoryGap="35%"
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke="#DEDEDE" vertical={false} />
+        <XAxis
+          dataKey="name"
+          tick={{ fill: "#9ca3af", fontSize: 12, fontWeight: 500, fontFamily: "Poppins, sans-serif" }}
+          axisLine={false}
+          tickLine={false}
+          padding={{ left: 15, right: 15 }}
+        />
+        <YAxis
+          tick={{ fill: "#9ca3af", fontSize: 12, fontFamily: "Poppins, sans-serif" }}
+          axisLine={false}
+          tickLine={false}
+          allowDecimals={false}
+        />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: "#F5F6FA" }} />
+        <Bar dataKey="cantidad" radius={[8, 8, 0, 0]}>
+          {normalized.map((_, i) => (
+            <Cell key={i} fill={BAR_COLORS[i % BAR_COLORS.length]} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+};

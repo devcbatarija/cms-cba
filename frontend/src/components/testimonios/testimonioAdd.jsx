@@ -1,18 +1,51 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import toast from "react-hot-toast";
 import { handleUpload, uploadImgbb } from "../../services/functions";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Card, CardActionArea, CardMedia, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Button,
+} from "@mui/material";
 import Uploader from "../dashboard/Publications/Uploader";
 
-const Title = styled.h2`
-  color: #343a40;
-  font-size: 20px;
-`;
+const BRAND_NAVY = "#002E5F";
+const BRAND_RED = "#D50032";
+
+const fieldSx = {
+  "& .MuiOutlinedInput-root": {
+    bgcolor: "#F7F8FA",
+    borderRadius: "8px",
+    fontFamily: "Arial, sans-serif",
+    "& fieldset": { borderColor: "#E5E7EB" },
+    "&:hover fieldset": { borderColor: BRAND_NAVY },
+    "&.Mui-focused fieldset": { borderColor: BRAND_NAVY },
+  },
+  "& .MuiInputLabel-root": { fontFamily: "Arial, sans-serif" },
+  "& textarea, & input": {
+    outline: "none",
+    boxShadow: "none",
+  },
+};
+
+const labelSx = {
+  fontFamily: "Arial, sans-serif",
+  fontWeight: 600,
+  fontSize: "0.8rem",
+  color: "#374151",
+  textTransform: "uppercase",
+  letterSpacing: "0.03em",
+  mb: 1,
+  display: "block",
+};
+
 export const TestimonioAdd = ({
   testimonios,
   setTestimonios,
-  handleSubmit,
   handleSetImagen,
   handleSubmitTestimonio,
 }) => {
@@ -35,7 +68,7 @@ export const TestimonioAdd = ({
     } else if (value === "Otro") {
       setInput(true);
     } else if (name === "cargoTwo") {
-      // No additional logic needed here, as we've already set the value above
+      // No additional logic needed here
     } else {
       setInput(false);
       if (testimonios.cargo !== "Otro") {
@@ -46,183 +79,198 @@ export const TestimonioAdd = ({
     setTestimonios(newTestimonios);
   };
 
-  const handleDragEnter = (e) => {
+  const handleSubmitImg = async (e) => {
     e.preventDefault();
-    fileInputRef.current.classList.add("drag-over");
-  };
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-  const handleDragLeave = (e) => {
-    fileInputRef.current.classList.remove("drag-over");
-  };
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    const format = [];
-    const files = Array.from(e.dataTransfer.files); //obtenemos las imagenes
 
-    for (let [index, file] of files.entries()) {
-      //cargamos las imagenes a un array para visualizar
-      format.push({ name: file.name, type: file.type });
+    if (!image.multimedia[0]) {
+      toast.error("Debes seleccionar una imagen antes de crear el testimonio.");
+      return;
     }
 
-    const promises = await handleUpload(files);
-    const base64DataArray = await Promise.all(promises);
-
-    setImage(base64DataArray);
-    handleSetImagen(base64DataArray[0]); //mandamos a nuestro componente padre la imagen
-  };
-  const handleSubmitImg = async (e) => {
-    //subir imagenes con el servicio
-    e.preventDefault();
     try {
       const response = await uploadImgbb(image.multimedia[0]);
-      if (response.status == 200) {
+      if (response?.status == 200) {
         handleSubmitTestimonio(response.results);
+      } else {
+        toast.error("No se pudo subir la imagen. Intenta nuevamente.");
       }
     } catch (error) {
       if (error) {
         console.log(error);
+        toast.error("Ocurrió un error al crear el testimonio.");
       }
     }
   };
-  const handleFileChange = (e) => {
-    setSelectedFile(e.dataTransfer.files);
-  };
+
   useEffect(() => {
     image.multimedia.length > 0
       ? handleSetImagen(image.multimedia[0])
       : handleSetImagen("");
   }, [image]);
+
   return (
-    <div className="w-full border bg-white rounded-lg p-4">
-      <div className="flex flex-col items-center justify-center">
-        <Title>Crear testimonio</Title>
-      </div>
-      <div className="w-full">
-        <label
-          htmlFor="up"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >Insertar imagen</label>
-        <div name="up">
-          <Uploader publicacion={image} setPublicacion={setImage} cantMax={1} ></Uploader>
-        </div>
-      </div>
-      <form
-        onSubmit={handleSubmitImg}
-        className="flex w-full pl-12 pr-12 sm:pl-6 sm:pr-6 md:pl-12 md:pr-12 lg:pl-0 lg:pr-0"
-      >
-        <div className="grid gap-6 mb-6 w-full">
-          <div className="w-full ">
-            <label
-              htmlFor="nombre"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
+    <Box
+      sx={{
+        width: "100%",
+        bgcolor: "#fff",
+        borderRadius: "12px",
+        overflow: "hidden",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+      }}
+    >
+      {/* Header navy */}
+      <Box sx={{ bgcolor: BRAND_NAVY, px: 3, py: 2.5 }}>
+        <Typography
+          variant="h6"
+          sx={{ color: "#fff", fontWeight: 600, fontFamily: "Arial, sans-serif" }}
+        >
+          Datos del testimonio
+        </Typography>
+      </Box>
+
+      <Box sx={{ p: 3 }}>
+        {/* Imagen */}
+        <Box sx={{ mb: 3 }}>
+          <Typography component="label" sx={labelSx}>
+            Insertar imagen
+          </Typography>
+          <Uploader publicacion={image} setPublicacion={setImage} cantMax={1} />
+        </Box>
+
+        <Box
+          component="form"
+          onSubmit={handleSubmitImg}
+          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+        >
+          {/* Nombre */}
+          <Box>
+            <Typography component="label" sx={labelSx}>
               Nombre de la persona
-            </label>
-            <input
-              onChange={handleChange}
-              type="text"
-              id="nombre"
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
               name="nombre"
               value={testimonios.nombre}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              required
-            />
-          </div>
-          <div className="w-full ">
-            <label
-              htmlFor="apellidos"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Apellidos de la persona
-            </label>
-            <input
               onChange={handleChange}
-              type="text"
-              id="apellidos"
+              required
+              placeholder="Nombre"
+              sx={fieldSx}
+            />
+          </Box>
+
+          {/* Apellidos */}
+          <Box>
+            <Typography component="label" sx={labelSx}>
+              Apellidos de la persona
+            </Typography>
+            <TextField
+              fullWidth
+              size="small"
               name="apellidos"
               value={testimonios.apellidos}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={handleChange}
               required
+              placeholder="Apellidos"
+              sx={fieldSx}
             />
-          </div>
-          <div className="flex gap-1">
-            <div className="w-1/2">
-              <label
-                htmlFor="comentario"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+          </Box>
+
+          {/* Cargo y Estado */}
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            <Box sx={{ flex: 1, minWidth: 200 }}>
+              <Typography component="label" sx={labelSx}>
                 Cargo
-              </label>
-              <select
-                id="cargo"
-                onChange={handleChange}
-                name="cargo"
-                value={testimonios.cargo}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value="Estudiante">Estudiante</option>
-                <option value="Maestro">Maestro</option>
-                <option value="Otro">Otro</option>
-              </select>
-              {testimonios.cargo == "Otro" ? (
-                <input
+              </Typography>
+              <FormControl fullWidth size="small" sx={fieldSx}>
+                <Select
+                  name="cargo"
+                  value={testimonios.cargo}
                   onChange={handleChange}
-                  type="text"
-                  id="cargoTwo"
+                  sx={{ fontFamily: "Arial, sans-serif" }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: { "& .MuiMenuItem-root": { fontFamily: "Arial, sans-serif" } },
+                    },
+                  }}
+                >
+                  <MenuItem value="Estudiante">Estudiante</MenuItem>
+                  <MenuItem value="Maestro">Maestro</MenuItem>
+                  <MenuItem value="Otro">Otro</MenuItem>
+                </Select>
+              </FormControl>
+              {testimonios.cargo === "Otro" && (
+                <TextField
+                  fullWidth
+                  size="small"
                   name="cargoTwo"
                   value={testimonios.cargoTwo}
-                  placeholder="Ingrese otro cargo"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={handleChange}
                   required
+                  placeholder="Ingrese otro cargo"
+                  sx={{ ...fieldSx, mt: 1.5 }}
                 />
-              ) : null}
-            </div>
-            <div className="w-1/2">
-              <label
-                htmlFor="state"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Estado
-              </label>
-              <select
-                id="state"
-                onChange={handleChange}
-                name="state"
-                value={testimonios.state}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              >
-                <option value={true}>Visible</option>
-                <option value={false}>Oculto</option>
-              </select>
-            </div>
-          </div>
+              )}
+            </Box>
 
-          <div className="w-full ">
-            <label
-              htmlFor="message"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
+            <Box sx={{ flex: 1, minWidth: 200 }}>
+              <Typography component="label" sx={labelSx}>
+                Estado
+              </Typography>
+              <FormControl fullWidth size="small" sx={fieldSx}>
+                <Select
+                  name="state"
+                  value={testimonios.state}
+                  onChange={handleChange}
+                  sx={{ fontFamily: "Arial, sans-serif" }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: { "& .MuiMenuItem-root": { fontFamily: "Arial, sans-serif" } },
+                    },
+                  }}
+                >
+                  <MenuItem value={true}>Visible</MenuItem>
+                  <MenuItem value={false}>Oculto</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
+
+          {/* Comentario */}
+          <Box>
+            <Typography component="label" sx={labelSx}>
               Comentario
-            </label>
-            <textarea
-              onChange={handleChange}
-              id="message"
-              rows="4"
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
               name="comentario"
               value={testimonios.comentario}
-              className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            ></textarea>
-          </div>
-          <button
+              onChange={handleChange}
+              placeholder="Escribe el testimonio aquí..."
+              sx={fieldSx}
+            />
+          </Box>
+
+          <Button
             type="submit"
-            className="bg-blue-700 hover:bg-blue-500 text-white font-bold py-2 px-4"
+            variant="contained"
+            sx={{
+              bgcolor: BRAND_RED,
+              borderRadius: "8px",
+              textTransform: "none",
+              fontFamily: "Arial, sans-serif",
+              fontWeight: 600,
+              py: 1.2,
+              boxShadow: "none",
+              "&:hover": { bgcolor: "#B0002A", boxShadow: "none" },
+            }}
           >
             Crear
-          </button>
-        </div>
-      </form>
-    </div>
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };

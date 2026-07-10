@@ -14,7 +14,8 @@ const ambienteRoutes=require('./ambiente_Routes');
 const programPrices=require('./programPriceRoute')
 const becaRoutes=require('./becaRoutes')
 const QR_Routes=require('./QR_Routes')
-const notificationFCMRoutes=require('./PushNotificationsFCM.js')
+const analyticsRoutes=require('./analyticsRoutes') 
+//const notificationFCMRoutes=require('./PushNotificationsFCM.js')
 const router=Router();
 
 router.use('/test',testRouter); //"http:localhost:3001/api/test"
@@ -32,7 +33,7 @@ router.use('/environment', ambienteRoutes);
 router.use('/programPrices', programPrices);
 router.use('/beca', becaRoutes);
 router.use('/QR', QR_Routes);
-
-router.use('/notification',notificationFCMRoutes);
+router.use('/analytics', analyticsRoutes); 
+router.use('/chatbot', require('./chatbotRoutes')); 
+//router.use('/notification',notificationFCMRoutes);
 module.exports=router;
-

@@ -1,11 +1,12 @@
 const { Programa, Usuario, ProgramPrices } = require("../db");
-
 module.exports = {
     getAllPrograms: async () => {
         try {
             const data = await Programa.findAll({
-                include: [{ model: Usuario }],
-                include: [{ model: ProgramPrices }]
+                include: [
+                    { model: Usuario },
+                    { model: ProgramPrices }
+                ]
             });
             return data;
         } catch (error) {
@@ -19,6 +20,8 @@ module.exports = {
                 caracteristica: p.caracteristica,
                 requisitos: p.requisitos,
                 multimedia: p.multimedia,
+                categoria: p.categoria || "Adults",
+                orden: p.orden ?? 0,
                 UsuarioIdUsuario: p.UsuarioIdUsuario,
             });
             return nuevoPrograma;
@@ -32,13 +35,7 @@ module.exports = {
             if (!exist) {
                 throw new Error("Programa no encontrado");
             }
-
-            await Programa.update(progr, {
-                where: {
-                    id_Programa: id,
-                },
-            });
-
+            await exist.update(progr);
             return { message: "Programa actualizado correctamente" };
         } catch (error) {
             throw new Error("Error al actualizar el programa");
@@ -59,7 +56,10 @@ module.exports = {
     getProgram: async (id) => {
         try {
             const program = await Programa.findByPk(id, {
-                include: [{ model: Usuario }],
+                include: [
+                    { model: Usuario },
+                    { model: ProgramPrices }
+                ],
             });
             if (!program) {
                 throw new Error("Programa no encontrado");
